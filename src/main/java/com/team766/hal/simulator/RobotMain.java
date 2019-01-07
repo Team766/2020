@@ -14,7 +14,7 @@ public class RobotMain {
 	private Simulator simulator;
 	
 	public RobotMain() {
-		ConfigFileReader.instance = new ConfigFileReader(EntryPoint.getSimConfigFile());
+		ConfigFileReader.instance = new ConfigFileReader("simConfig.txt");
 		RobotProvider.instance = new SimulationRobotProvider();
 		
 		Scheduler.getInstance().reset();
