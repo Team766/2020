@@ -17,7 +17,7 @@ public class DriveStraight extends Subroutine {
                 Robot.drive.setDrivePower(0.0,0.0);
             }
         }, 
-        5000 
+        1000 
         );
     }
 }
