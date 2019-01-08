@@ -2,6 +2,8 @@ package com.team766.framework;
 
 import java.util.function.BooleanSupplier;
 
+import com.team766.hal.RobotProvider;
+
 public abstract class Subroutine extends Command {
 	private static enum ControlOwner {
 		MAIN_THREAD,
@@ -65,6 +67,11 @@ public abstract class Subroutine extends Command {
 		while (!predicate.getAsBoolean()) {
 			transferControl(ControlOwner.SUBROUTINE, ControlOwner.MAIN_THREAD);
 		}
+	}
+
+	protected void waitForSeconds(double seconds) {
+		double startTime = RobotProvider.instance.getClock().getTime();
+		waitFor(() -> RobotProvider.instance.getClock().getTime() - startTime > seconds);
 	}
 	
 	public final void run() {

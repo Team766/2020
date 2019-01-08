@@ -1,7 +1,6 @@
 package com.team766.frc2019;
 
 import com.team766.framework.Command;
-import com.team766.frc2019.commands.ExampleSequence;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
@@ -19,12 +18,6 @@ public class OI extends Command {
 	}
 	
 	public void run() {
-		double leftPower = m_joystick1.getRawAxis(2);
-		double rightPower = m_joystick2.getRawAxis(2);
-		Robot.drive.setDrivePower(leftPower, rightPower);
 		
-		if (m_joystick2.getTriggerPressed()) {
-			new ExampleSequence().start();
-		}
 	}
 }
