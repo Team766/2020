@@ -4,4 +4,4 @@ Welcome to the 2019 Software Team
 
 Maya Khodabakchian
 AJ Smyth
-
+Connor Kurtz
