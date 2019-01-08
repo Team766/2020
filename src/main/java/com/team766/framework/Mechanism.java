@@ -13,4 +13,7 @@ public abstract class Mechanism implements Runnable {
 		}
 		m_runningCommand = command;
 	}
+
+	@Override
+	public void run () {}
 }

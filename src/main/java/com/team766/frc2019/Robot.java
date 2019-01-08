@@ -2,20 +2,15 @@ package com.team766.frc2019;
 
 import com.team766.framework.AutonomousCommandUtils;
 import com.team766.framework.Command;
-import com.team766.frc2019.mechanisms.Arm;
-import com.team766.frc2019.mechanisms.Drive;
-import com.team766.frc2019.mechanisms.Wrist;
 import com.team766.hal.MyRobot;
 import com.team766.web.AutonomousSelector;
 import com.team766.web.ConfigUI;
 import com.team766.web.LogViewer;
 import com.team766.web.WebServer;
 
-public class Robot extends MyRobot {	
-	public static Arm arm;
-	public static Wrist wrist;
-	public static Drive drive;
-	
+public class Robot extends MyRobot {
+	// Declare mechanisms here
+
 	private OI m_oi;
 	
 	private WebServer m_webServer;
@@ -24,9 +19,7 @@ public class Robot extends MyRobot {
 	
 	@Override
 	public void robotInit() {
-		drive = new Drive();
-		arm = new Arm();
-		wrist = new Wrist();
+		// Initialize mechanisms here
 		
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());
