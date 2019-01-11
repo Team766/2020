@@ -15,6 +15,7 @@ public class Parameters {
 	public static final double DRIVE_WHEEL_DIAMETER = 0.1524; // 6 inches in meters
 	public static final double DRIVE_GEAR_RATIO = 8.0;
 	public static final int NUM_LOADED_WHEELS = 2;
+	public static final int ENCODER_TICKS_PER_REVOLUTION = 256;
 	
 	public static final double ROBOT_MASS = 66; // approx. 145 lbs in kg
 	public static final double ROBOT_LENGTH = 1.0; // meters

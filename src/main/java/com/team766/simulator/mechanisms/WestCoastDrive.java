@@ -8,6 +8,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import com.team766.simulator.ElectricalSystem;
 import com.team766.simulator.Parameters;
 import com.team766.simulator.PhysicalConstants;
+import com.team766.simulator.ProgramInterface;
 import com.team766.simulator.elements.DCMotor;
 import com.team766.simulator.elements.DriveBase;
 import com.team766.simulator.elements.Gears;
@@ -31,6 +32,7 @@ public class WestCoastDrive extends DriveBase {
 	private Wheel rightWheels = new Wheel(Parameters.DRIVE_WHEEL_DIAMETER, rightGears);
 	private static final Vector3D RIGHT_WHEEL_POSITION = new Vector3D(0., -0.3302, 0.);
 	private static final double WHEEL_BASE = 0.585;
+	private static final double ENCODER_TICKS_PER_METER = Parameters.ENCODER_TICKS_PER_REVOLUTION / (Parameters.DRIVE_WHEEL_DIAMETER * Math.PI);
 	
 	private Vector3D robotPosition = Vector3D.ZERO;
 	private Rotation robotRotation = Rotation.IDENTITY;
@@ -38,6 +40,9 @@ public class WestCoastDrive extends DriveBase {
 	private Vector3D angularVelocity = Vector3D.ZERO;
 	private Vector3D linearAcceleration = Vector3D.ZERO;
 	private Vector3D angularAcceleration = Vector3D.ZERO;
+
+	private double leftEncoderResidual = 0;
+	private double rightEncoderResidual = 0;
 	
 	public WestCoastDrive(ElectricalSystem electricalSystem) {
 		electricalSystem.addDevice(leftController);
@@ -53,7 +58,7 @@ public class WestCoastDrive extends DriveBase {
 		}
 		return x;
 	}
-	
+
 	public void step() {
 		Vector3D wheelForce;
 		Vector3D netForce = Vector3D.ZERO;
@@ -72,6 +77,18 @@ public class WestCoastDrive extends DriveBase {
 		netTorque = netTorque.add(Vector3D.crossProduct(RIGHT_WHEEL_POSITION, wheelForce));
 		
 		Vector3D ego_velocity = robotRotation.applyInverseTo(linearVelocity);
+		
+		double deltaLeft = ENCODER_TICKS_PER_METER * (ego_velocity.getX() - angularVelocity.getZ() * LEFT_WHEEL_POSITION.getNorm()) * Parameters.TIME_STEP;
+		double deltaRight = ENCODER_TICKS_PER_METER * (ego_velocity.getX() + angularVelocity.getZ() * RIGHT_WHEEL_POSITION.getNorm()) * Parameters.TIME_STEP;
+		leftEncoderResidual += deltaLeft;
+		rightEncoderResidual += deltaRight;
+		ProgramInterface.encoderChannels[0] += (long)leftEncoderResidual;
+		ProgramInterface.encoderChannels[2] += (long)rightEncoderResidual;
+		leftEncoderResidual %= 1;
+		rightEncoderResidual %= 1;
+
+		ProgramInterface.gyro.angle = robotRotation.getAngles(RotationOrder.XYZ, RotationConvention.VECTOR_OPERATOR)[2];
+		ProgramInterface.gyro.rate = angularVelocity.getZ();
 
 		Vector3D rollingResistance = new Vector3D(-softSignum(ego_velocity.getX()), 0.0, 0.0).scalarMultiply(
 				Parameters.ROBOT_MASS * PhysicalConstants.GRAVITY_ACCELERATION * Parameters.ROLLING_RESISTANCE);
