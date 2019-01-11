@@ -8,7 +8,8 @@ import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import com.team766.simulator.elements.AirCompressor;
 import com.team766.simulator.elements.AirReservoir;
 import com.team766.simulator.mechanisms.WestCoastDrive;
-import com.team766.simulator.ui.Plot;
+import com.team766.simulator.ui.Metrics;
+import com.team766.simulator.ui.Trajectory;
 
 public class Simulator {
 	private ElectricalSystem electricalSystem = new ElectricalSystem();
@@ -43,15 +44,19 @@ public class Simulator {
 				time,
 				drive.getPosition().getX(),
 				drive.getPosition().getY(),
-				drive.getRotation().getAngles(RotationOrder.XYZ, RotationConvention.VECTOR_OPERATOR)[2],
+				Math.toDegrees(drive.getRotation().getAngles(RotationOrder.XYZ, RotationConvention.VECTOR_OPERATOR)[2]),
 				drive.getLinearVelocity().getX(),
 				drive.getLinearAcceleration().getX(),
 				electricalSystem.getSystemVoltage(),
 				pneumaticsSystem.getSystemPressure() / PneumaticsSystem.PSI_TO_PASCALS,
+				Math.toDegrees(Math.atan2(drive.getLinearVelocity().getY(), drive.getLinearVelocity().getX())),
 			});
 		trajectory.add(new Double[] {
 				drive.getPosition().getX(),
 				drive.getPosition().getY(),
+				drive.getRotation().getAngles(RotationOrder.XYZ, RotationConvention.VECTOR_OPERATOR)[2],
+				drive.getLinearVelocity().getX(),
+				drive.getLinearVelocity().getY(),
 			});
 	}
 	
@@ -64,17 +69,16 @@ public class Simulator {
 				pneumaticsSystem.ventPressure();
 			}
 		}
-		Plot.makePlotFrame(trajectory, new String[] {
-				"Position (m)",
-			}, true);
-		Plot.makePlotFrame(metrics, new String[] {
+		Trajectory.makePlotFrame(trajectory);
+		Metrics.makePlotFrame(metrics, new String[] {
 				"X Position (m)",
 				"Y Position (m)",
-				"Rotation (rad)",
+				"Rotation (deg)",
 				"Velocity (m/s)",
 				"Acceleration (m/s^2)",
 				"System Voltage (V)",
 				"System Pressure (PSI)",
-			}, false);
+				"Velocity orientation",
+			});
 	}
 }
