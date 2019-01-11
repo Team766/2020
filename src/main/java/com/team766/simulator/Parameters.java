@@ -1,7 +1,7 @@
 package com.team766.simulator;
 
 public class Parameters {
-	public static final double TIME_STEP = 0.0005; // seconds
+	public static final double TIME_STEP = 0.001; // seconds
 	public static final double DURATION = 5.0; // seconds
 
 	// Run autonomous in the simulator if true, else run teleop 
@@ -22,5 +22,6 @@ public class Parameters {
 	public static final double ROBOT_MOMENT_OF_INERTIA = 1.0/12.0 * ROBOT_MASS * (ROBOT_WIDTH*ROBOT_WIDTH + ROBOT_LENGTH*ROBOT_LENGTH);
 	
 	public static final double WHEEL_COEFFICIENT_OF_FRICTION = 1.1;
-	public static final double ROLLING_RESISTANCE = 0.015;
+	public static final double ROLLING_RESISTANCE = 0.09;
+	public static final double TURNING_RESISTANCE_FACTOR = 0.15;
 }
