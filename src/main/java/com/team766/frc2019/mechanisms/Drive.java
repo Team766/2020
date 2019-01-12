@@ -11,15 +11,12 @@ public class Drive extends Mechanism {
 	public Drive() {
 		m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
 		m_rightMotor = RobotProvider.instance.getMotor("drive.rightMotor");
+		m_leftMotor.setInverted(true);
 	}
 
 	public void setDrivePower(double leftPower, double rightPower) {
 		m_leftMotor.set(leftPower);
 		m_rightMotor.set(rightPower);
-	}
-
-	@Override
-	public void run() {
 	}
 }
 
