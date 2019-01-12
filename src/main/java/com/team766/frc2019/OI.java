@@ -18,6 +18,8 @@ public class OI extends Command {
 	}
 	
 	public void run() {
-		
+		double leftPower = m_joystick1.getRawAxis(2);
+		double rightPower = m_joystick2.getRawAxis(2);
+		Robot.drive.setDriverPower(leftPower, rightPower);
 	}
 }
