@@ -5,33 +5,34 @@ import com.team766.framework.Subroutine;
 public class DriveSquare extends Subroutine {
     protected void subroutine() {
         callSubroutine(new DriveStraight());
-
-        callSubroutine(new TurnLeft(1.0));
-
+        waitForSeconds(0.5);
+        callSubroutine(new TurnLeft());
+        waitForSeconds(0.5);
         callSubroutine(new DriveStraight());
-
-        callSubroutine(new TurnLeft(1.0));
-
+        waitForSeconds(0.5);
+        callSubroutine(new TurnLeft());
+        waitForSeconds(0.5);
         callSubroutine(new DriveStraight());
-
-        callSubroutine(new TurnLeft(1.0));
-
+        waitForSeconds(0.5);
+        callSubroutine(new TurnLeft());
+        waitForSeconds(0.5);
         callSubroutine(new DriveStraight());
-
-        callSubroutine(new TurnLeft(1.0));
-
+        waitForSeconds(0.5);
+        callSubroutine(new TurnLeft());
+        waitForSeconds(0.5);
         callSubroutine(new DriveStraight());
-
-        callSubroutine(new TurnLeft(1.0));
-
+        waitForSeconds(0.5);
+        callSubroutine(new TurnLeft());
+        waitForSeconds(0.5);
         callSubroutine(new DriveStraight());
-
-        callSubroutine(new TurnLeft(1.0));
-
+        waitForSeconds(0.5);
+        callSubroutine(new TurnLeft());
+        waitForSeconds(0.5);
         callSubroutine(new DriveStraight());
-
-        callSubroutine(new TurnLeft(1.0));
-
+        waitForSeconds(0.5);
+        callSubroutine(new TurnLeft());
+        waitForSeconds(0.5);
         callSubroutine(new DriveStraight());
+        waitForSeconds(0.5);
     }
 }
