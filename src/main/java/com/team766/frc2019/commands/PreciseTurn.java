@@ -15,21 +15,17 @@ public class PreciseTurn extends Subroutine {
     protected void subroutine() {
         double currentAngle = Robot.drive.getGyroAngle();
         double newAngle = (currentAngle + m_turnAngle) % 360;
-        while (Robot.drive.getGyroAngle() != newAngle) {
-            System.out.println("Current Angle: " + Robot.drive.getGyroAngle() + "\nTarget Angle: " + newAngle);
-            if (newAngle > currentAngle) {
-                Robot.drive.setDrivePower(0.25, 0.25);
-            } else if (newAngle < currentAngle) {
+        if (newAngle > currentAngle) {
+            while (Robot.drive.getGyroAngle() <= newAngle) {
+                System.out.println("Current Angle: " + Robot.drive.getGyroAngle() + "Target Angle: " + newAngle);
                 Robot.drive.setDrivePower(-0.25, -0.25);
+            }
+        } else if (newAngle < currentAngle) {
+            while (Robot.drive.getGyroAngle() >= newAngle) {
+                System.out.println("Current Angle: " + Robot.drive.getGyroAngle() + "Target Angle: " + newAngle);
+                Robot.drive.setDrivePower(0.25, 0.25);
             }
         }
         Robot.drive.setDrivePower(0.0, 0.0);
-        /*
-        if (newAngle > currentAngle) {
-            Robot.drive.setDrivePower(0.25, 0.25);
-        } else if (newAngle < currentAngle) {
-            Robot.drive.setDrivePower(-0.25, -0.25);
-        }
-        waitFor(() -> (!((Robot.drive.getGyroAngle() <= newAngle + 5) && (Robot.drive.getGyroAngle() >= newAngle - 5))));*/
     }
 }
