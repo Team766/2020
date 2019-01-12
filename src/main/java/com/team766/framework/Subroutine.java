@@ -77,6 +77,11 @@ public abstract class Subroutine extends Command {
 		double startTime = RobotProvider.instance.getClock().getTime();
 		waitFor(() -> RobotProvider.instance.getClock().getTime() - startTime > seconds);
 	}
+
+	protected void callSubroutine(Subroutine other) {
+		other.start();
+		waitForSubroutine(other);
+	}
 	
 	public final void run() {
 		if (m_done) {
