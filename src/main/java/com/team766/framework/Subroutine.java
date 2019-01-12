@@ -69,6 +69,11 @@ public abstract class Subroutine extends Command {
 		}
 	}
 
+	protected void yield() {
+		m_blockingPredicate = null;
+		transferControl(ControlOwner.SUBROUTINE, ControlOwner.MAIN_THREAD);
+	}
+
 	protected void waitForSubroutine(Subroutine other) {
 		waitFor(() -> other.isDone());
 	}
