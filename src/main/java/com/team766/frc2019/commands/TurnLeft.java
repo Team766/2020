@@ -13,7 +13,7 @@ public class TurnLeft extends Subroutine {
     }
 
     protected void subroutine() {
-        Robot.drive.setDrivePower(1.0, -1.0);
+        Robot.drive.setDrivePower(1.0, 1.0);
         waitForSeconds(m_turnTime);
 
         Robot.drive.setDrivePower(0.0, 0.0);
