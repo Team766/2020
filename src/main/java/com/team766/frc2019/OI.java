@@ -3,6 +3,7 @@ package com.team766.frc2019;
 import com.team766.framework.Command;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
+import com.team766.hal.wpilib.Encoder;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -15,9 +16,14 @@ public class OI extends Command {
 	public OI() {
 		m_joystick1 = RobotProvider.instance.getJoystick(1);
 		m_joystick2 = RobotProvider.instance.getJoystick(2);
+
+		//Encoder leftEncoder = new Encoder(0, 1);
+		//Encoder rightEncoder = new Encoder(2, 3);
 	}
 	
 	public void run() {
-		
+		double leftPower = m_joystick1.getRawAxis(2);
+		double rightPower = m_joystick2.getRawAxis(2);
+		Robot.drive.setDrivePower(leftPower, rightPower);
 	}
 }
