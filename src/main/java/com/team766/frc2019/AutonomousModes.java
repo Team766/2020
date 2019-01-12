@@ -11,4 +11,6 @@ public enum AutonomousModes {
     DriveSquare,
     @AutonomousCommand(commandClass= com.team766.frc2019.commands.PreciseTurn.class)
     PreciseTurn,
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.PreciseTurnInertia.class)
+    PreciseTurnInertia,
 }
