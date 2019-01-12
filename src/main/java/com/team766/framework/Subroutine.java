@@ -69,6 +69,10 @@ public abstract class Subroutine extends Command {
 		}
 	}
 
+	protected void waitForSubroutine(Subroutine other) {
+		waitFor(() -> other.isDone());
+	}
+
 	protected void waitForSeconds(double seconds) {
 		double startTime = RobotProvider.instance.getClock().getTime();
 		waitFor(() -> RobotProvider.instance.getClock().getTime() - startTime > seconds);
@@ -83,5 +87,9 @@ public abstract class Subroutine extends Command {
 		if (m_blockingPredicate == null || m_blockingPredicate.getAsBoolean()) {
 			transferControl(ControlOwner.MAIN_THREAD, ControlOwner.SUBROUTINE);
 		}
+	}
+
+	public boolean isDone() {
+		return m_done;
 	}
 }
