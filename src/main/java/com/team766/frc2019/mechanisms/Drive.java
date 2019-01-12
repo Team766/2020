@@ -15,7 +15,7 @@ public class Drive extends Mechanism {
         public Drive() { 
             m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
             m_rightMotor = RobotProvider.instance.getMotor("drive.rightMotor");
-            m_gyro = RobotProvider.instance.getGyro("driver.gyro");
+            m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         }
 
         public void setDrivePower(double leftPower, double rightPower) {
@@ -26,4 +26,5 @@ public class Drive extends Mechanism {
         public double getGyroAngle() {
             return(m_gyro.getAngle());
         }
+
 }
