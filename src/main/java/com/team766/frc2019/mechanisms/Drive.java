@@ -26,4 +26,8 @@ public class Drive extends Mechanism {
     public double getGyroAngle() {
         return(m_gyro.getAngle());
     }
+
+    public double getGyroRate() {
+        return(m_gyro.getRate());
+    }
 }

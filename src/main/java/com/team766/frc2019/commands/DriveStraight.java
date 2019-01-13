@@ -5,21 +5,21 @@ import com.team766.frc2019.Robot;
 
 public class DriveStraight extends Subroutine {
 
-    /*double m_driveTime;
+    //double m_driveTime;
 
-    public DriveStraight(double driveTime) {
+    /*public DriveStraight(double driveTime) {
         m_driveTime = driveTime;
         takeControl(Robot.drive);
     }*/
 
-    public DriveStraight() {
+    /*public DriveStraight() {
         takeControl(Robot.drive);
-    }
+    }*/
 
     protected void subroutine() {
-        Robot.drive.setDrivePower(0.25, -0.25);
+        Robot.drive.setDrivePower(-0.25, 0.25);
         //waitForSeconds(m_driveTime);
-        waitForSeconds(1.0);
+        waitForSeconds(3.0);
 
         Robot.drive.setDrivePower(0.0, 0.0);
     }
