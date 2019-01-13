@@ -21,10 +21,10 @@ public class PreciseTurnInertia extends Subroutine {
         double speedForce = 0.25;
         if (m_angle > 0) {
             leftDrivePower = 1.0;
-            rightDrivePower = -1.0;
+            rightDrivePower = 1.0;
         } else {
             leftDrivePower = -1.0;
-            rightDrivePower = 1.0;
+            rightDrivePower = -1.0;
         }
         Robot.drive.setDrivePower(leftDrivePower * speedForce, rightDrivePower * speedForce);
 
