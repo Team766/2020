@@ -12,9 +12,9 @@ public class DriveStraight extends Subroutine {
         takeControl(Robot.drive);
     }*/
 
-    /*public DriveStraight() {
+    public DriveStraight() {
         takeControl(Robot.drive);
-    }*/
+    }
 
     protected void subroutine() {
         Robot.drive.setDrivePower(-0.25, 0.25);
