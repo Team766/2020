@@ -16,15 +16,16 @@ public class PreciseDrive extends Subroutine {
         double leftPower;
         double rightPower;
         int i = 0;
-        int numUpdates = 10;
+        int numUpdates = 1000;
         double currentAngle = Robot.drive.getGyroAngle();
+        double error = 0;
         while (i < m_driveTime * numUpdates) {
             leftPower = 0.25;
             rightPower = 0.25;
-            if (Robot.drive.getGyroAngle() > currentAngle + 2) {
-                rightPower += 0.005 * currentAngle;
-            } else if (Robot.drive.getGyroAngle() < currentAngle - 2) {
-                leftPower += 0.005 * currentAngle;
+            if (Math.round(Robot.drive.getGyroAngle()) != Math.round(currentAngle)) {
+                error = Robot.drive.getGyroAngle() - currentAngle;
+                rightPower *= Math.pow((error / 180), 2) + 1;
+                leftPower *= Math.pow((error / 180) - 1, 2) + 1;
             }
             i++;
             Robot.drive.setDrivePower(leftPower, rightPower);
