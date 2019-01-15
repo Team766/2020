@@ -7,6 +7,11 @@ public class PreciseDrive extends Subroutine {
 
     double m_driveTime;
 
+    public PreciseDrive() {
+        m_driveTime = 4.0;
+        takeControl(Robot.drive);
+    }
+
     public PreciseDrive(double driveTime) {
         m_driveTime = driveTime;
         takeControl(Robot.drive);

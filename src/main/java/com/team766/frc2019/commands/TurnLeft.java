@@ -5,17 +5,17 @@ import com.team766.frc2019.Robot;
 
 public class TurnLeft extends Subroutine {
 
-    /*double m_turnTime;
+    double m_turnTime;
+
+    public TurnLeft() {
+        m_turnTime = 1.0;
+        takeControl(Robot.drive);
+    }
 
     public TurnLeft(double turnTime) {
         m_turnTime = turnTime;
         takeControl(Robot.drive);
-    }*/
-
-    public TurnLeft() {
-        takeControl(Robot.drive);
     }
-
 
     protected void subroutine() {
         Robot.drive.setDrivePower(0.25, 0.25);
