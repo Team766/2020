@@ -8,6 +8,12 @@ public class PreciseTurn extends Subroutine {
     double m_turnAngle;
     double m_rampAngle;
 
+    public PreciseTurn() {
+        m_turnAngle = 90;
+        m_rampAngle = 20;
+        takeControl(Robot.drive);
+    }
+
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;
         m_rampAngle = Math.max(turnAngle / 4.5, 20);
