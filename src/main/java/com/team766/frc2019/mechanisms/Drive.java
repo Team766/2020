@@ -19,8 +19,8 @@ public class Drive extends Mechanism {
         m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
         m_rightMotor = RobotProvider.instance.getMotor("drive.rightMotor");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
-        m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
-        m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
+        //m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
+        //m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
     }
 
     public void setDrivePower(double leftPower, double rightPower) {
@@ -42,5 +42,23 @@ public class Drive extends Mechanism {
 
     public double getRightEncoderDistance() {
         return(m_rightEncoder.getDistance());
+    }
+
+    public double calculateError(double oldAngle, double targetAngle) {
+        double error = 0;
+        if (oldAngle < targetAngle) {
+            if (Math.abs(oldAngle - targetAngle) < 180) {
+                error = Math.abs(oldAngle - targetAngle);
+            } else {
+                error = -Math.abs(oldAngle - targetAngle);
+            }
+        } else {
+            if (Math.abs(oldAngle - targetAngle) < 180) {
+                error = -Math.abs(oldAngle - targetAngle);
+            } else {
+                error = Math.abs(oldAngle - targetAngle);
+            }
+        }
+        return(error);
     }
 }
