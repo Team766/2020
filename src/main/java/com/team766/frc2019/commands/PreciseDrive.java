@@ -18,32 +18,17 @@ public class PreciseDrive extends Subroutine {
     }
 
     protected void subroutine() {
-        double leftPower;
-        double rightPower;
         int i = 0;
         int numUpdates = 10;
-        double targetAngle = Robot.drive.getGyroAngle();
+        double targetAngle = Robot.drive.getGyroAngle() % 360;
         double error = 0;
         int P = 1, I = 1, D = 1;
-        int integral = 0, previous_error = 0, setpoint = 0;
+        int integral = 0, previous_error = 0;
         double derivative = 0, PIDAngle = 0;
+        System.out.println("(Going Straight) Current Angle: " + Robot.drive.getGyroAngle() + " Target Angle: " + targetAngle + " PID Angle: " + PIDAngle);
         while (i < (m_driveTime * numUpdates)) {
-            leftPower = 0.25;
-            rightPower = 0.25;
-            if (Math.round(Robot.drive.getGyroAngle()) != Math.round(targetAngle)) {
-                if (Robot.drive.getGyroAngle() < targetAngle) {
-                    if (Math.abs(Robot.drive.getGyroAngle() - targetAngle) < 180) {
-                        error = Math.abs(Robot.drive.getGyroAngle() - targetAngle);
-                    } else {
-                        error = -Math.abs(Robot.drive.getGyroAngle() - targetAngle);
-                    }
-                } else {
-                    if (Math.abs(Robot.drive.getGyroAngle() - targetAngle) < 180) {
-                        error = -Math.abs(Robot.drive.getGyroAngle() - targetAngle);
-                    } else {
-                        error = Math.abs(Robot.drive.getGyroAngle() - targetAngle);
-                    }
-                }
+            if (!(Robot.drive.getGyroAngle() >= targetAngle - 1 && Robot.drive.getGyroAngle() <= targetAngle + 1)) {
+                error = Robot.drive.calculateError(Robot.drive.getGyroAngle(), targetAngle);
                 integral += error*.02;
                 derivative = (error - previous_error) / .02;
                 PIDAngle = P * error + I * integral + D * derivative;
@@ -51,7 +36,7 @@ public class PreciseDrive extends Subroutine {
             }
             System.out.println("(Going Straight) Current Angle: " + Robot.drive.getGyroAngle() + " Target Angle: " + targetAngle + " PID Angle: " + PIDAngle);
             i++;
-            Robot.drive.setDrivePower(0.5, 0.5);
+            Robot.drive.setDrivePower(-1, -1);
             waitForSeconds(1.0 / numUpdates);
         }
         Robot.drive.setDrivePower(0.0, 0.0);
