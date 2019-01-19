@@ -9,10 +9,7 @@ public class DriveSquare extends Subroutine {
     }
 
     protected void subroutine() {
-        for (int i = 0; i < 4; i++) {
-            this.callSubroutine(new DriveStraight(3));
-            this.callSubroutine(new TurnLeft(90)); 
-        }
+            callSubroutine(new PreciseTurn(90)); 
      
     }  
 }
