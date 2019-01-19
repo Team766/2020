@@ -87,4 +87,44 @@ public class Drive extends Mechanism {
             System.out.println("current angle is " + currentAngle + " power is " + power + " error is " + m_turnController.getCurrentError());
         }
     }
+
+    public void startDriveStraight(double distance) {
+        resetEncoders();
+        m_driveController = new PIDController(P, I, D, THRESHOLD);
+        m_driveController.setSetpoint(distance);
+        m_driveController.setMaxoutputHigh(maxDriveSpeed);
+        m_driveController.setMaxoutputLow(minDriveSpeed);
+    }
+
+    public boolean isDriveDone() {
+        if (m_driveController == null) {
+            return true;
+        }
+        return m_driveController.isDone();
+    }
+
+    public void runDrive() {
+        if (m_driveController != null) {
+            double currentDist = rightEncoderDistance();
+            m_driveController.calculate(currentDist, true);
+            
+            if (m_driveController.isDone()) {
+                setDrivePower(0,0);
+                m_driveController = null;
+                return;
+            }
+            
+            double power = m_driveController.getOutput();
+            
+           if (Math.abs(power) < minDriveSpeed) {
+               if (power < 0) {
+                   power = -minDriveSpeed;
+                } else {
+                    power = minDriveSpeed;
+                }
+            }
+            setDrivePower(-power, power);
+            System.out.println("current distance is " + currentDist + " power is" + power);
+        }
+    }
 }
