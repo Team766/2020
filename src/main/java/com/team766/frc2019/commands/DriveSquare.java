@@ -10,6 +10,15 @@ public class DriveSquare extends Subroutine {
 
     protected void subroutine() {
             callSubroutine(new PreciseTurn(90)); 
-     
+            waitForSeconds(1.0);
+            callSubroutine(new PreciseTurn(45)); 
+            waitForSeconds(1.0);
+
+            callSubroutine(new PreciseTurn(-45)); 
+            waitForSeconds(1.0);
+
+            callSubroutine(new PreciseTurn(-90)); 
+            waitForSeconds(1.0);
+
     }  
 }
