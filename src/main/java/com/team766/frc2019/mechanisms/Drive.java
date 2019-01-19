@@ -13,10 +13,11 @@ public class Drive extends Mechanism {
     private SpeedController m_rightMotor;
     private GyroReader m_gyro;
     private PIDController m_turnController;
-    private static double P = 0.025;
-    private static double I = 0;
+    private static double P = 0.014;
+    private static double I = 0.001;
     private static double D = 0;
-    private static double THRESHOLD = 0.2;
+    private static double THRESHOLD = .2;
+    private static double MAX_TURN_SPEED = 0.25;
 
     public Drive() { 
         m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
@@ -48,8 +49,8 @@ public class Drive extends Mechanism {
         resetGyro(); 
         m_turnController = new PIDController(P, I, D, THRESHOLD);
         m_turnController.setSetpoint(angle);
-        m_turnController.setMaxoutputHigh(0.5);      
-        m_turnController.setMaxoutputLow(0.1);
+        m_turnController.setMaxoutputHigh(MAX_TURN_SPEED);      
+        m_turnController.setMaxoutputLow(-MAX_TURN_SPEED);
     }
         
     public boolean isTurnDone() {
@@ -63,13 +64,17 @@ public class Drive extends Mechanism {
         if (m_turnController != null) {
             double currentAngle = m_gyro.getAngle();
             m_turnController.calculate(currentAngle, true);
+
+            System.out.println("current angle is " + currentAngle + " error? " + m_turnController.getCurrentError());
+            if (m_turnController.isDone()) {
+                setDrivePower(0, 0);
+                m_turnController = null;
+                return;
+            } 
+
             double power = m_turnController.getOutput();
             setDrivePower(power, -power);
             System.out.println("current angle is " + currentAngle + " power is " + power);
-
-            if (m_turnController.isDone()) {
-                m_turnController = null;
-            }
         }
     }
 }

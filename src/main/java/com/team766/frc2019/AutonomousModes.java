@@ -17,5 +17,5 @@ public enum AutonomousModes {
     @AutonomousCommand(commandClass= ExtendGripper.class) ExtendGripper,
     @AutonomousCommand(commandClass= RetractGripper.class) RetractGripper,
     @AutonomousCommand(commandClass= TestGripper.class) TestGripper,
-    @AutonomousCommand(commandClass= TestActuator.class) TestActuator,
+    // @AutonomousCommand(commandClass= TestActuator.class) TestActuator,
 }
