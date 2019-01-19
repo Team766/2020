@@ -20,14 +20,19 @@ public class Drive extends Mechanism {
     private static double MAX_TURN_SPEED = 0.75;
     private static double MIN_TURN_SPEED = 0.2;
     private PIDController m_driveController;
-    private static double maxDriveSpeed = 0.75;
-    private static double minDriveSpeed = 0.25;
+    private static double maxDriveSpeed = 0.6;
+    private static double minDriveSpeed = 0.2;
+    private EncoderReader m_leftEncoder;
+    private EncoderReader m_rightEncoder;
+
 
     public Drive() { 
         m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
         m_rightMotor = RobotProvider.instance.getMotor("drive.rightMotor");
         m_rightMotor.setInverted(true);
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
+        m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
+        m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
     }
 
     public void setDrivePower(double leftPower, double rightPower) {
@@ -90,6 +95,16 @@ public class Drive extends Mechanism {
             System.out.println("current angle is " + currentAngle + " power is " + power + " error is " + m_turnController.getCurrentError());
         }
     }
+
+    public void resetEncoders() {
+        m_leftEncoder.reset();
+        m_rightEncoder.reset();
+    }
+    
+    public double rightEncoderDistance() {
+        return(m_rightEncoder.getDistance());
+    }
+ 
 
     public void startDriveStraight(double distance) {
         resetEncoders();
