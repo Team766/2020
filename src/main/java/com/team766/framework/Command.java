@@ -40,6 +40,7 @@ public abstract class Command implements Runnable {
 		m_running = false;
 		cleanup();
 		Logger.get(Category.COMMANDS).logRaw(Severity.DEBUG, this.getClass().getName() + "/" + m_id + " is stopping");
+		new Exception().printStackTrace();
 	}
 	
 	protected void takeControl(Mechanism mechanism) {

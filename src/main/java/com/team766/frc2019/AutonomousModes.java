@@ -16,6 +16,8 @@ public enum AutonomousModes {
     @AutonomousCommand(commandClass= com.team766.frc2019.commands.SimpleTurn.class)
     SimpleTurn,
 
+
+
     @AutonomousCommand(commandClass= ExtendGripper.class) ExtendGripper,
     @AutonomousCommand(commandClass= RetractGripper.class) RetractGripper,
     @AutonomousCommand(commandClass= TestGripper.class) TestGripper,

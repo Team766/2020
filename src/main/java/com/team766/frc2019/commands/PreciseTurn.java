@@ -3,25 +3,28 @@ package com.team766.frc2019.commands;
 import com.team766.controllers.PIDController;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
+import java.util.Date;
+
 
 public class PreciseTurn extends Subroutine {
     private double m_angle;
     public PreciseTurn(double angle) {
         m_angle = angle;
-        takeControl(Robot.drive);
+        //takeControl(Robot.drive);
     }        
  
     protected void subroutine() {
+        double startTime = new Date().getTime();
+
         Robot.drive.startTurn(m_angle);
        
        System.out.println("precise turn subroutine");
         while (!Robot.drive.isTurnDone()) {
-            yield();
-            System.out.println("PRECISE TURN");
-         
+            yield();         
         }
-        System.out.println("Precise Turn Done");
-        
+        double endTime = new Date().getTime();
+        System.out.println("Precise turn is done in " + (endTime - startTime));
+
  
     }
 }
