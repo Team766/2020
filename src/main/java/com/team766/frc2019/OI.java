@@ -18,5 +18,6 @@ public class OI extends Command {
 	}
 	
 	public void run() {
+	double rightPower= m_joystick2.getRawAxis(2);
 	}
 }
