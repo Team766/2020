@@ -49,7 +49,6 @@ public class Simulator {
 				drive.getLinearAcceleration().getX(),
 				electricalSystem.getSystemVoltage(),
 				pneumaticsSystem.getSystemPressure() / PneumaticsSystem.PSI_TO_PASCALS,
-				Math.toDegrees(Math.atan2(drive.getLinearVelocity().getY(), drive.getLinearVelocity().getX())),
 			});
 		trajectory.add(new Double[] {
 				drive.getPosition().getX(),
@@ -78,7 +77,6 @@ public class Simulator {
 				"Acceleration (m/s^2)",
 				"System Voltage (V)",
 				"System Pressure (PSI)",
-				"Velocity orientation",
 			});
 	}
 }
