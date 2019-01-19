@@ -5,6 +5,7 @@ import com.team766.hal.GyroReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.SpeedController;
 import com.team766.controllers.PIDController;
+import com.team766.hal.EncoderReader;
 
 
 public class Drive extends Mechanism { 
