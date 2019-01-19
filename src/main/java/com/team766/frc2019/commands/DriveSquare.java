@@ -3,6 +3,7 @@ package com.team766.frc2019.commands;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.RobotProvider;
+import java.util.Date;
 
 public class DriveSquare extends Subroutine {
     public DriveSquare() {
@@ -10,13 +11,13 @@ public class DriveSquare extends Subroutine {
     }
 
     protected void subroutine() {
-        double startTime = RobotProvider.instance.getClock().getTime();
-        System.out.println("PRECISETURN");
-        callSubroutine(new PreciseTurn(-90)); 
-        System.out.println("TURN IS DONE");
-        callSubroutine(new PreciseTurn(90));
+        double startTime = new Date().getTime();
+        System.out.println("DRIVESQUARE STARTING");
+        callSubroutine(new PreciseTurn(-20)); 
+        System.out.println("DRIVESQUARE IS DONE");
+        //callSubroutine(new PreciseTurn(90));
 
-        double endTime = RobotProvider.instance.getClock().getTime();
+        double endTime = new Date().getTime();
         System.out.println("ENDED IN" + (endTime - startTime));
         // callSubroutine(new PreciseTurn(45)); 
 

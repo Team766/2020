@@ -16,8 +16,9 @@ public class Drive extends Mechanism {
     private static double P = 0.025;
     private static double I = 0.025;
     private static double D = 0.0;
-    private static double THRESHOLD = 0.5;
+    private static double THRESHOLD = 5;
     private static double MAX_TURN_SPEED = 0.75;
+    private static double MIN_TURN_SPEED = 0.2;
 
     public Drive() { 
         m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
@@ -65,7 +66,7 @@ public class Drive extends Mechanism {
             double currentAngle = m_gyro.getAngle();
             m_turnController.calculate(currentAngle, true);
 
-            System.out.println("current angle is " + currentAngle + " error? " + m_turnController.getCurrentError());
+            //System.out.println("current angle is " + currentAngle + " error? " + m_turnController.getCurrentError());
             if (m_turnController.isDone()) {
                 setDrivePower(0, 0);
                 m_turnController = null;
@@ -73,8 +74,17 @@ public class Drive extends Mechanism {
             } 
 
             double power = m_turnController.getOutput();
+
+            if (Math.abs(power) < MIN_TURN_SPEED) {
+                if (power < 0) {
+                    power = -MIN_TURN_SPEED;
+                } else {
+                    power = MIN_TURN_SPEED;
+                }
+            }
+
             setDrivePower(power, -power);
-            System.out.println("current angle is " + currentAngle + " power is " + power);
+            System.out.println("current angle is " + currentAngle + " power is " + power + " error is " + m_turnController.getCurrentError());
         }
     }
 }
