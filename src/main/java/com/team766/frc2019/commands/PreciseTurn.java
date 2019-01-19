@@ -5,23 +5,10 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 
 public class PreciseTurn extends Subroutine {
-    private double m_angle = 90;
-    private PIDController m_PID;
-    private static double P = 10;
-    private static double I = 2;
-    private static double D = 20;
-    private static double THRESHOLD = 0.2;
-
+    private double m_angle;
     public PreciseTurn(double angle) {
         m_angle = angle;
-        Robot.drive.resetGyro();
-        m_PID = new PIDController(P, I, D, THRESHOLD);
-        m_PID.setSetpoint(angle);
-        m_PID.setMaxoutputHigh(0.5);      
-        m_PID.setMaxoutputLow(0.1);  
-        
-            takeControl(Robot.drive);
-
+        takeControl(Robot.drive);
     }        
  
     protected void subroutine() {

@@ -13,9 +13,9 @@ public class Drive extends Mechanism {
     private SpeedController m_rightMotor;
     private GyroReader m_gyro;
     private PIDController m_turnController;
-    private static double P = 10;
-    private static double I = 2;
-    private static double D = 20;
+    private static double P = 0.025;
+    private static double I = 0;
+    private static double D = 0;
     private static double THRESHOLD = 0.2;
 
     public Drive() { 
