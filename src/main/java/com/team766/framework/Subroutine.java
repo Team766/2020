@@ -3,29 +3,51 @@ package com.team766.framework;
 import java.util.function.BooleanSupplier;
 
 import com.team766.hal.RobotProvider;
+import com.team766.logging.Category;
+import com.team766.logging.Logger;
+import com.team766.logging.Severity;
 
 public abstract class Subroutine extends Command {
 	private static enum ControlOwner {
 		MAIN_THREAD,
 		SUBROUTINE,
 	}
-	
+
 	private Thread m_thread;
 	private Object m_threadSync;
 	private boolean m_done;
 	private BooleanSupplier m_blockingPredicate;
 	private ControlOwner m_controlOwner;
+	private String m_previousWaitPoint;
 	
 	@Override
 	protected final void initialize() {
 		m_threadSync = new Object();
+		m_previousWaitPoint = null;
 		m_controlOwner = ControlOwner.MAIN_THREAD;
 		m_done = false;
 		m_thread = new Thread(this::threadFunction);
 		m_thread.start();
 	}
+
+	private String getExecutionPoint() {
+		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+		for (int i = 0; i < stack.length; ++i) {
+			if (stack[i].getClassName() == this.getClass().getName()) {
+				return stack[i].toString();
+			}
+		}
+		return null;
+	}
 	
 	private void waitForControl(ControlOwner thisOwner) {
+		if (thisOwner == ControlOwner.SUBROUTINE) {
+			String waitPointTrace = getExecutionPoint();
+			if (waitPointTrace != null && !waitPointTrace.equals(m_previousWaitPoint)) {
+				Logger.get(Category.COMMANDS).logRaw(Severity.DEBUG, this.getClass().getName() + "/" + m_id + " is waiting at " + waitPointTrace);
+				m_previousWaitPoint = waitPointTrace;
+			}
+		}
 		synchronized (m_threadSync) {
 			while (m_controlOwner != thisOwner && !m_done) {
 				try {
