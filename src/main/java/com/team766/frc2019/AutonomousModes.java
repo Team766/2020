@@ -13,6 +13,8 @@ public enum AutonomousModes {
     DriveSquare,
     @AutonomousCommand(commandClass= com.team766.frc2019.commands.PreciseTurn.class)
     PreciseTurn,
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.SimpleTurn.class)
+    SimpleTurn,
 
     @AutonomousCommand(commandClass= ExtendGripper.class) ExtendGripper,
     @AutonomousCommand(commandClass= RetractGripper.class) RetractGripper,
