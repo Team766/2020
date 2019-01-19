@@ -17,6 +17,7 @@ public class Drive extends Mechanism {
     public Drive() {
         m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
         m_rightMotor = RobotProvider.instance.getMotor("drive.rightMotor");
+        m_rightMotor.setInverted(true); 
     }
 
     public void setDrivePower(double leftPower, double rightPower) {

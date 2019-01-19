@@ -7,9 +7,10 @@ import com.team766.web.AutonomousSelector;
 import com.team766.web.ConfigUI;
 import com.team766.web.LogViewer;
 import com.team766.web.WebServer;
-
+import com.team766.frc2019.mechanism.Drive;
 public class Robot extends MyRobot {
 	// Declare mechanisms here
+    public static Drive drive;
 
 	private OI m_oi;
 	
@@ -20,7 +21,7 @@ public class Robot extends MyRobot {
 	@Override
 	public void robotInit() {
 		// Initialize mechanisms here
-		
+		drive = new Drive();
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());
 		m_webServer.addHandler("/logs", new LogViewer());
