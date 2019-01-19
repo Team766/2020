@@ -19,6 +19,9 @@ public class Drive extends Mechanism {
     private static double THRESHOLD = 5;
     private static double MAX_TURN_SPEED = 0.75;
     private static double MIN_TURN_SPEED = 0.2;
+    private PIDController m_driveController;
+    private static double maxDriveSpeed = 0.75;
+    private static double minDriveSpeed = 0.25;
 
     public Drive() { 
         m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
