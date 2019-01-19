@@ -9,7 +9,7 @@ public class DriveStraight extends Subroutine {
     }
 
     protected void subroutine() {
-        Robot.drive.setDrivePower(-1.0, 1.0);
+        Robot.drive.setDrivePower(0.5, 0.5);
         waitForSeconds(1.0);
 
         Robot.drive.setDrivePower(0.0, 0.0);
