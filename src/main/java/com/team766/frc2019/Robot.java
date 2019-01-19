@@ -15,7 +15,7 @@ public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
 		public static FlowerGripper flowerGripper;
-		public static FlowerActuator flowerActuator;
+//		public static FlowerActuator flowerActuator;
 
 
 	private OI m_oi;
@@ -29,7 +29,7 @@ public class Robot extends MyRobot {
 		// Initialize mechanisms here
 		drive = new Drive();
 		flowerGripper = new FlowerGripper();
-		flowerActuator = new FlowerActuator();
+//		flowerActuator = new FlowerActuator();
 		
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());

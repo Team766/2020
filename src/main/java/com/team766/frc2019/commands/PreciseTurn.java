@@ -15,12 +15,14 @@ public class PreciseTurn extends Subroutine {
         Robot.drive.startTurn(m_angle);
        
        int loops = 0;
-        while (!Robot.drive.isTurnDone() && loops < 100) {
+       System.out.println("precise turn subroutine");
+        while (!Robot.drive.isTurnDone()) {
             yield();
-            loops += 1;
+            System.out.println("precise turn " + loops);
+         
         }
 
-        Robot.drive.setDrivePower(0.0, 0.0);
+ 
     }
 }
 
