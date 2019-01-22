@@ -25,6 +25,7 @@ public class Scheduler implements Runnable {
 	
 	@SuppressWarnings("unchecked")
 	public void run() {
+		for (Runnable runnable : new LinkedList<Runnable>(m_runnables)) {
 			runnable.run();
 		}
 	}
