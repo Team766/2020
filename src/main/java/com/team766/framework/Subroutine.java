@@ -44,7 +44,7 @@ public abstract class Subroutine extends Command {
 		if (thisOwner == ControlOwner.SUBROUTINE) {
 			String waitPointTrace = getExecutionPoint();
 			if (waitPointTrace != null && !waitPointTrace.equals(m_previousWaitPoint)) {
-				Logger.get(Category.COMMANDS).logRaw(Severity.DEBUG, this.getClass().getName() + "/" + m_id + " is waiting at " + waitPointTrace);
+				Logger.get(Category.COMMANDS).logRaw(Severity.INFO, getCommandName() + " is waiting at " + waitPointTrace);
 				m_previousWaitPoint = waitPointTrace;
 			}
 		}
