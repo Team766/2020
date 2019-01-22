@@ -19,7 +19,7 @@ public abstract class RobotProvider {
 	protected AnalogInputReader[] angInputs = new AnalogInputReader[5];
 	protected RelayOutput[] relays = new RelayOutput[5];
 	
-	//HAL
+	//HA
 	public abstract SpeedController getMotor(int index);
 	public abstract CANSpeedController getCANMotor(int index);
 	
