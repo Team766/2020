@@ -4,23 +4,27 @@ import com.team766.framework.Mechanism;
 import com.team766.hal.GyroReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.SpeedController;
-import com.team766.hal.EncoderReader;
+import com.team766.controllers.PIDController;
 
 
-public class Drive extends Mechanism {
+public class Drive extends Mechanism { 
 
     private SpeedController m_leftMotor;
     private SpeedController m_rightMotor;
     private GyroReader m_gyro;
-    private EncoderReader m_leftEncoder;
-    private EncoderReader m_rightEncoder;
+    private PIDController m_turnController;
+    public static double P = 0.04;
+    public static double I = 0;
+    public static double D = 0.004;
+    public static double THRESHOLD = 3;
+    public static double MAX_TURN_SPEED = 0.75;
+    public static double MIN_TURN_SPEED = 0.1;
 
-    public Drive() {
+    public Drive() { 
         m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
         m_rightMotor = RobotProvider.instance.getMotor("drive.rightMotor");
+        m_rightMotor.setInverted(true);
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
-        //m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
-        //m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
     }
 
     public void setDrivePower(double leftPower, double rightPower) {
@@ -32,33 +36,20 @@ public class Drive extends Mechanism {
         return(m_gyro.getAngle());
     }
 
-    public double getGyroRate() {
-        return(m_gyro.getRate());
+    public void resetGyro() {
+        m_gyro.reset(); 
     }
 
-    public double getLeftEncoderDistance() {
-        return(m_leftEncoder.getDistance());
+    /*@Override
+    public void run() {
+        setDrivePower(leftPower, rightPower);
     }
-
-    public double getRightEncoderDistance() {
-        return(m_rightEncoder.getDistance());
-    }
-
-    public double calculateError(double oldAngle, double targetAngle) {
-        double error = 0;
-        if (oldAngle < targetAngle) {
-            if (Math.abs(oldAngle - targetAngle) < 180) {
-                error = Math.abs(oldAngle - targetAngle);
-            } else {
-                error = -Math.abs(oldAngle - targetAngle);
-            }
-        } else {
-            if (Math.abs(oldAngle - targetAngle) < 180) {
-                error = -Math.abs(oldAngle - targetAngle);
-            } else {
-                error = Math.abs(oldAngle - targetAngle);
-            }
+    */
+        
+    public boolean isTurnDone(PIDController turnController) {
+        if (turnController == null) {
+            return true;
         }
-        return(error);
+        return turnController.isDone();
     }
 }
