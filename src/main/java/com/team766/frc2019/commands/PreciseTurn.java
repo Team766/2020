@@ -2,21 +2,17 @@ package com.team766.frc2019.commands;
 
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
+import com.team766.controllers.PIDController;
 
 public class PreciseTurn extends Subroutine {
 
     double m_turnAngle;
     double m_rampAngle;
-
-    public PreciseTurn() {
-        m_turnAngle = 90;
-        m_rampAngle = 20;
-        takeControl(Robot.drive);
-    }
+    PIDController m_turnController;
 
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;
-        m_rampAngle = Math.max(turnAngle / 4.5, 20);
+        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
         takeControl(Robot.drive);
     }
 
@@ -30,22 +26,18 @@ public class PreciseTurn extends Subroutine {
         } else {
             targetAngle = (newAngle - 360 - oldAngle) % 360; // Zero cross
         }
-        double direction = 0;
+        m_turnController.setSetpoint(targetAngle);
         double power = 0;
-        while (!(Robot.drive.getGyroAngle() >= newAngle - 1 && Robot.drive.getGyroAngle() <= newAngle + 1)) {
-            if (targetAngle > oldAngle) {
-                System.out.println("(Turning) Current Angle: " + Robot.drive.getGyroAngle() + " Target Angle: " + newAngle);
-                direction = -1;
-            } else if (targetAngle < oldAngle) {
-                System.out.println("(Turning) Current Angle: " + Robot.drive.getGyroAngle() + " Target Angle: " + newAngle);
-                direction = 1;
+        while(!(Robot.drive.isTurnDone(m_turnController))) {
+            power = m_turnController.getOutput();
+            if (Math.abs(power) < Robot.drive.MIN_TURN_SPEED) {
+                if (power < 0) {
+                    power = -Robot.drive.MIN_TURN_SPEED;
+                } else {
+                    power = Robot.drive.MIN_TURN_SPEED;
+                }
             }
-            if (Robot.drive.getGyroAngle() - oldAngle < m_rampAngle - oldAngle || Robot.drive.getGyroAngle() - targetAngle < m_rampAngle - targetAngle) {
-                power = 0.25;
-            } else {
-                power = 0.5;
-            }
-            Robot.drive.setDrivePower(power * direction, power * direction);
+            Robot.drive.setDrivePower(power, -power);
             yield();
         }
         Robot.drive.setDrivePower(0.0, 0.0);
