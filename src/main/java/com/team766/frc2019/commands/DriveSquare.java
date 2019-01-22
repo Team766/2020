@@ -2,49 +2,29 @@ package com.team766.frc2019.commands;
 
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
+//import com.team766.hal.RobotProvider;
+import java.util.Date;
 
 public class DriveSquare extends Subroutine {
+    public DriveSquare() {
+        //takeControl(Robot.drive);
+    }
+
     protected void subroutine() {
-        System.out.println(Robot.drive.getGyroAngle());
-        callSubroutine(new PreciseDrive(2));
-        waitForSeconds(0.5);
-        callSubroutine(new PreciseTurn(90));
-        System.out.println(Robot.drive.getGyroAngle());
-        /*for (int i = 0; i < 8; i++) {
-            callSubroutine(new PreciseDrive(3));
-            waitForSeconds(0.5);
-            callSubroutine(new PreciseTurn(90));
-            waitForSeconds(0.5);
-        }*/
-        /*callSubroutine(new DriveStraight());
-        waitForSeconds(0.5);
-        callSubroutine(new PreciseTurn(90));
-        waitForSeconds(0.5);
-        callSubroutine(new DriveStraight());
-        waitForSeconds(0.5);
-        callSubroutine(new PreciseTurn(90));
-        waitForSeconds(0.5);
-        callSubroutine(new DriveStraight());
-        waitForSeconds(0.5);
-        callSubroutine(new PreciseTurn(90));
-        waitForSeconds(0.5);
-        callSubroutine(new DriveStraight());
-        waitForSeconds(0.5);
-        callSubroutine(new PreciseTurn(90));
-        waitForSeconds(0.5);
-        callSubroutine(new DriveStraight());
-        waitForSeconds(0.5);
-        callSubroutine(new PreciseTurn(90));
-        waitForSeconds(0.5);
-        callSubroutine(new DriveStraight());
-        waitForSeconds(0.5);
-        callSubroutine(new PreciseTurn(90));
-        waitForSeconds(0.5);
-        callSubroutine(new DriveStraight());
-        waitForSeconds(0.5);
-        callSubroutine(new PreciseTurn(90));
-        waitForSeconds(0.5);
-        callSubroutine(new DriveStraight());
-        waitForSeconds(0.5);*/
+        double startTime = new Date().getTime();
+        System.out.println("DRIVESQUARE STARTING");
+
+        for (int i=1; i<5; i++) {
+            System.out.println("Entering DriveSquare loop # " + i);
+            callSubroutine(new DriveStraight(1)); 
+            callSubroutine(new PreciseTurn(-90));
+        }
+
+        System.out.println("DRIVESQUARE IS DONE");
+
+
+        double endTime = new Date().getTime();
+        System.out.println("ENDED IN " + (endTime - startTime));
+
     }
 }
