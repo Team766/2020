@@ -87,8 +87,8 @@ public class WestCoastDrive extends DriveBase {
 		leftEncoderResidual %= 1;
 		rightEncoderResidual %= 1;
 
-		ProgramInterface.gyro.angle = robotRotation.getAngles(RotationOrder.XYZ, RotationConvention.VECTOR_OPERATOR)[2];
-		ProgramInterface.gyro.rate = angularVelocity.getZ();
+		ProgramInterface.gyro.angle = Math.toDegrees(robotRotation.getAngles(RotationOrder.XYZ, RotationConvention.VECTOR_OPERATOR)[2]);
+		ProgramInterface.gyro.rate = Math.toDegrees(angularVelocity.getZ());
 
 		Vector3D rollingResistance = new Vector3D(-softSignum(ego_velocity.getX()), 0.0, 0.0).scalarMultiply(
 				Parameters.ROBOT_MASS * PhysicalConstants.GRAVITY_ACCELERATION * Parameters.ROLLING_RESISTANCE);
