@@ -22,14 +22,18 @@ public abstract class Command implements Runnable {
 		m_id = createNewId();
 	}
 
+	public String getCommandName() {
+		return this.getClass().getName() + "/" + m_id;
+	}
+
 	protected void initialize() {}
 	protected void cleanup() {}
-	
+
 	public final void start() {
 		for (Mechanism m : m_controlledMechanisms) {
 			m.takeControl(this);
 		}
-		Logger.get(Category.COMMANDS).logRaw(Severity.DEBUG, this.getClass().getName() + "/" + m_id + " is starting");
+		Logger.get(Category.COMMANDS).logRaw(Severity.INFO, getCommandName() + " is starting");
 		initialize();
 		m_running = true;
 		Scheduler.getInstance().add(this);
@@ -39,8 +43,7 @@ public abstract class Command implements Runnable {
 		Scheduler.getInstance().cancel(this);
 		m_running = false;
 		cleanup();
-		Logger.get(Category.COMMANDS).logRaw(Severity.DEBUG, this.getClass().getName() + "/" + m_id + " is stopping");
-		new Exception().printStackTrace();
+		Logger.get(Category.COMMANDS).logRaw(Severity.INFO, getCommandName() + " is stopping");
 	}
 	
 	protected void takeControl(Mechanism mechanism) {
