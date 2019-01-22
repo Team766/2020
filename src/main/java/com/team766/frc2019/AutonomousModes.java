@@ -10,14 +10,19 @@ import com.team766.frc2019.commands.TestActuator;
 import com.team766.frc2019.commands.TestGripper;
 
 public enum AutonomousModes {
-    @AutonomousCommand(commandClass= DriveStraight.class)
-    DriveStraight, 
-    @AutonomousCommand(commandClass= DriveSquare.class)
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.DriveStraight.class)
+    DriveStraight,
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.DriveSquare.class)
     DriveSquare,
-    @AutonomousCommand(commandClass= TurnLeft.class)
-    TurnLeft,
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.PreciseTurn.class)
+    PreciseTurn,
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.SimpleTurn.class)
+    SimpleTurn,
+
+
+
     @AutonomousCommand(commandClass= ExtendGripper.class) ExtendGripper,
     @AutonomousCommand(commandClass= RetractGripper.class) RetractGripper,
     @AutonomousCommand(commandClass= TestGripper.class) TestGripper,
-    @AutonomousCommand(commandClass= TestActuator.class) TestActuator,
+    // @AutonomousCommand(commandClass= TestActuator.class) TestActuator,
 }
