@@ -14,11 +14,13 @@ public class DriveSquare extends Subroutine {
         double startTime = new Date().getTime();
         System.out.println("DRIVESQUARE STARTING");
 
-        //for (int i=1; i<5; i++) {
-            //System.out.println("Entering DriveSquare loop # " + i);
-            //callSubroutine(new PreciseDrive(2.5, 0.75, 0.75)); 
-        callSubroutine(new PreciseTurn(90));
-        //}
+        for (int i=1; i<3; i++) {
+            for (int n=1; n<5; n++) {
+                System.out.println("Entering DriveSquare loop # " + i);
+                callSubroutine(new PreciseDrive(1, 0.5, 0.5)); 
+                callSubroutine(new PreciseTurn(90));
+            }
+        }
 
         System.out.println("DRIVESQUARE IS DONE");
 
