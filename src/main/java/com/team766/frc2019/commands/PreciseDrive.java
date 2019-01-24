@@ -35,6 +35,7 @@ public class PreciseDrive extends Subroutine {
             } else {
                 Robot.drive.setDrivePower(m_leftPower, m_rightPower - power);
             }
+            yield();
         }
         Robot.drive.setDrivePower(0.0, 0.0);
     }
