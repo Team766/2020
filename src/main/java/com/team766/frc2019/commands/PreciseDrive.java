@@ -23,8 +23,12 @@ public class PreciseDrive extends Subroutine {
         double currentAngle = Robot.drive.getGyroAngle();
         m_turnController.setSetpoint(currentAngle);
         double power = 0;
+        power = m_turnController.getOutput();
         double endTime = System.currentTimeMillis() + (m_driveTime * 1000);
+        System.out.println("Current Angle: " + currentAngle + " Power: " + power + "Time: " + System.currentTimeMillis() + " End Time: " + endTime);
+        m_turnController.calculate(Robot.drive.getGyroAngle(), true);
         while(System.currentTimeMillis() < endTime) {
+            m_turnController.calculate(Robot.drive.getGyroAngle(), true);
             power = m_turnController.getOutput();
             if (power < 0) {
                 Robot.drive.setDrivePower(m_leftPower + power, m_rightPower);
