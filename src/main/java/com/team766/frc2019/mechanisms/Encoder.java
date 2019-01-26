@@ -12,6 +12,8 @@ public class Encoder extends Mechanism {
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder"); //change these to whatever we call it in config
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder"); //also here
     }
+    
+
 
     
 }
