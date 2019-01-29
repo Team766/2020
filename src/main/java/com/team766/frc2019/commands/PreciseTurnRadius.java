@@ -92,5 +92,4 @@ public class PreciseTurnRadius extends Subroutine {
         return Math.min(Math.min(startPower, endPower), m_targetPower) + MIN_POWER;
 
     }
-
 }
