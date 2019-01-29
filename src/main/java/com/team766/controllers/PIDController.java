@@ -208,7 +208,6 @@ public class PIDController {
 	}
 
 	public boolean isDone() {
-		System.out.println("Current Error: " + cur_error);
 		return Math.abs(cur_error) < endthreshold.get();
 	}
 

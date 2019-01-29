@@ -9,15 +9,13 @@ public class PreciseDrive extends Subroutine {
     PIDController m_turnController;
     double m_driveTime;
     double m_targetAngle;
-    double m_leftPower;
-    double m_rightPower;
+    double m_motorPower;
 
-    public PreciseDrive(double driveTime, double targetAngle, double leftPower, double rightPower) {
+    public PreciseDrive(double driveTime, double targetAngle, double motorPower) {
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
         m_driveTime = driveTime;
         m_targetAngle = targetAngle;
-        m_leftPower = leftPower;
-        m_rightPower = rightPower;
+        m_motorPower = motorPower;
         takeControl(Robot.drive);
     }
 
@@ -32,9 +30,9 @@ public class PreciseDrive extends Subroutine {
             m_turnController.calculate(Robot.drive.getGyroAngle(), true);
             power = m_turnController.getOutput();
             if (power < 0) {
-                Robot.drive.setDrivePower(m_leftPower + power, m_rightPower);
+                Robot.drive.setDrivePower(m_motorPower + power, m_motorPower);
             } else {
-                Robot.drive.setDrivePower(m_leftPower, m_rightPower - power);
+                Robot.drive.setDrivePower(m_motorPower, m_motorPower - power);
             }
             yield();
         }

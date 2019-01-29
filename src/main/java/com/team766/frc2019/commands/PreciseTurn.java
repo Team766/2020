@@ -17,9 +17,15 @@ public class PreciseTurn extends Subroutine {
     }
 
     protected void subroutine() {
+        if (Math.abs(m_turnAngle - Robot.drive.getGyroAngle()) > 180) {
+            if (m_turnAngle > Robot.drive.getGyroAngle()) {
+                m_turnAngle -= 360;
+            } else {
+                m_turnAngle += 360;
+            }
+        }
         double power = 0;
         System.out.println("hey im gonna turn");
-        System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Check: " + Robot.drive.isTurnDone(m_turnController));
         m_turnController.setSetpoint(m_turnAngle);
         m_turnController.calculate(Robot.drive.getGyroAngle(), true);
         while(!(Robot.drive.isTurnDone(m_turnController))) {
@@ -33,6 +39,7 @@ public class PreciseTurn extends Subroutine {
                 }
             }
             Robot.drive.setDrivePower(power, -power);
+            System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Check: " + Robot.drive.isTurnDone(m_turnController));
             yield();
         }
         Robot.drive.setDrivePower(0.0, 0.0);
