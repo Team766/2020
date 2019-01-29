@@ -11,7 +11,7 @@ public class PreciseTurnRadius extends Subroutine {
     double m_targetPower;
     double m_startPower;
     double m_endPower;
-    double m_adjustment;
+    //double m_adjustment;
     double m_arcLength;
     double m_insideArcLength;
     double m_outsideArcLength;
@@ -42,9 +42,10 @@ public class PreciseTurnRadius extends Subroutine {
     }
 
     protected void subroutine() {
-        m_turnController.setSetpoint(180.0);
+        m_turnController.setSetpoint(0);
         //sets bearing
-        m_adjustment = 180.0 - m_targetAngle;
+        //m_adjustment = 180.0 - m_targetAngle;
+        System.out.println("Current Distance: " + getCurrentDistance() + " Arc Length: " + m_arcLength);
         while(getCurrentDistance() < m_arcLength) {
             m_turnController.calculate(getBearingError(), true);
             double turnAdjust = m_turnController.getOutput();

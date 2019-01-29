@@ -29,6 +29,8 @@ public class Drive extends Mechanism {
     public Drive() { 
         m_leftMotor = RobotProvider.instance.getMotor("drive.leftMotor");
         m_rightMotor = RobotProvider.instance.getMotor("drive.rightMotor");
+        m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
+        m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_rightMotor.setInverted(true);
         encodersDistancePerPulse(DIST_PER_PULSE);
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
