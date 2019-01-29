@@ -15,30 +15,28 @@ public class DriveSquare extends Subroutine {
         System.out.println("DRIVESQUARE STARTING");
 
         Robot.drive.resetGyro();
-        callSubroutine(new PreciseDrive(2, 0, 0.5)); 
-        callSubroutine(new PreciseTurn(90));
-        callSubroutine(new PreciseDrive(2, 90, 0.5)); 
-        callSubroutine(new PreciseTurn(180));
-        callSubroutine(new PreciseDrive(2, 180, 0.5)); 
-        callSubroutine(new PreciseTurn(270));
-        callSubroutine(new PreciseDrive(2, 270, 0.5)); 
-        callSubroutine(new PreciseTurn(0));
-        callSubroutine(new PreciseDrive(2, 0, 0.5)); 
-        callSubroutine(new PreciseTurn(90));
-        callSubroutine(new PreciseDrive(2, 90, 0.5)); 
-        callSubroutine(new PreciseTurn(180));
-        callSubroutine(new PreciseDrive(2, 180, 0.5)); 
-        callSubroutine(new PreciseTurn(270));
-        callSubroutine(new PreciseDrive(2, 270, 0.5)); 
-        callSubroutine(new PreciseTurn(0));
-        //callSubroutine(new PreciseTurn(10));
-        //callSubroutine(new PreciseTurn(350));
-
-        System.out.println("DRIVESQUARE IS DONE");
+        callSubroutine(new PreciseDrive(2, 0, .75, 0, 0));
+         /*
+        for (int i = 0; i < 2; i++) {
+           callSubroutine(new PreciseDrive(1, 0, 0.5, 0.5)); 
+            callSubroutine(new PreciseTurn(90));
+            callSubroutine(new PreciseDrive(1, 90, 0.5, 0.5)); 
+            callSubroutine(new PreciseTurn(180));
+            callSubroutine(new PreciseDrive(1, 180, 0.5, 0.5)); 
+            callSubroutine(new PreciseTurn(270));
+            callSubroutine(new PreciseDrive(1, 270, 0.5, 0.5)); 
+            callSubroutine(new PreciseTurn(0));
+            callSubroutine(new PreciseDrive(1, 0, 0.5, 0.5)); 
+            callSubroutine(new PreciseTurn(0));
+            */
+            System.out.println("DRIVESQUARE IS DONE");
+        }
 
 
-        double endTime = new Date().getTime();
-        System.out.println("ENDED IN " + (endTime - startTime));
+        
+
+
+       // double endTime = new Date().getTime();
+        //System.out.println("ENDED IN " + (endTime - startTime));
 
     }
-}
