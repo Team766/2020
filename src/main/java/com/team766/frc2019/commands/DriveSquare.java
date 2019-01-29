@@ -11,11 +11,10 @@ public class DriveSquare extends Subroutine {
     }
 
     protected void subroutine() {
-        double startTime = new Date().getTime();
         System.out.println("DRIVESQUARE STARTING");
 
         Robot.drive.resetGyro();
-        callSubroutine(new PreciseDrive(2, 0, .75, 0, 0));
+        callSubroutine(new PreciseTurnRadius(90, 12, .75, 0, 0));
         /*
         for (int i = 0; i < 2; i++) {
            callSubroutine(new PreciseDrive(1, 0, 0.5, 0.5)); 
