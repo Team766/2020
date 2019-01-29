@@ -7,35 +7,72 @@ import com.team766.controllers.PIDController;
 public class PreciseDrive extends Subroutine {
 
     PIDController m_turnController;
-    double m_driveTime;
+    double m_driveDistance;
     double m_targetAngle;
-    double m_motorPower;
+    double m_targetPower;
+    double m_startPower;
+    double m_endPower;
+    double m_adjustment;
+    double MIN_POWER = 0.2;
+    double POWER_RAMP = 1.0;
 
-    public PreciseDrive(double driveTime, double targetAngle, double motorPower) {
+    public PreciseDrive(double driveDistance, double targetAngle, double targetPower, double startPower, double endPower) {
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
-        m_driveTime = driveTime;
+        m_driveDistance = driveDistance;
         m_targetAngle = targetAngle;
-        m_motorPower = motorPower;
+        m_targetPower = targetPower;
+        m_startPower = startPower;
+        m_endPower = endPower;
         takeControl(Robot.drive);
     }
 
     protected void subroutine() {
-        m_turnController.setSetpoint(m_targetAngle);
-        double power = 0;
-        power = m_turnController.getOutput();
-        double endTime = System.currentTimeMillis() + (m_driveTime * 1000);
-        System.out.println("Current Angle: " + Robot.drive.getGyroAngle() + " Target Angle: " + m_targetAngle + " Power: " + power + "Time: " + System.currentTimeMillis() + " End Time: " + endTime);
-        m_turnController.calculate(Robot.drive.getGyroAngle(), true);
-        while(System.currentTimeMillis() < endTime) {
-            m_turnController.calculate(Robot.drive.getGyroAngle(), true);
-            power = m_turnController.getOutput();
-            if (power < 0) {
-                Robot.drive.setDrivePower(m_motorPower + power, m_motorPower);
+        //Robot.drive.getEncoder();
+        m_turnController.setSetpoint(180.0);
+        setBearing();
+        //double power = 0.0;
+        //power = m_turnController.getOutput(); 
+        //System.out.println("Current Angle: " + Robot.drive.getGyroAngle() + " Target Angle: " + m_targetAngle + " Power: " + power + "Current Distance: " + );
+        while(getCurrentDistance() < m_driveDistance) {
+            m_turnController.calculate(getBearingError(), true);
+            double turnPower = m_turnController.getOutput();
+            double straightPower = calcPower();
+            if (turnPower < 0) {
+                Robot.drive.setDrivePower(straightPower + turnPower, straightPower);
             } else {
-                Robot.drive.setDrivePower(m_motorPower, m_motorPower - power);
+                Robot.drive.setDrivePower(straightPower, straightPower - turnPower);
             }
             yield();
         }
-        Robot.drive.setDrivePower(0.0, 0.0);
+        Robot.drive.setDrivePower(m_endPower, m_endPower);
     }
+
+    public double getCurrentDistance() {
+        return((Robot.drive.rightEncoderDistance() + Robot.drive.leftEncoderDistance())*Robot.drive.DIST_PER_PULSE/2.0);
+    }
+
+    public double getBearingError() {
+        double err = Robot.drive.getGyroAngle() + m_adjustment;
+        if (err > 360.0) {
+            err -= 360.0;
+        }
+        if (err < 0.0) {
+            err += 360.0;
+        }
+        return err;
+    }
+
+    public void setBearing() {
+        m_adjustment = 180.0 - m_targetAngle;
+    }
+
+    public double calcPower() {
+        double currentDistance = getCurrentDistance();  
+        
+        double startPower = currentDistance * POWER_RAMP;
+        double endPower = (m_driveDistance - currentDistance) * POWER_RAMP;
+        return Math.min(Math.min(startPower, endPower), m_targetPower) + MIN_POWER;
+
+    }
+
 }
