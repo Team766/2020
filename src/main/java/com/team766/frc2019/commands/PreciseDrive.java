@@ -27,12 +27,11 @@ public class PreciseDrive extends Subroutine {
     }
 
     protected void subroutine() {
-        //Robot.drive.getEncoder();
+        Robot.drive.resetGyro();
+        Robot.drive.resetEncoders();
         m_turnController.setSetpoint(180.0);
-        setBearing();
-        //double power = 0.0;
-        //power = m_turnController.getOutput(); 
-        //System.out.println("Current Angle: " + Robot.drive.getGyroAngle() + " Target Angle: " + m_targetAngle + " Power: " + power + "Current Distance: " + );
+        //sets bearing
+        m_adjustment = 180.0 - m_targetAngle;
         while(getCurrentDistance() < m_driveDistance) {
             m_turnController.calculate(getBearingError(), true);
             double turnPower = m_turnController.getOutput();
@@ -48,7 +47,7 @@ public class PreciseDrive extends Subroutine {
     }
 
     public double getCurrentDistance() {
-        return((Robot.drive.rightEncoderDistance() + Robot.drive.leftEncoderDistance())*Robot.drive.DIST_PER_PULSE/2.0);
+        return(((Robot.drive.rightEncoderDistance() + Robot.drive.leftEncoderDistance())*Robot.drive.DIST_PER_PULSE)/2.0);
     }
 
     public double getBearingError() {
@@ -60,10 +59,6 @@ public class PreciseDrive extends Subroutine {
             err += 360.0;
         }
         return err;
-    }
-
-    public void setBearing() {
-        m_adjustment = 180.0 - m_targetAngle;
     }
 
     public double calcPower() {
