@@ -15,7 +15,6 @@ public class Drive extends Mechanism {
     private GyroReader m_gyro;
     private EncoderReader m_leftEncoder; 
     private EncoderReader m_rightEncoder;
-    private PIDController m_turnController;
     public static double P = 0.04;
     public static double I = 0;
     public static double D = 0.004;
@@ -55,6 +54,14 @@ public class Drive extends Mechanism {
 
     public double rightEncoderDistance() { 
         return(m_rightEncoder.getDistance());
+    }
+
+    public EncoderReader getOutsideEncoder(boolean turnDirection) {
+        if (turnDirection) {
+            return(m_leftEncoder);
+        } else {
+            return(m_rightEncoder);
+        }
     }
 
     public void resetEncoders() {
