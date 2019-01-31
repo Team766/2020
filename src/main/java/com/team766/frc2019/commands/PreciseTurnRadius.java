@@ -47,7 +47,7 @@ public class PreciseTurnRadius extends Subroutine {
         m_turnController.setSetpoint(0);
         //sets bearing
         //m_adjustment = 180.0 - m_targetAngle;
-        System.out.println("Current Distance: " + getCurrentDistance() + " Arc Length: " + m_arcLength);
+        System.out.println("Current Distance: " + getCurrentDistance() + " Arc Length: " + m_arcLength + " Outside Arc Length: " + m_outsideArcLength + " Inside Arc Length: " + m_insideArcLength);
         while((Robot.drive.getOutsideEncoder(m_turnDirection).getDistance() * Robot.drive.DIST_PER_PULSE) < m_outsideArcLength) {
             m_turnController.calculate(getBearingError(), true);
             double turnAdjust = m_turnController.getOutput();
@@ -63,8 +63,10 @@ public class PreciseTurnRadius extends Subroutine {
             }
             if (m_turnDirection) {
                 Robot.drive.setDrivePower((m_outsidePower * straightPower) + leftAdjust, (m_insidePower * straightPower) + rightAdjust);
+                System.out.println("Bearing Error: " + getBearingError() + " Power: " + straightPower + " Left Power: " + (m_outsidePower * straightPower) + leftAdjust + " Right Power: " + (m_insidePower * straightPower) + rightAdjust);
             } else {
                 Robot.drive.setDrivePower((m_insidePower * straightPower) + leftAdjust, (m_outsidePower * straightPower) + rightAdjust);
+                System.out.println("Bearing Error: " + getBearingError() + " Power: " + straightPower + " Left Power: " + (m_insidePower * straightPower) + leftAdjust + " Right Power: " + (m_outsidePower * straightPower) + rightAdjust);
             }
             yield();
         }
