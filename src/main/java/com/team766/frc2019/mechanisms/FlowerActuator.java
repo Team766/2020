@@ -10,15 +10,15 @@ public class FlowerActuator extends Mechanism {
     private SolenoidController m_gripper;
 
     public FlowerActuator() {
-        m_gripper = RobotProvider.instance.getSolenoid("actuator.flower"); 
+        //m_gripper = RobotProvider.instance.getSolenoid("actuator.flower"); 
     }
 
     public void extend() {
-        m_gripper.set(true);
+        //m_gripper.set(true);
     }
 
     public void retract() {
-        m_gripper.set(false);
+        //m_gripper.set(false);
     }
 }
 

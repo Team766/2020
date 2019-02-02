@@ -9,15 +9,15 @@ public class FlowerGripper extends Mechanism {
     private SolenoidController m_gripper;
 
     public FlowerGripper(){
-        m_gripper = RobotProvider.instance.getSolenoid("gripper.flower"); 
+        //m_gripper = RobotProvider.instance.getSolenoid("gripper.flower"); 
     }
 
     public void extend() {
-        m_gripper.set(true);
+        //m_gripper.set(true);
     }
 
     public void retract() {
-        m_gripper.set(false);
+        //m_gripper.set(false);
     }
 }
 
