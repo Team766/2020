@@ -4,6 +4,7 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.controllers.PIDController;
 import com.team766.hal.EncoderReader;
+import com.team766.hal.CANSpeedController.ControlMode;
 
 public class PreciseTurnRadius extends Subroutine {
 
@@ -65,9 +66,9 @@ public class PreciseTurnRadius extends Subroutine {
                 rightAdjust = turnAdjust;
             }
             if (m_turnDirection) {
-                Robot.drive.setDrivePower(straightPower + leftAdjust, (straightPower * (m_insideArcLength / m_outsideArcLength)) + rightAdjust);
+                Robot.drive.setDrive(straightPower + leftAdjust, (straightPower * (m_insideArcLength / m_outsideArcLength)) + rightAdjust, ControlMode.PercentOutput);
             } else {
-                Robot.drive.setDrivePower((straightPower * (m_insideArcLength / m_outsideArcLength)) + leftAdjust, straightPower + rightAdjust);
+                Robot.drive.setDrive((straightPower * (m_insideArcLength / m_outsideArcLength)) + leftAdjust, straightPower + rightAdjust, ControlMode.PercentOutput);
             }
             //System.out.println("currdist: " + getCurrentDistance() + " power: " + straightPower + " ladj: " + leftAdjust + " radj: " + rightAdjust);
             //System.out.println("arc: " + m_arcLength + " out: " + m_outsideArcLength + " in: " + m_insideArcLength);
