@@ -69,5 +69,10 @@ public class Talon implements CANSpeedController{
 	public void setPosition(int position) {
 		sensorPosition = position;
 	}
+
+	@Override
+	public void follow(CANSpeedController leader) {
+		throw new UnsupportedOperationException();
+	}
 	
 }
