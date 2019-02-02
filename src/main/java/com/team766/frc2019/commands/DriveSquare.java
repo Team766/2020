@@ -14,8 +14,9 @@ public class DriveSquare extends Subroutine {
         System.out.println("DRIVESQUARE STARTING");
 
         Robot.drive.resetGyro();
-        callSubroutine(new PreciseDrive(2, 0, .5, 0, .25));
-        //callSubroutine(new PreciseTurnRadius(90, 1, .25, .25, .25));
+        Robot.drive.resetEncoders();
+        //%callSubroutine(new PreciseDrive(10, 0, .25, 0, 0));
+        callSubroutine(new PreciseTurnRadius(90, 0, .25, .25, .25));
         //callSubroutine(new PreciseDrive(2, 90, .5, 0, .25));
         //callSubroutine(new PreciseTurnRadius(180, 1, .25, .25, .25));
         //callSubroutine(new PreciseDrive(2, 180, .5, 0, .25));

@@ -15,14 +15,14 @@ public class Drive extends Mechanism {
     private GyroReader m_gyro;
     private EncoderReader m_leftEncoder; 
     private EncoderReader m_rightEncoder;
-    public static double P = 0.004;
+    public static double P = 0.04;
     public static double I = 0.0;
-    public static double D = 0.0004;
+    public static double D = 0.004;
     public static double THRESHOLD = 3;
     public static double MAX_TURN_SPEED = 0.75;
     public static double MIN_TURN_SPEED = 0.1;
     public static double DIST_PER_PULSE = 0.04987;
-    public static double robotWidth = 28.0;
+    public static double robotWidth = 2.8;
     
 
     public Drive() { 
@@ -30,9 +30,9 @@ public class Drive extends Mechanism {
         m_rightMotor = RobotProvider.instance.getMotor("drive.rightMotor");
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
+        m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         m_rightMotor.setInverted(true);
         encodersDistancePerPulse(DIST_PER_PULSE);
-        m_gyro = RobotProvider.instance.getGyro("drive.gyro");
     }
 
     public void setDrivePower(double leftPower, double rightPower) {
