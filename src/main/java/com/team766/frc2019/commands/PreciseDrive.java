@@ -27,13 +27,9 @@ public class PreciseDrive extends Subroutine {
     }
 
     protected void subroutine() {
-        Robot.drive.resetGyro();
-        Robot.drive.resetEncoders();
-        m_turnController.setSetpoint(180.0);
-        //sets bearing
-        m_adjustment = 180.0 - m_targetAngle;
+        m_turnController.setSetpoint(0.0);
         while(getCurrentDistance() < m_driveDistance) {
-            m_turnController.calculate(getBearingError(), true);
+            m_turnController.calculate(Robot.drive.AngleDifference(m_targetAngle, Robot.drive.getGyroAngle()), true);
             double turnPower = m_turnController.getOutput();
             double straightPower = calcPower();
             if (turnPower < 0) {
@@ -41,24 +37,15 @@ public class PreciseDrive extends Subroutine {
             } else {
                 Robot.drive.setDrivePower(straightPower, straightPower - turnPower);
             }
+            System.out.println("Turn: " + turnPower + " Straight: " + straightPower + " Current: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(m_targetAngle, Robot.drive.getGyroAngle()));
             yield();
         }
         Robot.drive.setDrivePower(m_endPower, m_endPower);
+        Robot.drive.resetEncoders();
     }
 
     public double getCurrentDistance() {
         return(((Robot.drive.rightEncoderDistance() + Robot.drive.leftEncoderDistance())*Robot.drive.DIST_PER_PULSE)/2.0);
-    }
-
-    public double getBearingError() {
-        double err = Robot.drive.getGyroAngle() + m_adjustment;
-        if (err > 360.0) {
-            err -= 360.0;
-        }
-        if (err < 0.0) {
-            err += 360.0;
-        }
-        return err;
     }
 
     public double calcPower() {
