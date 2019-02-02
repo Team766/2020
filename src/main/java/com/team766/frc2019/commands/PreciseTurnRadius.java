@@ -2,9 +2,8 @@ package com.team766.frc2019.commands;
 
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
-import com.team766.controllers.PIDController;
-import com.team766.hal.EncoderReader;
 import com.team766.hal.CANSpeedController.ControlMode;
+import com.team766.controllers.PIDController;
 
 public class PreciseTurnRadius extends Subroutine {
 
@@ -24,14 +23,13 @@ public class PreciseTurnRadius extends Subroutine {
     double POWER_RAMP = 1.0;
     boolean m_turnDirection;
     //true is right false is left
-    private EncoderReader outsideEncoder;
 
     public PreciseTurnRadius(double targetAngle, double radius, double targetPower, double startPower, double endPower) {
         double difference = Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), targetAngle);
         if (difference < 0) { m_turnDirection = false; } else { m_turnDirection = true; }
-        m_arcLength = (2 * Math.PI * radius * (difference / 360));
-        m_insideArcLength = (2 * Math.PI * (radius - (Robot.drive.robotWidth / 2.0)) * (difference / 360));
-        m_outsideArcLength = (2 * Math.PI * (radius + (Robot.drive.robotWidth / 2.0)) * (difference / 360));
+        m_arcLength = 2 * Math.PI * radius * (difference / 360);
+        m_insideArcLength = 2 * Math.PI * (radius - (Robot.drive.robotWidth / 2.0)) * (difference / 360);
+        m_outsideArcLength = 2 * Math.PI * (radius + (Robot.drive.robotWidth / 2.0)) * (difference / 360);
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
         m_targetAngle = targetAngle;
         m_targetPower = targetPower;

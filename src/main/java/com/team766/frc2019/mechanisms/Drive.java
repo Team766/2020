@@ -44,6 +44,10 @@ public class Drive extends Mechanism {
         encodersDistancePerPulse(DIST_PER_PULSE);
     }
 
+    /**
+    * Sets the mode and value for the left and right Talon controllers.
+    * Each Talon is followed by 2 Victors, which mirror the Talon's output.
+    */
     public void setDrive(double leftSetting, double rightSetting, ControlMode controlMode) {
         m_leftTalon.set(controlMode, leftSetting);
         m_rightTalon.set(controlMode, rightSetting);
@@ -69,6 +73,10 @@ public class Drive extends Mechanism {
         return(m_rightEncoder.getDistance());
     }
 
+    /**
+    * Returns the object of the specified encoder.
+    * turnDirection = true returns the left encoder, and false returns the right encoder.
+    */
     public EncoderReader getOutsideEncoder(boolean turnDirection) {
         if (turnDirection) {
             return(m_leftEncoder);
@@ -92,7 +100,7 @@ public class Drive extends Mechanism {
         setDrivePower(leftPower, rightPower);
     }
     */
-        
+    
     public boolean isTurnDone(PIDController turnController) {
         if (turnController == null) {
             return true;
@@ -100,6 +108,10 @@ public class Drive extends Mechanism {
         return turnController.isDone();
     }
 
+    /**
+	 * Gets the difference between angle1 and angle2, between -180 and 180 degrees.
+     * angle1 is the current angle, angle2 is the desired angle.
+	 */
     public double AngleDifference(double angle1, double angle2) {
         double diff = (angle2 - angle1 + 180) % 360 - 180;
         return diff < -180 ? diff + 360 : diff;
