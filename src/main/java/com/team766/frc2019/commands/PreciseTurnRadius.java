@@ -27,11 +27,10 @@ public class PreciseTurnRadius extends Subroutine {
 
     public PreciseTurnRadius(double targetAngle, double radius, double targetPower, double startPower, double endPower) {
         double difference = Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), targetAngle);
-        m_arcLength = (2 * Math.PI * radius * (difference / 360)) / 12;
-        if (difference > 180.0) { m_targetAngle -= 360; } else if (difference < -180.0) { m_targetAngle += 360; }
         if (difference < 0) { m_turnDirection = false; } else { m_turnDirection = true; }
-        m_insideArcLength = (2 * Math.PI * (radius - (Robot.drive.robotWidth / 2.0)) * (difference / 360)) / 12;
-        m_outsideArcLength = (2 * Math.PI * (radius + (Robot.drive.robotWidth / 2.0)) * (difference / 360)) / 12;
+        m_arcLength = (2 * Math.PI * radius * (difference / 360));
+        m_insideArcLength = (2 * Math.PI * (radius - (Robot.drive.robotWidth / 2.0)) * (difference / 360));
+        m_outsideArcLength = (2 * Math.PI * (radius + (Robot.drive.robotWidth / 2.0)) * (difference / 360));
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
         m_targetAngle = targetAngle;
         m_targetPower = targetPower;
@@ -42,12 +41,18 @@ public class PreciseTurnRadius extends Subroutine {
     }
 
     protected void subroutine() {
-        double startAngle = Robot.drive.getGyroAngle();
+        double angleDiff = -Robot.drive.AngleDifference(m_targetAngle, m_initialAngle);
+        double arcPercent = 0;
+        double error = 0;
         m_turnController.setSetpoint(0.0);
-        //sets bearing
-        //m_adjustment = 180.0 - m_targetAngle;
-       while((Robot.drive.getOutsideEncoder(m_turnDirection).getDistance() * Robot.drive.DIST_PER_PULSE) < m_outsideArcLength) {
-            m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), (startAngle + ((m_targetAngle - startAngle) * (getCurrentDistance() / m_arcLength)))), true);
+        while((Robot.drive.getOutsideEncoder(m_turnDirection).getDistance() * Robot.drive.DIST_PER_PULSE) < m_outsideArcLength) {
+
+            arcPercent = Robot.drive.getOutsideEncoder(m_turnDirection).getDistance() / m_outsideArcLength;
+            error = Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), (m_initialAngle + (angleDiff * arcPercent)));
+            m_turnController.calculate(error, true);
+            System.out.println("AngleDiff: " + angleDiff + " ArcPercent: " + arcPercent);
+            //System.out.println(" CurrDist: " + (angleDiff * arcPercent) + " Exp: " + (m_initialAngle + (angleDiff * arcPercent)) + " CurrAng: " + Robot.drive.getGyroAngle() + " Error: " + error + " Pout: " + m_turnController.getOutput());
+            
             double turnAdjust = m_turnController.getOutput();
             double leftAdjust;
             double rightAdjust;
@@ -64,10 +69,11 @@ public class PreciseTurnRadius extends Subroutine {
             } else {
                 Robot.drive.setDrivePower((straightPower * (m_insideArcLength / m_outsideArcLength)) + leftAdjust, straightPower + rightAdjust);
             }
-            System.out.println("Error: " + getBearingError() + " Current Dist: " + (Robot.drive.getOutsideEncoder(m_turnDirection).getDistance() * Robot.drive.DIST_PER_PULSE) + " Target Dist: " + m_outsideArcLength);
+            //System.out.println("currdist: " + getCurrentDistance() + " power: " + straightPower + " ladj: " + leftAdjust + " radj: " + rightAdjust);
+            //System.out.println("arc: " + m_arcLength + " out: " + m_outsideArcLength + " in: " + m_insideArcLength);
             yield();
         }
-        Robot.drive.setDrivePower(m_endPower, m_endPower);
+        //Robot.drive.setDrivePower(m_endPower, m_endPower);
         Robot.drive.resetEncoders();
     }
 
