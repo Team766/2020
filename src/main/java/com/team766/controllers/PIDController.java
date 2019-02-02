@@ -199,8 +199,7 @@ public class PIDController {
 		
 		pr("	Total Error: " + total_error + "		Current Error: " + cur_error
 				+ "	Output: " + output_value + " 	Setpoint: " + setpoint);
-		System.out.println("	Total Error: " + total_error + "		Current Error: " + cur_error
-		+ "	Output: " + output_value + " 	Setpoint: " + setpoint);
+		//System.out.println("	Total Error: " + total_error + "		Current Error: " + cur_error + "	Output: " + output_value + " 	Setpoint: " + setpoint);
 	}
 
 	public double getOutput() {

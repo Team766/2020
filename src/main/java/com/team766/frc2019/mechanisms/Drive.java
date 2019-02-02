@@ -15,9 +15,9 @@ public class Drive extends Mechanism {
     private GyroReader m_gyro;
     private EncoderReader m_leftEncoder; 
     private EncoderReader m_rightEncoder;
-    public static double P = 0.04;
-    public static double I = 0;
-    public static double D = 0.004;
+    public static double P = 0.004;
+    public static double I = 0.0;
+    public static double D = 0.0004;
     public static double THRESHOLD = 3;
     public static double MAX_TURN_SPEED = 0.75;
     public static double MIN_TURN_SPEED = 0.1;
@@ -85,5 +85,10 @@ public class Drive extends Mechanism {
             return true;
         }
         return turnController.isDone();
+    }
+
+    public double AngleDifference(double angle1, double angle2) {
+        double diff = (angle2 - angle1 + 180) % 360 - 180;
+        return diff < -180 ? diff + 360 : diff;
     }
 }
