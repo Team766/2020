@@ -41,7 +41,7 @@ public class PreciseTurnRadius extends Subroutine {
     }
 
     protected void subroutine() {
-        double angleDiff = -Robot.drive.AngleDifference(m_targetAngle, m_initialAngle);
+        double angleDiff = Robot.drive.AngleDifference(m_initialAngle, m_targetAngle);
         double arcPercent = 0;
         double error = 0;
         m_turnController.setSetpoint(0.0);
