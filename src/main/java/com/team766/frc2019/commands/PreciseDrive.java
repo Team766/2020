@@ -2,6 +2,7 @@ package com.team766.frc2019.commands;
 
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
+import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
 
 public class PreciseDrive extends Subroutine {
@@ -33,14 +34,14 @@ public class PreciseDrive extends Subroutine {
             double turnPower = m_turnController.getOutput();
             double straightPower = calcPower();
             if (turnPower < 0) {
-                Robot.drive.setDrivePower(straightPower + turnPower, straightPower);
+                Robot.drive.setDrive(straightPower + turnPower, straightPower, ControlMode.PercentOutput);
             } else {
-                Robot.drive.setDrivePower(straightPower, straightPower - turnPower);
+                Robot.drive.setDrive(straightPower, straightPower - turnPower, ControlMode.PercentOutput);
             }
             System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(m_targetAngle, Robot.drive.getGyroAngle()) + " Pout: " + m_turnController.getOutput() + " dist: " + getCurrentDistance());
             yield();
         }
-        Robot.drive.setDrivePower(m_endPower, m_endPower);
+        Robot.drive.setDrive(m_endPower, m_endPower, ControlMode.PercentOutput);
         Robot.drive.resetEncoders();
     }
 

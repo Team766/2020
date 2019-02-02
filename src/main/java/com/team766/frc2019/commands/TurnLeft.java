@@ -1,5 +1,6 @@
 package com.team766.frc2019.commands;
 
+import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 
@@ -18,10 +19,10 @@ public class TurnLeft extends Subroutine {
     }
 
     protected void subroutine() {
-        Robot.drive.setDrivePower(0.25, 0.25);
+        Robot.drive.setDrive(0.25, 0.25, ControlMode.PercentOutput);
         //waitForSeconds(m_turnTime);
         waitForSeconds(1.0);
 
-        Robot.drive.setDrivePower(0.0, 0.0);
+        Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
     }
 }

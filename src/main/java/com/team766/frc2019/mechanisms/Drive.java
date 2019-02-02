@@ -5,15 +5,16 @@ import com.team766.hal.GyroReader;
 import com.team766.hal.CANSpeedController;
 import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
-import com.team766.hal.SpeedController;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
 
 
 public class Drive extends Mechanism { 
 
-    private SpeedController m_leftVictor;
-    private SpeedController m_rightVictor;
+    private CANSpeedController m_leftVictor1;
+    private CANSpeedController m_leftVictor2;
+    private CANSpeedController m_rightVictor1;
+    private CANSpeedController m_rightVictor2;
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
@@ -30,25 +31,26 @@ public class Drive extends Mechanism {
     
 
     public Drive() { 
-        m_leftVictor = RobotProvider.instance.getMotor("drive.leftMotor");
-        m_rightVictor = RobotProvider.instance.getMotor("drive.rightMotor");
+        m_leftVictor1 = RobotProvider.instance.getCANMotor("drive.leftVictor1");
+        m_leftVictor2 = RobotProvider.instance.getCANMotor("drive.leftVictor2");
+        m_rightVictor1 = RobotProvider.instance.getCANMotor("drive.rightVictor1");
+        m_rightVictor2 = RobotProvider.instance.getCANMotor("drive.rightVictor2");
         m_leftTalon = RobotProvider.instance.getCANMotor("drive.leftController");
         m_rightTalon = RobotProvider.instance.getCANMotor("drive.rightController");
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
-        m_rightVictor.setInverted(true);
+        m_rightTalon.setInverted(true);
         encodersDistancePerPulse(DIST_PER_PULSE);
     }
 
-    public void setDrivePower(double leftPower, double rightPower) {
-        m_leftVictor.set(leftPower);
-        m_rightVictor.set(rightPower);
-    }
-
-    public void setDriveVelocity(double leftVelocity, double rightVelocity) {
-        m_leftTalon.set(ControlMode.Velocity, leftVelocity);
-        m_rightTalon.set(ControlMode.Velocity, rightVelocity);
+    public void setDrive(double leftSetting, double rightSetting, ControlMode controlMode) {
+        m_leftTalon.set(controlMode, leftSetting);
+        m_rightTalon.set(controlMode, rightSetting);
+        m_leftVictor1.follow(m_leftTalon);
+        m_leftVictor2.follow(m_leftTalon);
+        m_rightVictor1.follow(m_rightTalon);
+        m_rightVictor2.follow(m_rightTalon);
     }
 
     public double getGyroAngle() {

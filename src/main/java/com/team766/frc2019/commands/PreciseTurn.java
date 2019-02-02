@@ -2,6 +2,7 @@ package com.team766.frc2019.commands;
 
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
+import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
 
 public class PreciseTurn extends Subroutine {
@@ -31,10 +32,10 @@ public class PreciseTurn extends Subroutine {
                     power = Robot.drive.MIN_TURN_SPEED;
                 }
             }
-            Robot.drive.setDrivePower(power, -power);
+            Robot.drive.setDrive(power, -power, ControlMode.PercentOutput);
             System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Check: " + Robot.drive.isTurnDone(m_turnController));
             yield();
         }
-        Robot.drive.setDrivePower(0.0, 0.0);
+        Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
     }
 }
