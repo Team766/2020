@@ -29,7 +29,7 @@ public class PreciseDrive extends Subroutine {
     protected void subroutine() {
         m_turnController.setSetpoint(0.0);
         while(getCurrentDistance() < m_driveDistance) {
-            m_turnController.calculate(Robot.drive.AngleDifference(m_targetAngle, Robot.drive.getGyroAngle()), true);
+            m_turnController.calculate(-Robot.drive.AngleDifference(m_targetAngle, Robot.drive.getGyroAngle()), true);
             double turnPower = m_turnController.getOutput();
             double straightPower = calcPower();
             if (turnPower < 0) {
@@ -37,7 +37,7 @@ public class PreciseDrive extends Subroutine {
             } else {
                 Robot.drive.setDrivePower(straightPower, straightPower - turnPower);
             }
-            System.out.println("Turn: " + turnPower + " Straight: " + straightPower + " Current: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(m_targetAngle, Robot.drive.getGyroAngle()));
+            System.out.println("TA: " + Math.round(m_targetAngle) + " Cu: " + Math.round(Robot.drive.getGyroAngle()) + " Diff: " + Math.round(Robot.drive.AngleDifference(m_targetAngle, Robot.drive.getGyroAngle())) + " Pout: " + Math.round(m_turnController.getOutput()) + " dist: " + Math.round(getCurrentDistance()));
             yield();
         }
         Robot.drive.setDrivePower(m_endPower, m_endPower);
