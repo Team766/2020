@@ -49,6 +49,8 @@ public class Drive extends Mechanism {
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
+        m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
+        m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightTalon.setInverted(true);
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
         m_rightTalon.setNeutralMode(NeutralMode.Brake);
@@ -140,5 +142,55 @@ public class Drive extends Mechanism {
     public double AngleDifference(double angle1, double angle2) {
         double diff = (angle2 - angle1 + 180) % 360 - 180;
         return diff < -180 ? diff + 360 : diff;
+    }
+
+    public void resetEncoders() {
+        m_leftEncoder.reset();
+        m_rightEncoder.reset();
+    }
+    
+    public double rightEncoderDistance() {
+        return(m_rightEncoder.getDistance());
+    }
+ 
+
+    public void startDriveStraight(double distance) {
+        resetEncoders();
+        m_driveController = new PIDController(P, I, D, THRESHOLD);
+        m_driveController.setSetpoint(distance);
+        m_driveController.setMaxoutputHigh(maxDriveSpeed);
+        m_driveController.setMaxoutputLow(minDriveSpeed);
+    }
+
+    public boolean isDriveDone() {
+        if (m_driveController == null) {
+            return true;
+        }
+        return m_driveController.isDone();
+    }
+
+    public void runDrive() {
+        if (m_driveController != null) {
+            double currentDist = rightEncoderDistance();
+            m_driveController.calculate(currentDist, true);
+            
+            if (m_driveController.isDone()) {
+                setDrivePower(0,0);
+                m_driveController = null;
+                return;
+            }
+            
+            double power = m_driveController.getOutput();
+            
+           if (Math.abs(power) < minDriveSpeed) {
+               if (power < 0) {
+                   power = -minDriveSpeed;
+                } else {
+                    power = minDriveSpeed;
+                }
+            }
+            setDrivePower(-power, power);
+            System.out.println("current distance is " + currentDist + " power is" + power);
+        }
     }
 }
