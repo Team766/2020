@@ -7,6 +7,7 @@ import com.team766.frc2019.commands.PreciseDrive;
 import com.team766.frc2019.commands.ExtendGripper;
 import com.team766.frc2019.commands.RetractGripper;
 import com.team766.frc2019.commands.TestGripper;
+import com.team766.frc2019.commands.DriveVelocity;
 
 public enum AutonomousModes {
     @AutonomousCommand(commandClass= DriveSquare.class)
@@ -15,5 +16,6 @@ public enum AutonomousModes {
     @AutonomousCommand(commandClass= ExtendGripper.class) ExtendGripper,
     @AutonomousCommand(commandClass= RetractGripper.class) RetractGripper,
     @AutonomousCommand(commandClass= TestGripper.class) TestGripper,
+    @AutonomousCommand(commandClass= DriveVelocity.class) DriveVelocity,
     // @AutonomousCommand(commandClass= TestActuator.class) TestActuator,
 }

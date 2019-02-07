@@ -5,7 +5,7 @@ import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
 
 public class DriveStraight extends Subroutine {
-    public DriveStraight(double distance) {
+    public DriveStraight() {
         takeControl(Robot.drive);
     }
 
