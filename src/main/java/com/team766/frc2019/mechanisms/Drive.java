@@ -28,7 +28,7 @@ public class Drive extends Mechanism {
     public static double THRESHOLD = 3;
     public static double MAX_TURN_SPEED = 0.75;
     public static double MIN_TURN_SPEED = 0.1;
-    public static double DIST_PER_PULSE = 0.04987;
+    public static double DIST_PER_PULSE = 0.0014592;
     public static double robotWidth = 2.8;
     public static boolean m_secondVictor = true;
     
@@ -49,6 +49,10 @@ public class Drive extends Mechanism {
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         m_rightTalon.setInverted(true);
+        /*m_rightVictor1.setInverted(true);
+        if (m_secondVictor) {
+            m_rightVictor2.setInverted(true);
+        }*/
         encodersDistancePerPulse(DIST_PER_PULSE);
     }
 

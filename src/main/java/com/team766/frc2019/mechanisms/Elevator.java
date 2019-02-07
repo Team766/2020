@@ -1,6 +1,7 @@
 package com.team766.frc2019.mechanisms;
 
 import com.team766.framework.Mechanism;
+import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
@@ -10,7 +11,7 @@ public class Elevator extends Mechanism {
 
     private CANSpeedController m_elevatorMotor;
     private CANSpeedController m_actuatorMotor;
-    public static double DIST_PER_PULSE = 0.0000384;
+    public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
 
     public Elevator() {
         m_elevatorMotor = RobotProvider.instance.getCANMotor("elevator.elevatorMotor");
