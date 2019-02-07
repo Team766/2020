@@ -77,5 +77,12 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	public void follow(CANSpeedController leader) {
 		super.follow((CANTalonSpeedController)leader);
 	}
-	
+
+	@Override
+	public void setPIDF(double kP, double kI, double kD, double kF) {
+		super.config_kP(0, kP);
+		super.config_kI(0, kI);
+		super.config_kD(0, kD);
+		super.config_kF(0, kF);
+	}
 }
