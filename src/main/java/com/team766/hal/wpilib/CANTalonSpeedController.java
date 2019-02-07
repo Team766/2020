@@ -1,5 +1,6 @@
 package com.team766.hal.wpilib;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.team766.hal.CANSpeedController;
 import com.team766.logging.Category;
@@ -77,5 +78,4 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	public void follow(CANSpeedController leader) {
 		super.follow((CANTalonSpeedController)leader);
 	}
-	
 }

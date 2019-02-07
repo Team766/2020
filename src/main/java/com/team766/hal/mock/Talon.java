@@ -1,5 +1,6 @@
 package com.team766.hal.mock;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.hal.CANSpeedController;
 
 public class Talon implements CANSpeedController{
@@ -75,4 +76,8 @@ public class Talon implements CANSpeedController{
 		throw new UnsupportedOperationException();
 	}
 	
+	@Override
+	public void setNeutralMode(NeutralMode neutralMode) {
+		throw new UnsupportedOperationException();
+	}
 }

@@ -1,5 +1,7 @@
 package com.team766.hal;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 /**
  * Interface for speed controlling devices over CAN bus.
  */
@@ -73,4 +75,6 @@ public interface CANSpeedController extends SpeedController {
 	void setPosition(int position);
 
 	void follow(CANSpeedController leader);
+
+	void setNeutralMode(NeutralMode neutralMode);
 }

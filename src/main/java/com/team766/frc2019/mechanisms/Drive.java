@@ -7,6 +7,7 @@ import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
 
 
@@ -28,7 +29,7 @@ public class Drive extends Mechanism {
     public static double THRESHOLD = 3;
     public static double MAX_TURN_SPEED = 0.75;
     public static double MIN_TURN_SPEED = 0.1;
-    public static double DIST_PER_PULSE = 0.0016129632;
+    public static double DIST_PER_PULSE = 0.00159616132;
     public static double robotWidth = 2.8;
     public static boolean m_secondVictor = true;
     
@@ -48,13 +49,9 @@ public class Drive extends Mechanism {
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
-        m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
-        m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightTalon.setInverted(true);
-        /*m_rightVictor1.setInverted(true);
-        if (m_secondVictor) {
-            m_rightVictor2.setInverted(true);
-        }*/
+        m_leftTalon.setNeutralMode(NeutralMode.Brake);
+        m_rightTalon.setNeutralMode(NeutralMode.Brake);
         encodersDistancePerPulse(DIST_PER_PULSE);
     }
 
@@ -114,6 +111,13 @@ public class Drive extends Mechanism {
     public void encodersDistancePerPulse(double distancePerPulse) {
         m_leftEncoder.setDistancePerPulse(distancePerPulse);
         m_rightEncoder.setDistancePerPulse(distancePerPulse);
+    }
+
+    public void shutdown() {
+        m_leftTalon.set(ControlMode.PercentOutput, 0);
+        m_rightTalon.set(ControlMode.PercentOutput, 0);
+        m_leftTalon.setNeutralMode(NeutralMode.Coast);
+        m_rightTalon.setNeutralMode(NeutralMode.Coast);
     }
 
     /*@Override
