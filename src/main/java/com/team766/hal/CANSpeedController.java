@@ -73,4 +73,6 @@ public interface CANSpeedController extends SpeedController {
 	void setPosition(int position);
 
 	void follow(CANSpeedController leader);
+
+	void setPIDF(double kP, double kI, double kD, double kF);
 }
