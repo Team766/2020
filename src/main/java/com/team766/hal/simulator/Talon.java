@@ -73,5 +73,10 @@ public class Talon implements CANSpeedController{
 	public void follow(CANSpeedController leader) {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void setPIDF(double kP, double kI, double kD, double kF) {
+		throw new UnsupportedOperationException();
+	}
 	
 }
