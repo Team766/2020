@@ -44,7 +44,7 @@ public abstract class Subroutine extends Command {
 		if (thisOwner == ControlOwner.SUBROUTINE) {
 			String waitPointTrace = getExecutionPoint();
 			if (waitPointTrace != null && !waitPointTrace.equals(m_previousWaitPoint)) {
-				Logger.get(Category.COMMANDS).logRaw(Severity.DEBUG, this.getClass().getName() + "/" + m_id + " is waiting at " + waitPointTrace);
+				Logger.get(Category.COMMANDS).logRaw(Severity.INFO, getCommandName() + " is waiting at " + waitPointTrace);
 				m_previousWaitPoint = waitPointTrace;
 			}
 		}
@@ -77,10 +77,13 @@ public abstract class Subroutine extends Command {
 		try {
 			subroutine();
 		} finally {
+			System.out.println("before synchronized");
 			synchronized (m_threadSync) {
 				m_done = true;
 				m_threadSync.notifyAll();
 			}
+			System.out.println("after synchronized");
+
 		}
 	}
 	
@@ -97,7 +100,13 @@ public abstract class Subroutine extends Command {
 	}
 
 	protected void waitForSubroutine(Subroutine other) {
-		waitFor(() -> other.isDone());
+		//System.out.println("Starting to wait for " + other.getClass().getName());
+		while (!other.isDone()) {
+			//System.out.println("waiting for " + other.getClass().getName());
+			yield();
+		}
+		//System.out.println("done waiting");
+		//waitFor(() -> other.isDone());
 	}
 
 	protected void waitForSeconds(double seconds) {
@@ -115,9 +124,11 @@ public abstract class Subroutine extends Command {
 			stop();
 			return;
 		}
-		
+		//System.out.println("checking " + this.getClass().getName());
 		if (m_blockingPredicate == null || m_blockingPredicate.getAsBoolean()) {
+			//System.out.println("running " + this.getClass().getName());
 			transferControl(ControlOwner.MAIN_THREAD, ControlOwner.SUBROUTINE);
+			//System.out.println("finished running" + this.getClass().getName());
 		}
 	}
 
