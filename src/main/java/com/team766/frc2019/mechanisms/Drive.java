@@ -7,6 +7,8 @@ import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.team766.config.ConfigFileReader;
+
 
 
 public class Drive extends Mechanism { 
@@ -28,13 +30,19 @@ public class Drive extends Mechanism {
     public static double MIN_TURN_SPEED = 0.1;
     public static double DIST_PER_PULSE = 0.04987;
     public static double robotWidth = 2.8;
+    public static boolean m_secondVictor = true;
     
 
     public Drive() { 
-        m_leftVictor1 = RobotProvider.instance.getCANMotor("drive.leftVictor1");
-        //m_leftVictor2 = RobotProvider.instance.getCANMotor("drive.leftVictor2");
+        m_leftVictor1 = RobotProvider.instance.getCANMotor("drive.leftVictor1"); 
         m_rightVictor1 = RobotProvider.instance.getCANMotor("drive.rightVictor1");
-        //m_rightVictor2 = RobotProvider.instance.getCANMotor("drive.rightVictor2");
+        if ( ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
+            m_secondVictor = true;
+            m_leftVictor2 = RobotProvider.instance.getCANMotor("drive.leftVictor2");
+            m_rightVictor2 = RobotProvider.instance.getCANMotor("drive.rightVictor2");
+        } else {
+            m_secondVictor = false;
+        }
         m_leftTalon = RobotProvider.instance.getCANMotor("drive.leftTalon");
         m_rightTalon = RobotProvider.instance.getCANMotor("drive.rightTalon");
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
@@ -52,9 +60,11 @@ public class Drive extends Mechanism {
         m_leftTalon.set(controlMode, leftSetting);
         m_rightTalon.set(controlMode, rightSetting);
         m_leftVictor1.follow(m_leftTalon);
-        //m_leftVictor2.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
-        //m_rightVictor2.follow(m_rightTalon);
+        if (m_secondVictor == true) {
+            m_leftVictor2.follow(m_leftTalon);
+            m_rightVictor2.follow(m_rightTalon);
+        }
     }
 
     public double getGyroAngle() {
@@ -73,6 +83,11 @@ public class Drive extends Mechanism {
         return(m_rightTalon.getSensorPosition());
     }
 
+    public void setDrivePower(double leftPower, double rightPower, ControlMode controlMode) {
+        m_leftTalon.set(controlMode, leftPower);
+        m_rightTalon.set(controlMode, rightPower);
+    }
+
     /**
     * Returns the object of the specified encoder.
     * turnDirection = true returns the left encoder, and false returns the right encoder.
@@ -86,8 +101,8 @@ public class Drive extends Mechanism {
     }
 
     public void resetEncoders() {
-        m_leftEncoder.reset();
-        m_rightEncoder.reset();
+        m_leftTalon.setPosition(0);
+        m_rightTalon.setPosition(0);
     }
 
     public void encodersDistancePerPulse(double distancePerPulse) {
