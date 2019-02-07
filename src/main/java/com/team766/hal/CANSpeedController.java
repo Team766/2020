@@ -71,4 +71,6 @@ public interface CANSpeedController extends SpeedController {
 	 * @param position The desired set position
 	 */
 	void setPosition(int position);
+
+	void follow(CANSpeedController leader);
 }
