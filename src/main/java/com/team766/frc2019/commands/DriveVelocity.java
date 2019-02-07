@@ -12,24 +12,24 @@ public class DriveVelocity extends Subroutine {
     protected void subroutine() {
 
         System.out.println("0.5");
-        Robot.drive.setDrive(0.5, 0.5, ControlMode.PercentOutput);
+        Robot.drive.setDrive(0.5, 0.5, ControlMode.Velocity);
         waitForSeconds(5.0);
         System.out.println("1.0");
-        Robot.drive.setDrive(1.0, 1.0, ControlMode.PercentOutput);
+        Robot.drive.setDrive(1.0, 1.0, ControlMode.Velocity);
         waitForSeconds(5.0);
         System.out.println("5.0");
-        Robot.drive.setDrive(5.0, 5.0, ControlMode.PercentOutput);
+        Robot.drive.setDrive(5.0, 5.0, ControlMode.Velocity);
         waitForSeconds(5.0);
         System.out.println("10.0");
-        Robot.drive.setDrive(10.0, 10.0, ControlMode.PercentOutput);
+        Robot.drive.setDrive(10.0, 10.0, ControlMode.Velocity);
         waitForSeconds(5.0);
         System.out.println("50.0");
-        Robot.drive.setDrive(50.0, 50.0, ControlMode.PercentOutput);
+        Robot.drive.setDrive(50.0, 50.0, ControlMode.Velocity);
         waitForSeconds(5.0);
         System.out.println("100.0");
-        Robot.drive.setDrive(100.0, 100.0, ControlMode.PercentOutput);
+        Robot.drive.setDrive(100.0, 100.0, ControlMode.Velocity);
         waitForSeconds(5.0);
-        Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
+        Robot.drive.setDrive(0.0, 0.0, ControlMode.Velocity);
     }
     
 }
