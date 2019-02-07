@@ -45,6 +45,7 @@ public class PreciseDrive extends Subroutine {
             yield();
         }
         Robot.drive.setDrivePower(m_endPower, m_endPower, ControlMode.PercentOutput);
+        Robot.drive.shutdown();
         Robot.drive.resetEncoders();
     }
 
