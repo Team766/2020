@@ -1,5 +1,6 @@
 package com.team766.hal.wpilib;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.team766.hal.CANSpeedController;
 import com.team766.logging.Category;
@@ -84,5 +85,6 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 		super.config_kI(0, kI);
 		super.config_kD(0, kD);
 		super.config_kF(0, kF);
+		super.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 	}
 }
