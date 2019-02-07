@@ -13,8 +13,8 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = 0.0000384;
 
     public Elevator() {
-        m_elevatorMotor = RobotProvider.instance.getCANMotor("elevator.lowerMotor");
-        m_actuatorMotor = RobotProvider.instance.getCANMotor("elevator.upperMotor"); 
+        m_elevatorMotor = RobotProvider.instance.getCANMotor("elevator.elevatorMotor");
+        m_actuatorMotor = RobotProvider.instance.getCANMotor("elevator.actuatorMotor"); 
     }
 
     public void setElevatorPower(double elevatorPower) {

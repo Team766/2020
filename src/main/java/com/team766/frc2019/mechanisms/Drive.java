@@ -32,11 +32,11 @@ public class Drive extends Mechanism {
 
     public Drive() { 
         m_leftVictor1 = RobotProvider.instance.getCANMotor("drive.leftVictor1");
-        m_leftVictor2 = RobotProvider.instance.getCANMotor("drive.leftVictor2");
+        //m_leftVictor2 = RobotProvider.instance.getCANMotor("drive.leftVictor2");
         m_rightVictor1 = RobotProvider.instance.getCANMotor("drive.rightVictor1");
-        m_rightVictor2 = RobotProvider.instance.getCANMotor("drive.rightVictor2");
-        m_leftTalon = RobotProvider.instance.getCANMotor("drive.leftController");
-        m_rightTalon = RobotProvider.instance.getCANMotor("drive.rightController");
+        //m_rightVictor2 = RobotProvider.instance.getCANMotor("drive.rightVictor2");
+        m_leftTalon = RobotProvider.instance.getCANMotor("drive.leftTalon");
+        m_rightTalon = RobotProvider.instance.getCANMotor("drive.rightTalon");
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
@@ -52,9 +52,9 @@ public class Drive extends Mechanism {
         m_leftTalon.set(controlMode, leftSetting);
         m_rightTalon.set(controlMode, rightSetting);
         m_leftVictor1.follow(m_leftTalon);
-        m_leftVictor2.follow(m_leftTalon);
+        //m_leftVictor2.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
-        m_rightVictor2.follow(m_rightTalon);
+        //m_rightVictor2.follow(m_rightTalon);
     }
 
     public double getGyroAngle() {
@@ -66,11 +66,11 @@ public class Drive extends Mechanism {
     }
 
     public double leftEncoderDistance() { 
-        return(m_leftEncoder.getDistance());
+        return(m_leftTalon.getSensorPosition());
     }
 
     public double rightEncoderDistance() { 
-        return(m_rightEncoder.getDistance());
+        return(m_rightTalon.getSensorPosition());
     }
 
     /**

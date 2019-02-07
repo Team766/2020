@@ -64,9 +64,9 @@ public class PreciseTurnRadius extends Subroutine {
                 rightAdjust = turnAdjust;
             }
             if (m_turnDirection) {
-                Robot.drive.setDrive(straightPower + leftAdjust, (straightPower * (m_insideArcLength / m_outsideArcLength)) + rightAdjust, ControlMode.PercentOutput);
+                Robot.drive.setDrive(straightPower + leftAdjust, (straightPower * (m_insideArcLength / m_outsideArcLength)) + rightAdjust, ControlMode.Velocity);
             } else {
-                Robot.drive.setDrive((straightPower * (m_insideArcLength / m_outsideArcLength)) + leftAdjust, straightPower + rightAdjust, ControlMode.PercentOutput);
+                Robot.drive.setDrive((straightPower * (m_insideArcLength / m_outsideArcLength)) + leftAdjust, straightPower + rightAdjust, ControlMode.Velocity);
             }
             //System.out.println("currdist: " + getCurrentDistance() + " power: " + straightPower + " ladj: " + leftAdjust + " radj: " + rightAdjust);
             //System.out.println("arc: " + m_arcLength + " out: " + m_outsideArcLength + " in: " + m_insideArcLength);
