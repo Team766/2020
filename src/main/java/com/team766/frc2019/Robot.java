@@ -10,13 +10,12 @@ import com.team766.web.AutonomousSelector;
 import com.team766.web.ConfigUI;
 import com.team766.web.LogViewer;
 import com.team766.web.WebServer;
-import com.team766.frc2019.mechanisms.Drive;
 public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
-		public static FlowerGripper flowerGripper;
-		public static FlowerActuator flowerActuator;
-
+	public static FlowerGripper flowerGripper;
+//		public static FlowerActuator flowerActuator;
+	public static Elevator elevator;
 
 	private OI m_oi;
 	
