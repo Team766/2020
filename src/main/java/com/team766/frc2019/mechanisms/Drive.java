@@ -52,6 +52,12 @@ public class Drive extends Mechanism {
         m_rightTalon.setInverted(true);
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
         m_rightTalon.setNeutralMode(NeutralMode.Brake);
+        m_leftTalon.config_kP(0, 0.05, 0);
+        m_leftTalon.config_kI(0, 0.0, 0);
+        m_leftTalon.config_kD(0, 0.0, 0);
+        m_rightTalon.config_kP(0, 0.05, 0);
+        m_rightTalon.config_kI(0, 0.0, 0);
+        m_rightTalon.config_kD(0, 0.0, 0);
         encodersDistancePerPulse(DIST_PER_PULSE);
     }
 

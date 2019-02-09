@@ -1,5 +1,6 @@
 package com.team766.hal;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 /**
@@ -78,9 +79,9 @@ public interface CANSpeedController extends SpeedController {
 
 	void setNeutralMode(NeutralMode neutralMode);
 
-	void config_kP(int slotIdx, double value, int timeoutMs);
+	ErrorCode config_kP(int slotIdx, double value, int timeoutMs);
 
-	void config_kI(int slotIdx, double value, int timeoutMs);
+	ErrorCode config_kI(int slotIdx, double value, int timeoutMs);
 
-	void config_kD(int slotIdx, double value, int timeoutMs);
+	ErrorCode config_kD(int slotIdx, double value, int timeoutMs);
 }
