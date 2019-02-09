@@ -12,7 +12,6 @@ public class PreciseTurnRadius extends Subroutine {
     double m_targetPower;
     double m_startPower;
     double m_endPower;
-    //double m_adjustment;
     double m_arcLength;
     double m_insideArcLength;
     double m_outsideArcLength;
