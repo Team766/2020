@@ -35,17 +35,16 @@ public class PreciseDrive extends Subroutine {
             double turnPower = m_turnController.getOutput();
             double straightPower = calcPower();
             System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance());
-            if (turnPower < 0) {
+            if (turnPower > 0) {
                 System.out.println("l: " + (straightPower + turnPower) + " r: " + straightPower);
-                Robot.drive.setDrivePower(straightPower + turnPower, straightPower, ControlMode.PercentOutput);
+                Robot.drive.setDrivePower(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
             } else {
                 System.out.println("l: " + straightPower + " r: " + (straightPower - turnPower));
-                Robot.drive.setDrivePower(straightPower, straightPower - turnPower, ControlMode.PercentOutput);
+                Robot.drive.setDrivePower(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
             }
             yield();
         }
         Robot.drive.setDrivePower(m_endPower, m_endPower, ControlMode.PercentOutput);
-        Robot.drive.shutdown();
         Robot.drive.resetEncoders();
     }
 

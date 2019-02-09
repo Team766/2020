@@ -14,30 +14,28 @@ public class DriveSquare extends Subroutine {
 
         Robot.drive.resetGyro();
         Robot.drive.resetEncoders();
-        //callSubroutine(new PreciseTurnRadius(90, 2, .5, 0, 0));
-        callSubroutine(new DriveVelocity());
-        //callSubroutine(new PreciseTurnRadius(90, 0, .25, .25, .25));
-        //callSubroutine(new PreciseDrive(2, 90, .5, 0, .25));
-        //callSubroutine(new PreciseTurnRadius(180, 1, .25, .25, .25));
-        //callSubroutine(new PreciseDrive(2, 180, .5, 0, .25));
-        //callSubroutine(new PreciseTurnRadius(270, 1, .25, .25, .25));
-        //callSubroutine(new PreciseDrive(2, 270, .5, 0, .25));
-        //callSubroutine(new PreciseTurnRadius(0, 1, .25, .25, .25));
-        /*
-        for (int i = 0; i < 2; i++) {
-           callSubroutine(new PreciseDrive(1, 0, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(90));
-            callSubroutine(new PreciseDrive(1, 90, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(180));
-            callSubroutine(new PreciseDrive(1, 180, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(270));
-            callSubroutine(new PreciseDrive(1, 270, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(0));
-            callSubroutine(new PreciseDrive(1, 0, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(0));
-        */
-            System.out.println("DRIVESQUARE IS DONE");
-        }
+        //callSubroutine(new PreciseDrive(4, 0, .25, 0, .25));
+        //while (Robot.drive.isEnabled()) {
+            callSubroutine(new PreciseTurnRadius(90, 2, .25, .25, .25));
+            waitForSeconds(2.0);
+            callSubroutine(new PreciseTurnRadius(180, 2, .25, .25, .25));
+            waitForSeconds(2.0);
+            callSubroutine(new PreciseTurnRadius(270, 2, .25, .25, .25));
+            waitForSeconds(2.0);
+            /*callSubroutine(new PreciseDrive(4, 270, .25, .25, .25));
+            waitForSeconds(2.0);
+            callSubroutine(new PreciseTurnRadius(180, 2, .25, .25, .25));
+            waitForSeconds(2.0);
+            callSubroutine(new PreciseTurnRadius(90, 2, .25, .25, .25));
+            waitForSeconds(2.0);
+            callSubroutine(new PreciseTurnRadius(0, 2, .25, .25, .25));
+            waitForSeconds(2.0);
+            callSubroutine(new PreciseDrive(4, 0, .5, .5, .5));
+            waitForSeconds(2.0);*/
+        //}
+        System.out.println("DRIVESQUARE IS DONE");
+        Robot.drive.shutdown();
+    }
 
 
         

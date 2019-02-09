@@ -10,13 +10,11 @@ public class DriveVelocity extends Subroutine {
     }
 
     protected void subroutine() {
-        double dist = 0;
-        for (int i = 0; i < 101; i++) {
-            dist = i / Robot.drive.DIST_PER_PULSE;
-            System.out.println("something something inches per second: " + (dist / 10));
-            Robot.drive.setDrive(dist / 10, 0, ControlMode.Velocity);
-            waitForSeconds(2.0);
-        }
+        double positions = 1000;
+        double time = 5.0;
+        System.out.println("velocity: " + positions * time + " encoder distance: " + (Robot.drive.leftEncoderDistance() + Robot.drive.rightEncoderDistance()) / 2.0);
+        Robot.drive.setDrive(positions * 10, positions * 10, ControlMode.Velocity);
+        waitForSeconds(time);
         Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
     }
 }
