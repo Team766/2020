@@ -6,6 +6,9 @@ import com.team766.hal.CANSpeedController;
 import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
+
+import edu.wpi.first.wpilibj.DriverStation;
+
 import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -31,6 +34,7 @@ public class Drive extends Mechanism {
     public static double MAX_TURN_SPEED = 0.75;
     public static double MIN_TURN_SPEED = 0.1;
     public static double DIST_PER_PULSE = 0.00159616132;
+    public static double POSITION_PER_INCH = 40000;
     public static double robotWidth = 2.8;
     public static boolean m_secondVictor = true;
     
@@ -97,8 +101,12 @@ public class Drive extends Mechanism {
         }
     }
 
+    public boolean isEnabled() {
+        return(DriverStation.getInstance().isEnabled());
+    }
+
     public double getGyroAngle() {
-        return(m_gyro.getAngle());
+        return(-m_gyro.getAngle());
     }
 
     public void resetGyro() {
@@ -106,28 +114,28 @@ public class Drive extends Mechanism {
     }
 
     public double leftEncoderDistance() { 
-        return(m_leftTalon.getSensorPosition());
+        return(-m_leftTalon.getSensorPosition());
     }
 
     public double rightEncoderDistance() { 
-        return(m_rightTalon.getSensorPosition());
-    }
-
-    public void setDrivePower(double leftPower, double rightPower, ControlMode controlMode) {
-        m_leftTalon.set(controlMode, leftPower);
-        m_rightTalon.set(controlMode, rightPower);
+        return(-m_rightTalon.getSensorPosition());
     }
 
     /**
     * Returns the object of the specified encoder.
     * turnDirection = true returns the left encoder, and false returns the right encoder.
     */
-    public EncoderReader getOutsideEncoder(boolean turnDirection) {
+    public double getOutsideEncoderDistance(boolean turnDirection) {
         if (turnDirection) {
-            return(m_leftEncoder);
+            return(leftEncoderDistance());
         } else {
-            return(m_rightEncoder);
+            return(rightEncoderDistance());
         }
+    }
+
+    public void setDrivePower(double leftPower, double rightPower, ControlMode controlMode) {
+        m_leftTalon.set(controlMode, leftPower);
+        m_rightTalon.set(controlMode, rightPower);
     }
 
     public void resetEncoders() {
@@ -166,6 +174,7 @@ public class Drive extends Mechanism {
 	 */
     public double AngleDifference(double angle1, double angle2) {
         double diff = (angle2 - angle1 + 180) % 360 - 180;
-        return diff < -180 ? diff + 360 : diff;
+        // return diff < -180 ? diff + 360 : diff;
+        return diff;
     }
 }
