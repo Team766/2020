@@ -100,12 +100,12 @@ public abstract class Subroutine extends Command {
 	}
 
 	protected void waitForSubroutine(Subroutine other) {
-		System.out.println("Starting to wait for " + other.getClass().getName());
+		//System.out.println("Starting to wait for " + other.getClass().getName());
 		while (!other.isDone()) {
-			System.out.println("waiting for " + other.getClass().getName());
+			//System.out.println("waiting for " + other.getClass().getName());
 			yield();
 		}
-		System.out.println("done waiting");
+		//System.out.println("done waiting");
 		//waitFor(() -> other.isDone());
 	}
 
@@ -124,11 +124,11 @@ public abstract class Subroutine extends Command {
 			stop();
 			return;
 		}
-		System.out.println("checking " + this.getClass().getName());
+		//System.out.println("checking " + this.getClass().getName());
 		if (m_blockingPredicate == null || m_blockingPredicate.getAsBoolean()) {
-			System.out.println("running " + this.getClass().getName());
+			//System.out.println("running " + this.getClass().getName());
 			transferControl(ControlOwner.MAIN_THREAD, ControlOwner.SUBROUTINE);
-			System.out.println("finished running" + this.getClass().getName());
+			//System.out.println("finished running" + this.getClass().getName());
 		}
 	}
 

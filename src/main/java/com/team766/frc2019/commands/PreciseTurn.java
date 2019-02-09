@@ -1,69 +1,41 @@
 package com.team766.frc2019.commands;
 
-import com.team766.controllers.PIDController;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
-import java.util.Date;
-
+import com.team766.hal.CANSpeedController.ControlMode;
+import com.team766.controllers.PIDController;
 
 public class PreciseTurn extends Subroutine {
-    private double m_angle;
-    public PreciseTurn(double angle) {
-        m_angle = angle;
-        //takeControl(Robot.drive);
-    }        
- 
-    protected void subroutine() {
-        double startTime = new Date().getTime();
 
-        Robot.drive.startTurn(m_angle);
-       
-       System.out.println("precise turn subroutine");
-        while (!Robot.drive.isTurnDone()) {
-            yield();         
-        }
-        double endTime = new Date().getTime();
-        System.out.println("Precise turn is done in " + (endTime - startTime));
+    double m_turnAngle;
+    double m_rampAngle;
+    PIDController m_turnController;
 
- 
+    public PreciseTurn(double turnAngle) {
+        m_turnAngle = turnAngle;
+        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
+        takeControl(Robot.drive);
     }
-}
 
-    /*protected void subroutine_old() {
-        double leftDrivePower;
-        double rightDrivePower;
-        double speedForce = 0.25;
-        if (m_angle > 0) {
-            leftDrivePower = 1.0;
-            rightDrivePower = -1.0;
-        } else {
-            leftDrivePower = -1.0;
-            rightDrivePower = 1.0;
-        }
-        Robot.drive.setDrivePower(leftDrivePower * speedForce, rightDrivePower * speedForce);
-
-       
-        while (Math.abs(Robot.drive.getGyroAngle()) < Math.abs(m_angle)) {
-            
-            double currentAngle = Math.abs(Robot.drive.getGyroAngle());
-            if (currentAngle < RAMP_ANGLE) {
-                speedForce = currentAngle/ RAMP_ANGLE;
-                if (speedForce < .25)
-                    speedForce = .25;
-            } else if (currentAngle < m_angle-RAMP_ANGLE) { 
-                speedForce = 1;
-            } else {
-                speedForce = 1 - (currentAngle - (m_angle-RAMP_ANGLE))/RAMP_ANGLE;
-                if (speedForce < .25)
-                    speedForce = .25;
-            } 
-            Robot.drive.setDrivePower(leftDrivePower * speedForce, rightDrivePower * speedForce);
+    protected void subroutine() {
+        double power = 0;
+        System.out.println("hey im gonna turn");
+        m_turnController.setSetpoint(0.0);
+        m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
+        while(!(Robot.drive.isTurnDone(m_turnController))) {
+            m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
+            power = m_turnController.getOutput();
+            if (Math.abs(power) < Robot.drive.MIN_TURN_SPEED) {
+                if (power < 0) {
+                    power = -Robot.drive.MIN_TURN_SPEED;
+                } else {
+                    power = Robot.drive.MIN_TURN_SPEED;
+                }
+            }
+            Robot.drive.setDrive(power, -power, ControlMode.PercentOutput);
+            System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Check: " + Robot.drive.isTurnDone(m_turnController));
             yield();
         }
-
-        Robot.drive.setDrivePower(0.0, 0.0);
-        
+        Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
     }
- 
-} 
-*/
+}
