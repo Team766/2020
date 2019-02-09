@@ -1,6 +1,7 @@
 package com.team766.hal;
 
 import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 /**
@@ -84,4 +85,20 @@ public interface CANSpeedController extends SpeedController {
 	ErrorCode config_kI(int slotIdx, double value, int timeoutMs);
 
 	ErrorCode config_kD(int slotIdx, double value, int timeoutMs);
+
+	ErrorCode config_kF(int slotidx, double value, int timeoutMs);
+
+	ErrorCode configSelectedFeedbackSensor(FeedbackDevice feedbackDevice);
+
+	ErrorCode configNominalOutputForward(double PercentOutput);
+
+	ErrorCode configNominalOutputReverse(double PercentOutput);
+
+	ErrorCode configPeakOutputForward(double PercentOutput);
+
+	ErrorCode configPeakOutputReverse(double PercentOutput);
+	
+	void setSensorPhase(boolean PhaseSensor);
+
+	ErrorCode configFactoryDefault();
 }
