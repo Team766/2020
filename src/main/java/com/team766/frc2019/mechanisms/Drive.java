@@ -7,6 +7,7 @@ import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
 
@@ -49,15 +50,35 @@ public class Drive extends Mechanism {
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
+        m_leftTalon.configFactoryDefault();
+        m_rightTalon.configFactoryDefault();
+        m_leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        m_rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.setInverted(true);
-        m_leftTalon.setNeutralMode(NeutralMode.Brake);
-        m_rightTalon.setNeutralMode(NeutralMode.Brake);
+        m_rightVictor1.setInverted(true);
+        if (m_secondVictor) {
+            m_rightVictor2.setInverted(true);
+        }
+        m_leftTalon.setSensorPhase(true);
+        m_rightTalon.setSensorPhase(true);
+        m_leftTalon.configNominalOutputForward(0);
+        m_leftTalon.configNominalOutputReverse(0);
+        m_leftTalon.configPeakOutputForward(1);
+        m_leftTalon.configPeakOutputReverse(-1);
+        m_rightTalon.configNominalOutputForward(0);
+        m_rightTalon.configNominalOutputReverse(0);
+        m_rightTalon.configPeakOutputForward(1);
+        m_rightTalon.configPeakOutputReverse(-1);
         m_leftTalon.config_kP(0, 0.05, 0);
         m_leftTalon.config_kI(0, 0.0, 0);
-        m_leftTalon.config_kD(0, 0.0, 0);
+        m_leftTalon.config_kD(0, 0.01, 0);
+        m_leftTalon.config_kF(0, 0.0, 0);
         m_rightTalon.config_kP(0, 0.05, 0);
         m_rightTalon.config_kI(0, 0.0, 0);
-        m_rightTalon.config_kD(0, 0.0, 0);
+        m_rightTalon.config_kD(0, 0.01, 0);
+        m_rightTalon.config_kF(0, 0.0, 0);
+        m_leftTalon.setNeutralMode(NeutralMode.Brake);
+        m_rightTalon.setNeutralMode(NeutralMode.Brake);
         encodersDistancePerPulse(DIST_PER_PULSE);
     }
 
