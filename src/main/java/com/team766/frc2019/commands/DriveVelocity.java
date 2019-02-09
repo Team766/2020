@@ -11,10 +11,10 @@ public class DriveVelocity extends Subroutine {
 
     protected void subroutine() {
         double dist = 0;
-        for (int i = 0; i < 101; i++) {
-            dist = i / Robot.drive.DIST_PER_PULSE;
-            System.out.println("something something inches per second: " + (dist));
-            Robot.drive.setDrive(dist / 10, 0, ControlMode.Velocity);
+        for (int i = 0; i <= 100; i++) {
+//            dist = i / Robot.drive.DIST_PER_PULSE;
+            System.out.println("velocity: " + (i*1000.0));
+            Robot.drive.setDrive(i*1000.0, i*1000.0, ControlMode.Velocity);
             waitForSeconds(2.0);
         }
         Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
