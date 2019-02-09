@@ -13,7 +13,7 @@ public class DriveVelocity extends Subroutine {
         double dist = 0;
         for (int i = 0; i < 101; i++) {
             dist = i / Robot.drive.DIST_PER_PULSE;
-            System.out.println("something something inches per second: " + (dist));
+            System.out.println("something something inches per second: " + (dist / 10));
             Robot.drive.setDrive(dist / 10, 0, ControlMode.Velocity);
             waitForSeconds(2.0);
         }
