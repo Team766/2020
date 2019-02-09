@@ -77,4 +77,10 @@ public interface CANSpeedController extends SpeedController {
 	void follow(CANSpeedController leader);
 
 	void setNeutralMode(NeutralMode neutralMode);
+
+	void config_kP(int slotIdx, double value, int timeoutMs);
+
+	void config_kI(int slotIdx, double value, int timeoutMs);
+
+	void config_kD(int slotIdx, double value, int timeoutMs);
 }
