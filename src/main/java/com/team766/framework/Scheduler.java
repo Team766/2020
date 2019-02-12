@@ -24,7 +24,7 @@ public class Scheduler implements Runnable {
 	}
 	
 	public void run() {
-		for (Runnable runnable : m_runnables) {
+		for (Runnable runnable : new LinkedList<Runnable>(m_runnables)) {
 			runnable.run();
 		}
 	}
