@@ -3,29 +3,51 @@ package com.team766.framework;
 import java.util.function.BooleanSupplier;
 
 import com.team766.hal.RobotProvider;
+import com.team766.logging.Category;
+import com.team766.logging.Logger;
+import com.team766.logging.Severity;
 
 public abstract class Subroutine extends Command {
 	private static enum ControlOwner {
 		MAIN_THREAD,
 		SUBROUTINE,
 	}
-	
+
 	private Thread m_thread;
 	private Object m_threadSync;
 	private boolean m_done;
 	private BooleanSupplier m_blockingPredicate;
 	private ControlOwner m_controlOwner;
+	private String m_previousWaitPoint;
 	
 	@Override
 	protected final void initialize() {
 		m_threadSync = new Object();
+		m_previousWaitPoint = null;
 		m_controlOwner = ControlOwner.MAIN_THREAD;
 		m_done = false;
 		m_thread = new Thread(this::threadFunction);
 		m_thread.start();
 	}
+
+	private String getExecutionPoint() {
+		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+		for (int i = 0; i < stack.length; ++i) {
+			if (stack[i].getClassName() == this.getClass().getName()) {
+				return stack[i].toString();
+			}
+		}
+		return null;
+	}
 	
 	private void waitForControl(ControlOwner thisOwner) {
+		if (thisOwner == ControlOwner.SUBROUTINE) {
+			String waitPointTrace = getExecutionPoint();
+			if (waitPointTrace != null && !waitPointTrace.equals(m_previousWaitPoint)) {
+				Logger.get(Category.COMMANDS).logRaw(Severity.INFO, getCommandName() + " is waiting at " + waitPointTrace);
+				m_previousWaitPoint = waitPointTrace;
+			}
+		}
 		synchronized (m_threadSync) {
 			while (m_controlOwner != thisOwner && !m_done) {
 				try {
@@ -55,10 +77,13 @@ public abstract class Subroutine extends Command {
 		try {
 			subroutine();
 		} finally {
+			System.out.println("before synchronized");
 			synchronized (m_threadSync) {
 				m_done = true;
 				m_threadSync.notifyAll();
 			}
+			System.out.println("after synchronized");
+
 		}
 	}
 	
@@ -75,7 +100,13 @@ public abstract class Subroutine extends Command {
 	}
 
 	protected void waitForSubroutine(Subroutine other) {
-		waitFor(() -> other.isDone());
+		System.out.println("Starting to wait for " + other.getClass().getName());
+		while (!other.isDone()) {
+			System.out.println("waiting for " + other.getClass().getName());
+			yield();
+		}
+		System.out.println("done waiting");
+		//waitFor(() -> other.isDone());
 	}
 
 	protected void waitForSeconds(double seconds) {
@@ -93,9 +124,11 @@ public abstract class Subroutine extends Command {
 			stop();
 			return;
 		}
-		
+		System.out.println("checking " + this.getClass().getName());
 		if (m_blockingPredicate == null || m_blockingPredicate.getAsBoolean()) {
+			System.out.println("running " + this.getClass().getName());
 			transferControl(ControlOwner.MAIN_THREAD, ControlOwner.SUBROUTINE);
+			System.out.println("finished running" + this.getClass().getName());
 		}
 	}
 

@@ -24,7 +24,7 @@ public class LimeLogger extends Subroutine{
             System.out.println(skew());
             waitForSeconds(1.0);
         }*/
-        center3();
+        center2();
         
         
 
@@ -47,7 +47,7 @@ public class LimeLogger extends Subroutine{
         double average = 0.0;
 
         for (int i = 0; i < 8; i++) {
-            raw[i] = LimeLight.skew();
+            raw[i] = skew();
             n += (90 + raw[i] <= 2.5) ? 1 : 0;
         }
         
@@ -87,27 +87,12 @@ public class LimeLogger extends Subroutine{
     }
 
     public void center() {
-        LimeLight.setPipeline(1);
-        if (!LimeLight.isTarget()) {
-            waitForSeconds(2.4);
-            while (!LimeLight.isTarget()) {
-                Robot.drive.setDrivePower(speed, 0.0);
-            }
-        }
-        double x = LimeLight.tx();
-        if (x > 0.3) {
-            Robot.drive.setDrivePower(-speed, -0.1);
-        }
-        if (x < -0.3) {
-            Robot.drive.setDrivePower(-0.1, -speed);
-        } else {
-            Robot.drive.setDrivePower(0.0, 0.0);
-        }
+        
     }
 
     public void center2() {
         LimeLight.setPipeline(1);
-        double e = 0.0007;
+        double e = 0.0025;
         double x = LimeLight.tx();
         double a = LimeLight.ta();
         while (a < stop){
@@ -126,7 +111,7 @@ public class LimeLogger extends Subroutine{
 
     public void center3() {
         LimeLight.setPipeline(1);
-        double e = 0.0003;
+        double e = 0.0025;
         double x = LimeLight.tx();
         double a = LimeLight.ta();
         boolean f = LimeLight.isTarget();

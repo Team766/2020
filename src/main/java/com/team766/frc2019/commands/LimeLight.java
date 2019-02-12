@@ -2,7 +2,7 @@ package com.team766.frc2019.commands;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
+import com.team766.framework.Subroutine;
 
 public class LimeLight {
 	private static NetworkTableInstance table = null;
@@ -43,34 +43,15 @@ public class LimeLight {
         return getValue("ts").getDouble(0.00);
     }
 
-    public static double distanceDumb() {
+    public static double distanceDumb(double angle) {
 		setPipeline(1);
-		return 4.8 / Math.tan(((ty() + 9.3625) * Math.PI) / 180.0 );
+		return 4.8 / Math.tan(((ty() + angle) * Math.PI) / 180.0 );
 	}
 	
 	public static double thor() {
 		return getValue("thor").getDouble(0.0);
 	}
 
-	public static double skew() {
-		setPipeline(2);
-		double l = ta();
-		setPipeline(3);
-		double r = ta();
-		return 90.0 * ((l > r) ? r/l : (-1.0 * l)/r);
-	}
-
-	public static double ra() {
-		setPipeline(3);
-		double x = ta();
-		return x;
-	}
-
-	public static double la() {
-		setPipeline(2);
-		double x = ta();
-		return x;
-	}
 	public static void setPipeline(int number) {
 		getValue("pipeline").setNumber(number);
 	}
