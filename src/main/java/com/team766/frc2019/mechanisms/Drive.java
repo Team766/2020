@@ -113,17 +113,17 @@ public class Drive extends Mechanism {
         m_gyro.reset(); 
     }
 
-    public double leftEncoderDistance() { 
+    public double leftEncoderDistance() {
         return(-m_leftTalon.getSensorPosition());
     }
 
-    public double rightEncoderDistance() { 
+    public double rightEncoderDistance() {
         return(-m_rightTalon.getSensorPosition());
     }
 
     /**
     * Returns the object of the specified encoder.
-    * turnDirection = true returns the left encoder, and false returns the right encoder.
+    * turnDirection = true returns the right encoder, and false returns the left encoder.
     */
     public double getOutsideEncoderDistance(boolean turnDirection) {
         if (turnDirection) {
@@ -174,7 +174,7 @@ public class Drive extends Mechanism {
 	 */
     public double AngleDifference(double angle1, double angle2) {
         double diff = (angle2 - angle1 + 180) % 360 - 180;
-        // return diff < -180 ? diff + 360 : diff;
-        return diff;
+        return diff < -180 ? diff + 360 : diff;
+        // return diff;
     }
 }
