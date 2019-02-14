@@ -28,7 +28,8 @@ public class Robot extends MyRobot {
 		// Initialize mechanisms here
 		drive = new Drive();
 		flowerGripper = new FlowerGripper();
-//		flowerActuator = new FlowerActuator();
+		elevator = new Elevator();
+		//flowerActuator = new FlowerActuator();
 		
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());

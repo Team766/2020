@@ -1,5 +1,7 @@
 package com.team766.frc2019.mechanisms;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.framework.Mechanism;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController;
@@ -16,6 +18,30 @@ public class Elevator extends Mechanism {
     public Elevator() {
         m_elevatorMotor = RobotProvider.instance.getCANMotor("elevator.elevatorMotor");
         m_actuatorMotor = RobotProvider.instance.getCANMotor("elevator.actuatorMotor"); 
+        m_elevatorMotor.configFactoryDefault();
+        m_actuatorMotor.configFactoryDefault();
+        m_elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        m_actuatorMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        m_elevatorMotor.setSensorPhase(true);
+        m_actuatorMotor.setSensorPhase(true);
+        m_elevatorMotor.configNominalOutputForward(0);
+        m_elevatorMotor.configNominalOutputReverse(0);
+        m_elevatorMotor.configPeakOutputForward(1);
+        m_elevatorMotor.configPeakOutputReverse(-1);
+        m_actuatorMotor.configNominalOutputForward(0);
+        m_actuatorMotor.configNominalOutputReverse(0);
+        m_actuatorMotor.configPeakOutputForward(1);
+        m_actuatorMotor.configPeakOutputReverse(-1);
+        m_elevatorMotor.config_kP(0, 0.05, 0);
+        m_elevatorMotor.config_kI(0, 0.0, 0);
+        m_elevatorMotor.config_kD(0, 0.01, 0);
+        m_elevatorMotor.config_kF(0, 0.0, 0);
+        m_actuatorMotor.config_kP(0, 0.05, 0);
+        m_actuatorMotor.config_kI(0, 0.0, 0);
+        m_actuatorMotor.config_kD(0, 0.01, 0);
+        m_actuatorMotor.config_kF(0, 0.0, 0);
+        m_elevatorMotor.setNeutralMode(NeutralMode.Brake);
+        m_actuatorMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     public void setElevatorPower(double elevatorPower) {
