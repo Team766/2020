@@ -16,8 +16,8 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
 
     public Elevator() {
-        m_elevatorMotor = RobotProvider.instance.getCANMotor("elevator.elevatorMotor");
-        m_actuatorMotor = RobotProvider.instance.getCANMotor("elevator.actuatorMotor"); 
+        m_elevatorMotor = RobotProvider.instance.getTalonCANMotor("elevator.elevatorMotor");
+        m_actuatorMotor = RobotProvider.instance.getTalonCANMotor("elevator.actuatorMotor");
         m_elevatorMotor.configFactoryDefault();
         m_actuatorMotor.configFactoryDefault();
         m_elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
