@@ -1,6 +1,7 @@
 package com.team766.hal;
 
 public interface GyroReader {
+
 	/**
 	   * Calibrate the gyro by running for a number of samples and computing the
 	   * center value. Then use the center value as the Accumulator center value for
