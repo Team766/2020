@@ -18,7 +18,7 @@ public class DrivePrecise extends Subroutine {
     } 
     
     protected void  subroutine() {
-        double m_lPower = POWER;
+        /*double m_lPower = POWER;
         double m_rPower = POWER;
         Robot.drive.setDrivePower(m_lPower,m_rPower);
         Robot.drive.gyroReset();
@@ -51,8 +51,9 @@ public class DrivePrecise extends Subroutine {
             yield();
         }
         Robot.drive.setDrivePower(0.0,0.0);
+        */
     }
-
+    
 }
 
 

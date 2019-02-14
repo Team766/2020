@@ -4,26 +4,28 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.RobotProvider;
 
-public class LimeLogger extends Subroutine{
+public class LimeLogger /*extends Subroutine */{
     public LimeLogger() {
-        takeControl(Robot.drive);
+       // takeControl(Robot.drive);
     }
-    final double speed = 0.16;
+
+    
+    /*final double speed = 0.16;
     final double stop = 1.0;
 
     protected void subroutine() {
-        /*LimeLight.setPipeline(1);
+        LimeLight.setPipeline(1);
         double distance = LimeLight.ta();
         center2();
         waitForSeconds(0.1);
         
         System.out.println("DONE, FINAL ANGLE: " + skew());
-       */
+       
         /*final double start = RobotProvider.instance.getClock().getTime();
         while (RobotProvider.instance.getClock().getTime() - start < 30.0) {
             System.out.println(skew());
             waitForSeconds(1.0);
-        }*/
+        }
         center2();
         
         
@@ -99,7 +101,7 @@ public class LimeLogger extends Subroutine{
             a = LimeLight.ta();
             x = LimeLight.tx();
             if (x > 0) {
-                Robot.drive.setDrivePower(-speed - (x * x * e), -speed);
+                Robot.drive.setDrivePower(-speed - (x * x * e), -speed, ControlMode.PercentOutput);
             }
             if (x < 0) {
                 Robot.drive.setDrivePower(-speed, -speed - (x * x * e));
@@ -137,7 +139,7 @@ public class LimeLogger extends Subroutine{
                 }
             }
         }
-        /*waitForSeconds(1.0);
+        waitForSeconds(1.0);
         double fin = Math.abs(skew());
         waitForSeconds(1.0);
         fin = 90 - fin;
@@ -157,7 +159,7 @@ public class LimeLogger extends Subroutine{
         }
         waitForSeconds(0.2);
         Robot.drive.setDrivePower(0.0, 0.0);
-        */
+        
     }
 
     public void center4() {
@@ -210,4 +212,5 @@ public class LimeLogger extends Subroutine{
             yield();
         }
     }
+    */
 }

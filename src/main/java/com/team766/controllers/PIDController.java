@@ -197,8 +197,9 @@ public class PIDController {
 
 		lastTime = RobotProvider.instance.getClock().getTime();
 		
-		pr("	Total Eror: " + total_error + "		Current Error: " + cur_error
+		pr("	Total Error: " + total_error + "		Current Error: " + cur_error
 				+ "	Output: " + output_value + " 	Setpoint: " + setpoint);
+		//System.out.println("	Total Error: " + total_error + "		Current Error: " + cur_error + "	Output: " + output_value + " 	Setpoint: " + setpoint);
 	}
 
 	public double getOutput() {

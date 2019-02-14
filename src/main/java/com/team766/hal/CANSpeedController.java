@@ -1,5 +1,8 @@
 package com.team766.hal;
 
+import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 /**
  * Interface for speed controlling devices over CAN bus.
  */
@@ -71,4 +74,14 @@ public interface CANSpeedController extends SpeedController {
 	 * @param position The desired set position
 	 */
 	void setPosition(int position);
+
+	void follow(CANSpeedController leader);
+
+	void setNeutralMode(NeutralMode neutralMode);
+
+	ErrorCode config_kP(int slotIdx, double value, int timeoutMs);
+
+	ErrorCode config_kI(int slotIdx, double value, int timeoutMs);
+
+	ErrorCode config_kD(int slotIdx, double value, int timeoutMs);
 }
