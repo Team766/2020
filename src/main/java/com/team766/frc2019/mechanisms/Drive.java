@@ -34,7 +34,7 @@ public class Drive extends Mechanism {
     public static double MAX_TURN_SPEED = 0.75;
     public static double MIN_TURN_SPEED = 0.1;
     public static double DIST_PER_PULSE = 0.00159616132;
-    public static double POSITION_PER_INCH = 40000;
+    public static double POSITION_PER_INCH = 20000;
     public static double robotWidth = 2.8;
     public static boolean m_secondVictor = true;
     
@@ -93,12 +93,12 @@ public class Drive extends Mechanism {
     public void setDrive(double leftSetting, double rightSetting, ControlMode controlMode) {
         m_leftTalon.set(controlMode, leftSetting);
         m_rightTalon.set(controlMode, rightSetting);
-        m_leftVictor1.follow(m_leftTalon);
+        /*m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor == true) {
             m_leftVictor2.follow(m_leftTalon);
             m_rightVictor2.follow(m_rightTalon);
-        }
+        }*/
     }
 
     public boolean isEnabled() {
@@ -106,7 +106,7 @@ public class Drive extends Mechanism {
     }
 
     public double getGyroAngle() {
-        return(-m_gyro.getAngle());
+        return(m_gyro.getAngle());
     }
 
     public void resetGyro() {
@@ -174,7 +174,7 @@ public class Drive extends Mechanism {
 	 */
     public double AngleDifference(double angle1, double angle2) {
         double diff = (angle2 - angle1 + 180) % 360 - 180;
-        return diff < -180 ? diff + 360 : diff;
-        // return diff;
+        //return diff < -180 ? diff + 360 : diff;
+        return diff;
     }
 }
