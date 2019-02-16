@@ -77,12 +77,12 @@ public abstract class Subroutine extends Command {
 		try {
 			subroutine();
 		} finally {
-			System.out.println("before synchronized");
+			//System.out.println("before synchronized");
 			synchronized (m_threadSync) {
 				m_done = true;
 				m_threadSync.notifyAll();
 			}
-			System.out.println("after synchronized");
+			//System.out.println("after synchronized");
 
 		}
 	}

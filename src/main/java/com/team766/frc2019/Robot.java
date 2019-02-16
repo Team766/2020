@@ -4,6 +4,7 @@ import com.team766.framework.AutonomousCommandUtils;
 import com.team766.framework.Command;
 import com.team766.frc2019.mechanisms.Drive;
 import com.team766.frc2019.mechanisms.Elevator;
+import com.team766.frc2019.mechanisms.FlowerActuator;
 import com.team766.frc2019.mechanisms.FlowerGripper;
 import com.team766.hal.MyRobot;
 import com.team766.web.AutonomousSelector;
@@ -14,7 +15,7 @@ public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
 	public static FlowerGripper flowerGripper;
-//		public static FlowerActuator flowerActuator;
+	public static FlowerActuator flowerActuator;
 	public static Elevator elevator;
 
 	private OI m_oi;
@@ -29,7 +30,7 @@ public class Robot extends MyRobot {
 		drive = new Drive();
 		flowerGripper = new FlowerGripper();
 		elevator = new Elevator();
-		//flowerActuator = new FlowerActuator();
+		flowerActuator = new FlowerActuator();
 		
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());
