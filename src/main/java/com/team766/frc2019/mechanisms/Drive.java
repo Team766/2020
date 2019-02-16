@@ -42,17 +42,18 @@ public class Drive extends Mechanism {
     
 
     public Drive() { 
-        m_leftVictor1 = RobotProvider.instance.getCANMotor("drive.leftVictor1"); 
-        m_rightVictor1 = RobotProvider.instance.getCANMotor("drive.rightVictor1");
+        m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
+        m_rightVictor1 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor1");
         if ( ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
             m_secondVictor = true;
-            m_leftVictor2 = RobotProvider.instance.getCANMotor("drive.leftVictor2");
-            m_rightVictor2 = RobotProvider.instance.getCANMotor("drive.rightVictor2");
+            m_leftVictor2 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor2");
+            m_rightVictor2 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor2");
         } else {
             m_secondVictor = false;
         }
-        m_leftTalon = RobotProvider.instance.getCANMotor("drive.leftTalon");
-        m_rightTalon = RobotProvider.instance.getCANMotor("drive.rightTalon");
+        m_leftTalon = RobotProvider.instance.getTalonCANMotor("drive.leftTalon");
+        m_rightTalon = RobotProvider.instance.getTalonCANMotor("drive.rightTalon");
+        
         m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");

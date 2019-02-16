@@ -1,18 +1,15 @@
 package com.team766.hal.wpilib;
 
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.IMotorController;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.team766.hal.CANSpeedController;
 import com.team766.logging.Category;
 import com.team766.logging.Logger;
 import com.team766.logging.Severity;
 
-public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedController {
+public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedController {
 
-	public CANTalonSpeedController(int deviceNumber) {
+	public CANVictorSpeedController(int deviceNumber) {
 		super(deviceNumber);
 	}
 
@@ -74,7 +71,7 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	
 	@Override
 	public void setPosition(int position){
-		super.setSelectedSensorPosition(position, 0, 0);
+		super.setSelectedSensorPosition(position, 0, 20);
 	}
 
 	@Override

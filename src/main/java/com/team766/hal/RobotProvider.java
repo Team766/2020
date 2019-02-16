@@ -9,7 +9,8 @@ public abstract class RobotProvider {
 	public static RobotProvider instance;
 	
 	protected SpeedController[] motors = new SpeedController[12];
-	protected CANSpeedController[] canMotors = new CANSpeedController[64];
+	protected CANSpeedController[] talonCanMotors = new CANSpeedController[64];
+	protected CANSpeedController[] victorCanMotors = new CANSpeedController[64];
 	protected EncoderReader[] encoders = new EncoderReader[20];
 	protected SolenoidController[] solenoids = new SolenoidController[10];
 	protected GyroReader[] gyros = new GyroReader[13];
@@ -21,7 +22,8 @@ public abstract class RobotProvider {
 	
 	//HA
 	public abstract SpeedController getMotor(int index);
-	public abstract CANSpeedController getCANMotor(int index);
+	public abstract CANSpeedController getTalonCANMotor(int index);
+	public abstract CANSpeedController getVictorCANMotor(int index);
 	
 	public abstract EncoderReader getEncoder(int index1, int index2);
 	
@@ -45,12 +47,19 @@ public abstract class RobotProvider {
 		}
 		return getMotor(port);
 	}
-	public CANSpeedController getCANMotor(String configName) {
+	public CANSpeedController getTalonCANMotor(String configName) {
 		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
 		if (port == null) {
-			throw new IllegalArgumentException("CAN Motor " + configName + " not found in config file");
+			throw new IllegalArgumentException("Talon CAN Motor " + configName + " not found in config file");
 		}
-		return getCANMotor(port);
+		return getTalonCANMotor(port);
+	}
+	public CANSpeedController getVictorCANMotor(String configName) {
+		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
+		if (port == null) {
+			throw new IllegalArgumentException("Victor CAN Motor " + configName + " not found in config file");
+		}
+		return getVictorCANMotor(port);
 	}
 	public EncoderReader getEncoder(String configName) {
 		Integer[] ports = ConfigFileReader.getInstance().getInts(configName).get();
