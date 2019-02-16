@@ -51,6 +51,43 @@ public class Elevator extends Mechanism {
         m_actuatorMotor.set(ControlMode.PercentOutput, actuatorPower);
     }
 
+    public double getActuatorHeight() {
+       return m_actuatorMotor.getSensorPosition();
+    }
+
+    public double getElevatorHeight() {
+       return m_elevatorMotor.getSensorPosition();
+    }
+
+    public void resetElevatorEncoder() {
+        m_elevatorMotor.setPosition(0);
+    }
+
+    public void resetActuatorEncoder() {
+        m_actuatorMotor.setPosition(0);
+    }
+
+    public void setElevatorHeight(double position, double power) {
+        while (getElevatorHeight() != position) {
+            if (getElevatorHeight() > position) {
+                setElevatorPower(-power);
+            } else {
+                setElevatorPower(power);
+            }
+        }
+    }
+
+    public void setActuatorHeight(double position, double power) {
+        while (getActuatorHeight() != position) {
+            if (getActuatorHeight() > position) {
+                setActuatorPower(-power);
+            } else {
+                setActuatorPower(power);
+            }
+        }
+    }
+
+
     /**
     * Move the elevator motor a set number of inches.
     **/
