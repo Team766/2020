@@ -80,4 +80,14 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	public void follow(CANSpeedController leader) {
 		super.follow((CANTalonSpeedController)leader);
 	}
+
+	@Override
+	public void configOpenLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		super.configOpenloopRamp(secondsFromNeutralToFull, timeoutMs);
+	}
+
+	@Override
+	public void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		super.configClosedloopRamp(secondsFromNeutralToFull, timeoutMs);
+	}
 }

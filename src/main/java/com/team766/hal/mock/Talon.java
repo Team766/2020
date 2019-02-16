@@ -137,4 +137,14 @@ public class Talon implements CANSpeedController{
 	public ErrorCode configFactoryDefault() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void configOpenLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
 }
