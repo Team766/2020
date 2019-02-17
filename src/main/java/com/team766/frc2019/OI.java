@@ -28,18 +28,6 @@ public class OI extends Command {
 	private static int ELEVATOR_LVL3 = 11;
 	private static int ELEVATOR_LVL2 = 12;
 	private static int ELEVATOR_LVL1 = 13;
-	private static int MIN_HEIGHT = 200;
-	private static int NEAR_MIN_HEIGHT = 200000;
-	private static int MAX_HEIGHT = 2130000;
-	private static int NEAR_MAX_HEIGHT = 1930000;
-	private static int NEAR_MAX_ACTUATOR_HEIGHT = 900000;
-	private static int MAX_HEIGHT_ACTUATOR = 950000;
-	private static int MID_HEIGHT_BIG = 0;
-	private static int MAX_HEIGHT_BIG = 0;
-	private static int MID_HEIGHT_SMALL = 0;
-	private static int MAX_HEIGHT_SMALL = 0;
-
-
 
 
 
@@ -97,48 +85,22 @@ public class OI extends Command {
 
 		//SMALL ELEVATOR MOVEMENT
 		if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
-			Robot.elevator.setActuatorPower(-1);
+			Robot.elevator.setActuatorPower(.75);
 			System.out.println("Actuator Height - " + Robot.elevator.getActuatorHeight());
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
-			Robot.elevator.setActuatorPower(1);
+			Robot.elevator.setActuatorPower(-.75);
 			System.out.println("Actuator Height - " + Robot.elevator.getActuatorHeight());
-			//if (Robot.elevator.getActuatorHeight() < MIN_HEIGHT) {
-			//	Robot.elevator.resetActuatorEncoder();
-			//}
 		} else {
 			Robot.elevator.setActuatorPower(0.0);	
 		}
 
 		//BIG ELEVATOR MOVEMENT
 		if (m_boxop.getRawButton(ELEVATOR_UP) ) {
-			//takeControl(Robot.elevator);
-			System.out.println("Elevator Height - " + Robot.elevator.getElevatorHeight());
-			if (Robot.elevator.getElevatorHeight() >= MAX_HEIGHT) {
-				if (Robot.elevator.getActuatorHeight() > MAX_HEIGHT_ACTUATOR) {
-					Robot.elevator.setActuatorPower(0.0);
-				} else if (Robot.elevator.getActuatorHeight() > NEAR_MAX_ACTUATOR_HEIGHT) {
-					Robot.elevator.setActuatorPower(0.2);
-				} else {
-					Robot.elevator.setActuatorPower(0.75);
-				}
-				Robot.elevator.setElevatorPower(0.0);
-			} else if (Robot.elevator.getElevatorHeight() > NEAR_MAX_HEIGHT) {
-				Robot.elevator.setElevatorPower(0.2);
-			} else {
-				Robot.elevator.setElevatorPower(0.75);
-			}
+			Robot.elevator.elevatorUp(); 
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN)) {
-			//takeControl(Robot.elevator);
-			System.out.println("Elevator Height - " + Robot.elevator.getElevatorHeight());
-			if (Robot.elevator.getElevatorHeight() < MIN_HEIGHT) {
-				Robot.elevator.setElevatorPower(0.0);
-			} else if (Robot.elevator.getElevatorHeight() < NEAR_MIN_HEIGHT) {
-				Robot.elevator.setElevatorPower(-0.1);
-			} else {
-				Robot.elevator.setElevatorPower(-0.75);
-			}
+			Robot.elevator.elevatorDown();
 		} else {
-			Robot.elevator.setElevatorPower(0.0);
+			Robot.elevator.elevatorNeutral();
 		}
 
 		//INTAKE FORWARD AND BACK
@@ -150,18 +112,20 @@ public class OI extends Command {
 
 		//ELEVATOR LEVELS
 		if (m_boxop.getRawButton(ELEVATOR_LVL1)) {
-			Robot.elevator.setElevatorHeight(0, 0.25);
-			Robot.elevator.setActuatorHeight(0, 0.25);
+			//Robot.elevator.setPosition(Robot.elevator.LVL1);
+			Robot.elevator.setActuatorPosition(-10240);
 
+			//Robot.elevator.resetElevatorEncoder();
 		}
 		if (m_boxop.getRawButton(ELEVATOR_LVL2)) {
-			Robot.elevator.setElevatorHeight(MID_HEIGHT_BIG, 0.25);
-			Robot.elevator.setActuatorHeight(MID_HEIGHT_SMALL, 0.25);
+			//Robot.elevator.resetActuatorEncoder();
+			Robot.elevator.setElevatorPosition(0);
+			//Robot.elevator.setPosition(Robot.elevator.LVL2);
 		}
-		if (m_boxop.getRawButton(ELEVATOR_LVL3)) {
-			Robot.elevator.setElevatorHeight(MAX_HEIGHT_BIG, 0.25);
-			Robot.elevator.setActuatorHeight(MAX_HEIGHT_SMALL, 0.25);
-
+		if (m_boxop.getRawButton(ELEVATOR_LVL3)) {		
+			//Robot.elevator.resetElevatorEncoder();
+			Robot.elevator.setActuatorPosition(10240);
+			//Robot.elevator.setPosition(Robot.elevator.LVL3);
 		}
 	
 	}
