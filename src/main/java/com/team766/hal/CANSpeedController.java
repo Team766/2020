@@ -101,4 +101,8 @@ public interface CANSpeedController extends SpeedController {
 	void setSensorPhase(boolean PhaseSensor);
 
 	ErrorCode configFactoryDefault();
+
+	void configOpenLoopRamp(double secondsFromNeutralToFull, int timeoutMs);
+
+	void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs);
 }

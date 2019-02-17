@@ -33,7 +33,7 @@ public class PreciseTurn extends Subroutine {
                 }
             }
             Robot.drive.setDrive(power, -power, ControlMode.PercentOutput);
-            System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Check: " + Robot.drive.isTurnDone(m_turnController));
+            System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) + " Check: " + Robot.drive.isTurnDone(m_turnController));
             yield();
         }
         Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
