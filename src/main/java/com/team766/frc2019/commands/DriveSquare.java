@@ -14,25 +14,46 @@ public class DriveSquare extends Subroutine {
 
         Robot.drive.resetGyro();
         Robot.drive.resetEncoders();
-        //callSubroutine(new PreciseDrive(5, 0, .25, 0, 0));
-        callSubroutine(new PreciseDrive(0, 20, .5, 0, 0));
+        /*callSubroutine(new PreciseDrive(0, -5, .5, 0, .5));
+        callSubroutine(new PreciseTurnRadius(90, 0, .5, .5, .5));
+        callSubroutine(new PreciseTurnRadius(180, 0, .5, .5, .5));
+        callSubroutine(new PreciseDrive(180, 5, .5, .5, 0)); dukes of hazzard turn*/
+        /*callSubroutine(new PreciseDrive(0, 5, .5, .5));
+        callSubroutine(new PreciseTurnRadius(90, 2, .5, .5));
+        callSubroutine(new PreciseTurnRadius(180, 2, .5, .5));
+        callSubroutine(new PreciseDrive(180, 5, .5, .5));
+        callSubroutine(new PreciseDrive(180, -5, .5, .5));
+        callSubroutine(new PreciseTurnRadius(90, -2, .5, .5));
+        callSubroutine(new PreciseTurnRadius(0, -2, .5, .5));
+        callSubroutine(new PreciseDrive(0, -5, .5, .5)); mcdonalds logo*/
+        callSubroutine(new PreciseTurnRadius(0, 10.4375, .5, 0));
+        callSubroutine(new ExtendGripper());
+        callSubroutine(new PreciseTurnRadius(0, -3.666666666666667, .5, 0));
+        callSubroutine(new RetractGripper());
+        callSubroutine(new PreciseTurn(-135));
+        callSubroutine(new PreciseDrive(225, 14, .5, .5));
+        callSubroutine(new PreciseTurnRadius(180, 0.6666666666666667, .5, .5));
+        callSubroutine(new ExtendGripper());
+        callSubroutine(new PreciseDrive(180, 2, .5, 0));
+        callSubroutine(new RetractGripper());
+        callSubroutine(new PreciseDrive(180, -2, .5, 0));
         /*while (Robot.drive.isEnabled()) {
             callSubroutine(new PreciseTurnRadius(270, 2, .5, 0, .5));
-            callSubroutine(new PreciseDrive(270, 1, .5, .5, .5));
+            //callSubroutine(new PreciseDrive(270, 1, .5, .5, .5));
             callSubroutine(new PreciseTurnRadius(180, 2, .5, .5, .5));
-            callSubroutine(new PreciseDrive(180, 1, .5, .5, .5));
+            //callSubroutine(new PreciseDrive(180, 1, .5, .5, .5));
             callSubroutine(new PreciseTurnRadius(90, 2, .5, .5, .5));
-            callSubroutine(new PreciseDrive(90, 1, .5, .5, .5));
+            //callSubroutine(new PreciseDrive(90, 1, .5, .5, .5));
             callSubroutine(new PreciseTurnRadius(0, 2, .5, .5, 0));
-            callSubroutine(new PreciseDrive(0, 1, .5, .5, .5));
+            //callSubroutine(new PreciseDrive(0, 1, .5, .5, .5));
             callSubroutine(new PreciseTurnRadius(90, 2, .5, 0, .5));
-            callSubroutine(new PreciseDrive(90, 1, .5, .5, .5));
+            //callSubroutine(new PreciseDrive(90, 1, .5, .5, .5));
             callSubroutine(new PreciseTurnRadius(180, 2, .5, .5, .5));
-            callSubroutine(new PreciseDrive(180, 1, .5, .5, .5));
+            //callSubroutine(new PreciseDrive(180, 1, .5, .5, .5));
             callSubroutine(new PreciseTurnRadius(270, 2, .5, .5, .5));
-            callSubroutine(new PreciseDrive(270, 1, .5, .5, .5));
+            //callSubroutine(new PreciseDrive(270, 1, .5, .5, .5));
             callSubroutine(new PreciseTurnRadius(0, 2, .5, .5, 0));
-            callSubroutine(new PreciseDrive(0, 1, .5, .5, .5));
+            //callSubroutine(new PreciseDrive(0, 1, .5, .5, .5));
         }*/
         /*callSubroutine(new PreciseDrive(4, 270, .25, .25, .25));
         waitForSeconds(2.0);
