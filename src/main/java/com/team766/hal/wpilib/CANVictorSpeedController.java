@@ -78,4 +78,14 @@ public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedC
 	public void follow(CANSpeedController leader) {
 		super.follow((IMotorController)leader);
 	}
+
+	@Override
+	public void configOpenLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		super.configOpenloopRamp(secondsFromNeutralToFull, timeoutMs);
+	}
+
+	@Override
+	public void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		super.configClosedloopRamp(secondsFromNeutralToFull, timeoutMs);
+	}
 }

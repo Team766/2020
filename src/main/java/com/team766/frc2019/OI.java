@@ -66,7 +66,7 @@ public class OI extends Command {
 		/// Ryan added this code
 		double leftPower = fwd_power + turn_power;
 		double rightPower = fwd_power - turn_power;
-		Robot.drive.setDrivePower(leftPower, rightPower, ControlMode.PercentOutput);
+		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
 		/// End of Ryan's code
 
 
