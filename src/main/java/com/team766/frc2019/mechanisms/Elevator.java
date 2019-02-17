@@ -19,11 +19,11 @@ public class Elevator extends Mechanism {
     private static int MIN_HEIGHT = 0;
 	private static int NEAR_MIN_HEIGHT = 75000;
 	private static int MAX_HEIGHT = 2130000;
-    private static int NEAR_MAX_HEIGHT = MAX_HEIGHT - 50000;
+    private static int NEAR_MAX_HEIGHT = 2030000;
     private static int MAX_HEIGHT_ACTUATOR = 950000;
-	private static int NEAR_MAX_ACTUATOR_HEIGHT = MAX_HEIGHT_ACTUATOR - 20000;
+	private static int NEAR_MAX_ACTUATOR_HEIGHT = 930000;
 	private static int MIN_HEIGHT_ACTUATOR = 0;
-	private static int NEAR_MIN_ACTUATOR_HEIGHT = MIN_HEIGHT_ACTUATOR + 30000;
+	private static int NEAR_MIN_ACTUATOR_HEIGHT = 50000;
 	private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
@@ -36,21 +36,21 @@ public class Elevator extends Mechanism {
     public Elevator() {
         m_elevatorMotor = RobotProvider.instance.getTalonCANMotor("elevator.elevatorMotor");
         m_actuatorMotor = RobotProvider.instance.getTalonCANMotor("elevator.actuatorMotor");
-        m_actuatorMotor.setInverted(true);
         m_elevatorMotor.configFactoryDefault();
         m_actuatorMotor.configFactoryDefault();
+        m_actuatorMotor.setInverted(true);
         m_elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_actuatorMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_elevatorMotor.setSensorPhase(true);
-        m_actuatorMotor.setSensorPhase(true);
-        m_elevatorMotor.configNominalOutputForward(0);
-        m_elevatorMotor.configNominalOutputReverse(0);
-        m_elevatorMotor.configPeakOutputForward(1);
-        m_elevatorMotor.configPeakOutputReverse(-1);
-        m_actuatorMotor.configNominalOutputForward(0);
-        m_actuatorMotor.configNominalOutputReverse(0);
-        m_actuatorMotor.configPeakOutputForward(1);
-        m_actuatorMotor.configPeakOutputReverse(-1);
+        m_actuatorMotor.setSensorPhase(false);
+        m_elevatorMotor.configNominalOutputForward(0.0);
+        m_elevatorMotor.configNominalOutputReverse(0.0);
+        m_elevatorMotor.configPeakOutputForward(1.0);
+        m_elevatorMotor.configPeakOutputReverse(-1.0);
+        m_actuatorMotor.configNominalOutputForward(0.0);
+        m_actuatorMotor.configNominalOutputReverse(0.0);
+        m_actuatorMotor.configPeakOutputForward(1.0);
+        m_actuatorMotor.configPeakOutputReverse(-1.0);
         m_elevatorMotor.config_kP(0, 0.05, 0);
         m_elevatorMotor.config_kI(0, 0.0, 0);
         m_elevatorMotor.config_kD(0, 0.01, 0);
@@ -61,6 +61,8 @@ public class Elevator extends Mechanism {
         m_actuatorMotor.config_kF(0, 0.0, 0);
         m_elevatorMotor.setNeutralMode(NeutralMode.Brake);
         m_actuatorMotor.setNeutralMode(NeutralMode.Brake);
+        m_actuatorMotor.setPosition(0);
+        m_elevatorMotor.setPosition(0);
     }
 
     public void setElevatorPower(double elevatorPower) {
@@ -84,7 +86,7 @@ public class Elevator extends Mechanism {
         System.out.println("Setting position to: " + position + "ED: " + position/3 + " AD: " + (position*2/3));
         if (position > 0 && position < (double)(MAX_HEIGHT + MAX_HEIGHT_ACTUATOR)) {
             setElevatorPosition((2*position)/3);
-            setActuatorPosition(-(position/3));
+            setActuatorPosition((position/3));
             targetPosition = position;
         } else {
             System.out.println("im a bot");
@@ -138,21 +140,16 @@ public class Elevator extends Mechanism {
     public void elevatorUp() {
         targetPosition = -1;
         System.out.println("EH: " + Robot.elevator.getElevatorHeight() + " AH: " + Robot.elevator.getActuatorHeight());
-        if (Robot.elevator.getElevatorHeight() >= MAX_HEIGHT) {
-            Robot.elevator.setElevatorPower(0.0);
-            if (Robot.elevator.getActuatorHeight() > MAX_HEIGHT_ACTUATOR) {
-                Robot.elevator.setActuatorPower(0.0);
-            } else if (Robot.elevator.getActuatorHeight() > NEAR_MAX_ACTUATOR_HEIGHT) {
-                Robot.elevator.setActuatorPower(0.4);
+        if (Robot.elevator.getElevatorHeight() > NEAR_MAX_HEIGHT) {
+            if (Robot.elevator.getElevatorHeight() >= MAX_HEIGHT) {
+                Robot.elevator.setElevatorPower(0.0);
             } else {
-                Robot.elevator.setActuatorPower(0.75);
+                Robot.elevator.setElevatorPower(0.2);
             }
-        } else if (Robot.elevator.getElevatorHeight() > NEAR_MAX_HEIGHT) {
-            Robot.elevator.setElevatorPower(0.2);
             if (Robot.elevator.getActuatorHeight() > MAX_HEIGHT_ACTUATOR) {
                 Robot.elevator.setActuatorPower(0.0);
             } else if (Robot.elevator.getActuatorHeight() > NEAR_MAX_ACTUATOR_HEIGHT) {
-                Robot.elevator.setActuatorPower(0.4);
+                Robot.elevator.setActuatorPower(0.3);
             } else {
                 Robot.elevator.setActuatorPower(0.75);
             }
@@ -163,19 +160,20 @@ public class Elevator extends Mechanism {
 
     public void elevatorDown() {
         targetPosition = -1;
-        System.out.println("EH: " + Robot.elevator.getElevatorHeight() + " MinEH: " + MIN_HEIGHT);
-        System.out.println("AH: " + Robot.elevator.getActuatorHeight() + " MinAH: " + MIN_HEIGHT_ACTUATOR);
-        if (Robot.elevator.getActuatorHeight() <= MIN_HEIGHT_ACTUATOR) {
+        System.out.println("EH: " + Robot.elevator.getElevatorHeight() + " AH: " + Robot.elevator.getActuatorHeight());
+        if (Robot.elevator.getActuatorHeight() < NEAR_MIN_ACTUATOR_HEIGHT) {
             if (Robot.elevator.getElevatorHeight() < MIN_HEIGHT) {
                 Robot.elevator.setElevatorPower(0.0);
             } else if (Robot.elevator.getElevatorHeight() < NEAR_MIN_HEIGHT) {
                 Robot.elevator.setElevatorPower(-0.2);
-            } else {
+            }  else {
                 Robot.elevator.setElevatorPower(-0.75);
             }
-            Robot.elevator.setActuatorPower(0.0);
-        } else if (Robot.elevator.getActuatorHeight() < NEAR_MIN_ACTUATOR_HEIGHT) {
-            Robot.elevator.setActuatorPower(-0.4);
+            if (Robot.elevator.getActuatorHeight() <= MIN_HEIGHT_ACTUATOR) {
+                Robot.elevator.setActuatorPower(0.0);
+            } else {
+                Robot.elevator.setActuatorPower(-0.2);
+            }
         } else {
             Robot.elevator.setActuatorPower(-0.75);
         }
