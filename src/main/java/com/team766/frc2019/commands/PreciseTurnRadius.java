@@ -69,23 +69,23 @@ public class PreciseTurnRadius extends Subroutine {
         while(currentDistance * moveDir < Math.abs(m_outsideArcLength)) {
             currentDistance = Robot.drive.getOutsideEncoderDistance(m_turnDirection) * Robot.drive.DIST_PER_PULSE;
             
-            arcPercent = currentDistance *moveDir / m_outsideArcLength;
+            arcPercent = (currentDistance * moveDir) / m_outsideArcLength;
             error = Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), (m_initialAngle + (m_angleDiff * arcPercent)));
             m_turnController.calculate(error, true);
 
             turnAdjust = m_turnController.getOutput();
             straightPower = calcPower();
-            if (index++ % 1 == 0) {
-                //System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + "   sp: " + roundOff(straightPower, 2) + " td: " + Math.abs(roundOff(m_outsideArcLength, 2)) + " cd: " + roundOff(currentDistance, 2) * moveDir + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2));
-                System.out.println("Speed: " + straightPower + " Adjusted Speed: " + straightPower * (m_insideArcLength / m_outsideArcLength));
+            if (index++ % 50 == 0) {
+                System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + "   sp: " + roundOff(straightPower, 2) + " td: " + Math.abs(roundOff(m_outsideArcLength, 2)) + " cd: " + roundOff(currentDistance, 2) * moveDir + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2));
+                //System.out.println("Speed: " + straightPower + " Adjusted Speed: " + straightPower * (m_insideArcLength / m_outsideArcLength));
             }
-            /*if (turnAdjust > 0) {
-                leftAdjust = turnAdjust;
+            if (turnAdjust < 0) {
+                leftAdjust = -turnAdjust;
                 rightAdjust = 0;
             } else {
                 leftAdjust = 0;
-                rightAdjust = -turnAdjust;
-            }*/
+                rightAdjust = turnAdjust;
+            }
             if (m_turnDirection) {
                 Robot.drive.setDrive((straightPower + leftAdjust) * Robot.drive.POSITION_PER_INCH, ((straightPower * (m_insideArcLength / m_outsideArcLength)) + rightAdjust) * Robot.drive.POSITION_PER_INCH, ControlMode.Velocity);
             } else {
