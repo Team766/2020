@@ -26,8 +26,8 @@ public class Drive extends Mechanism {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    private EncoderReader m_leftEncoder; 
-    private EncoderReader m_rightEncoder;
+    //private EncoderReader m_leftEncoder; 
+    //private EncoderReader m_rightEncoder;
     public static double P = 0.04;
     public static double I = 0.0;
     public static double D = 0.004;
@@ -54,8 +54,8 @@ public class Drive extends Mechanism {
         m_leftTalon = RobotProvider.instance.getTalonCANMotor("drive.leftTalon");
         m_rightTalon = RobotProvider.instance.getTalonCANMotor("drive.rightTalon");
         
-        m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
-        m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
+        //m_leftEncoder = RobotProvider.instance.getEncoder("drive.leftEncoder");
+        //m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         m_leftTalon.configFactoryDefault();
         m_rightTalon.configFactoryDefault();
@@ -90,7 +90,7 @@ public class Drive extends Mechanism {
         m_leftTalon.configClosedLoopRamp(0.5, 0);
         m_rightTalon.configOpenLoopRamp(0.5, 0);
         m_rightTalon.configClosedLoopRamp(0.5, 0);
-        encodersDistancePerPulse(DIST_PER_PULSE);
+        //encodersDistancePerPulse(DIST_PER_PULSE);
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
     }
 
@@ -126,7 +126,7 @@ public class Drive extends Mechanism {
     }
 
     public double leftEncoderDistance() {
-        return(m_leftTalon.getSensorPosition());
+        return(-m_leftTalon.getSensorPosition());
     }
 
     public double rightEncoderDistance() {
@@ -148,12 +148,14 @@ public class Drive extends Mechanism {
     public void resetEncoders() {
         m_leftTalon.setPosition(0);
         m_rightTalon.setPosition(0);
+        //m_leftEncoder.reset();
+        //m_rightEncoder.reset();
     }
 
-    public void encodersDistancePerPulse(double distancePerPulse) {
+    /*public void encodersDistancePerPulse(double distancePerPulse) {
         m_leftEncoder.setDistancePerPulse(distancePerPulse);
         m_rightEncoder.setDistancePerPulse(distancePerPulse);
-    }
+    }*/
 
     public void shutdown() {
         m_leftTalon.set(ControlMode.PercentOutput, 0);
@@ -161,12 +163,6 @@ public class Drive extends Mechanism {
         m_leftTalon.setNeutralMode(NeutralMode.Coast);
         m_rightTalon.setNeutralMode(NeutralMode.Coast);
     }
-
-    /*@Override
-    public void run() {
-        setDrivePower(leftPower, rightPower);
-    }
-    */
     
     public boolean isTurnDone(PIDController turnController) {
         if (turnController == null) {
@@ -179,7 +175,7 @@ public class Drive extends Mechanism {
 	 * Gets the difference between angle1 and angle2, between -180 and 180 degrees.
      * angle1 is the current angle, angle2 is the desired angle.
 	 */
-    public double AngleDifference(double angle1, double angle2) {
+    public double AngleDifference(double angle1, double angle2) { //356, 0
         double diff = (angle2 - angle1 + 180) % 360 - 180;
         return diff < -180 ? diff + 360 : diff;
         //return diff;
