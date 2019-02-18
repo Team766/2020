@@ -47,8 +47,9 @@ public class OI extends Command {
 	
 	public void run() {
 		// cheezy - right stick fwd/back - left stick lft/rgt
-		double fwd_power = Math.pow(-m_joystick1.getRawAxis(1), 3);
-		double turn_power =  Math.pow(m_joystick2.getRawAxis(0), 3);
+		double fwd_power = Math.pow(-(1.2)*m_joystick1.getRawAxis(1), 1);
+		double turn_power = Math.pow((0.7)*m_joystick2.getRawAxis(0), 1);
+		//System.out.println(m_joystick2.getRawAxis(0));
 		/*double leftPower = fwd_power*MAX_ROBOT_VELOCITY;
 		double rightPower = fwd_power*MAX_ROBOT_VELOCITY;
 		double normalizer = Math.max(Math.abs(fwd_power),Math.abs(turn_power))/(Math.abs(fwd_power) + Math.abs(turn_power)); // divides both motor powers by the larger one to keep the ratio and keep power at or below 1
@@ -64,9 +65,9 @@ public class OI extends Command {
 		// Robot.drive.setDrivePower(leftPower, rightPower);*/
 
 		/// Ryan added this code
-		double leftPower = fwd_power + turn_power;
-		double rightPower = fwd_power - turn_power;
-		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
+		double leftPower = (fwd_power + turn_power) * (10000);
+		double rightPower = (fwd_power - turn_power) * (10000);
+		Robot.drive.setDrive(leftPower, rightPower, ControlMode.Velocity);
 		/// End of Ryan's code
 
 
@@ -86,12 +87,16 @@ public class OI extends Command {
 		//SMALL ELEVATOR MOVEMENT
 		if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
 			Robot.elevator.setActuatorPower(0.75);
+			Robot.elevator.stopTargeting = true;
 			System.out.println("Actuator Height - " + Robot.elevator.getActuatorHeight());
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
 			Robot.elevator.setActuatorPower(-0.75);
+			Robot.elevator.stopTargeting = true;
 			System.out.println("Actuator Height - " + Robot.elevator.getActuatorHeight());
 		} else {
-			Robot.elevator.setActuatorPower(0.0);	
+			Robot.elevator.setActuatorPower(0.0);
+			System.out.println("Actuator stopped moving");
+			//Robot.elevator.actuatorNeutral();
 		}
 
 		//BIG ELEVATOR MOVEMENT
@@ -112,13 +117,13 @@ public class OI extends Command {
 
 		//ELEVATOR LEVELS
 		if (m_boxop.getRawButton(ELEVATOR_LVL1)) {
-			Robot.elevator.setPosition(Robot.elevator.LVL1);
+			Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
 		}
 		if (m_boxop.getRawButton(ELEVATOR_LVL2)) {
-			Robot.elevator.setPosition(Robot.elevator.LVL2);
+			Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
 		}
-		if (m_boxop.getRawButton(ELEVATOR_LVL3)) {		
-			Robot.elevator.setPosition(Robot.elevator.LVL3);
+		if (m_boxop.getRawButton(ELEVATOR_LVL3)) {
+			Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
 		}
 	
 	}

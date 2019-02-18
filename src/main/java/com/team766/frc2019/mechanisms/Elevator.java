@@ -28,9 +28,10 @@ public class Elevator extends Mechanism {
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
     private static int MAX_HEIGHT_SMALL = 900000;
-    public static int LVL1 = 100;
+    public static int LVL1 = 5000;
     public static int LVL2 = 500000;
     public static int LVL3 = 1000000;
+    public static boolean stopTargeting = false;
 
 
     public Elevator() {
@@ -81,22 +82,24 @@ public class Elevator extends Mechanism {
         System.out.println("setting position to: " + position);
         m_actuatorMotor.set(ControlMode.Position, position);
     }
-
-    public void setPosition(double position) {
-        System.out.println("Setting position to: " + position + "ED: " + position/3 + " AD: " + (position*2/3));
+    
+    public void setCombinedPosition(double position) {
+        System.out.println("Setting position to: " + position + "AD: " + getActuatorHeight() + " ED: " + getElevatorHeight());
         if (position > 0 && position < (double)(MAX_HEIGHT + MAX_HEIGHT_ACTUATOR)) {
             setElevatorPosition((2*position)/3);
             setActuatorPosition((position/3));
             targetPosition = position;
+            System.out.println("TARGETPOSITION: " + targetPosition);
         } else {
-            System.out.println("im a bot");
+            System.out.println("Cannot reach target position");
         }
     }
 
     public void addToPosition(double add) {
-        if (targetPosition < 0) {
-            targetPosition = getElevatorHeight() + getActuatorHeight();
-        }
+        //if (stopTargeting == true) {
+        //    targetPosition = getElevatorHeight() + getActuatorHeight();
+        //    stopTargeting = false;
+        //}
         targetPosition += add;
         m_elevatorMotor.set(ControlMode.Position, targetPosition);
     }
@@ -138,7 +141,7 @@ public class Elevator extends Mechanism {
     }
 
     public void elevatorUp() {
-        targetPosition = -1;
+        stopTargeting = true;
         System.out.println("EH: " + Robot.elevator.getElevatorHeight() + " AH: " + Robot.elevator.getActuatorHeight());
         if (Robot.elevator.getElevatorHeight() > NEAR_MAX_HEIGHT) {
             if (Robot.elevator.getElevatorHeight() >= MAX_HEIGHT) {
@@ -149,6 +152,7 @@ public class Elevator extends Mechanism {
             if (Robot.elevator.getActuatorHeight() > MAX_HEIGHT_ACTUATOR) {
                 Robot.elevator.setActuatorPower(0.0);
             } else if (Robot.elevator.getActuatorHeight() > NEAR_MAX_ACTUATOR_HEIGHT) {
+                System.out.println("COMMIT SLOWING TO ACTUATOR");
                 Robot.elevator.setActuatorPower(0.3);
             } else {
                 Robot.elevator.setActuatorPower(0.75);
@@ -159,13 +163,13 @@ public class Elevator extends Mechanism {
     }
 
     public void elevatorDown() {
-        targetPosition = -1;
+        stopTargeting = true;
         System.out.println("EH: " + Robot.elevator.getElevatorHeight() + " AH: " + Robot.elevator.getActuatorHeight());
         if (Robot.elevator.getActuatorHeight() < NEAR_MIN_ACTUATOR_HEIGHT) {
             if (Robot.elevator.getElevatorHeight() < MIN_HEIGHT) {
                 Robot.elevator.setElevatorPower(0.0);
             } else if (Robot.elevator.getElevatorHeight() < NEAR_MIN_HEIGHT) {
-                Robot.elevator.setElevatorPower(-0.2);
+                Robot.elevator.setElevatorPower(-0.1);
             }  else {
                 Robot.elevator.setElevatorPower(-0.75);
             }
@@ -180,14 +184,23 @@ public class Elevator extends Mechanism {
     }
 
     public void elevatorNeutral() {
-        if (targetPosition < 0.0) {
+        if (stopTargeting == true) {
+            System.out.println("NEUTRAL TARGET POSITION IS: " + targetPosition);
             Robot.elevator.setActuatorPower(0.0);
             Robot.elevator.setElevatorPower(0.0);
             targetPosition = getElevatorHeight() + getActuatorHeight();
+            stopTargeting = false;
         }
     }
 
-
+    public void actuatorNeutral() {
+        if (stopTargeting == true) {
+            System.out.println("NEUTRAL TARGET POSITION IS: " + targetPosition);
+            Robot.elevator.setActuatorPower(0.0);
+            targetPosition = getElevatorHeight() + getActuatorHeight();
+            stopTargeting = false;
+        }
+    }
 
 
     /**
