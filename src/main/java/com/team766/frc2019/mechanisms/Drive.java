@@ -29,7 +29,7 @@ public class Drive extends Mechanism {
     //private EncoderReader m_leftEncoder; 
     //private EncoderReader m_rightEncoder;
     public static double P = 0.04;
-    public static double I = 0.0;
+    public static double I = 0.01;
     public static double D = 0.004;
     public static double THRESHOLD = 3;
     public static double MAX_TURN_SPEED = 0.75;
@@ -66,8 +66,9 @@ public class Drive extends Mechanism {
         if (m_secondVictor) {
             m_rightVictor2.setInverted(true);
         }
-        m_leftTalon.setSensorPhase(true);
-        m_rightTalon.setSensorPhase(true);
+        // left false right true for new, both false for mule
+        m_leftTalon.setSensorPhase(false);
+        m_rightTalon.setSensorPhase(false);
         m_leftTalon.configNominalOutputForward(0);
         m_leftTalon.configNominalOutputReverse(0);
         m_leftTalon.configPeakOutputForward(1);
@@ -77,11 +78,11 @@ public class Drive extends Mechanism {
         m_rightTalon.configPeakOutputForward(1);
         m_rightTalon.configPeakOutputReverse(-1);
         m_leftTalon.config_kP(0, 0.05, 0);
-        m_leftTalon.config_kI(0, 0.0, 0);
+        m_leftTalon.config_kI(0, 0.01, 0);
         m_leftTalon.config_kD(0, 0.01, 0);
         m_leftTalon.config_kF(0, 0.0, 0);
         m_rightTalon.config_kP(0, 0.05, 0);
-        m_rightTalon.config_kI(0, 0.0, 0);
+        m_rightTalon.config_kI(0, 0.01, 0);
         m_rightTalon.config_kD(0, 0.01, 0);
         m_rightTalon.config_kF(0, 0.0, 0);
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
@@ -126,11 +127,11 @@ public class Drive extends Mechanism {
     }
 
     public double leftEncoderDistance() {
-        return(-m_leftTalon.getSensorPosition());
+        return(m_leftTalon.getSensorPosition());
     }
 
     public double rightEncoderDistance() {
-        return(-m_rightTalon.getSensorPosition());
+        return(m_rightTalon.getSensorPosition());
     }
 
     /**

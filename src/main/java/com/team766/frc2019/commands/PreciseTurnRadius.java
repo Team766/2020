@@ -21,6 +21,7 @@ public class PreciseTurnRadius extends Subroutine {
     double m_initialAngle;
     double MIN_POWER = 0.2;
     double POWER_RAMP = 1.0;
+    double END_POWER_PERCENT = 0.75;
     double moveDir = 1;
     boolean m_turnDirection;
     //true is left encoder false is right encoder
@@ -74,17 +75,18 @@ public class PreciseTurnRadius extends Subroutine {
             m_turnController.calculate(error, true);
 
             turnAdjust = m_turnController.getOutput();
-            straightPower = calcPower();
+            straightPower = calcPower(arcPercent);
             if (index++ % 50 == 0) {
-                System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + "   sp: " + roundOff(straightPower, 2) + " td: " + Math.abs(roundOff(m_outsideArcLength, 2)) + " cd: " + roundOff(currentDistance, 2) * moveDir + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2));
-                //System.out.println("Speed: " + straightPower + " Adjusted Speed: " + straightPower * (m_insideArcLength / m_outsideArcLength));
+                if (Robot.drive.isEnabled()) {
+                    System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + "   sp: " + roundOff(straightPower, 2) + " td: " + Math.abs(roundOff(m_outsideArcLength, 2)) + " cd: " + roundOff(currentDistance, 2) * moveDir + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2) + " MoveDir: " + moveDir);
+                }
             }
-            if (turnAdjust < 0) {
-                leftAdjust = -turnAdjust;
-                rightAdjust = 0;
-            } else {
+            if (turnAdjust < 0 ^ moveDir < 0) {
                 leftAdjust = 0;
-                rightAdjust = turnAdjust;
+                rightAdjust = turnAdjust * moveDir;
+            } else {
+                leftAdjust = -turnAdjust * moveDir;
+                rightAdjust = 0;
             }
             if (m_turnDirection) {
                 Robot.drive.setDrive((straightPower + leftAdjust) * Robot.drive.POSITION_PER_INCH, ((straightPower * (m_insideArcLength / m_outsideArcLength)) + rightAdjust) * Robot.drive.POSITION_PER_INCH, ControlMode.Velocity);
@@ -98,8 +100,9 @@ public class PreciseTurnRadius extends Subroutine {
         yield();
     }
 
-    public double calcPower() {
-        double endPower = (Math.abs(m_outsideArcLength) - Math.abs(Robot.drive.getOutsideEncoderDistance(m_turnDirection) * Robot.drive.DIST_PER_PULSE)) * POWER_RAMP;
+    public double calcPower(double arcPercent) {
+        // endPower = (((m_endPower - m_targetPower) / (1 - arcPercent)) * (arcPercent - END_POWER_PERCENT)) + m_targetPower;
+        double endPower = ((1 - arcPercent) / POWER_RAMP) * moveDir;
         return Math.max(Math.min(Math.abs(endPower), Math.abs(m_targetPower)), MIN_POWER) * moveDir;
     }
 
