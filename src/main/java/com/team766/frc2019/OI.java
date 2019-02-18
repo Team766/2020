@@ -85,22 +85,22 @@ public class OI extends Command {
 
 		//SMALL ELEVATOR MOVEMENT
 		if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
-			Robot.elevator.setActuatorPower(0.75);
-			System.out.println("Actuator Height - " + Robot.elevator.getActuatorHeight());
+			Robot.elevator.setUpperStagePower(0.75);
+			System.out.println("UpperStage Height - " + Robot.elevator.getUpperStageHeight());
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
-			Robot.elevator.setActuatorPower(-0.75);
-			System.out.println("Actuator Height - " + Robot.elevator.getActuatorHeight());
+			Robot.elevator.setUpperStagePower(-0.75);
+			System.out.println("UpperStage Height - " + Robot.elevator.getUpperStageHeight());
 		} else {
-			Robot.elevator.setActuatorPower(0.0);	
+			Robot.elevator.setUpperStagePower(0.0);	
 		}
 
 		//BIG ELEVATOR MOVEMENT
 		if (m_boxop.getRawButton(ELEVATOR_UP) ) {
-			Robot.elevator.elevatorUp(); 
+			Robot.elevator.lowerStageUp(); 
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN)) {
-			Robot.elevator.elevatorDown();
+			Robot.elevator.lowerStageDown();
 		} else {
-			Robot.elevator.elevatorNeutral();
+			Robot.elevator.lowerStageNeutral();
 		}
 
 		//INTAKE FORWARD AND BACK
