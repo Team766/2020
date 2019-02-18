@@ -11,7 +11,7 @@ public interface JoystickReader {
 	  
 	  /**
 	   * Get the button value (starting at button 1)
-	   *
+		*
 	   * The appropriate button is returned as a boolean value.
 	   *
 	   * @param button The button number to be read (starting at 1).
