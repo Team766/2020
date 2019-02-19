@@ -4,14 +4,22 @@ import com.team766.frc2019.Robot;
 import com.team766.hal.JoystickReader;
 
 public class TestBoxop extends Subroutine {
-    private static int INTAKE_ACTUATE = 2;
+	private static int INTAKE_ACTUATE = 2;
+	//private static int INTAKE_ACTUATE = 7;
 	private static int INTAKE_RETRACT = 3;
+	//private static int INTAKE_RETRACT = 8;
 	private static int INTAKE_OPEN = 4;
+	//private static int INTAKE_OPEN = 5;	
 	private static int INTAKE_CLOSE = 5;
+	//private static int INTAKE_CLOSE = 6;
 	private static int ELEVATOR_UP = 9;
+	//private static int ELEVATOR_UP = 1;
 	private static int ELEVATOR_DOWN = 10;
+	//private static int ELEVATOR_DOWN = 2;
 	private static int ELEVATOR_UP_SMALL = 7;
+	//private static int ELEVATOR_UP_SMALL = 3;
 	private static int ELEVATOR_DOWN_SMALL = 8;
+	//private static int ELEVATOR_DOWN_SMALL = 4;
 	private static int ELEVATOR_LVL3 = 11;
 	private static int ELEVATOR_LVL2 = 12;
     private static int ELEVATOR_LVL1 = 13;
