@@ -23,16 +23,20 @@ public class CalibrateElevator extends Subroutine {
             waitForSeconds(0.25);
             Robot.elevator.setUpperPower(0.0);
             System.out.println("Calibrate upper: " + Robot.elevator.getUpperMinLimitSwitch());
+            int caliBreak = 0;
             while (Robot.elevator.getUpperMinLimitSwitch() && Robot.drive.isEnabled()) {
                 Robot.elevator.setUpperPower(-0.3);
-                if (index % 50 == 0 && Robot.drive.isEnabled()) {
+                if (index++ % 60 == 0 && Robot.drive.isEnabled()) {
                     System.out.println("Setting upper power to -0.3");
                 }
-                index++;
+                if (caliBreak++ > 36000) {
+                    break;
+                }
             }
             Robot.elevator.resetUpperEncoder();
             Robot.elevator.setUpperPosition(0.0);
             Robot.elevator.setUpperPower(0.0);
+            Robot.elevator.resetUpperEncoder();
             System.out.println("Successfully reset upper encoder");
             m_isrunning = false;
     }
@@ -40,7 +44,7 @@ public class CalibrateElevator extends Subroutine {
     protected void calibrateLower() {
         m_isrunning = true;
         Robot.elevator.setLowerPower(0.5);
-        waitForSeconds(0.75);
+        waitForSeconds(0.4);
         Robot.elevator.setLowerPower(0.0);
         System.out.println("Calibrate lower: " + Robot.elevator.getLowerMinLimitSwitch());
         while (Robot.elevator.getLowerMinLimitSwitch()) {
@@ -53,6 +57,7 @@ public class CalibrateElevator extends Subroutine {
         Robot.elevator.resetLowerEncoder();        
         Robot.elevator.setLowerPosition(0.0);
         Robot.elevator.setLowerPower(0.0);
+        Robot.elevator.resetLowerEncoder();
         System.out.println("Successfully reset lower encoder");
         m_isrunning = false;
     }

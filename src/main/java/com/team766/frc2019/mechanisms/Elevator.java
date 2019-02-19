@@ -22,14 +22,14 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
     public static double targetPosition;
 
-    public static int MIN_LOWER_HEIGHT = 0;
-	public static int NEAR_MIN_LOWER_HEIGHT = 250000;
+    public static int MIN_LOWER_HEIGHT = 40000;
+	public static int NEAR_MIN_LOWER_HEIGHT = 400000;
     private static int NEAR_MAX_LOWER_HEIGHT = 2030000;
     private static int MAX_LOWER_HEIGHT = 2130000;
 	public static int MIN_UPPER_HEIGHT = 0;
     public static int NEAR_MIN_UPPER_HEIGHT = 100000;
-    private static int NEAR_MAX_UPPER_HEIGHT = 880000;
-    private static int MAX_UPPER_HEIGHT = 980000;
+    private static int NEAR_MAX_UPPER_HEIGHT = 890000;
+    private static int MAX_UPPER_HEIGHT = 920000;
 	private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
@@ -135,7 +135,40 @@ public class Elevator extends Mechanism {
         }
     }
 
-    public void addToPosition(double add) {}
+    public void addToPosition(double add) {
+        if (combinedStopTargeting == true) {
+            targetPosition = getLowerHeight() + getUpperHeight();
+            combinedStopTargeting = false;
+        }
+        targetPosition += add;
+        m_lowerElevatorMotor.set(ControlMode.Position, targetPosition);
+    }
+
+    public double getUpperHeight() {
+       return m_upperElevatorMotor.getSensorPosition();
+    }
+
+    public double getLowerHeight() {
+       return m_lowerElevatorMotor.getSensorPosition();
+    }
+
+    public void resetLowerEncoder() {
+        m_lowerElevatorMotor.setPosition(0);
+    }
+
+    public void resetUpperEncoder() {
+        m_upperElevatorMotor.setPosition(0);
+    }
+
+    public void setLowerHeight(double position, double power) {
+        while (getLowerHeight() != position) {
+            if (getLowerHeight() > position) {
+                setLowerPower(-power);
+            } else {
+                setLowerPower(power);
+            }
+        }
+    }
 
     public void setUpperHeight(double position, double power) {
         while (getUpperHeight() != position) {
@@ -163,31 +196,31 @@ public class Elevator extends Mechanism {
                 System.out.println("UPPER NEARING DESTINATION");
                 Robot.elevator.setUpperPower(0.6);
             } else {
-                Robot.elevator.setUpperPower(0.9);
+                Robot.elevator.setUpperPower(1.0);
             }
         } else {
-            Robot.elevator.setLowerPower(0.9);
+            Robot.elevator.setLowerPower(1.0);
         }
     }
 
     public void elevatorDown() {
         combinedStopTargeting = true;
         System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
-        if (Robot.elevator.getUpperHeight() < NEAR_MIN_UPPER_HEIGHT) {
-            if (Robot.elevator.getLowerHeight() <= MIN_LOWER_HEIGHT) {
+        if (Robot.elevator.getUpperHeight() <= MIN_UPPER_HEIGHT) {
+            if (Robot.elevator.getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
+                Robot.elevator.setLowerPower(0.0);
                 hover();
             } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
-                Robot.elevator.setLowerPower(-0.4);
+                System.out.println("Nearing Bottom");
+                Robot.elevator.setLowerPower(-0.2);
             }  else {
                 Robot.elevator.setLowerPower(-0.9);
             }
-            if (Robot.elevator.getUpperHeight() <= MIN_UPPER_HEIGHT) {
-                Robot.elevator.setUpperPower(0.0);
-            } else {
+            Robot.elevator.setUpperPower(0.0);
+        } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
                 Robot.elevator.setUpperPower(-0.4);
-            }
         } else {
-            Robot.elevator.setUpperPower(-0.9);
+            Robot.elevator.setUpperPower(-1.0);
         }
     }
 
@@ -240,14 +273,6 @@ public class Elevator extends Mechanism {
     **/
     public void moveUpperDistance(double distance) {
         m_upperElevatorMotor.set(ControlMode.Position, distance / DIST_PER_PULSE);
-    }
-
-    public double getLowerHeight() {
-        return(m_lowerElevatorMotor.getSensorPosition());
-    }
-
-    public double getUpperHeight() {
-        return(m_upperElevatorMotor.getSensorPosition());
     }
 }
 
