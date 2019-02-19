@@ -135,11 +135,11 @@ public class OI extends Command {
 		//COMBINED ELEVATOR MOVEMENT ALGORITHM
 	
 		if (m_boxop.getRawButton(ELEVATOR_UP) ) {
-			Robot.elevator.lowerStageUp(); 
+			Robot.elevator.elevatorUp(); 
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN)) {
-			Robot.elevator.lowerStageDown();
+			Robot.elevator.elevatorDown();
 		} else {
-			Robot.elevator.lowerStageNeutral();
+			Robot.elevator.elevatorNeutral();
 		}
 	
 

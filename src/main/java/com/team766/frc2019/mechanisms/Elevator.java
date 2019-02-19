@@ -97,9 +97,7 @@ public class Elevator extends Mechanism {
         }
     }
 
-    public void addToPosition(double add) {
-        }
-    }
+    public void addToPosition(double add) {}
 
     public void setUpperHeight(double position, double power) {
         while (getUpperHeight() != position) {
@@ -186,6 +184,14 @@ public class Elevator extends Mechanism {
     **/
     public void moveUpperDistance(double distance) {
         m_upperElevatorMotor.set(ControlMode.Position, distance / DIST_PER_PULSE);
+    }
+
+    public double getLowerHeight() {
+        return(m_lowerElevatorMotor.getSensorPosition());
+    }
+
+    public double getUpperHeight() {
+        return(m_upperElevatorMotor.getSensorPosition());
     }
 }
 
