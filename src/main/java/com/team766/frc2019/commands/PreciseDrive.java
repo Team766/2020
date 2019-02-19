@@ -33,7 +33,7 @@ public class PreciseDrive extends Subroutine {
     protected void subroutine() {
         double index = 0;
         m_turnController.setSetpoint(0.0);
-        System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput());
+        System.out.println("I'm driving to: " + m_targetAngle + " and the difference is : " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " with an power of: " + m_targetPower);
         while(getCurrentDistance() * driveDir < Math.abs(m_driveDistance)) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle), true);
             double turnPower = m_turnController.getOutput() * -Robot.drive.m_gyroDirection;
@@ -43,10 +43,14 @@ public class PreciseDrive extends Subroutine {
             } else {
                 Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
             }
-            if (index % 100 == 0) {
-                System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Gyro Dir: " + Robot.drive.m_gyroDirection + " DistPulse: " + Robot.drive.DIST_PER_PULSE);
+            if (index % 30 == 0 && Robot.drive.isEnabled()) {
+                //System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Gyro Dir: " + Robot.drive.m_gyroDirection + " DistPulse: " + Robot.drive.DIST_PER_PULSE);
             }
             index++;
+            if (!Robot.drive.isEnabled()){
+                Robot.drive.nukeRobot();
+                yield();
+            }
         }
         Robot.drive.setDrive(m_endPower, m_endPower, ControlMode.PercentOutput);
         Robot.drive.resetEncoders();
