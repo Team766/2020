@@ -47,6 +47,10 @@ public class PreciseDrive extends Subroutine {
                 System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Gyro Dir: " + Robot.drive.m_gyroDirection + " DistPulse: " + Robot.drive.DIST_PER_PULSE);
             }
             index++;
+            if (!Robot.drive.isEnabled()){
+                Robot.drive.nukeRobot();
+                yield();
+            }
         }
         Robot.drive.setDrive(m_endPower, m_endPower, ControlMode.PercentOutput);
         Robot.drive.resetEncoders();
