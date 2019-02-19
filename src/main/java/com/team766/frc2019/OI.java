@@ -48,7 +48,7 @@ public class OI extends Command {
 	public void run() {
 		// cheezy - right stick fwd/back - left stick lft/rgt
 		double fwd_power = Math.pow(-(1.2)*m_joystick1.getRawAxis(1), 1);
-		double turn_power = Math.pow((0.7)*m_joystick2.getRawAxis(0), 1);
+		double turn_power = Math.pow((0.75)*m_joystick2.getRawAxis(0), 1);
 		//System.out.println(m_joystick2.getRawAxis(0));
 		/*double leftPower = fwd_power*MAX_ROBOT_VELOCITY;
 		double rightPower = fwd_power*MAX_ROBOT_VELOCITY;
@@ -70,7 +70,7 @@ public class OI extends Command {
 		Robot.drive.setDrive(leftPower, rightPower, ControlMode.Velocity);
 		/// End of Ryan's code
 
-
+		/*
 		//GRIPPER ACTIONS
 		if(m_boxop.getRawButton(INTAKE_IN) ) {
 			// user clicked on the intake in button
@@ -79,27 +79,61 @@ public class OI extends Command {
 
 		}
 		if(m_boxop.getRawButton(INTAKE_OUT) ) {
-			// user clicked on the intake out button
-			System.out.println(">>> INTAKE_CLOSE pressed");
+			// user clicked on the intake out button                                                                                                                                            ggbhhhhhhhhhhmmbb  
 			new RetractGripper().start();
 		}
+		*/
 
 		//SMALL ELEVATOR MOVEMENT
+		
 		if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
-			Robot.elevator.setActuatorPower(0.75);
-			Robot.elevator.stopTargeting = true;
-			System.out.println("Actuator Height - " + Robot.elevator.getActuatorHeight());
+			Robot.elevator.upperStopTargeting = true;
+			Robot.elevator.setUpperPower(0.5);
+			System.out.println("UPPER POWER IS 0.75");
+			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
-			Robot.elevator.setActuatorPower(-0.75);
-			Robot.elevator.stopTargeting = true;
-			System.out.println("Actuator Height - " + Robot.elevator.getActuatorHeight());
+			Robot.elevator.upperStopTargeting = true;
+			Robot.elevator.setUpperPower(-0.5);
+			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 		} else {
-			Robot.elevator.setActuatorPower(0.0);
-			System.out.println("Actuator stopped moving");
-			//Robot.elevator.actuatorNeutral();
+			//Robot.elevator.setUpperPower(0.0);
+			//System.out.println("Upper stopped moving");
+			Robot.elevator.upperNeutral();
 		}
+		
 
-		//BIG ELEVATOR MOVEMENT
+		// Upper elevator basic movement w/o limits
+
+		/*
+		if(m_boxop.getRawButton(ELEVATOR_UP_SMALL)) {
+			Robot.elevator.setUpperPower(0.5);
+			System.out.println("Upper going up");
+		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
+			Robot.elevator.setUpperPower(-0.5);
+			System.out.println("Upper going down");
+		} else {
+			Robot.elevator.setUpperPower(0.0);
+		}
+		*/
+		
+		/*if(m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
+			Robot.elevator.setUpperPower(-0.5);
+			System.out.println("Upper going down");
+		} else {
+			Robot.elevator.setUpperPower(0.0);
+		}
+		*/
+
+		// 
+		/*if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
+			Robot.elevator.addToPosition(10000);
+		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
+			Robot.elevator.addToPosition(-10000);
+		}
+		*/
+
+		//COMBINED ELEVATOR MOVEMENT ALGORITHM
+	
 		if (m_boxop.getRawButton(ELEVATOR_UP) ) {
 			Robot.elevator.elevatorUp(); 
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN)) {
@@ -107,7 +141,20 @@ public class OI extends Command {
 		} else {
 			Robot.elevator.elevatorNeutral();
 		}
+	
 
+		// Lower Elevator basic movement w/o limits
+		/*
+		if(m_boxop.getRawButton(ELEVATOR_UP)) {
+			Robot.elevator.setLowerPower(0.75);
+			System.out.println("Lower going up");
+		} else if (m_boxop.getRawButton(ELEVATOR_DOWN)) {
+			Robot.elevator.setLowerPower(-0.75);
+			System.out.println("Lower going down");
+		} else {
+			Robot.elevator.setLowerPower(0.0);
+		}
+		*/
 		//INTAKE FORWARD AND BACK
 		if (m_boxop.getRawButton(INTAKE_ACTUATE)) {
 			Robot.flowerActuator.extend();
@@ -117,6 +164,8 @@ public class OI extends Command {
 
 		//ELEVATOR LEVELS
 		if (m_boxop.getRawButton(ELEVATOR_LVL1)) {
+			Robot.elevator.setUpperPower(-0.1);
+			Robot.elevator.setLowerPower(-0.1);
 			Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
 		}
 		if (m_boxop.getRawButton(ELEVATOR_LVL2)) {
