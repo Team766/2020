@@ -55,16 +55,6 @@ public class DriveSquare extends Subroutine {
             callSubroutine(new PreciseTurnRadius(0, 4, -.75, 0));
             //callSubroutine(new PreciseDrive(0, 1, .5, .5, .5));
         //}
-        /*callSubroutine(new PreciseDrive(4, 270, .25, .25, .25));
-        waitForSeconds(2.0);
-        callSubroutine(new PreciseTurnRadius(180, 2, .25, .25, .25));
-        waitForSeconds(2.0);
-        callSubroutine(new PreciseTurnRadius(90, 2, .25, .25, .25));
-        waitForSeconds(2.0);
-        callSubroutine(new PreciseTurnRadius(0, 2, .25, .25, .25));
-        waitForSeconds(2.0);
-        callSubroutine(new PreciseDrive(4, 0, .5, .5, .5));
-        waitForSeconds(2.0);*/
         System.out.println("DRIVESQUARE IS DONE");
         Robot.drive.nukeRobot();
         yield();
