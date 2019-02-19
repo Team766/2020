@@ -135,40 +135,7 @@ public class Elevator extends Mechanism {
         }
     }
 
-    public void addToPosition(double add) {
-        if (combinedStopTargeting == true) {
-            targetPosition = getLowerHeight() + getUpperHeight();
-            combinedStopTargeting = false;
-        }
-        targetPosition += add;
-        m_lowerElevatorMotor.set(ControlMode.Position, targetPosition);
-    }
-
-    public double getUpperHeight() {
-       return m_upperElevatorMotor.getSensorPosition();
-    }
-
-    public double getLowerHeight() {
-       return m_lowerElevatorMotor.getSensorPosition();
-    }
-
-    public void resetLowerEncoder() {
-        m_lowerElevatorMotor.setPosition(0);
-    }
-
-    public void resetUpperEncoder() {
-        m_upperElevatorMotor.setPosition(0);
-    }
-
-    public void setLowerHeight(double position, double power) {
-        while (getLowerHeight() != position) {
-            if (getLowerHeight() > position) {
-                setLowerPower(-power);
-            } else {
-                setLowerPower(power);
-            }
-        }
-    }
+    public void addToPosition(double add) {}
 
     public void setUpperHeight(double position, double power) {
         while (getUpperHeight() != position) {
@@ -273,6 +240,14 @@ public class Elevator extends Mechanism {
     **/
     public void moveUpperDistance(double distance) {
         m_upperElevatorMotor.set(ControlMode.Position, distance / DIST_PER_PULSE);
+    }
+
+    public double getLowerHeight() {
+        return(m_lowerElevatorMotor.getSensorPosition());
+    }
+
+    public double getUpperHeight() {
+        return(m_upperElevatorMotor.getSensorPosition());
     }
 }
 
