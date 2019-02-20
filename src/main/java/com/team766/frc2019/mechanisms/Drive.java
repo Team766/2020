@@ -45,7 +45,7 @@ public class Drive extends Mechanism {
     public Drive() { 
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
         m_rightVictor1 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor1");
-        if ( ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
+        if (ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
             m_secondVictor = true;
             m_leftVictor2 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor2");
             m_rightVictor2 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor2");
