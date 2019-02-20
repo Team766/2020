@@ -30,6 +30,11 @@ public class OI extends Command {
 	private static int ELEVATOR_LVL3 = 11;
 	private static int ELEVATOR_LVL2 = 12;
 	private static int ELEVATOR_LVL1 = 13;
+	
+	private double fwd_power = 0;
+	private double turn_power = 0;
+	private double leftPower = 0;
+	private double rightPower = 0;
 
 	private int index = 0;
 
@@ -62,8 +67,8 @@ public class OI extends Command {
 		}
 		index++;
 		// cheezy - right stick fwd/back - left stick lft/rgt
-		double fwd_power = Math.pow(-(1.2)*m_joystick1.getRawAxis(1), 1);
-		double turn_power = Math.pow((0.75)*m_joystick2.getRawAxis(0), 1);
+		fwd_power = Math.pow(-(1.2)*m_joystick1.getRawAxis(1), 1);
+		turn_power = Math.pow((0.45)*m_joystick2.getRawAxis(0), 1);
 		//System.out.println(m_joystick2.getRawAxis(0));
 		/*double leftPower = fwd_power*MAX_ROBOT_VELOCITY;
 		double rightPower = fwd_power*MAX_ROBOT_VELOCITY;
@@ -80,9 +85,12 @@ public class OI extends Command {
 		// Robot.drive.setDrivePower(leftPower, rightPower);*/
 
 		/// Ryan added this code
-		double leftPower = (fwd_power + turn_power) * (10000);
-		double rightPower = (fwd_power - turn_power) * (10000);
-		Robot.drive.setDrive(leftPower, rightPower, ControlMode.Velocity);
+		leftPower = (fwd_power + turn_power);// * (10000);
+		rightPower = (fwd_power - turn_power);// * (10000);
+		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);//.Velocity);
+		if (index % 25 == 0 && Robot.drive.isEnabled()) {
+			System.out.println(" fwd: " + fwd_power + " turn: " + turn_power + " left: " + leftPower + " right: " + rightPower);
+		}
 		/// End of Ryan's code
 
 		/*
