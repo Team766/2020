@@ -17,6 +17,7 @@ public class PreciseDrive extends Subroutine {
     double MIN_POWER = 0.2;
     double POWER_RAMP = 1.0;
     int driveDir = 1;
+    double END_POWER_PERCENT = 0.85;
 
     public PreciseDrive(double targetAngle, double driveDistance, double targetPower, double endPower) {
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
@@ -49,7 +50,8 @@ public class PreciseDrive extends Subroutine {
             index++;
             if (!Robot.drive.isEnabled()){
                 Robot.drive.nukeRobot();
-                yield();
+                m_turnController.reset();
+                return;
             }
         }
         Robot.drive.setDrive(m_endPower, m_endPower, ControlMode.PercentOutput);
@@ -63,9 +65,9 @@ public class PreciseDrive extends Subroutine {
 
     public double calcPower() {
         double currentDistance = getCurrentDistance();
-
-        double endPower = ((Math.abs(m_driveDistance) - Math.abs(currentDistance))) * POWER_RAMP;
-        return Math.max(Math.min(endPower, m_targetPower), MIN_POWER);
+        double drivePercent = currentDistance / m_driveDistance;
+        double endPower = (((m_endPower - m_targetPower) / (1 - drivePercent)) * (drivePercent - END_POWER_PERCENT)) + m_targetPower;
+        return Math.max(Math.min(Math.abs(endPower), Math.abs(m_targetPower)), MIN_POWER) * driveDir;
     }
 
 }
