@@ -98,11 +98,6 @@ public class Talon implements CANSpeedController{
 	}
 
 	@Override
-	public ErrorCode config_kF(int slotIdx, double value, int timeoutMs) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public ErrorCode configSelectedFeedbackSensor(FeedbackDevice feedbackDevice) {
 		throw new UnsupportedOperationException();
 	}
@@ -144,6 +139,11 @@ public class Talon implements CANSpeedController{
 
 	@Override
 	public void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setFeedForward(double value) {
 		throw new UnsupportedOperationException();
 	}
 }
