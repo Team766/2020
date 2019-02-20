@@ -106,6 +106,14 @@ public class Elevator extends Mechanism {
         Robot.elevator.setUpperPower(0.5);
     }
 
+    public void resetUpperEncoder() {
+        m_upperElevatorMotor.setPosition(0);
+    }
+
+    public void resetLowerEncoder() {
+        m_lowerElevatorMotor.setPosition(0);
+    }
+
     public void setLowerPower(double elevatorPower) {
         m_lowerElevatorMotor.set(ControlMode.PercentOutput, elevatorPower);
     }
