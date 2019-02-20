@@ -30,6 +30,11 @@ public class OI extends Command {
 	private static int ELEVATOR_LVL3 = 11;
 	private static int ELEVATOR_LVL2 = 12;
 	private static int ELEVATOR_LVL1 = 13;
+	
+	private double fwd_power = 0;
+	private double turn_power = 0;
+	private double leftPower = 0;
+	private double rightPower = 0;
 
 	private int index = 0;
 
