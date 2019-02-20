@@ -104,6 +104,15 @@ public class Elevator extends Mechanism {
         return upperElevatorMaxLimitSwitch.get();
     }
 
+
+    public void resetUpperEncoder() {
+        m_upperElevatorMotor.setPosition(0);
+    }
+
+    public void resetLowerEncoder() {
+        m_lowerElevatorMotor.setPosition(0);
+    }
+
     public void setLowerPower(double elevatorPower) {
         m_lowerElevatorMotor.set(ControlMode.PercentOutput, elevatorPower);
     }
@@ -182,13 +191,6 @@ public class Elevator extends Mechanism {
        return m_lowerElevatorMotor.getSensorPosition();
     }
 
-    public void resetLowerEncoder() {
-        m_lowerElevatorMotor.setPosition(0);
-    }
-
-    public void resetUpperEncoder() {
-        m_upperElevatorMotor.setPosition(0);
-    }
 
     // less complicated method of setting elevator to destination
     public void setLowerHeight(double position, double power) {

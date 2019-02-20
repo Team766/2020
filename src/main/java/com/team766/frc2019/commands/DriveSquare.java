@@ -17,7 +17,7 @@ public class DriveSquare extends Subroutine {
         /*callSubroutine(new PreciseDrive(0, -5, .5, 0, .5));
         callSubroutine(new PreciseTurnRadius(90, 0, .5, .5, .5));
         callSubroutine(new PreciseTurnRadius(180, 0, .5, .5, .5));
-        callSubroutine(new PreciseDrive(180, 5, .5, .5, 0)); dukes of hazzard turn*/
+        callSubroutine(new PreciseDrive(180, 5, .5, .5, 0)); //dukes of hazzard turn*/
         /*callSubroutine(new PreciseDrive(0, 5, .5, .5));
         callSubroutine(new PreciseTurnRadius(90, 2, .5, .5));
         callSubroutine(new PreciseTurnRadius(180, 2, .5, .5));
@@ -25,7 +25,7 @@ public class DriveSquare extends Subroutine {
         callSubroutine(new PreciseDrive(180, -5, .5, .5));
         callSubroutine(new PreciseTurnRadius(90, -2, .5, .5));
         callSubroutine(new PreciseTurnRadius(0, -2, .5, .5));
-        callSubroutine(new PreciseDrive(0, -5, .5, .5)); mcdonalds logo*/
+        callSubroutine(new PreciseDrive(0, -5, .5, .5)); //mcdonalds logo*/
         /*callSubroutine(new PreciseDrive(0, 10.4375, .5, 0));
         callSubroutine(new ExtendGripper());
         callSubroutine(new PreciseDrive(0, -1.666666666666667, .5, 0));
@@ -36,35 +36,27 @@ public class DriveSquare extends Subroutine {
         callSubroutine(new ExtendGripper());
         callSubroutine(new PreciseDrive(180, 4, .5, 0));
         callSubroutine(new RetractGripper());
-        callSubroutine(new PreciseDrive(180, -4, .5, 0)); auton path test*/
-        //while (Robot.drive.isEnabled()) {
-            callSubroutine(new PreciseTurnRadius(270, 4, .75, .75));
-            //callSubroutine(new PreciseDrive(270, 1, .5, .5, .5));
-            callSubroutine(new PreciseTurnRadius(180, 4, .75, .75));
-            //callSubroutine(new PreciseDrive(180, 1, .5, .5, .5));
-            callSubroutine(new PreciseTurnRadius(90, 4, .75, .75));
-            //callSubroutine(new PreciseDrive(90, 1, .5, .5, .5));
-            callSubroutine(new PreciseTurnRadius(0, 4, .75, 0));
-            //callSubroutine(new PreciseDrive(0, 1, .5, .5, .5));
-            callSubroutine(new PreciseTurnRadius(90, 4, -.75, -.75));
-            //callSubroutine(new PreciseDrive(90, 1, .5, .5, .5));
-            callSubroutine(new PreciseTurnRadius(180, 4, -.75, -.75));
-            //callSubroutine(new PreciseDrive(180, 1, .5, .5, .5));
-            callSubroutine(new PreciseTurnRadius(270, 4, -.75, -.75));
-            //callSubroutine(new PreciseDrive(270, 1, .5, .5, .5));
-            callSubroutine(new PreciseTurnRadius(0, 4, -.75, 0));
-            //callSubroutine(new PreciseDrive(0, 1, .5, .5, .5));
-        //}
+        callSubroutine(new PreciseDrive(180, -4, .5, 0)); //auton path test*/
+        /*callSubroutine(new PreciseTurnRadius(270, 4, .75, .75));
+        callSubroutine(new PreciseTurnRadius(180, 4, .75, .75));
+        callSubroutine(new PreciseTurnRadius(90, 4, .75, .75));
+        callSubroutine(new PreciseTurnRadius(0, 4, .75, 0));
+        callSubroutine(new PreciseTurnRadius(90, 4, -.75, -.75));
+        callSubroutine(new PreciseTurnRadius(180, 4, -.75, -.75));
+        callSubroutine(new PreciseTurnRadius(270, 4, -.75, -.75));
+        callSubroutine(new PreciseTurnRadius(0, 4, -.75, 0)); //forward and back circles*/
+        while (Robot.drive.isEnabled()) {
+            callSubroutine(new PreciseTurnRadius(270, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(180, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(90, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(0, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(90, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(180, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(270, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(0, 4, .6, .6));
+        } //left and right circles
         System.out.println("DRIVESQUARE IS DONE");
         Robot.drive.nukeRobot();
-        yield();
+        return;
     }
-
-
-        
-
-
-       // double endTime = new Date().getTime();
-        //System.out.println("ENDED IN " + (endTime - startTime));
-
-    }
+}

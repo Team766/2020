@@ -21,7 +21,7 @@ public class PreciseTurnRadius extends Subroutine {
     double m_initialAngle;
     double MIN_POWER = 0.2;
     double POWER_RAMP = 1.0;
-    double END_POWER_PERCENT = 0.90;
+    double END_POWER_PERCENT = 0.85;
     double moveDir = 1;
     boolean m_turnDirection;
     //true is left encoder false is right encoder
@@ -122,8 +122,9 @@ public class PreciseTurnRadius extends Subroutine {
             if (!Robot.drive.isEnabled()) {
                 Robot.drive.nukeRobot();
                 m_turnController.reset();
-                yield();
+                return;
             }
+            yield();
         }
         Robot.drive.setDrive(m_endPower * Robot.drive.POSITION_PER_INCH, m_endPower * Robot.drive.POSITION_PER_INCH, ControlMode.Velocity);
         Robot.drive.resetEncoders();
@@ -132,8 +133,6 @@ public class PreciseTurnRadius extends Subroutine {
 
     public double calcPower(double arcPercent) {
         double endPower = (((m_endPower - m_targetPower) / (1 - arcPercent)) * (arcPercent - END_POWER_PERCENT)) + m_targetPower;
-        //double endPower = ((1 - arcPercent) / POWER_RAMP) * moveDir;
-        //System.out.println("end power: " + endPower);
         return Math.max(Math.min(Math.abs(endPower), Math.abs(m_targetPower)), MIN_POWER) * moveDir;
         //return m_targetPower;
     }
