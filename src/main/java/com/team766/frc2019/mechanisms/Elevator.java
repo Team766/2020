@@ -20,30 +20,32 @@ public class Elevator extends Mechanism {
     private DigitalInputReader upperElevatorMinLimitSwitch;
     private DigitalInputReader upperElevatorMaxLimitSwitch;
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
-    public static double targetPosition;
+    public static double targetDestination;
 
-    public static int MIN_LOWER_HEIGHT = 40000;
+    // Changed minimums to 0, added very close min lower height to make the lower elevator have a better cushion 
+    // BE CAREFUL! since the encoders go whack when the elevator gets to the top, it will probably forget where bottom is and ignore mins.
+    // Even if the min is 500,000 the encoders could still end up off by ~500,000 and slam into bottom. Not sure if it is mechanical problem.
+    public static int MIN_LOWER_HEIGHT = 0;
     public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 100000;
 	public static int NEAR_MIN_LOWER_HEIGHT = 400000;
     private static int NEAR_MAX_LOWER_HEIGHT = 1800000;
     private static int MAX_LOWER_HEIGHT = 2130000;
+
 	public static int MIN_UPPER_HEIGHT = 0;
     public static int NEAR_MIN_UPPER_HEIGHT = 100000;
     private static int NEAR_MAX_UPPER_HEIGHT = 880000;
-    private static int MAX_UPPER_HEIGHT = 920000;
-    private static int MID_HEIGHT_BIG = 1000000;
-	private static int MAX_HEIGHT_BIG = 1930000;
-	private static int MID_HEIGHT_SMALL = 500000;
-    private static int MAX_HEIGHT_SMALL = 900000;
+    private static int MAX_UPPER_HEIGHT = 950000;
+
+    public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
+
     public static int LVL1 = 50000;
     public static int LVL2 = 1480000;
     public static int LVL3 = 3000000;
-    public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
     
-    private boolean setPositionRunning = false;
+    private boolean sendCombinedRunning = false;
     public static boolean combinedStopTargeting = false;
     public static boolean upperStopTargeting = false;
-    public static boolean hoverAtZero = false;
+    public static boolean hovering = true;
     private int index = 0;
 
     public Elevator() {
@@ -82,12 +84,12 @@ public class Elevator extends Mechanism {
         m_lowerElevatorMotor.setPosition(0);
     }
 
-    // Limit switch code
-    
+    // Prevents lower elevator from lowering due to gravity
     public void hover() {
-        Robot.elevator.setLowerPosition(Math.max(Robot.elevator.getLowerHeight(),0.0));
+        sendLowerToDestination(Math.max(getLowerHeight(),0.0));
     }
 
+    // Get limit switches   
     public boolean getLowerMinLimitSwitch() {
         return lowerElevatorMinLimitSwitch.get();
     }
@@ -104,7 +106,7 @@ public class Elevator extends Mechanism {
         return upperElevatorMaxLimitSwitch.get();
     }
 
-
+    // Reset encoders    
     public void resetUpperEncoder() {
         m_upperElevatorMotor.setPosition(0);
     }
@@ -113,6 +115,7 @@ public class Elevator extends Mechanism {
         m_lowerElevatorMotor.setPosition(0);
     }
 
+    // Sets elevator motors' power
     public void setLowerPower(double elevatorPower) {
         m_lowerElevatorMotor.set(ControlMode.PercentOutput, elevatorPower);
     }
@@ -121,68 +124,95 @@ public class Elevator extends Mechanism {
         m_upperElevatorMotor.set(ControlMode.PercentOutput, actuatorPower);
     }
 
-    public void setLowerPosition(double position) {
-        m_lowerElevatorMotor.set(ControlMode.Position, position);
+    // Moves motors until encoders read the set destination
+    public void sendLowerToDestination(double destination) {
+        targetDestination += destination - getLowerHeight();
+        hovering = false;
+        m_lowerElevatorMotor.set(ControlMode.Position, destination);
     }
     
-    public void setUpperPosition(double position) {
-        m_upperElevatorMotor.set(ControlMode.Position, position);
+    public void sendUpperToDestination(double destination) {
+        targetDestination += destination - getUpperHeight();
+        m_upperElevatorMotor.set(ControlMode.Position, destination);
     }
-    
-    public void setCombinedPosition(double position) {
-        if (setPositionRunning) {
+
+    // Revised sendCombined. (UNTESTED) Uses near slowing for each elevator seperately, so upper doesnt slow if lower is nearing.
+    // Since it has been altered so drastically, be careful when testing this! It could be completely messed up, but I have examined it closely.
+    public void sendCombinedToDestination(double destination) {
+        if (sendCombinedRunning) {
            return;
         }
-        setPositionRunning = true;
-        System.out.println("Setting position to: " + position);
-        System.out.print(" upperTarget" + 92*position/305 + " lowerTarget" + 213*position/305);
-        if (position > 0 && position < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT) && combinedStopTargeting == false) {
-            if (position < NEAR_MIN_LOWER_HEIGHT) {
-                double upperTarget = 92*position/305;
-                double lowerTarget = 213*position/305;
-                System.out.print("upperTarget: " + upperTarget + "lowerTarget" + lowerTarget);
-                while ((Robot.elevator.getUpperHeight() > upperTarget) && (Robot.elevator.getLowerHeight() > lowerTarget || getLowerMinLimitSwitch())){
-                    if (Robot.elevator.getUpperHeight() <= upperTarget) {
-                        Robot.elevator.setUpperPower(0.0);
-                    } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
-                            Robot.elevator.setUpperPower(-0.4);
+        sendCombinedRunning = true;
+        double upperTarget = 95*destination/308;
+        double lowerTarget = 213*destination/308;
+        // Checks if elevator can actually reach the destination OR if elevator is being overrided by the manual combined buttons
+        if (destination >= 0 && destination < (double)(MAX_COMBINED_HEIGHT) && !combinedStopTargeting) {
+            System.out.println("Sending elevator to: " + destination + " upperTarget: " + upperTarget + " lowerTarget: " + lowerTarget);
+            hovering = false;
+            
+            // Checks if the lower elevator has to GO DOWN and get close to the bottom (basically, if lower might crash into bottom)
+            if (getLowerHeight() > lowerTarget && lowerTarget < NEAR_MIN_LOWER_HEIGHT) {
+                System.out.println("lowerTarget close to bottom, activating near precautions");
+                // Instead of using send to destination, lower elevator will use the down algorithm and slow when nearing
+                while((getLowerHeight() > lowerTarget) && getLowerMinLimitSwitch()) {
+                    if (getLowerHeight() > NEAR_MIN_LOWER_HEIGHT) {
+                        setLowerPower(-1.0);
+                    } else if (getLowerHeight() > VERY_CLOSE_MIN_LOWER_HEIGHT) {
+                        setLowerPower(-0.4);
                     } else {
-                        Robot.elevator.setUpperPower(-1.0);
-                    }                    
-                    if (Robot.elevator.getLowerHeight() <= lowerTarget || !getLowerMinLimitSwitch()) {
-                        Robot.elevator.setLowerPower(0.0);
-                        hover();
-                    } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
-     //                   System.out.println("Nearing Bottom");
-                        Robot.elevator.setLowerPower(-0.1);
-                    }  else {
-                        Robot.elevator.setLowerPower(-0.9);
+                        setLowerPower(-0.2);
                     }
                 }
+                // Once lower exits while loop (reaches lowerTarget), hover at current position (should be lowerTarget)
+                hovering = true;
             } else {
-                System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget" + 92*position/305 + " lowerTarget" + 213*position/305);
-                setLowerPosition((213*position)/305);
-                setUpperPosition((92*position/305));
-                targetPosition = position;
+                sendLowerToDestination(lowerTarget);
             }
+
+            // Checks if the upper elevator has to GO DOWN and get close to the minimum
+            if (getUpperHeight() > upperTarget && upperTarget < NEAR_MIN_UPPER_HEIGHT) {
+                System.out.println("upperTarget close to bottom, activating near precautions");
+                // Instead of using send to destination, upper elevator will use the down algorithm and slow when nearing
+                while((getUpperHeight() > upperTarget) && getUpperMinLimitSwitch()) {
+                    if (getUpperHeight() > NEAR_MIN_UPPER_HEIGHT) {
+                        setUpperPower(-1.0);
+                    } else {
+                        setUpperPower(-0.4);
+                    }
+                }
+                // Once upper exits while loop (reaches upperTarget), set power to 0.0 (brake)
+                setUpperPower(0.0);
+            } else {
+                sendUpperToDestination(upperTarget);
+            }
+            
         } else {
-            System.out.println("Cannot reach target position");
+            //  Only prints cannot reach if it actually can't reach. Before, it printed "cannot reach" even if it actually could and was just interrupted by manual buttons
+            if (!combinedStopTargeting) {
+                System.out.println("Cannot reach target destination");
+            }
         }
-        setPositionRunning = false;
+        sendCombinedRunning = false;
     }
 
     // Adds to DESTINATION, not current position. If robot is not moving to a LVL already, simply adds to current position.
-    public void addToPosition(double add) {
+    public void addToDestination(double add) {
+        // In testing, addToDestination may run multiple times with a short, quick button press
+        System.out.println("Adding " + add);
+        // If this print appears multiple times very quickly, we may need to find a way to make it not run again until button is RELEASED and then PRESSED again.
         if (combinedStopTargeting == true) {
-            targetPosition = getLowerHeight() + getUpperHeight();
+            targetDestination = getLowerHeight() + getUpperHeight();
             combinedStopTargeting = false;
-        }
-        if ((targetPosition + add) <= MAX_COMBINED_HEIGHT) {
-            targetPosition += add;
-            m_lowerElevatorMotor.set(ControlMode.Position, targetPosition);
+        } else if ((targetDestination + add) <= MAX_COMBINED_HEIGHT) {
+            hovering = false;
+            targetDestination += add;
+            sendCombinedToDestination(targetDestination);
+        } else if ((targetDestination + add) > MAX_COMBINED_HEIGHT) {
+            System.out.println("Canceling addToDestination; would have sent above max height");
         }
     }
 
+    // Returns encoder ticks of elevators
     public double getUpperHeight() {
        return m_upperElevatorMotor.getSensorPosition();
     }
@@ -192,8 +222,8 @@ public class Elevator extends Mechanism {
     }
 
 
-    // less complicated method of setting elevator to destination
-    public void setLowerHeight(double position, double power) {
+    // Less complicated methods for setting elevators to destination. Allows us to control power, but is less reliable than sendToDestination
+    public void lowerMoveTo(double position, double power) {
         while (getLowerHeight() != position) {
             if (getLowerHeight() > position) {
                 setLowerPower(-power);
@@ -203,7 +233,7 @@ public class Elevator extends Mechanism {
         }
     }
 
-    public void setUpperHeight(double position, double power) {
+    public void upperMoveTo(double position, double power) {
         while (getUpperHeight() != position) {
             if (getUpperHeight() > position) {
                 setUpperPower(-power);
@@ -213,66 +243,81 @@ public class Elevator extends Mechanism {
         }
     }
 
+    // Moves lower up, then upper starts moving up when lower is approaching max. Both elevators slow when nearing endpoints.
     public void elevatorUp() {
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-            System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+            System.out.println("LH: " + getLowerHeight() + " UH: " + getUpperHeight());
         }
-        if (Robot.elevator.getLowerHeight() > NEAR_MAX_LOWER_HEIGHT) {
-            if (Robot.elevator.getLowerHeight() >= MAX_LOWER_HEIGHT) {
-                Robot.elevator.setLowerPower(0.0);
-                hover();
+        if (getLowerHeight() > NEAR_MAX_LOWER_HEIGHT) {
+            if (getLowerHeight() >= MAX_LOWER_HEIGHT) {
+                hovering = true;
             } else {
-                Robot.elevator.setLowerPower(0.6);
+                hovering = false;
+                setLowerPower(0.6);
             }
-            if (Robot.elevator.getUpperHeight() >= MAX_UPPER_HEIGHT) {
-                Robot.elevator.setUpperPower(0.0);
-            } else if (Robot.elevator.getUpperHeight() > NEAR_MAX_UPPER_HEIGHT) {
-    //            System.out.println("UPPER NEARING DESTINATION");
-                Robot.elevator.setUpperPower(0.6);
+            // Upper movement is nested in lower so that upper moves while lower is nearing (to save time)
+            if (getUpperHeight() >= MAX_UPPER_HEIGHT) {
+                setUpperPower(0.0);
+            } else if (getUpperHeight() > NEAR_MAX_UPPER_HEIGHT) {
+                //System.out.println("UPPER NEARING DESTINATION");
+                setUpperPower(0.6);
             } else {
-                Robot.elevator.setUpperPower(1.0);
+                setUpperPower(1.0);
             }
         } else {
-            Robot.elevator.setLowerPower(1.0);
+            hovering = false;
+            setLowerPower(1.0);
         }
     }
 
     public void elevatorDown() {
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-            System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+            System.out.println("LH: " + getLowerHeight() + " UH: " + getUpperHeight());
         }
-        if (Robot.elevator.getUpperHeight() <= MIN_UPPER_HEIGHT) {
-            if (Robot.elevator.getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
-                Robot.elevator.setLowerPower(0.0);
-                hover();
-            } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
-    //            System.out.println("Nearing Bottom");
-                Robot.elevator.setLowerPower(-0.2);
+        if (getUpperHeight() <= MIN_UPPER_HEIGHT) {
+            if (getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
+                hovering = true;
+            } else if (getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
+                //System.out.println("Nearing Bottom");
+                hovering = false;
+                setLowerPower(-0.2);
             }  else {
-                Robot.elevator.setLowerPower(-0.9);
+                hovering = false;
+                setLowerPower(-0.9);
             }
-            Robot.elevator.setUpperPower(0.0);
-        } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
-                Robot.elevator.setUpperPower(-0.4);
+            setUpperPower(0.0);
+        } else if (getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
+            setUpperPower(-0.4);
         } else {
-            Robot.elevator.setUpperPower(-1.0);
+            setUpperPower(-1.0);
         }
     }
 
+    // Only runs if not setting combined position. Resolves conflict between manual combined and presets
     public void elevatorNeutral() {
         if (combinedStopTargeting == true) {
             System.out.println("Setting elevator to neutral");
-            Robot.elevator.setUpperPower(0.0);
-            hover();
-            targetPosition = getLowerHeight() + getUpperHeight();
+            setUpperPower(0.0);
+            hovering = true;
+            targetDestination = getLowerHeight() + getUpperHeight();
             combinedStopTargeting = false;
         }
     }
 
-    // Replacement for LVL1, same function as COMBINED DOWN method, but moves both elevators instead of upper, then lower
-    public void bothElevatorsDown() {
+    // Only runs if not setting upper position. This resolves the conflict between manual upper and presets
+    public void upperNeutral() {
+        if (upperStopTargeting == true) {
+            System.out.println("Setting upper to neutral");
+            setUpperPower(0.0);
+            targetDestination = getUpperHeight() + getLowerHeight();
+            upperStopTargeting = false;
+        }
+    }
+
+     // Replacement for LVL1, same function as elevatorDown method, but moves both elevators at the same time 
+     public void bothElevatorsDown() {
         if(getUpperHeight() <= MIN_UPPER_HEIGHT) {
             setUpperPower(0.0); 
         } else if (getUpperHeight() < NEAR_MIN_UPPER_HEIGHT) {
@@ -281,24 +326,16 @@ public class Elevator extends Mechanism {
             setUpperPower(-1.0);
         }
         if (getLowerHeight() <= MIN_LOWER_HEIGHT) {
-            setLowerPower(0.0);
-            hover();
+            hovering = true;
         } else if (getLowerHeight() < VERY_CLOSE_MIN_LOWER_HEIGHT) {
+            hovering = false;
             setLowerPower(-0.1);
         } else if (getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
-            
+            hovering = false;
+            setLowerPower(-0.4);
         } else {
+            hovering = false;
             setLowerPower(-1.0);
-        }
-    }
-
-
-    public void upperNeutral() {
-        if (upperStopTargeting == true) {
-            System.out.println("Setting upper to neutral");
-            Robot.elevator.setUpperPower(0.0);
-            targetPosition = getUpperHeight() + getLowerHeight();
-            upperStopTargeting = false;
         }
     }
 
