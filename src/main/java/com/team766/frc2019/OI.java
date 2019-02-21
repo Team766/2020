@@ -44,6 +44,7 @@ public class OI extends Command {
 
 	public double combinedPosition;
 
+
 	public OI() {
 		m_joystick1 = RobotProvider.instance.getJoystick(0);
 		m_joystick2 = RobotProvider.instance.getJoystick(1);
@@ -55,18 +56,40 @@ public class OI extends Command {
 	
 	public void run() {
 		combinedPosition = Robot.elevator.getLowerHeight() + Robot.elevator.getUpperHeight();
-		//output encoder ticks
-		/*
-		System.out.println("LowerMaxLimSwitch: " + Robot.elevator.getLowerMaxLimitSwitch());
-		System.out.println("UpperMinLimSwitch: " + Robot.elevator.getUpperMinLimitSwitch());
-		System.out.println("UpperMaxLimSwitch: " + Robot.elevator.getUpperMaxLimitSwitch());
+
+		/* 
+		*  THE LOWER ELEVATOR MAINTAINS MOMENTUM AFTER LETTING GO OF THE ELEVATOR DOWN BUTTON,
+		*  BUT THE hover(); METHOD MAKES IT MOVE BACK UP TO WHERE IT WAS WHEN THE BUTTON WAS RELEASED.
+		*  THIS MAKES IT VERY DIFFICULT TO ACCURATELY LOWER THE LOWER ELEVATOR WITH QUICK, SUCCESSIVE TAPS ON THE BUTTON.
+		*  TO RESOLVE THIS ISSUE WHILE STILL MAKING SURE THE LOWER ELEVATOR NEVER DRIFTS DOWN FROM ITS WEIGHT DUE TO GRAVITY,
+		*  WE CAN TRY MAKING IT CONSTANTLY UPDATE ITS DESTINATION TO ITS CURRENT POSITION IF IT IS NOT TARGETTING ANYTHING.
+		*  
+		*  Unfortunately, if we plug in a command to constantly do this, it will interfere with the sendToDestination methods
+		*  and the manual elevator buttons, so we have to make any action interrupt this process. I'm adding a hovering boolean
+		*  to set true whenever a button is pressed.
+		*
 		*/
 
+		// Since run() is constantly refreshing, hover will always be updating to set position at the new current position.
+		// This should resolve the issue with it drifting downwards and then going back up to compensate.
+		if (Robot.elevator.hovering) {
+			Robot.elevator.hover();
+		}
 
-//		if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-//			System.out.println("LowerMinLimSwitch: " + Robot.elevator.getLowerMinLimitSwitch());
-//			System.out.println("LowerHeight: " + Robot.elevator.getLowerHeight() + " UpperHeight: " + Robot.elevator.getUpperHeight());/
-//		}
+		/* 
+		*  Print limit switch values
+		*  System.out.println("LowerMinLimSwitch: " + Robot.elevator.getLowerMinLimitSwitch());
+		*  System.out.println("LowerMaxLimSwitch: " + Robot.elevator.getLowerMaxLimitSwitch());
+		*  System.out.println("UpperMinLimSwitch: " + Robot.elevator.getUpperMinLimitSwitch());
+		*  System.out.println("UpperMaxLimSwitch: " + Robot.elevator.getUpperMaxLimitSwitch());
+		*/
+
+		// Prints every 2000 ticks so it doesnt spam the log
+		if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
+			System.out.println("LowerHeight: " + Robot.elevator.getLowerHeight() + " UpperHeight: " + Robot.elevator.getUpperHeight());
+		}
+
+
 		// cheezy - right stick fwd/back - left stick lft/rgt
 		double fwd_power = Math.pow(-(1.1)*m_joystick1.getRawAxis(1), 1);
 		double turn_power = Math.pow((0.6)*m_joystick2.getRawAxis(0), 1);
@@ -94,78 +117,38 @@ public class OI extends Command {
 
 
 		// SMALL ELEVATOR FORCED MANUAL MOVEMENT
-		
 		if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
 			/*Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(0.5);
-			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
-			*/
+			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight()); */
 			if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
 				m_calibrate.start();
 			}
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
 			Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(-0.5);
-			//Robot.elevator.setLowerPower(-0.5);
+			/*Robot.elevator.hovering = false;
+			Robot.elevator.setLowerPower(-0.5); */
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 		} else {
 			Robot.elevator.upperNeutral();
 		}
 		
 
-		// BIG ELEVATOR FORCED MANUAL MOVEMENT
+		// BIG ELEVATOR FORCED MANUAL MOVEMENT (doesnt really work. we would need to code a Robot.elevator.lowerNeutral(), which we dont have)
 		/*if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
 			Robot.elevator.upperStopTargeting = true;
-			Robot.elevator.setLowerPower(0.5);
-			System.out.println("UPPER POWER IS 0.75");
-			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
+			Robot.elevator.setLowerPower(0.6);
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
 			Robot.elevator.upperStopTargeting = true;
-			Robot.elevator.setLowerPower(-0.5);
-			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
+			Robot.elevator.setLowerPower(-0.6);
 		} else {
 			Robot.elevator.setLowerPower(0.0);
-			//System.out.println("Upper stopped moving");
-			//Robot.elevator.upperNeutral();
+			Robot.elevator.upperNeutral();
 		}
 		*/
 
-		// Lower Elevator basic movement w/o limits
-		/*
-		if(m_boxop.getRawButton(ELEVATOR_UP)) {
-			Robot.elevator.setLowerPower(0.75);
-			System.out.println("Lower going up");
-		} else if (m_boxop.getRawButton(ELEVATOR_DOWN)) {
-			Robot.elevator.setLowerPower(-0.75);
-			System.out.println("Lower going down");
-		} else {
-			Robot.elevator.setLowerPower(0.0);
-		}
-		*/
-		
-
-		// Upper elevator basic movement w/o limits
-		/*
-		if(m_boxop.getRawButton(ELEVATOR_UP_SMALL)) {
-			Robot.elevator.setUpperPower(0.5);
-			System.out.println("Upper going up");
-		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
-			Robot.elevator.setUpperPower(-0.5);
-			System.out.println("Upper going down");
-		} else {
-			Robot.elevator.setUpperPower(0.0);
-		}
-		*/
-		
-		/*if(m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
-			Robot.elevator.setUpperPower(-0.5);
-			System.out.println("Upper going down");
-		} else {
-			Robot.elevator.setUpperPower(0.0);
-		}
-		*/
-
-		// 
+		// Replace the manual forced buttons with the addToPosition function (We should try this out sometime!)
 		/*if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
 			Robot.elevator.addToPosition(10000);
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
@@ -210,20 +193,20 @@ public class OI extends Command {
 		if (m_boxop.getRawButton(ELEVATOR_LVL1)) {
 			/*if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
 				m_calibrate.start();
-			}
-			*/
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
+			}*/
+			Robot.elevator.sendCombinedToDestination(Robot.elevator.LVL1);
 			//Robot.elevator.bothElevatorsDown();
 		}
 
 		if (m_boxop.getRawButton(ELEVATOR_LVL2)) {
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
+			Robot.elevator.sendCombinedToDestination(Robot.elevator.LVL2);
 		}
 
 		if (m_boxop.getRawButton(ELEVATOR_LVL3)) {
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
+			Robot.elevator.sendCombinedToDestination(Robot.elevator.LVL3);
 		}
 
+		// When robot is disabled, NUKE ROBOT! and disable calibrate subroutine.
 		if (!Robot.drive.isEnabled()) {
 			Robot.drive.nukeRobot();
 			m_calibrate.stop();

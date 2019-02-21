@@ -46,6 +46,7 @@ public class CalibrateElevator extends Subroutine {
 
     protected void calibrateLower() {
         m_isrunning = true;
+        Robot.elevator.hovering = false;
         Robot.elevator.setLowerPower(0.3);
         waitForSeconds(0.2);
         Robot.elevator.setLowerPower(0.0);
@@ -57,18 +58,18 @@ public class CalibrateElevator extends Subroutine {
             }
             if (caliBreak++ >= 36000) {
                 System.out.println("Lower elevator timed out; breaking");
-                Robot.elevator.setLowerPower(0.0);
                 break;
             }
         }
         Robot.elevator.resetLowerEncoder();    
         Robot.elevator.setLowerPower(0.0);
-        Robot.elevator.setLowerPosition(0.0);
+        Robot.elevator.sendLowerToDestination(0.0);
         if (!Robot.elevator.getLowerMinLimitSwitch()) {  
             System.out.println("Succesfully reset lower encoder");    
         } else {
             System.out.println("Timed out lower elevator");
         }
+        Robot.elevator.hovering = true;
         m_isrunning = false;
     }
 
