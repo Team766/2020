@@ -43,9 +43,9 @@ public class Elevator extends Mechanism {
     public static int LVL3 = 3000000;
     
     private boolean sendCombinedRunning = false;
-    public static boolean combinedStopTargeting = false;
-    public static boolean upperStopTargeting = false;
-    public static boolean hovering = true;
+    public boolean combinedStopTargeting = false;
+    public boolean upperStopTargeting = false;
+    public boolean hovering = true;
     private int index = 0;
 
     public Elevator() {
@@ -185,7 +185,7 @@ public class Elevator extends Mechanism {
             } else {
                 sendUpperToDestination(upperTarget);
             }
-            
+
         } else {
             //  Only prints cannot reach if it actually can't reach. Before, it printed "cannot reach" even if it actually could and was just interrupted by manual buttons
             if (!combinedStopTargeting) {
