@@ -8,6 +8,7 @@ import com.team766.frc2019.commands.Debug;
 import com.team766.frc2019.commands.DriveAuto1;
 import com.team766.frc2019.commands.DriveAuto2;
 import com.team766.frc2019.commands.DriveAuto3;
+import com.team766.frc2019.commands.AutonElevator;
 
 public enum AutonomousModes {
     @AutonomousCommand(commandClass= DriveSquare.class) DriveSquare,
@@ -17,4 +18,6 @@ public enum AutonomousModes {
     @AutonomousCommand(commandClass= DriveAuto1.class) DriveAuto1,
     @AutonomousCommand(commandClass= DriveAuto2.class) DriveAuto2,
     @AutonomousCommand(commandClass= DriveAuto3.class) DriveAuto3,
+    @AutonomousCommand(commandClass= AutonElevator.class) AutonElevator,
+
 }

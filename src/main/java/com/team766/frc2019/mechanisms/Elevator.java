@@ -22,22 +22,22 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
     public static double targetPosition;
 
+    public static int LVL1 = 100000;
+    public static int LVL2 = 1480000;
+    public static int LVL3 = 3000000;
     public static int MIN_LOWER_HEIGHT = 40000;
     public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 100000;
 	public static int NEAR_MIN_LOWER_HEIGHT = 400000;
     private static int NEAR_MAX_LOWER_HEIGHT = 1800000;
     private static int MAX_LOWER_HEIGHT = 2130000;
 	public static int MIN_UPPER_HEIGHT = 0;
-    public static int NEAR_MIN_UPPER_HEIGHT = 100000;
+    public static int NEAR_MIN_UPPER_HEIGHT = 200000;
     private static int NEAR_MAX_UPPER_HEIGHT = 880000;
     private static int MAX_UPPER_HEIGHT = 920000;
     private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
     private static int MAX_HEIGHT_SMALL = 900000;
-    public static int LVL1 = 50000;
-    public static int LVL2 = 1480000;
-    public static int LVL3 = 3000000;
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
     
     private boolean setPositionRunning = false;
@@ -114,18 +114,22 @@ public class Elevator extends Mechanism {
     }
 
     public void setLowerPower(double elevatorPower) {
+        //System.out.println("*** setting lower power to " + elevatorPower + " ***");
         m_lowerElevatorMotor.set(ControlMode.PercentOutput, elevatorPower);
     }
 
     public void setUpperPower(double actuatorPower) {
+        //System.out.println("*** setting upper power to " + actuatorPower + " ***");
         m_upperElevatorMotor.set(ControlMode.PercentOutput, actuatorPower);
     }
 
     public void setLowerPosition(double position) {
+        System.out.println("*** setting lower position to " + position + " ***");
         m_lowerElevatorMotor.set(ControlMode.Position, position);
     }
     
     public void setUpperPosition(double position) {
+        System.out.println("*** setting upper position to " + position + " ***");
         m_upperElevatorMotor.set(ControlMode.Position, position);
     }
     
@@ -134,14 +138,48 @@ public class Elevator extends Mechanism {
            return;
         }
         setPositionRunning = true;
-        System.out.println("Setting position to: " + position);
-        System.out.print(" upperTarget" + 92*position/305 + " lowerTarget" + 213*position/305);
+        final double upperTarget = 92*position/305;
+        final double lowerTarget = 213*position/305;
+        System.out.println("Setting position to: " + position + ", target (U, L): " +upperTarget + ", " + lowerTarget + ", combinedStopTargeting: " + combinedStopTargeting );
         if (position > 0 && position < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT) && combinedStopTargeting == false) {
             if (position < NEAR_MIN_LOWER_HEIGHT) {
-                double upperTarget = 92*position/305;
-                double lowerTarget = 213*position/305;
-                System.out.print("upperTarget: " + upperTarget + "lowerTarget" + lowerTarget);
-                while ((Robot.elevator.getUpperHeight() > upperTarget) && (Robot.elevator.getLowerHeight() > lowerTarget || getLowerMinLimitSwitch())){
+                System.out.println( "Getting elevator to lowest position ");
+                // If lower nears bottom, slow down
+                // As long as either upper or lower elevators are higher than their target, lower them down
+                boolean upperDone = false;
+                boolean lowerDone = false;
+                do {
+                    //upper
+                    if( !upperDone ){
+                        if (getUpperHeight() <= MIN_UPPER_HEIGHT || !getUpperMinLimitSwitch()) {
+                            setUpperPower(0.0);
+                            upperDone = true;
+                            System.out.println("Upper is done");
+                        } else if (getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
+                            setUpperPower(-0.4);
+                        } else {
+                            setUpperPower(-1.0);
+                        }    
+                    }
+                    //lower
+                    if ( !lowerDone ) {
+                        if (getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
+                            setLowerPower(0.0);
+                            lowerDone = true;
+                            System.out.println("Lower is done");
+                        } else if (getLowerHeight() <= NEAR_MIN_LOWER_HEIGHT) {
+                            setLowerPower(-0.4);
+                        } else {
+                            setLowerPower(-1.0);
+                        }
+                    }                 
+                }
+                while( !upperDone || !lowerDone );
+
+                System.out.println("Elevator should be down");
+/*
+                while ((Robot.elevator.getUpperHeight() > upperTarget) && 
+                                (Robot.elevator.getLowerHeight() > lowerTarget || getLowerMinLimitSwitch())){
                     if (Robot.elevator.getUpperHeight() <= upperTarget) {
                         Robot.elevator.setUpperPower(0.0);
                     } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
@@ -159,10 +197,11 @@ public class Elevator extends Mechanism {
                         Robot.elevator.setLowerPower(-0.9);
                     }
                 }
+                */
             } else {
-                System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget" + 92*position/305 + " lowerTarget" + 213*position/305);
-                setLowerPosition((213*position)/305);
-                setUpperPosition((92*position/305));
+                System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget: " + upperTarget + " lowerTarget: " + lowerTarget);
+                setLowerPosition(lowerTarget);
+                setUpperPosition(upperTarget);
                 targetPosition = position;
             }
         } else {
