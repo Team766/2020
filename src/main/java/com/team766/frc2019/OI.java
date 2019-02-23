@@ -69,7 +69,7 @@ public class OI extends Command {
 //		}
 		// cheezy - right stick fwd/back - left stick lft/rgt
 		double fwd_power = Math.pow(-(1.1)*m_joystick1.getRawAxis(1), 1);
-		double turn_power = Math.pow((0.6)*m_joystick2.getRawAxis(0), 1);
+		double turn_power = Math.pow((0.5)*m_joystick2.getRawAxis(0), 1);
 		//System.out.println(m_joystick2.getRawAxis(0));
 		/*double leftPower = fwd_power*MAX_ROBOT_VELOCITY;
 		double rightPower = fwd_power*MAX_ROBOT_VELOCITY;
@@ -203,27 +203,28 @@ public class OI extends Command {
 			new RetractGripper().start();
 		}
 
-
-		
-
 		// ELEVATOR LEVELS
-		if (m_boxop.getRawButton(ELEVATOR_LVL1)) {
-			/*if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
-				m_calibrate.start();
-			}
-			*/
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
-			//Robot.elevator.bothElevatorsDown();
-		}
+		int tgtLvl = m_boxop.getRawButton(ELEVATOR_LVL1) ? 1 : 
+					m_boxop.getRawButton(ELEVATOR_LVL2) ? 2 :
+					m_boxop.getRawButton(ELEVATOR_LVL3) ? 3 : -1;
 
-		if (m_boxop.getRawButton(ELEVATOR_LVL2)) {
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
+		//System.out.println("==> Going to level: " + tgtLvl );
+		switch( tgtLvl ){
+			case 1:
+				/*if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
+					m_calibrate.start();
+				}
+				*/
+				Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
+				break;
+			case 2:
+				Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
+				break;
+			case 3:
+				Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
+				break;
 		}
-
-		if (m_boxop.getRawButton(ELEVATOR_LVL3)) {
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
-		}
-
+		
 		if (!Robot.drive.isEnabled()) {
 			Robot.drive.nukeRobot();
 			m_calibrate.stop();
