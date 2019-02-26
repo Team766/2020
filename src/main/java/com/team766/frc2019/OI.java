@@ -42,6 +42,7 @@ public class OI extends Command {
 	private static double MAX_ROBOT_VELOCITY = 20000.0;
 	private static double TURN_THRESHOLD = 0.05;
 
+	public double combinedPosition;
 
 	public OI() {
 		m_joystick1 = RobotProvider.instance.getJoystick(0);
@@ -53,6 +54,7 @@ public class OI extends Command {
 	}
 	
 	public void run() {
+		combinedPosition = Robot.elevator.getLowerHeight() + Robot.elevator.getUpperHeight();
 		//output encoder ticks
 		/*
 		System.out.println("LowerMaxLimSwitch: " + Robot.elevator.getLowerMaxLimitSwitch());
@@ -61,14 +63,13 @@ public class OI extends Command {
 		*/
 
 
-		if (index % 20 == 0 && Robot.drive.isEnabled()) {
-			System.out.println("LowerMinLimSwitch: " + Robot.elevator.getLowerMinLimitSwitch());
-			System.out.println("LowerHeight: " + Robot.elevator.getLowerHeight() + " UpperHeight: " + Robot.elevator.getUpperHeight());
-		}
-		index++;
+//		if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
+//			System.out.println("LowerMinLimSwitch: " + Robot.elevator.getLowerMinLimitSwitch());
+//			System.out.println("LowerHeight: " + Robot.elevator.getLowerHeight() + " UpperHeight: " + Robot.elevator.getUpperHeight());/
+//		}
 		// cheezy - right stick fwd/back - left stick lft/rgt
-		fwd_power = Math.pow(-(1.2)*m_joystick1.getRawAxis(1), 1);
-		turn_power = Math.pow((0.45)*m_joystick2.getRawAxis(0), 1);
+		double fwd_power = Math.pow(-(1.1)*m_joystick1.getRawAxis(1), 1);
+		double turn_power = Math.pow((0.5)*m_joystick2.getRawAxis(0), 1);
 		//System.out.println(m_joystick2.getRawAxis(0));
 		/*double leftPower = fwd_power*MAX_ROBOT_VELOCITY;
 		double rightPower = fwd_power*MAX_ROBOT_VELOCITY;
@@ -85,34 +86,18 @@ public class OI extends Command {
 		// Robot.drive.setDrivePower(leftPower, rightPower);*/
 
 		/// Ryan added this code
-		leftPower = (fwd_power + turn_power);// * (10000);
-		rightPower = (fwd_power - turn_power);// * (10000);
-		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);//.Velocity);
-		if (index % 25 == 0 && Robot.drive.isEnabled()) {
-			System.out.println(" fwd: " + fwd_power + " turn: " + turn_power + " left: " + leftPower + " right: " + rightPower);
-		}
+		double leftPower = (fwd_power + turn_power); //* (10000);
+		double rightPower = (fwd_power - turn_power);//* (10000);
+		//System.out.println("forward power: " + fwd_power + "turn power: " + turn_power);
+		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
 		/// End of Ryan's code
 
-		/*
-		// GRIPPER ACTIONS
-		if(m_boxop.getRawButton(INTAKE_IN) ) {
-			// user clicked on the intake in button
-			System.out.println(">>> INTAKE_OPEN pressed");
-			new ExtendGripper().start();
-
-		}
-		if(m_boxop.getRawButton(INTAKE_OUT) ) {
-			// user clicked on the intake out button                                                                                                                                            ggbhhhhhhhhhhmmbb  
-			new RetractGripper().start();
-		}
-		*/
 
 		// SMALL ELEVATOR FORCED MANUAL MOVEMENT
 		
 		if(m_boxop.getRawButton(ELEVATOR_UP_SMALL) ) {
 			/*Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(0.5);
-			System.out.println("UPPER POWER IS 0.75");
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 			*/
 			if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
@@ -121,10 +106,9 @@ public class OI extends Command {
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN_SMALL)) {
 			Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(-0.5);
+			//Robot.elevator.setLowerPower(-0.5);
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 		} else {
-			//Robot.elevator.setUpperPower(0.0);
-			//System.out.println("Upper stopped moving");
 			Robot.elevator.upperNeutral();
 		}
 		
@@ -190,7 +174,6 @@ public class OI extends Command {
 		*/
 
 		// COMBINED ELEVATOR MOVEMENT ALGORITHM
-	
 		if (m_boxop.getRawButton(ELEVATOR_UP) ) {
 			Robot.elevator.elevatorUp(); 
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN)) {
@@ -208,23 +191,44 @@ public class OI extends Command {
 			Robot.flowerActuator.retract();
 		}
 
-		
+		// GRIPPER ACTIONS
+		if(m_boxop.getRawButton(INTAKE_IN) ) {
+			// user clicked on the intake in button
+			System.out.println(">>> INTAKE_OPEN pressed");
+			new ExtendGripper().start();
+
+		}
+		if(m_boxop.getRawButton(INTAKE_OUT) ) {
+			// user clicked on the intake out button                                                                                                                                            ggbhhhhhhhhhhmmbb  
+			new RetractGripper().start();
+		}
 
 		// ELEVATOR LEVELS
-		if (m_boxop.getRawButton(ELEVATOR_LVL1)) {
-			/*if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
-				m_calibrate.start();
-			}
-			*/
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
-			//Robot.elevator.bothElevatorsDown();
-		}
-		if (m_boxop.getRawButton(ELEVATOR_LVL2)) {
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
-		}
-		if (m_boxop.getRawButton(ELEVATOR_LVL3)) {
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
+		int tgtLvl = m_boxop.getRawButton(ELEVATOR_LVL1) ? 1 : 
+					m_boxop.getRawButton(ELEVATOR_LVL2) ? 2 :
+					m_boxop.getRawButton(ELEVATOR_LVL3) ? 3 : -1;
+
+		//System.out.println("==> Going to level: " + tgtLvl );
+		switch( tgtLvl ){
+			case 1:
+				/*if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
+					m_calibrate.start();
+				}
+				*/
+				Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
+				break;
+			case 2:
+				Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
+				break;
+			case 3:
+				Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
+				break;
 		}
 		
+		if (!Robot.drive.isEnabled()) {
+			Robot.drive.nukeRobot();
+			m_calibrate.stop();
+			return;
+		}
 	}
 }
