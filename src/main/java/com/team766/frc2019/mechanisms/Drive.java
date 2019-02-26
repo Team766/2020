@@ -81,11 +81,9 @@ public class Drive extends Mechanism {
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
         m_leftTalon.config_kD(0, MD, 0);
-        m_leftTalon.config_kF(0, 0.0, 0);
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MP, 0);
-        m_rightTalon.config_kF(0, 0.0, 0);
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
         m_rightTalon.setNeutralMode(NeutralMode.Brake);
         m_leftTalon.configOpenLoopRamp(0.5, 0);

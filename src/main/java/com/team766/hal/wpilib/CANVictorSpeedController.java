@@ -1,5 +1,6 @@
 package com.team766.hal.wpilib;
 
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.team766.hal.CANSpeedController;
@@ -9,6 +10,8 @@ import com.team766.logging.Severity;
 
 public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedController {
 
+	private double m_feedForward = 0.0;
+	
 	public CANVictorSpeedController(int deviceNumber) {
 		super(deviceNumber);
 	}
@@ -16,9 +19,11 @@ public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedC
 	@Override
 	public void set(ControlMode mode, double value) {
 		com.ctre.phoenix.motorcontrol.ControlMode ctre_mode = null;
+		boolean useFourTermSet = true;
 		switch (mode) {
 		case PercentOutput:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput;
+			useFourTermSet = false;
 			break;
 		case Position:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Position;
@@ -31,6 +36,7 @@ public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedC
 			break;
 		case Follower:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Follower;
+			useFourTermSet = false;
 			break;
 		case MotionProfile:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.MotionProfile;
@@ -43,6 +49,7 @@ public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedC
 			break;
 		case Disabled:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Disabled;
+			useFourTermSet = false;
 			break;
 		}
 		if (ctre_mode == null) {
@@ -51,7 +58,11 @@ public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedC
 					"CAN ControlMode is not translatable: " + mode);
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Disabled;
 		}
-		super.set(ctre_mode, value);
+		if (useFourTermSet) {
+			super.set(ctre_mode, value, DemandType.ArbitraryFeedForward, m_feedForward);
+		} else {
+			super.set(ctre_mode, value);
+		}
 	}
 
 	@Override
@@ -87,5 +98,10 @@ public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedC
 	@Override
 	public void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
 		super.configClosedloopRamp(secondsFromNeutralToFull, timeoutMs);
+	}
+
+	@Override
+	public void setFeedForward(double value) {
+		m_feedForward = value;
 	}
 }

@@ -1,6 +1,7 @@
 package com.team766.hal.wpilib;
 
 import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -13,6 +14,8 @@ import com.team766.logging.Severity;
 
 public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedController {
 
+	private double m_feedForward = 0.0;
+
 	public CANTalonSpeedController(int deviceNumber) {
 		super(deviceNumber);
 	}
@@ -20,9 +23,11 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	@Override
 	public void set(ControlMode mode, double value) {
 		com.ctre.phoenix.motorcontrol.ControlMode ctre_mode = null;
+		boolean useFourTermSet = true;
 		switch (mode) {
 		case PercentOutput:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput;
+			useFourTermSet = false;
 			break;
 		case Position:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Position;
@@ -35,6 +40,7 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 			break;
 		case Follower:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Follower;
+			useFourTermSet = false;
 			break;
 		case MotionProfile:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.MotionProfile;
@@ -47,6 +53,7 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 			break;
 		case Disabled:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Disabled;
+			useFourTermSet = false;
 			break;
 		}
 		if (ctre_mode == null) {
@@ -55,7 +62,11 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 					"CAN ControlMode is not translatable: " + mode);
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Disabled;
 		}
-		super.set(ctre_mode, value);
+		if (useFourTermSet) {
+			super.set(ctre_mode, value, DemandType.ArbitraryFeedForward, m_feedForward);
+		} else {
+			super.set(ctre_mode, value);
+		}
 	}
 
 	@Override
@@ -91,5 +102,10 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	@Override
 	public void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
 		super.configClosedloopRamp(secondsFromNeutralToFull, timeoutMs);
+	}
+
+	@Override
+	public void setFeedForward(double value) {
+		m_feedForward = value;
 	}
 }
