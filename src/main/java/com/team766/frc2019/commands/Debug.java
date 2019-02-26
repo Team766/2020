@@ -15,7 +15,7 @@ public class Debug extends Subroutine {
         Robot.drive.shutdown();
         while (Robot.drive.isEnabled()) {
             //Robot.drive.setDrive(0.5, 0.5, ControlMode.PercentOutput);
-            System.out.println("Left Encoder: " + Robot.drive.leftEncoderDistance() + " Right Encoder: " + Robot.drive.rightEncoderDistance() + " gyro: " + Robot.drive.getGyroAngle());
+            System.out.println("Left Drive Encoder: " + Robot.drive.leftEncoderDistance() + " Right Drive Encoder: " + Robot.drive.rightEncoderDistance() + " gyro: " + Robot.drive.getGyroAngle() + " Lower Stage Encoder: " + Robot.elevator.getLowerHeight() +  " Upper Stage Encoder: " + Robot.elevator.getUpperHeight());
         }
     }
 }

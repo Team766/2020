@@ -10,13 +10,7 @@ public class DriveStraight extends Subroutine {
     }
 
     protected void subroutine() {
-
-        Robot.drive.setDrive(0.5, 0.5, ControlMode.PercentOutput);
-        System.out.println("Encoder value is" );
-        waitForSeconds(1.0);
-
-        Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
-        System.out.println("Encoder value is" );
+        callSubroutine(new PreciseDrive(0, 10, .5, 0));
     }
     
 }
