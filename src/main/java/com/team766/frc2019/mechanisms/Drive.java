@@ -67,11 +67,7 @@ public class Drive extends Mechanism {
         if (m_secondVictor) {
             m_rightVictor2.setInverted(true);
         }
-<<<<<<< HEAD
-        // left false right true for kylo, both false for viper and marie
-=======
         // left false right true for new, both false for mule
->>>>>>> parent of 5e74556... ok
         m_leftTalon.setSensorPhase(false);
         m_rightTalon.setSensorPhase(false);
         m_leftTalon.configNominalOutputForward(0);
@@ -82,21 +78,12 @@ public class Drive extends Mechanism {
         m_rightTalon.configNominalOutputReverse(0);
         m_rightTalon.configPeakOutputForward(1);
         m_rightTalon.configPeakOutputReverse(-1);
-<<<<<<< HEAD
-        m_leftTalon.config_kP(0, P, 0);
-        m_leftTalon.config_kI(0, I, 0);
-        m_leftTalon.config_kD(0, D, 0);
-        m_rightTalon.config_kP(0, P, 0);
-        m_rightTalon.config_kI(0, I, 0);
-        m_rightTalon.config_kD(0, P, 0);
-=======
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
         m_leftTalon.config_kD(0, MD, 0);
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MP, 0);
->>>>>>> parent of 5e74556... ok
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
         m_rightTalon.setNeutralMode(NeutralMode.Brake);
         m_leftTalon.configOpenLoopRamp(0.5, 0);
