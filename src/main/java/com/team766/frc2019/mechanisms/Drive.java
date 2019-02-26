@@ -50,6 +50,27 @@ public class Drive extends Mechanism {
         m_rightEncoder = RobotProvider.instance.getEncoder("drive.rightEncoder");
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         m_rightTalon.setInverted(true);
+        m_rightVictor1.setInverted(true);
+        if (m_secondVictor) {
+            m_rightVictor2.setInverted(true);
+        }
+        // left false right true for kylo, both false for viper and marie
+        m_leftTalon.setSensorPhase(false);
+        m_rightTalon.setSensorPhase(false);
+        m_leftTalon.configNominalOutputForward(0);
+        m_leftTalon.configNominalOutputReverse(0);
+        m_leftTalon.configPeakOutputForward(1);
+        m_leftTalon.configPeakOutputReverse(-1);
+        m_rightTalon.configNominalOutputForward(0);
+        m_rightTalon.configNominalOutputReverse(0);
+        m_rightTalon.configPeakOutputForward(1);
+        m_rightTalon.configPeakOutputReverse(-1);
+        m_leftTalon.config_kP(0, P, 0);
+        m_leftTalon.config_kI(0, I, 0);
+        m_leftTalon.config_kD(0, D, 0);
+        m_rightTalon.config_kP(0, P, 0);
+        m_rightTalon.config_kI(0, I, 0);
+        m_rightTalon.config_kD(0, P, 0);
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
         m_rightTalon.setNeutralMode(NeutralMode.Brake);
         encodersDistancePerPulse(DIST_PER_PULSE);
