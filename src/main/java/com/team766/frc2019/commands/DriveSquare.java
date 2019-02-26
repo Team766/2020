@@ -46,14 +46,14 @@ public class DriveSquare extends Subroutine {
         callSubroutine(new PreciseTurnRadius(270, 4, -.75, -.75));
         callSubroutine(new PreciseTurnRadius(0, 4, -.75, 0)); //forward and back circles*/
         while (Robot.drive.isEnabled()) {
-            callSubroutine(new PreciseTurnRadius(270, 4, .6, .6));
-            callSubroutine(new PreciseTurnRadius(180, 4, .6, .6));
-            callSubroutine(new PreciseTurnRadius(90, 4, .6, .6));
-            callSubroutine(new PreciseTurnRadius(0, 4, .6, .6));
-            callSubroutine(new PreciseTurnRadius(90, 4, .6, .6));
-            callSubroutine(new PreciseTurnRadius(180, 4, .6, .6));
-            callSubroutine(new PreciseTurnRadius(270, 4, .6, .6));
-            callSubroutine(new PreciseTurnRadius(0, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(270, 2, .75, .75));
+            callSubroutine(new PreciseTurnRadius(180, 2, .75, .75));
+            callSubroutine(new PreciseTurnRadius(90, 2, .75, .75));
+            callSubroutine(new PreciseTurnRadius(0, 2, .75, .75));
+            callSubroutine(new PreciseTurnRadius(90, 2, .75, .75));
+            callSubroutine(new PreciseTurnRadius(180, 2, .75, .75));
+            callSubroutine(new PreciseTurnRadius(270, 2, .75, .75));
+            callSubroutine(new PreciseTurnRadius(0, 2, .75, .75));
         } //left and right circles
         System.out.println("DRIVESQUARE IS DONE");
         Robot.drive.nukeRobot();
