@@ -282,20 +282,22 @@ public class Elevator extends Mechanism {
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
             System.out.println("LH: " + getLowerHeight() + " UH: " + getUpperHeight());
         }
-        if (getUpperHeight() <= MIN_UPPER_HEIGHT) {
+        if (getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
+            if (getUpperHeight() <= MIN_UPPER_HEIGHT) {
+                setUpperPower(0.0);
+            } else {
+                setUpperPower(-0.4)
+            }
             if (getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
                 hovering = true;
             } else if (getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
                 //System.out.println("Nearing Bottom");
                 hovering = false;
-                setLowerPower(-0.2);
+                setLowerPower(-0.3);
             }  else {
                 hovering = false;
                 setLowerPower(-0.9);
             }
-            setUpperPower(0.0);
-        } else if (getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
-            setUpperPower(-0.4);
         } else {
             setUpperPower(-1.0);
         }
