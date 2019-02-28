@@ -14,36 +14,49 @@ public class DriveSquare extends Subroutine {
 
         Robot.drive.resetGyro();
         Robot.drive.resetEncoders();
-        //callSubroutine(new PreciseTurnRadius(90, 2, .5, 0, 0));
-        callSubroutine(new DriveVelocity());
-        //callSubroutine(new PreciseTurnRadius(90, 0, .25, .25, .25));
-        //callSubroutine(new PreciseDrive(2, 90, .5, 0, .25));
-        //callSubroutine(new PreciseTurnRadius(180, 1, .25, .25, .25));
-        //callSubroutine(new PreciseDrive(2, 180, .5, 0, .25));
-        //callSubroutine(new PreciseTurnRadius(270, 1, .25, .25, .25));
-        //callSubroutine(new PreciseDrive(2, 270, .5, 0, .25));
-        //callSubroutine(new PreciseTurnRadius(0, 1, .25, .25, .25));
-        /*
-        for (int i = 0; i < 2; i++) {
-           callSubroutine(new PreciseDrive(1, 0, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(90));
-            callSubroutine(new PreciseDrive(1, 90, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(180));
-            callSubroutine(new PreciseDrive(1, 180, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(270));
-            callSubroutine(new PreciseDrive(1, 270, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(0));
-            callSubroutine(new PreciseDrive(1, 0, 0.5, 0.5)); 
-            callSubroutine(new PreciseTurn(0));
-        */
-            System.out.println("DRIVESQUARE IS DONE");
-        }
-
-
-        
-
-
-       // double endTime = new Date().getTime();
-        //System.out.println("ENDED IN " + (endTime - startTime));
-
+        /*callSubroutine(new PreciseDrive(0, -5, .5, 0, .5));
+        callSubroutine(new PreciseTurnRadius(90, 0, .5, .5, .5));
+        callSubroutine(new PreciseTurnRadius(180, 0, .5, .5, .5));
+        callSubroutine(new PreciseDrive(180, 5, .5, .5, 0)); //dukes of hazzard turn*/
+        /*callSubroutine(new PreciseDrive(0, 5, .5, .5));
+        callSubroutine(new PreciseTurnRadius(90, 2, .5, .5));
+        callSubroutine(new PreciseTurnRadius(180, 2, .5, .5));
+        callSubroutine(new PreciseDrive(180, 5, .5, .5));
+        callSubroutine(new PreciseDrive(180, -5, .5, .5));
+        callSubroutine(new PreciseTurnRadius(90, -2, .5, .5));
+        callSubroutine(new PreciseTurnRadius(0, -2, .5, .5));
+        callSubroutine(new PreciseDrive(0, -5, .5, .5)); //mcdonalds logo*/
+        /*callSubroutine(new PreciseDrive(0, 10.4375, .5, 0));
+        callSubroutine(new ExtendGripper());
+        callSubroutine(new PreciseDrive(0, -1.666666666666667, .5, 0));
+        callSubroutine(new RetractGripper());
+        callSubroutine(new PreciseTurn(225));
+        callSubroutine(new PreciseDrive(225, 14, .5, .5));
+        callSubroutine(new PreciseTurnRadius(180, 0.6666666666666667, .5, .5));
+        callSubroutine(new ExtendGripper());
+        callSubroutine(new PreciseDrive(180, 4, .5, 0));
+        callSubroutine(new RetractGripper());
+        callSubroutine(new PreciseDrive(180, -4, .5, 0)); //auton path test*/
+        /*callSubroutine(new PreciseTurnRadius(270, 4, .75, .75));
+        callSubroutine(new PreciseTurnRadius(180, 4, .75, .75));
+        callSubroutine(new PreciseTurnRadius(90, 4, .75, .75));
+        callSubroutine(new PreciseTurnRadius(0, 4, .75, 0));
+        callSubroutine(new PreciseTurnRadius(90, 4, -.75, -.75));
+        callSubroutine(new PreciseTurnRadius(180, 4, -.75, -.75));
+        callSubroutine(new PreciseTurnRadius(270, 4, -.75, -.75));
+        callSubroutine(new PreciseTurnRadius(0, 4, -.75, 0)); //forward and back circles*/
+        while (Robot.drive.isEnabled()) {
+            callSubroutine(new PreciseTurnRadius(270, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(180, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(90, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(0, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(90, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(180, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(270, 4, .6, .6));
+            callSubroutine(new PreciseTurnRadius(0, 4, .6, .6));
+        } //left and right circles
+        System.out.println("DRIVESQUARE IS DONE");
+        Robot.drive.nukeRobot();
+        return;
     }
+}

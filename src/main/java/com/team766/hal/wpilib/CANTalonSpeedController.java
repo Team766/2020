@@ -1,7 +1,9 @@
 package com.team766.hal.wpilib;
 
 import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.IMotorController;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.team766.hal.CANSpeedController;
@@ -73,11 +75,21 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	
 	@Override
 	public void setPosition(int position){
-		super.setSelectedSensorPosition(position, 0, 20);
+		super.setSelectedSensorPosition(position, 0, 0);
 	}
 
 	@Override
 	public void follow(CANSpeedController leader) {
-		super.follow((IMotorController)leader);
+		super.follow((CANTalonSpeedController)leader);
+	}
+
+	@Override
+	public void configOpenLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		super.configOpenloopRamp(secondsFromNeutralToFull, timeoutMs);
+	}
+
+	@Override
+	public void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		super.configClosedloopRamp(secondsFromNeutralToFull, timeoutMs);
 	}
 }

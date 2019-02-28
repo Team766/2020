@@ -15,7 +15,7 @@ public abstract class RobotProvider {
 	protected SolenoidController[] solenoids = new SolenoidController[10];
 	protected GyroReader[] gyros = new GyroReader[13];
 	protected HashMap<String, CameraReader> cams = new HashMap<String, CameraReader>();
-	protected JoystickReader[] joysticks = new JoystickReader[3];
+	protected JoystickReader[] joysticks = new JoystickReader[8];
 	protected DigitalInputReader[] digInputs = new DigitalInputReader[8];
 	protected AnalogInputReader[] angInputs = new AnalogInputReader[5];
 	protected RelayOutput[] relays = new RelayOutput[5];
