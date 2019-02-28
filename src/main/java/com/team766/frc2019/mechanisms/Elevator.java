@@ -286,7 +286,7 @@ public class Elevator extends Mechanism {
             if (getUpperHeight() <= MIN_UPPER_HEIGHT) {
                 setUpperPower(0.0);
             } else {
-                setUpperPower(-0.4)
+                setUpperPower(-0.4);
             }
             if (getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
                 hovering = true;
