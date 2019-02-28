@@ -8,10 +8,6 @@ public class CalibrateElevator extends Subroutine {
     private int index = 0;
     private boolean m_isrunning = false;
 
-    public CalibrateElevator() {
-        takeControl(Robot.elevator);
-    }
-
     protected void subroutine() {
         calibrateUpper();
         calibrateLower();

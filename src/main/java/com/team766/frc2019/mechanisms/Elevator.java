@@ -32,13 +32,17 @@ public class Elevator extends Mechanism {
     private static int MAX_LOWER_HEIGHT = 2130000;
 
 	public static int MIN_UPPER_HEIGHT = 0;
-    public static int NEAR_MIN_UPPER_HEIGHT = 100000;
+    public static int NEAR_MIN_UPPER_HEIGHT = 200000;
     private static int NEAR_MAX_UPPER_HEIGHT = 880000;
-    private static int MAX_UPPER_HEIGHT = 950000;
+    private static int MAX_UPPER_HEIGHT = 920000;
 
+    private static int MID_HEIGHT_BIG = 1000000;
+	private static int MAX_HEIGHT_BIG = 1930000;
+	private static int MID_HEIGHT_SMALL = 500000;
+    private static int MAX_HEIGHT_SMALL = 900000;
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
 
-    public static int LVL1 = 50000;
+    public static int LVL1 = 100000;
     public static int LVL2 = 1480000;
     public static int LVL3 = 3000000;
     
@@ -117,10 +121,12 @@ public class Elevator extends Mechanism {
 
     // Sets elevator motors' power
     public void setLowerPower(double elevatorPower) {
+        //System.out.println("*** setting lower power to " + elevatorPower + " ***");
         m_lowerElevatorMotor.set(ControlMode.PercentOutput, elevatorPower);
     }
 
     public void setUpperPower(double actuatorPower) {
+        //System.out.println("*** setting upper power to " + actuatorPower + " ***");
         m_upperElevatorMotor.set(ControlMode.PercentOutput, actuatorPower);
     }
 
