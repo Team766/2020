@@ -68,8 +68,24 @@ public class OI extends Command {
 //			System.out.println("LowerHeight: " + Robot.elevator.getLowerHeight() + " UpperHeight: " + Robot.elevator.getUpperHeight());/
 //		}
 		// cheezy - right stick fwd/back - left stick lft/rgt
-		double fwd_power = Math.pow(-(1.1)*m_joystick1.getRawAxis(1), 1);
-		double turn_power = Math.pow((0.5)*m_joystick2.getRawAxis(0), 1);
+		//double fwd_power = Math.pow(-(1.0)*m_joystick1.getRawAxis(1), 1);
+		double turn_power = Math.pow((0.45)*m_joystick2.getRawAxis(0), 1);
+		if (m_joystick1.getRawAxis(1) >= 0) {
+			fwd_power = -Math.pow(-(0.9)*m_joystick1.getRawAxis(1), 2);
+		} else {
+			fwd_power = Math.pow(-(0.9)*m_joystick1.getRawAxis(1), 2);
+		}
+		//if (m_joystick2.getRawAxis(0) >= 0) {
+			//turn_power = Math.pow((1.0)*m_joystick2.getRawAxis(0), 0.5);
+			//System.out.println("joystick: " + m_joystick2.getRawAxis(0));
+			//turn_power = .7*(Math.atan( m_joystick2.getRawAxis(0)*1.2 - 1.2 ) + (Math.PI/2) - 0.69473);
+			//System.out.println("turn power: " + turn_power);
+		//} else {
+			//turn_power = -Math.pow((1.0)*m_joystick2.getRawAxis(0), 0.5);
+			//System.out.println("joystick: " + m_joystick2.getRawAxis(0));
+			//turn_power = .7*(( Math.atan( m_joystick2.getRawAxis(0)*1.2 + 1.2 ) - 0.87605));
+			//System.out.println("turn power: " + turn_power);
+		//}
 		//System.out.println(m_joystick2.getRawAxis(0));
 		/*double leftPower = fwd_power*MAX_ROBOT_VELOCITY;
 		double rightPower = fwd_power*MAX_ROBOT_VELOCITY;
@@ -86,9 +102,9 @@ public class OI extends Command {
 		// Robot.drive.setDrivePower(leftPower, rightPower);*/
 
 		/// Ryan added this code
-		double leftPower = (fwd_power + turn_power); //* (10000);
-		double rightPower = (fwd_power - turn_power);//* (10000);
-		//System.out.println("forward power: " + fwd_power + "turn power: " + turn_power);
+		double leftPower = (fwd_power + turn_power)* (1.0);
+		double rightPower = (fwd_power - turn_power) * (1.0);
+		System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
 		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
 		/// End of Ryan's code
 
