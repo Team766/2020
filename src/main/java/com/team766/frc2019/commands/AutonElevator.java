@@ -18,13 +18,13 @@ public class AutonElevator extends CalibrateElevator {
 
 
         System.out.println( "Calibrate done");
-        Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
+        Robot.elevator.sendCombinedToDestination(Robot.elevator.LVL2);
         waitForSeconds(5.0);
-        Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
+        Robot.elevator.sendCombinedToDestination(Robot.elevator.LVL3);
         waitForSeconds(5.0);
-        Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
+        Robot.elevator.sendCombinedToDestination(Robot.elevator.LVL2);
         waitForSeconds(5.0);
-        Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
+        Robot.elevator.sendCombinedToDestination(Robot.elevator.LVL1);
         //Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
 
         
