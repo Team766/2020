@@ -15,8 +15,6 @@ public class OI extends Command {
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
 
-<<<<<<< HEAD
-=======
 	private static int WRIST_BACK = 7;
 	private static int WRIST_VERTICAL = 10;
 	private static int WRIST_DOWN = 9;
@@ -25,7 +23,6 @@ public class OI extends Command {
 	private static int MANUAL_WRIST_UP = 1;
 	private static int MANUAL_WRIST_DOWN = 3;
 
->>>>>>> origin/master
 
 	public OI() {
 		m_joystick1 = RobotProvider.instance.getJoystick(1);
@@ -34,12 +31,6 @@ public class OI extends Command {
 	}
 	
 	public void run() {
-<<<<<<< HEAD
-		double leftPower = m_joystick1.getRawAxis(1);
-		double rightPower = m_joystick2.getRawAxis(1);
-		Robot.drive.setDrivePower(leftPower, rightPower);
-
-=======
 		 double leftPower = m_joystick1.getRawAxis(2);
 		 double rightPower = m_joystick2.getRawAxis(2);
 
@@ -50,7 +41,7 @@ public class OI extends Command {
 			System.out.println(">>> WRIST_BACK pressed");
 			new ExtendGripper().start();
 		}
-		if(m_boxop.getRawButton(WRIST_VERTICAL) ) {
+		/*if(m_boxop.getRawButton(WRIST_VERTICAL) ) {
 			Robot.elevator.setActuatorPower(0.5);
 		} else if (m_boxop.getRawButton(WRIST_DOWN)) {
 			Robot.elevator.setActuatorPower(-0.5);
@@ -63,7 +54,6 @@ public class OI extends Command {
 			Robot.elevator.setElevatorPower(-0.5);
 		} else {
 			Robot.elevator.setElevatorPower(0.0);
-		}
->>>>>>> origin/master
+		}*/
 	}
 }
