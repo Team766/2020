@@ -56,13 +56,6 @@ public class OI extends Command {
 	}
 	
 	public void run() {
-		combinedPosition = Robot.elevator.getLowerHeight() + Robot.elevator.getUpperHeight();
-		//output encoder ticks
-		/*
-		System.out.println("LowerMaxLimSwitch: " + Robot.elevator.getLowerMaxLimitSwitch());
-		System.out.println("UpperMinLimSwitch: " + Robot.elevator.getUpperMinLimitSwitch());
-		System.out.println("UpperMaxLimSwitch: " + Robot.elevator.getUpperMaxLimitSwitch());
-		*/
 		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.05 ) {
 			fwd_power = 0;
 		} else {
@@ -72,7 +65,6 @@ public class OI extends Command {
 			turn_power = 0;
 		} else {
 			turn_power = 0.05*(Math.abs(m_joystick2.getRawAxis(0))/m_joystick2.getRawAxis(0)) + Math.pow(m_joystick2.getRawAxis(0), 3);
-			//turn_power = (1.1 - fwd_power) * turn_power;
 			turn_power = 0.5 * turn_power;
 			if (fwd_power > 0.5) {
 				turn_power = 0.8 * turn_power;
@@ -84,12 +76,9 @@ public class OI extends Command {
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
 		//System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
-	//	System.out.println("lp: " + leftPower + " rp: " + rightPower + " " + (turn_power*(1.1-fwd_power)+0.5));
 		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
 
 //		if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-//			System.out.println("LowerMinLimSwitch: " + Robot.elevator.getLowerMinLimitSwitch());
-//			System.out.println("LowerHeight: " + Robot.elevator.getLowerHeight() + " UpperHeight: " + Robot.elevator.getUpperHeight());/
 //		}
 		// cheezy - right stick fwd/back - left stick lft/rgt
 		//double fwd_power = Math.pow(-(1.0)*m_joystick1.getRawAxis(1), 1);
