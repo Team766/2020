@@ -68,7 +68,7 @@ public class OI extends Command {
 //			System.out.println("LowerHeight: " + Robot.elevator.getLowerHeight() + " UpperHeight: " + Robot.elevator.getUpperHeight());/
 //		}
 		// cheezy - right stick fwd/back - left stick lft/rgt
-		double fwd_power = Math.pow(-(1.1)*m_joystick1.getRawAxis(1), 1);
+		double fwd_power = Math.pow(-(0.9)*m_joystick1.getRawAxis(1), 1);
 		double turn_power = Math.pow((0.5)*m_joystick2.getRawAxis(0), 1);
 		//System.out.println(m_joystick2.getRawAxis(0));
 		/*double leftPower = fwd_power*MAX_ROBOT_VELOCITY;
