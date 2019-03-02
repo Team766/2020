@@ -34,10 +34,10 @@ public class PreciseDrive extends Subroutine {
     protected void subroutine() {
         double index = 0;
         m_turnController.setSetpoint(0.0);
-        System.out.println("I'm driving to: " + m_targetAngle + " and the difference is : " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " with an power of: " + m_targetPower);
+        System.out.println("I'm driving to: " + m_targetAngle + " and the difference is : " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " with an power of: " + m_targetPower + " to a distance of: " + m_driveDistance);
         while(getCurrentDistance() * driveDir < Math.abs(m_driveDistance)) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle), true);
-            double turnPower = m_turnController.getOutput() * -Robot.drive.m_gyroDirection;
+            double turnPower = m_turnController.getOutput();
             double straightPower = calcPower() * driveDir;
             if (turnPower > 0) {
                 Robot.drive.setDrive(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
@@ -45,7 +45,7 @@ public class PreciseDrive extends Subroutine {
                 Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
             }
             if (index % 30 == 0 && Robot.drive.isEnabled()) {
-                System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Gyro Dir: " + Robot.drive.m_gyroDirection + " DriveDir: " + driveDir);
+                System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Left Power: " + Robot.drive.leftMotorVelocity() + " Right Power: " + Robot.drive.rightMotorVelocity());
             }
             index++;
             if (!Robot.drive.isEnabled()){
