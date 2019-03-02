@@ -42,9 +42,9 @@ public class Elevator extends Mechanism {
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
     
     private boolean setPositionRunning = false;
-    public static boolean combinedStopTargeting = false;
-    public static boolean upperStopTargeting = false;
-    public static boolean hoverAtZero = false;
+    public boolean combinedStopTargeting = false;
+    public boolean upperStopTargeting = false;
+    public boolean hoverAtZero = false;
     private int index = 0;
 
     public Elevator() {
