@@ -1,5 +1,7 @@
 package com.team766.frc2019;
 
+//import static org.junit.Assume.assumeTrue;
+
 import com.team766.framework.Command;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.commands.CalibrateElevator;
@@ -61,7 +63,29 @@ public class OI extends Command {
 		System.out.println("UpperMinLimSwitch: " + Robot.elevator.getUpperMinLimitSwitch());
 		System.out.println("UpperMaxLimSwitch: " + Robot.elevator.getUpperMaxLimitSwitch());
 		*/
+		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.05 ) {
+			fwd_power = 0;
+		} else {
+			fwd_power = -(0.05*(Math.abs(m_joystick1.getRawAxis(1))/m_joystick1.getRawAxis(1)) + Math.pow(m_joystick1.getRawAxis(1), 3));
+		}
+		if (Math.abs(m_joystick2.getRawAxis(0)) < 0.05 ) {
+			turn_power = 0;
+		} else {
+			turn_power = 0.05*(Math.abs(m_joystick2.getRawAxis(0))/m_joystick2.getRawAxis(0)) + Math.pow(m_joystick2.getRawAxis(0), 3);
+			//turn_power = (1.1 - fwd_power) * turn_power;
+			turn_power = 0.5 * turn_power;
+			if (fwd_power > 0.5) {
+				turn_power = 0.8 * turn_power;
+			}
 
+
+		}
+		double normalizer = Math.max(Math.abs(fwd_power),Math.abs(turn_power))/(Math.abs(fwd_power) + Math.abs(turn_power)); // divides both motor powers by the larger one to keep the ratio and keep power at or below 1
+		double leftPower = (fwd_power + turn_power);
+		double rightPower = (fwd_power - turn_power);
+		//System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
+	//	System.out.println("lp: " + leftPower + " rp: " + rightPower + " " + (turn_power*(1.1-fwd_power)+0.5));
+		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
 
 //		if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
 //			System.out.println("LowerMinLimSwitch: " + Robot.elevator.getLowerMinLimitSwitch());
@@ -69,12 +93,32 @@ public class OI extends Command {
 //		}
 		// cheezy - right stick fwd/back - left stick lft/rgt
 		//double fwd_power = Math.pow(-(1.0)*m_joystick1.getRawAxis(1), 1);
-		double turn_power = Math.pow((0.45)*m_joystick2.getRawAxis(0), 1);
-		if (m_joystick1.getRawAxis(1) >= 0) {
-			fwd_power = -Math.pow(-(0.9)*m_joystick1.getRawAxis(1), 2);
+		//double turn_power = Math.pow((0.45)*m_joystick2.getRawAxis(0), 1);
+		/*
+		if (m_joystick2.getRawAxis(0) > 0.001) {
+			turn_power =  Math.pow((0.8)*m_joystick2.getRawAxis(0), 2);
+		} else if (m_joystick2.getRawAxis(0) <= 0.001 && m_joystick2.getRawAxis(0) >= -0.001) {
+			turn_power = 0.0;
 		} else {
-			fwd_power = Math.pow(-(0.9)*m_joystick1.getRawAxis(1), 2);
+			turn_power =  -Math.pow((0.8)*m_joystick2.getRawAxis(0), 2);
 		}
+
+		if (m_joystick1.getRawAxis(1) >= 0) {
+			fwd_power = -Math.pow(-(1.0)*m_joystick1.getRawAxis(1), 1);
+		} else if (m_joystick1.getRawAxis(0) <= 0.001 && m_joystick1.getRawAxis(0) >= -0.001) {
+			fwd_power = 0.0;
+		} else {
+			fwd_power = Math.pow((1.0)*m_joystick1.getRawAxis(1), 1);
+		}
+
+
+
+		while (m_joystick2.getRawButton(1)) {
+			turn_power *= 0.5;
+		}
+		*/
+		
+
 		//if (m_joystick2.getRawAxis(0) >= 0) {
 			//turn_power = Math.pow((1.0)*m_joystick2.getRawAxis(0), 0.5);
 			//System.out.println("joystick: " + m_joystick2.getRawAxis(0));
@@ -101,12 +145,6 @@ public class OI extends Command {
 		System.out.println(fwd_power + "  " + turn_power + "  " + leftPower + "  " + rightPower);
 		// Robot.drive.setDrivePower(leftPower, rightPower);*/
 
-		/// Ryan added this code
-		double leftPower = (fwd_power + turn_power)* (1.0);
-		double rightPower = (fwd_power - turn_power) * (1.0);
-		System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
-		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
-		/// End of Ryan's code
 
 
 		// SMALL ELEVATOR FORCED MANUAL MOVEMENT
