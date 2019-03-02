@@ -80,9 +80,6 @@ public class OI extends Command {
 
 //		if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
 //		}
-		// cheezy - right stick fwd/back - left stick lft/rgt
-		//double fwd_power = Math.pow(-(1.0)*m_joystick1.getRawAxis(1), 1);
-		//double turn_power = Math.pow((0.45)*m_joystick2.getRawAxis(0), 1);
 		/*
 		if (m_joystick2.getRawAxis(0) > 0.001) {
 			turn_power =  Math.pow((0.8)*m_joystick2.getRawAxis(0), 2);
