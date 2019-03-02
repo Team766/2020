@@ -8,6 +8,7 @@ import com.team766.hal.CANSpeedController;
 import com.team766.hal.DigitalInputReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
+import com.team766.framework.Subroutine;
 
 
 
@@ -70,7 +71,7 @@ public class Elevator extends Mechanism {
         m_upperElevatorMotor.configPeakOutputReverse(-1.0);
         m_lowerElevatorMotor.config_kP(0, 0.01, 0);
         m_lowerElevatorMotor.config_kI(0, 0.0, 0);
-        m_lowerElevatorMotor.config_kD(0, 0.01, 0);
+        m_lowerElevatorMotor.config_kD(0, 0.10, 0);
         m_lowerElevatorMotor.setFeedForward(0.0);
         m_upperElevatorMotor.config_kP(0, 0.01, 0);
         m_upperElevatorMotor.config_kI(0, 0.0, 0);
@@ -132,6 +133,17 @@ public class Elevator extends Mechanism {
         System.out.println("*** setting upper position to " + position + " ***");
         m_upperElevatorMotor.set(ControlMode.Position, position);
     }
+
+    /*
+    static final Set<Callable<boolean>> ADDITIONAL_TASKS = new HashSet<>();
+
+    public synchronized void doAdditionalTasks(){
+        for( Callable<boolean> task : ADDITIONAL_TASKS ){
+            // TODO - put in a try block
+            if( task.run() ) ADDITIONAL_TASKS.remove( task );
+        }
+    }
+    */
     
     public void setCombinedPosition(double position) {
         if (setPositionRunning) {
@@ -201,6 +213,16 @@ public class Elevator extends Mechanism {
             } else {
                 System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget: " + upperTarget + " lowerTarget: " + lowerTarget);
                 setLowerPosition(lowerTarget);
+                System.out.println("Position 1 : " + getLowerHeight());
+                setLowerPosition(lowerTarget);
+                /*
+                long t0 = System.currentTim....
+                ADDITIONAL_TASKS.put( new Callable<boolean>(){
+                    // check time, do what is needed
+                    // return true if done;
+                })
+                */
+                System.out.println("Position 2 : " + getLowerHeight());
                 setUpperPosition(upperTarget);
                 targetPosition = position;
             }
@@ -209,6 +231,7 @@ public class Elevator extends Mechanism {
         }
         setPositionRunning = false;
     }
+
 
     // Adds to DESTINATION, not current position. If robot is not moving to a LVL already, simply adds to current position.
     public void addToPosition(double add) {
