@@ -71,7 +71,7 @@ public class Elevator extends Mechanism {
         m_upperElevatorMotor.configPeakOutputReverse(-1.0);
         m_lowerElevatorMotor.config_kP(0, 0.01, 0);
         m_lowerElevatorMotor.config_kI(0, 0.0, 0);
-        m_lowerElevatorMotor.config_kD(0, 0.10, 0);
+        m_lowerElevatorMotor.config_kD(0, 0.01, 0);
         m_lowerElevatorMotor.setFeedForward(0.0);
         m_upperElevatorMotor.config_kP(0, 0.01, 0);
         m_upperElevatorMotor.config_kI(0, 0.0, 0);
@@ -134,16 +134,6 @@ public class Elevator extends Mechanism {
         m_upperElevatorMotor.set(ControlMode.Position, position);
     }
 
-    /*
-    static final Set<Callable<boolean>> ADDITIONAL_TASKS = new HashSet<>();
-
-    public synchronized void doAdditionalTasks(){
-        for( Callable<boolean> task : ADDITIONAL_TASKS ){
-            // TODO - put in a try block
-            if( task.run() ) ADDITIONAL_TASKS.remove( task );
-        }
-    }
-    */
     
     public void setCombinedPosition(double position) {
         if (setPositionRunning) {
@@ -152,7 +142,7 @@ public class Elevator extends Mechanism {
         setPositionRunning = true;
         final double upperTarget = 92*position/305;
         final double lowerTarget = 213*position/305;
-        System.out.println("Setting position to: " + position + ", target (U, L): " +upperTarget + ", " + lowerTarget + ", combinedStopTargeting: " + combinedStopTargeting );
+        System.out.println("Setting position to: " + position + ", target (U, L): " +upperTarget + ", " + lowerTarget);
         if (position > 0 && position < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT) && combinedStopTargeting == false) {
             if (position < NEAR_MIN_LOWER_HEIGHT) {
                 System.out.println( "Getting elevator to lowest position ");
@@ -189,40 +179,9 @@ public class Elevator extends Mechanism {
                 while( !upperDone || !lowerDone );
 
                 System.out.println("Elevator should be down");
-/*
-                while ((Robot.elevator.getUpperHeight() > upperTarget) && 
-                                (Robot.elevator.getLowerHeight() > lowerTarget || getLowerMinLimitSwitch())){
-                    if (Robot.elevator.getUpperHeight() <= upperTarget) {
-                        Robot.elevator.setUpperPower(0.0);
-                    } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
-                            Robot.elevator.setUpperPower(-0.4);
-                    } else {
-                        Robot.elevator.setUpperPower(-1.0);
-                    }                    
-                    if (Robot.elevator.getLowerHeight() <= lowerTarget || !getLowerMinLimitSwitch()) {
-                        Robot.elevator.setLowerPower(0.0);
-                        hover();
-                    } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
-     //                   System.out.println("Nearing Bottom");
-                        Robot.elevator.setLowerPower(-0.1);
-                    }  else {
-                        Robot.elevator.setLowerPower(-0.9);
-                    }
-                }
-                */
             } else {
                 System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget: " + upperTarget + " lowerTarget: " + lowerTarget);
                 setLowerPosition(lowerTarget);
-                System.out.println("Position 1 : " + getLowerHeight());
-                setLowerPosition(lowerTarget);
-                /*
-                long t0 = System.currentTim....
-                ADDITIONAL_TASKS.put( new Callable<boolean>(){
-                    // check time, do what is needed
-                    // return true if done;
-                })
-                */
-                System.out.println("Position 2 : " + getLowerHeight());
                 setUpperPosition(upperTarget);
                 targetPosition = position;
             }
@@ -290,7 +249,6 @@ public class Elevator extends Mechanism {
             if (Robot.elevator.getUpperHeight() >= MAX_UPPER_HEIGHT) {
                 Robot.elevator.setUpperPower(0.0);
             } else if (Robot.elevator.getUpperHeight() > NEAR_MAX_UPPER_HEIGHT) {
-    //            System.out.println("UPPER NEARING DESTINATION");
                 Robot.elevator.setUpperPower(0.6);
             } else {
                 Robot.elevator.setUpperPower(1.0);
@@ -303,7 +261,7 @@ public class Elevator extends Mechanism {
     public void elevatorDown() {
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-            System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+            //System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
         }
         if (Robot.elevator.getUpperHeight() <= MIN_UPPER_HEIGHT) {
             if (Robot.elevator.getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
