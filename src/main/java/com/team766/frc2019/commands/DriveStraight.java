@@ -10,7 +10,7 @@ public class DriveStraight extends Subroutine {
     }
 
     protected void subroutine() {
-        callSubroutine(new PreciseDrive(0, 10, .5, 0));
+        callSubroutine(new PreciseDrive(0, 5, .5, 0));
     }
     
 }

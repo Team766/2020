@@ -208,15 +208,15 @@ public class Elevator extends Mechanism {
         // In testing, addToDestination may run multiple times with a short, quick button press
         System.out.println("Adding " + add);
         // If this print appears multiple times very quickly, we may need to find a way to make it not run again until button is RELEASED and then PRESSED again.
-        if (combinedStopTargeting == true) {
-            targetDestination = getLowerHeight() + getUpperHeight();
-            combinedStopTargeting = false;
+        if ((targetDestination + add) > MAX_COMBINED_HEIGHT) {
+            System.out.println("Canceling addToDestination; would have sent above max height");
         } else if ((targetDestination + add) <= MAX_COMBINED_HEIGHT) {
             hovering = false;
             targetDestination += add;
             sendCombinedToDestination(targetDestination);
-        } else if ((targetDestination + add) > MAX_COMBINED_HEIGHT) {
-            System.out.println("Canceling addToDestination; would have sent above max height");
+        } else if (combinedStopTargeting == true) {
+            targetDestination = getLowerHeight() + getUpperHeight();
+            combinedStopTargeting = false;
         }
     }
 
