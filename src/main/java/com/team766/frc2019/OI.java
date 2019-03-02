@@ -92,9 +92,15 @@ public class OI extends Command {
 		}
 
 
-		// cheezy - right stick fwd/back - left stick lft/rgt
+		//cheezy - right stick fwd/back - left stick lft/rgt 
+		//(this kinda got destroyed in the merging of aidan and yardens branches so idk if it works)
 		double fwd_power = Math.pow(-(1.1)*m_joystick1.getRawAxis(1), 1);
 		double turn_power = Math.pow((0.5)*m_joystick2.getRawAxis(0), 1);
+
+		double leftPower = (fwd_power + turn_power);
+		double rightPower = (fwd_power - turn_power);
+		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
+
 		//System.out.println(m_joystick2.getRawAxis(0));
 		/*double leftPower = fwd_power*MAX_ROBOT_VELOCITY;
 		double rightPower = fwd_power*MAX_ROBOT_VELOCITY;
