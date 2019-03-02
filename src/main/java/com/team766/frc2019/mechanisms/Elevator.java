@@ -8,6 +8,7 @@ import com.team766.hal.CANSpeedController;
 import com.team766.hal.DigitalInputReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
+import com.team766.framework.Subroutine;
 
 
 
@@ -132,6 +133,7 @@ public class Elevator extends Mechanism {
         System.out.println("*** setting upper position to " + position + " ***");
         m_upperElevatorMotor.set(ControlMode.Position, position);
     }
+
     
     public void setCombinedPosition(double position) {
         if (setPositionRunning) {
@@ -140,7 +142,7 @@ public class Elevator extends Mechanism {
         setPositionRunning = true;
         final double upperTarget = 92*position/305;
         final double lowerTarget = 213*position/305;
-        System.out.println("Setting position to: " + position + ", target (U, L): " +upperTarget + ", " + lowerTarget + ", combinedStopTargeting: " + combinedStopTargeting );
+        System.out.println("Setting position to: " + position + ", target (U, L): " +upperTarget + ", " + lowerTarget);
         if (position > 0 && position < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT) && combinedStopTargeting == false) {
             if (position < NEAR_MIN_LOWER_HEIGHT) {
                 System.out.println( "Getting elevator to lowest position ");
@@ -177,27 +179,6 @@ public class Elevator extends Mechanism {
                 while( !upperDone || !lowerDone );
 
                 System.out.println("Elevator should be down");
-/*
-                while ((Robot.elevator.getUpperHeight() > upperTarget) && 
-                                (Robot.elevator.getLowerHeight() > lowerTarget || getLowerMinLimitSwitch())){
-                    if (Robot.elevator.getUpperHeight() <= upperTarget) {
-                        Robot.elevator.setUpperPower(0.0);
-                    } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
-                            Robot.elevator.setUpperPower(-0.4);
-                    } else {
-                        Robot.elevator.setUpperPower(-1.0);
-                    }                    
-                    if (Robot.elevator.getLowerHeight() <= lowerTarget || !getLowerMinLimitSwitch()) {
-                        Robot.elevator.setLowerPower(0.0);
-                        hover();
-                    } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
-     //                   System.out.println("Nearing Bottom");
-                        Robot.elevator.setLowerPower(-0.1);
-                    }  else {
-                        Robot.elevator.setLowerPower(-0.9);
-                    }
-                }
-                */
             } else {
                 System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget: " + upperTarget + " lowerTarget: " + lowerTarget);
                 setLowerPosition(lowerTarget);
@@ -209,6 +190,7 @@ public class Elevator extends Mechanism {
         }
         setPositionRunning = false;
     }
+
 
     // Adds to DESTINATION, not current position. If robot is not moving to a LVL already, simply adds to current position.
     public void addToPosition(double add) {
@@ -267,7 +249,6 @@ public class Elevator extends Mechanism {
             if (Robot.elevator.getUpperHeight() >= MAX_UPPER_HEIGHT) {
                 Robot.elevator.setUpperPower(0.0);
             } else if (Robot.elevator.getUpperHeight() > NEAR_MAX_UPPER_HEIGHT) {
-    //            System.out.println("UPPER NEARING DESTINATION");
                 Robot.elevator.setUpperPower(0.6);
             } else {
                 Robot.elevator.setUpperPower(1.0);
@@ -280,7 +261,7 @@ public class Elevator extends Mechanism {
     public void elevatorDown() {
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-            System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+            //System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
         }
         if (Robot.elevator.getUpperHeight() <= MIN_UPPER_HEIGHT) {
             if (Robot.elevator.getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
