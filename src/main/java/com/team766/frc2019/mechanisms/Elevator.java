@@ -20,7 +20,7 @@ public class Elevator extends Mechanism {
     private DigitalInputReader upperElevatorMinLimitSwitch;
     private DigitalInputReader upperElevatorMaxLimitSwitch;
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
-    public static double targetPosition;
+    public double targetPosition;
 
     public static int LVL1 = 100000;
     public static int LVL2 = 1480000;
