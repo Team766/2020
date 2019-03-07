@@ -7,6 +7,7 @@ import com.team766.frc2019.mechanisms.Elevator;
 import com.team766.frc2019.mechanisms.FlowerActuator;
 import com.team766.frc2019.mechanisms.FlowerGripper;
 import com.team766.hal.MyRobot;
+import com.team766.hal.mock.Gyro;
 import com.team766.web.AutonomousSelector;
 import com.team766.web.ConfigUI;
 import com.team766.web.LogViewer;

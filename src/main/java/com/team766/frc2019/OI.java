@@ -57,12 +57,9 @@ public class OI extends Command {
 	public static boolean calibrate;
 
 	public OI() {
-		m_joystick1 = RobotProvider.instance.getJoystick(0);
-		m_joystick2 = RobotProvider.instance.getJoystick(1);
-		m_boxop = RobotProvider.instance.getJoystick(2);
-		new ExtendGripper().start();		
-		takeControl(Robot.drive);
-		m_calibrate = new CalibrateElevator();
+		m_joystick1 = RobotProvider.instance.getJoystick(1);
+		m_joystick2 = RobotProvider.instance.getJoystick(2);
+		m_boxop = RobotProvider.instance.getJoystick(3);		
 	}
 	
 	public void run() {
