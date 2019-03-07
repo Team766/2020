@@ -6,7 +6,7 @@ import com.team766.frc2019.Robot;
 
 public class DriveAuto3 extends Subroutine {
     public DriveAuto3() {
-        //takeControl(Robot.drive);
+        takeControl(Robot.drive);
     }
 
     protected void subroutine() {

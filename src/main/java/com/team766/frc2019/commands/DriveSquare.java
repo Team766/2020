@@ -6,7 +6,7 @@ import com.team766.frc2019.Robot;
 
 public class DriveSquare extends Subroutine {
     public DriveSquare() {
-        //takeControl(Robot.drive);
+        takeControl(Robot.drive);
     }
 
     protected void subroutine() {
