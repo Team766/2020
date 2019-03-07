@@ -8,7 +8,6 @@ import com.team766.hal.CANSpeedController;
 import com.team766.hal.DigitalInputReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
-import com.team766.framework.Subroutine;
 
 
 
@@ -259,18 +258,6 @@ public class Elevator extends Mechanism {
         setPositionRunning = false;
     }
 
-
-    // Adds to DESTINATION, not current position. If robot is not moving to a LVL already, simply adds to current position.
-    public void addToPosition(double add) {
-        if (combinedStopTargeting == true) {
-            targetPosition = getLowerHeight() + getUpperHeight();
-            combinedStopTargeting = false;
-        }
-        if ((targetPosition + add) <= MAX_COMBINED_HEIGHT) {
-            targetPosition += add;
-            m_lowerElevatorMotor.set(ControlMode.Position, targetPosition);
-        }
-    }
 
     public double getUpperHeight() {
        return m_upperElevatorMotor.getSensorPosition();
