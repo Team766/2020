@@ -137,7 +137,7 @@ public class OI extends Command {
 		if(m_boxop.getRawButton(UPPER_UP) ) {
 			Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(0.5);
-			System.out.println("UPPER POWER IS 0.75");
+			System.out.println("UPPER POWER IS 0.5");
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 		} else if (m_boxop.getRawButton(UPPER_DOWN)) {
 			Robot.elevator.upperStopTargeting = true;
