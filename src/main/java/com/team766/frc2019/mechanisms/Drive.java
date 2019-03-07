@@ -3,7 +3,6 @@ package com.team766.frc2019.mechanisms;
 import com.team766.framework.Mechanism;
 import com.team766.hal.GyroReader;
 import com.team766.hal.CANSpeedController;
-import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
@@ -12,7 +11,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.sun.security.auth.login.ConfigFile;
 import com.team766.config.ConfigFileReader;
 
 
@@ -67,8 +65,8 @@ public class Drive extends Mechanism {
         if (m_secondVictor) {
             m_rightVictor2.setInverted(true);
         }
-        // left false right true for new, both false for mule
-        m_leftTalon.setSensorPhase(false);
+        // left true right false for new, both false for mule
+        m_leftTalon.setSensorPhase(true);
         m_rightTalon.setSensorPhase(false);
         m_leftTalon.configNominalOutputForward(0);
         m_leftTalon.configNominalOutputReverse(0);
@@ -131,6 +129,14 @@ public class Drive extends Mechanism {
 
     public double rightEncoderDistance() {
         return(m_rightTalon.getSensorPosition());
+    }
+
+    public double leftMotorVelocity() {
+        return(m_leftTalon.getSensorVelocity());
+    }
+
+    public double rightMotorVelocity() {
+        return(m_rightTalon.getSensorVelocity());
     }
 
     /**
