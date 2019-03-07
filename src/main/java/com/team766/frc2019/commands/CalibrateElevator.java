@@ -47,7 +47,7 @@ public class CalibrateElevator extends Subroutine {
         Robot.elevator.setLowerPower(0.0);
         int caliBreak = 0;
         while (Robot.elevator.getLowerMinLimitSwitch() && Robot.drive.isEnabled()) {
-            Robot.elevator.setLowerPower(-0.2);
+            Robot.elevator.setLowerPower(-0.3);
             if (index++ % 60 == 0 && Robot.drive.isEnabled()) {
                 System.out.println("Lower moving down to calibrate: " + Robot.elevator.getLowerMinLimitSwitch());
             }
