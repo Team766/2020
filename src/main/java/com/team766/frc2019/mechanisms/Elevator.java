@@ -49,10 +49,10 @@ public class Elevator extends Mechanism {
 
     
     private boolean setPositionRunning = false;
-    public static boolean combinedStopTargeting = false;
-    public static boolean upperStopTargeting = false;
-    public static boolean lowerStopTargeting = false;
-    public static boolean hoverAtZero = false;
+    public boolean combinedStopTargeting = false;
+    public boolean upperStopTargeting = false;
+    public boolean lowerStopTargeting = false;
+    public boolean hoverAtZero = false;
     private int index = 0;
 
     public Elevator() {
