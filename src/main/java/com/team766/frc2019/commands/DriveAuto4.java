@@ -16,17 +16,18 @@ public class DriveAuto4 extends Subroutine {
 
         Robot.flowerGripper.extend();
         Robot.flowerActuator.retract();
-        waitForSeconds(3.0);
+        waitForSeconds(1.5);
         Robot.flowerGripper.retract();
         callSubroutine(new PreciseDrive(0, 6.01, .5, 0));
         System.out.println("first drive done");
-        callSubroutine(new PreciseTurn(90));
-        callSubroutine(new PreciseDrive(90, 2, .5, 0));
-        callSubroutine(new PreciseTurn(0));
+        callSubroutine(new PreciseTurnRadius(90, Robot.drive.robotWidth / 2, .75, 0));
+        callSubroutine(new PreciseDrive(90, 4, .5, 0));
+        callSubroutine(new PreciseTurnRadius(0, Robot.drive.robotWidth / 2, .75, 0));
         callSubroutine(new PreciseDrive(0, 4.4, .5, 0));
-        callSubroutine(new PreciseTurn(-90));
-        callSubroutine(new PreciseDrive(-90, 2, .5, 0));
+        callSubroutine(new PreciseTurnRadius(-90, Robot.drive.robotWidth / 2, .75, 0));
+        callSubroutine(new PreciseDrive(-90, 5, .5, 0));
         Robot.flowerActuator.extend();
+        waitForSeconds(1.5);
         Robot.flowerGripper.extend();
         /*//callSubroutine(new LimeLight.jpg);
         callSubroutine(new PreciseDrive(-90, -1, .5, 0));

@@ -14,7 +14,7 @@ public class PreciseDrive extends Subroutine {
     double m_startPower;
     double m_endPower;
     double m_adjustment;
-    double MIN_POWER = 0.2;
+    double MIN_POWER = 0.25;
     double POWER_RAMP = 1.0;
     int driveDir = 1;
     double END_POWER_PERCENT = 0.85;
@@ -39,19 +39,28 @@ public class PreciseDrive extends Subroutine {
     }
 
     protected void subroutine() {
+        Robot.drive.resetEncoders();
         double index = 0;
         m_turnController.setSetpoint(0.0);
         System.out.println("I'm driving to: " + m_targetAngle + " and the difference is : " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " with an power of: " + m_targetPower + " to a distance of: " + m_driveDistance);
         while(getCurrentDistance() * driveDir < Math.abs(m_driveDistance)) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle), true);
-            double turnPower = m_turnController.getOutput() * driveDir;
+            double turnPower = m_turnController.getOutput();
             double straightPower = calcPower(Math.abs(getCurrentDistance() / m_driveDistance)) * driveDir;
-            if (turnPower > 0) {
-                Robot.drive.setDrive(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
+            if (driveDir < 0) {
+                if (turnPower > 0) {
+                    Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
+                } else {
+                    Robot.drive.setDrive(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
+                }
             } else {
-                Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
+                if (turnPower > 0) {
+                    Robot.drive.setDrive(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
+                } else {
+                    Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
+                }
             }
-            if (index % 20 == 0 && Robot.drive.isEnabled()) {
+            if (index % 15 == 0 && Robot.drive.isEnabled()) {
                 System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Power: " + calcPower(Math.abs(getCurrentDistance() / m_driveDistance))+ " Left Power: " + Robot.drive.leftMotorVelocity() + " Right Power: " + Robot.drive.rightMotorVelocity() + " DriveDir: " + driveDir);
             }
             index++;

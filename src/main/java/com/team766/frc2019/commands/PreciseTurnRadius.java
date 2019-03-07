@@ -19,7 +19,7 @@ public class PreciseTurnRadius extends Subroutine {
     double m_insidePower;
     double m_outsidePower;
     double m_initialAngle;
-    double MIN_POWER = 0.2;
+    double MIN_POWER = 0.25;
     double POWER_RAMP = 1.0;
     double END_POWER_PERCENT = 0.85;
     double moveDir = 1;
@@ -62,6 +62,7 @@ public class PreciseTurnRadius extends Subroutine {
     }
 
     protected void subroutine() {
+        Robot.drive.resetEncoders();
         double arcPercent = 0;
         double error = 0;
         double currentDistance = 0;
@@ -75,11 +76,10 @@ public class PreciseTurnRadius extends Subroutine {
 
         double index = 0;
 
-        Robot.drive.resetEncoders();
         m_turnController.reset();
         m_turnController.setSetpoint(0.0);
         currentDistance = Robot.drive.getOutsideEncoderDistance(m_turnDirection) * Robot.drive.DIST_PER_PULSE;
-        System.out.println("I'm turning from: " + m_initialAngle + " to: " + m_targetAngle + " and the difference is : " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " with an outside arc length of: " + m_outsideArcLength);
+        System.out.println("I'm turning from: " + m_initialAngle + " to: " + m_targetAngle + " and the difference is : " + m_angleDiff + " with an outside arc length of: " + m_outsideArcLength + " Current Dist: " + currentDistance);
         while(currentDistance * moveDir < Math.abs(m_outsideArcLength)) {
             currentDistance = Robot.drive.getOutsideEncoderDistance(m_turnDirection) * Robot.drive.DIST_PER_PULSE;
             
@@ -115,19 +115,22 @@ public class PreciseTurnRadius extends Subroutine {
                 rightPower = (straightPower + rightAdjust);
             }
             Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
-            System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + " sp: " + roundOff(straightPower, 2) + " td: " + roundOff(m_outsideArcLength, 2) + " cd: " + roundOff(currentDistance, 2) + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2) + " Left: " + roundOff(leftPower, 4) + " Right: " +  roundOff(rightPower, 4) + " MoveDir: " + moveDir);
+            if (index % 15 == 0) {
+                System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + " sp: " + roundOff(straightPower, 2) + " td: " + roundOff(m_outsideArcLength, 2) + " cd: " + roundOff(currentDistance, 2) + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2) + " Left: " + roundOff(leftPower, 4) + " Right: " +  roundOff(rightPower, 4) + " MoveDir: " + moveDir);
+            }
             index++;
             if (!Robot.drive.isEnabled()) {
                 Robot.drive.nukeRobot();
                 m_turnController.reset();
+                yield();
                 return;
             }
-            yield();
         }
         System.out.println("PreciseTurnRadius loop done");
         Robot.drive.setDrive(m_endPower, m_endPower, ControlMode.PercentOutput);
         Robot.drive.resetEncoders();
         yield();
+        return;
     }
 
     private double calcPower(double arcPercent) {
@@ -153,9 +156,9 @@ public class PreciseTurnRadius extends Subroutine {
 
     private double absoluteMin(double value, double initial) {
         if (initial > 0) {
-            return Math.max(value, -.2);
+            return Math.max(value, -MIN_POWER);
         } else {
-            return Math.min(value, .2);
+            return Math.min(value, MIN_POWER);
         }
     }
 }

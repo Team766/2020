@@ -16,10 +16,14 @@ public class DriveAuto5 extends Subroutine {
 
         Robot.flowerActuator.retract();
         callSubroutine(new ExtendGripper());
+        waitForSeconds(1.0);
         callSubroutine(new PreciseDrive(0, 8, .5, 0));
+        waitForSeconds(1.0);
         Robot.flowerActuator.extend();
+        waitForSeconds(0.5);
         callSubroutine(new RetractGripper());
-        callSubroutine(new PreciseDrive(0, -6, .5, 0));
+        waitForSeconds(0.5);
+        callSubroutine(new PreciseDrive(0, -2, .5, 0));
         
         System.out.println("DriveAuto5 IS DONE");
         Robot.drive.nukeRobot();

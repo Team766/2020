@@ -13,7 +13,10 @@ public class LimeLight {
 		}
 
 		return table.getTable("limelight").getEntry(key);
-    }
+	}
+	
+	//if everything goes wrong for some unexplainable reason define the 
+	//tv tx and ta and all that before hand like the documentation online does
     
 	public static boolean isTarget() {
 		return getValue("tv").getDouble(0) == 1;
