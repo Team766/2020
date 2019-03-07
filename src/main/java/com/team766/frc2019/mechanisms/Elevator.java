@@ -39,11 +39,20 @@ public class Elevator extends Mechanism {
 	private static int MID_HEIGHT_SMALL = 500000;
     private static int MAX_HEIGHT_SMALL = 900000;
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
+    private int upperDirection;
+    private int lowerDirection;
+    private int currentUpperDirection;
+    private int currentLowerDirection;
+    private double upperDistance;
+    private double lowerDistance;
+
+
     
     private boolean setPositionRunning = false;
-    public boolean combinedStopTargeting = false;
-    public boolean upperStopTargeting = false;
-    public boolean hoverAtZero = false;
+    public static boolean combinedStopTargeting = false;
+    public static boolean upperStopTargeting = false;
+    public static boolean lowerStopTargeting = false;
+    public static boolean hoverAtZero = false;
     private int index = 0;
 
     public Elevator() {
@@ -141,14 +150,27 @@ public class Elevator extends Mechanism {
         setPositionRunning = true;
         final double upperTarget = 92*position/305;
         final double lowerTarget = 213*position/305;
-        System.out.println("Setting position to: " + position + ", target (U, L): " +upperTarget + ", " + lowerTarget);
+        if (lowerTarget > getLowerHeight()) {
+            lowerDirection = 1;
+        } else {
+            lowerDirection = -1;
+        }
+
+        if (upperTarget > getUpperHeight()) {
+            upperDirection = 1;
+        } else {
+            upperDirection = -1;
+        }
+
+        System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
         if (position > 0 && position < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT) && combinedStopTargeting == false) {
+            boolean upperDone = false;
+            boolean lowerDone = false;
+            /*
             if (position < NEAR_MIN_LOWER_HEIGHT) {
                 System.out.println( "Getting elevator to lowest position ");
                 // If lower nears bottom, slow down
                 // As long as either upper or lower elevators are higher than their target, lower them down
-                boolean upperDone = false;
-                boolean lowerDone = false;
                 do {
                     //upper
                     if( !upperDone ){
@@ -178,12 +200,58 @@ public class Elevator extends Mechanism {
                 while( !upperDone || !lowerDone );
 
                 System.out.println("Elevator should be down");
+
             } else {
+                */
+                do {
+                    if ( !upperDone ) {
+                        upperDistance = Math.abs(upperTarget - getUpperHeight());
+                        if (upperDistance < 150000) {
+                            setUpperPower(0.3 * upperDirection);
+                            if (upperTarget > getUpperHeight()) {
+                                currentUpperDirection = 1;
+                            } else {
+                                currentUpperDirection = -1;
+                            }
+                            if (upperDirection != currentUpperDirection || !getUpperMinLimitSwitch()) {
+                                setUpperPower(0.0);
+                                upperDone = true;
+                            }
+                        } else {
+                            setUpperPower(1.0 * upperDirection);
+                        }
+                    }
+                    
+                    if ( !lowerDone ) {
+                        lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
+                        if (lowerDistance < 100000) {
+                            setLowerPower(0.3 * lowerDirection);
+                            if (lowerTarget > getLowerHeight()) {
+                                currentLowerDirection = 1;
+                            } else {
+                                currentLowerDirection = -1;
+                            }
+                            if (lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) {
+                                setLowerPower(0.0);
+                                hover();
+                                lowerDone = true;
+                            }
+                        } else {
+                            setLowerPower(1.0 * lowerDirection);
+                        }
+                    }
+                } while ( !upperDone || !lowerDone );
+            //} 
+
+
+
+                /* OLD SET POSITION CODE
                 System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget: " + upperTarget + " lowerTarget: " + lowerTarget);
                 setLowerPosition(lowerTarget);
                 setUpperPosition(upperTarget);
                 targetPosition = position;
-            }
+                */
+            
         } else {
             System.out.println("Cannot reach target position");
         }
@@ -272,6 +340,7 @@ public class Elevator extends Mechanism {
         if (combinedStopTargeting == true) {
             System.out.println("Setting elevator to neutral");
             Robot.elevator.setUpperPower(0.0);
+            Robot.elevator.setLowerPower(0.0);
             hover();
             targetPosition = getLowerHeight() + getUpperHeight();
             combinedStopTargeting = false;
@@ -309,6 +378,14 @@ public class Elevator extends Mechanism {
         }
     }
 
+    public void lowerNeutral() {
+        if (lowerStopTargeting == true) {
+            System.out.println("Setting lower to neutral");
+            Robot.elevator.setLowerPower(0.0);
+            targetPosition = getUpperHeight() + getLowerHeight();
+            lowerStopTargeting = false;
+        }
+    }
 
     /**
     * Move the elevator motor a set number of inches.
