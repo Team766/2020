@@ -25,7 +25,7 @@ public class Drive extends Mechanism {
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
     public static double P = 0.04;
-    public static double I = 0.001;
+    public static double I = 0.002;
     public static double D = 0.004;
     public static double MP = 0.025;
     public static double MI = 0.001;
@@ -123,6 +123,11 @@ public class Drive extends Mechanism {
         m_gyro.reset(); 
     }
 
+    public void resetEncoders() {
+        m_leftTalon.setPosition(0);
+        m_rightTalon.setPosition(0);
+    }
+
     public double leftEncoderDistance() {
         return(m_leftTalon.getSensorPosition());
     }
@@ -149,13 +154,6 @@ public class Drive extends Mechanism {
         } else {
             return(rightEncoderDistance());
         }
-    }
-
-    public void resetEncoders() {
-        m_leftTalon.setPosition(0);
-        m_rightTalon.setPosition(0);
-        //m_leftEncoder.reset();
-        //m_rightEncoder.reset();
     }
 
     /*public void encodersDistancePerPulse(double distancePerPulse) {

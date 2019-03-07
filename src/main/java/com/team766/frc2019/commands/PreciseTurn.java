@@ -8,7 +8,6 @@ import com.team766.controllers.PIDController;
 public class PreciseTurn extends Subroutine {
 
     double m_turnAngle;
-    double m_rampAngle;
     PIDController m_turnController;
 
     public PreciseTurn(double turnAngle) {
@@ -33,9 +32,9 @@ public class PreciseTurn extends Subroutine {
                     power = Robot.drive.MIN_TURN_SPEED;
                 }
             }
-            Robot.drive.setDrive(-power / 2, power / 2, ControlMode.PercentOutput);
+            Robot.drive.setDrive(-power / 1.75, power / 1.75, ControlMode.PercentOutput);
             if (index++ % 10 == 0) {
-                System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) + " Check: " + Robot.drive.isTurnDone(m_turnController));
+                System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) + " POut: " + m_turnController.getOutput());
             }
             if (!Robot.drive.isEnabled()){
                 Robot.drive.nukeRobot();
