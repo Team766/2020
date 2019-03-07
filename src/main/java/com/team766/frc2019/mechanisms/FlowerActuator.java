@@ -10,7 +10,7 @@ public class FlowerActuator extends Mechanism {
     private SolenoidController m_gripper;
 
     public FlowerActuator() {
-        m_gripper = RobotProvider.instance.getSolenoid("actuator.flower"); 
+        m_gripper = RobotProvider.instance.getSolenoid("actuator.flower");
     }
 
     public void extend() {

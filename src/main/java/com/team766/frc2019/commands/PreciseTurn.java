@@ -14,11 +14,12 @@ public class PreciseTurn extends Subroutine {
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
-        takeControl(Robot.drive);
+        //takeControl(Robot.drive);
     }
 
     protected void subroutine() {
         double power = 0;
+        double index = 0;
         System.out.println("hey im gonna turn");
         m_turnController.setSetpoint(0.0);
         m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
@@ -32,13 +33,19 @@ public class PreciseTurn extends Subroutine {
                     power = Robot.drive.MIN_TURN_SPEED;
                 }
             }
-            Robot.drive.setDrive(power, -power, ControlMode.PercentOutput);
-            System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) + " Check: " + Robot.drive.isTurnDone(m_turnController));
+            Robot.drive.setDrive(-power / 2, power / 2, ControlMode.PercentOutput);
+            if (index++ % 10 == 0) {
+                System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) + " Check: " + Robot.drive.isTurnDone(m_turnController));
+            }
             if (!Robot.drive.isEnabled()){
                 Robot.drive.nukeRobot();
                 yield();
+                return;
             }
         }
         Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
+        Robot.drive.resetEncoders();
+        yield();
+        return;
     }
 }

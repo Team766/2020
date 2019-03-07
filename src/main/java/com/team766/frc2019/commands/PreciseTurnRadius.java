@@ -58,7 +58,7 @@ public class PreciseTurnRadius extends Subroutine {
         m_targetPower = targetPower;
         m_endPower = endPower;
         
-        takeControl(Robot.drive);
+        //takeControl(Robot.drive);
     }
 
     protected void subroutine() {
@@ -108,16 +108,14 @@ public class PreciseTurnRadius extends Subroutine {
                 }
             }
             if (m_turnDirection) {
-                leftPower = (straightPower + leftAdjust);// * Robot.drive.POSITION_PER_INCH;
-                rightPower = ((straightPower * (m_insideArcLength / m_outsideArcLength)) + rightAdjust);// * Robot.drive.POSITION_PER_INCH;
+                leftPower = (straightPower + leftAdjust);
+                rightPower = absoluteMin((straightPower * (m_insideArcLength / m_outsideArcLength)) + rightAdjust, straightPower);
             } else {
-                leftPower = ((straightPower * (m_insideArcLength / m_outsideArcLength)) + leftAdjust);// * Robot.drive.POSITION_PER_INCH;
-                rightPower = (straightPower + rightAdjust);// * Robot.drive.POSITION_PER_INCH;
+                leftPower = absoluteMin((straightPower * (m_insideArcLength / m_outsideArcLength)) + leftAdjust, straightPower);
+                rightPower = (straightPower + rightAdjust);
             }
             Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
-            if (index % 30 == 0 && Robot.drive.isEnabled()) {
-                System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + " sp: " + roundOff(straightPower, 2) + " td: " + roundOff(m_outsideArcLength, 2) + " cd: " + roundOff(currentDistance, 2) + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2) + " Left: " + roundOff(leftPower, 4) + " Right: " +  roundOff(rightPower, 4));
-            }
+            System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + " sp: " + roundOff(straightPower, 2) + " td: " + roundOff(m_outsideArcLength, 2) + " cd: " + roundOff(currentDistance, 2) + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2) + " Left: " + roundOff(leftPower, 4) + " Right: " +  roundOff(rightPower, 4) + " MoveDir: " + moveDir);
             index++;
             if (!Robot.drive.isEnabled()) {
                 Robot.drive.nukeRobot();
@@ -126,19 +124,38 @@ public class PreciseTurnRadius extends Subroutine {
             }
             yield();
         }
-        Robot.drive.setDrive(m_endPower * Robot.drive.POSITION_PER_INCH, m_endPower * Robot.drive.POSITION_PER_INCH, ControlMode.Velocity);
+        System.out.println("PreciseTurnRadius loop done");
+        Robot.drive.setDrive(m_endPower, m_endPower, ControlMode.PercentOutput);
         Robot.drive.resetEncoders();
         yield();
     }
 
-    public double calcPower(double arcPercent) {
-        double endPower = (((m_endPower - m_targetPower) / (1 - arcPercent)) * (arcPercent - END_POWER_PERCENT)) + m_targetPower;
-        return Math.max(Math.min(Math.abs(endPower), Math.abs(m_targetPower)), MIN_POWER) * moveDir;
+    private double calcPower(double arcPercent) {
+        //double endPower = (((m_endPower - m_targetPower) / (1 - arcPercent)) * (arcPercent - END_POWER_PERCENT)) + m_targetPower;
+        //return Math.max(Math.min(Math.abs(endPower), Math.abs(m_targetPower)), MIN_POWER) * moveDir;
+
+        if (arcPercent < END_POWER_PERCENT) {
+            return m_targetPower;
+        }
+        double scaledPower = (1 - (arcPercent - END_POWER_PERCENT) / (1 - END_POWER_PERCENT)) * m_targetPower;
+        if (m_targetPower >= 0) {
+            return Math.max(MIN_POWER, scaledPower);
+        } else {
+            return Math.min(-MIN_POWER, scaledPower);
+        }
         //return m_targetPower;
     }
 
-    public double roundOff(double value, int decimalPlaces) {
+    private double roundOff(double value, int decimalPlaces) {
         double multiplier = Math.pow(10, decimalPlaces);
         return Math.round(value * multiplier) / multiplier;
+    }
+
+    private double absoluteMin(double value, double initial) {
+        if (initial > 0) {
+            return Math.max(value, -.2);
+        } else {
+            return Math.min(value, .2);
+        }
     }
 }

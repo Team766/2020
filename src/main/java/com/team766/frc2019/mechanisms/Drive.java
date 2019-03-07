@@ -27,9 +27,9 @@ public class Drive extends Mechanism {
     public static double P = 0.04;
     public static double I = 0.001;
     public static double D = 0.004;
-    public static double MP = 0.05;
-    public static double MI = 0.01;
-    public static double MD = 0.01;
+    public static double MP = 0.025;
+    public static double MI = 0.001;
+    public static double MD = 0.001;
     public static double THRESHOLD = 3;
     public static double MAX_TURN_SPEED = 0.75;
     public static double MIN_TURN_SPEED = 0.1;
