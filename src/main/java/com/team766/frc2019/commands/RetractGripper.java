@@ -9,6 +9,7 @@ public class RetractGripper extends Subroutine {
 
     @Override
     protected void subroutine() {
+        System.out.println("retracting gripper");
         Robot.flowerGripper.retract();
     }
 }

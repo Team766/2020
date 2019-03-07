@@ -154,7 +154,7 @@ public class OI extends Command {
 			Robot.elevator.upperStopTargeting = true;
 			//Robot.elevator.combinedStopTargeting = true;
 			Robot.elevator.setUpperPower(0.5);
-			System.out.println("UPPER POWER IS 0.75");
+			System.out.println("UPPER POWER IS 0.5");
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 			if (calibrate) {
 				Robot.elevator.resetUpperEncoder();
