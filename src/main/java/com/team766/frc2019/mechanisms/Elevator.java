@@ -163,7 +163,7 @@ public class Elevator extends Mechanism {
         }
         if (!setPositionRunning) {
             movePosition();
-            System.out.println("going to movePosition()");
+           // System.out.println("going to movePosition()");
          }
     }
 
@@ -171,7 +171,7 @@ public class Elevator extends Mechanism {
         setPositionRunning = true;
         combinedStopTargeting = false;
 
-        System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
+        //System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
         if (currentPosition > 0 && currentPosition < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
             boolean upperDone = false;
             boolean lowerDone = false;
@@ -225,7 +225,7 @@ public class Elevator extends Mechanism {
                 */
             
         } else {
-            System.out.println("Cannot reach target position");
+           // System.out.println("Cannot reach target position");
         }
         setPositionRunning = false;
     }
