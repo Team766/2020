@@ -9,8 +9,8 @@ public class LimeDrive extends Subroutine {
 
     PIDController m_turnController;
     double m_targetPower;
-    double m_startPower;
     double m_endPower;
+    double m_endDistance;
     double MIN_POWER = 0.25;
     double POWER_RAMP = 1.0;
     double END_POWER_PERCENT = 0.85;
@@ -20,10 +20,11 @@ public class LimeDrive extends Subroutine {
      * @param targetPower
      * @param endPower
      */
-    public LimeDrive(double targetPower, double endPower) {
+    public LimeDrive(double targetPower, double endPower, double endDistance) {
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
         m_targetPower = targetPower;
         m_endPower = endPower;
+        m_endDistance = endDistance;
     }
 
     protected void subroutine() {
