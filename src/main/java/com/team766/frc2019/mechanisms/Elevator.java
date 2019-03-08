@@ -147,6 +147,9 @@ public class Elevator extends Mechanism {
 
     
     public void setCombinedPosition(double position) {
+        if (position < 0) {
+            return;
+        }
         currentPosition = position;
         upperTarget = 3*position/7;
         lowerTarget = 4*position/7;
@@ -175,7 +178,6 @@ public class Elevator extends Mechanism {
         if (currentPosition > 0 && currentPosition < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
             boolean upperDone = false;
             boolean lowerDone = false;
-            do {
                 if ( !upperDone ) {
                     upperDistance = Math.abs(upperTarget - getUpperHeight());
                     if (upperDistance < 150000) {
@@ -185,7 +187,7 @@ public class Elevator extends Mechanism {
                         } else {
                             currentUpperDirection = -1;
                         }
-                        if (upperDirection != currentUpperDirection || !getUpperMinLimitSwitch()) {
+                        if ((upperDirection != currentUpperDirection || !getUpperMinLimitSwitch()) || upperDistance < 40000) {
                             setUpperPower(0.0);
                             upperDone = true;
                         }
@@ -203,7 +205,7 @@ public class Elevator extends Mechanism {
                         } else {
                             currentLowerDirection = -1;
                         }
-                        if (lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) {
+                        if ((lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) || lowerDistance < 40000) {
                             setLowerPower(0.0);
                             hover();
                             lowerDone = true;
@@ -212,7 +214,6 @@ public class Elevator extends Mechanism {
                         setLowerPower(1.0 * lowerDirection);
                     }
                 }
-            } while ( !upperDone || !lowerDone && !combinedStopTargeting);
             //} 
 
 
