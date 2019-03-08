@@ -119,7 +119,6 @@ public class OI extends Command {
 		// BIG ELEVATOR FORCED MANUAL MOVEMENT
 		if(m_boxop.getRawButton(LOWER_UP) ) {
 			Robot.elevator.lowerStopTargeting = true;
-			//Robot.elevator.combinedStopTargeting = true;
 			Robot.elevator.setLowerPower(0.5);
 			if (calibrate) {
 				Robot.elevator.resetLowerEncoder();
@@ -129,7 +128,6 @@ public class OI extends Command {
 			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 		} else if (m_boxop.getRawButton(LOWER_DOWN)) {
 			Robot.elevator.lowerStopTargeting = true;
-			//Robot.elevator.combinedStopTargeting = true;
 			Robot.elevator.setLowerPower(-0.5);
 			if (calibrate) {
 				Robot.elevator.resetLowerEncoder();
@@ -138,18 +136,12 @@ public class OI extends Command {
 			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 
 		} else {
-			if (calibrate) {
-				Robot.elevator.resetLowerEncoder();
-				Robot.elevator.resetUpperEncoder();
-				System.out.println("Calibrated");
-			}
 			Robot.elevator.lowerNeutral();
 		}
 
 		//SMALL ELEVATOR FORCED MOVEMENT 
 		if(m_boxop.getRawButton(UPPER_UP) ) {
 			Robot.elevator.upperStopTargeting = true;
-			//Robot.elevator.combinedStopTargeting = true;
 			Robot.elevator.setUpperPower(0.5);
 			System.out.println("UPPER POWER IS 0.5");
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
@@ -158,7 +150,6 @@ public class OI extends Command {
 				System.out.println("Calibrated");
 			}
 		} else if (m_boxop.getRawButton(UPPER_DOWN)) {
-			//Robot.elevator.combinedStopTargeting = true;
 			Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(-0.5);
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
