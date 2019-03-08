@@ -215,20 +215,20 @@ public class OI extends Command {
 		}
 	
 		// INTAKE FORWARD AND BACK
-		if (m_boxop.getRawButton(INTAKE_ACTUATE)) {
+		if (m_boxop.getRawButton(INTAKE_ACTUATE) || m_joystick1.getRawButton(1)) {
 			Robot.flowerActuator.extend();
-		} else if (m_boxop.getRawButton(INTAKE_RETRACT)) {
+		} else if (m_boxop.getRawButton(INTAKE_RETRACT) || m_joystick1.getRawButton(2)) {
 			Robot.flowerActuator.retract();
 		}
 
 		// GRIPPER ACTIONS
-		if(m_boxop.getRawButton(INTAKE_IN) ) {
+		if(m_boxop.getRawButton(INTAKE_IN) || m_joystick2.getRawButton(2)) {
 			// user clicked on the intake in button
 		//	System.out.println(">>> INTAKE_OPEN pressed");
 			new RetractGripper().start();
 		}
 
-		if(m_boxop.getRawButton(INTAKE_OUT) ) {
+		if(m_boxop.getRawButton(INTAKE_OUT) || m_joystick2.getRawButton(1)) {
 			// user clicked on the intake out button  
 			new ExtendGripper().start();  
 		}
