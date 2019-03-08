@@ -21,7 +21,7 @@ public class Robot extends MyRobot {
 	public static Elevator elevator;
 	public static LimeLight limeLight;
 
-	private OI m_oi;
+	public static OI m_oi;
 	
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;

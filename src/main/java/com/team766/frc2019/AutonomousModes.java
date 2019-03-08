@@ -15,6 +15,8 @@ import com.team766.frc2019.commands.DriveAuto7;
 import com.team766.frc2019.commands.TurnOnce;
 
 public enum AutonomousModes {
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.TeleopAuton.class) TeleopAuton,
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.StraightTeleopAuton.class) StraightTeleopAuton,
   //  @AutonomousCommand(commandClass= DriveAuto4.class) DriveAuto4,
   //  @AutonomousCommand(commandClass= DriveAuto1.class) DriveAuto1,
   //  @AutonomousCommand(commandClass= DriveAuto2.class) DriveAuto2,

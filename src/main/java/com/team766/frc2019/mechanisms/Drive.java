@@ -100,9 +100,9 @@ public class Drive extends Mechanism {
     * Sets the mode and value for the left and right Talon controllers.
     * Each Talon is followed by 2 Victors, which mirror the Talon's output.
     */
-    public void setDrive(double leftSetting, double rightSetting, ControlMode controlMode) {
-        m_leftTalon.set(controlMode, leftSetting);
-        m_rightTalon.set(controlMode, rightSetting);
+    public void setDrive(double leftSetting, double rightSetting, ControlMode percentoutput) {
+        m_leftTalon.set(percentoutput, leftSetting);
+        m_rightTalon.set(percentoutput, rightSetting);
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor == true) {
@@ -117,6 +117,10 @@ public class Drive extends Mechanism {
 
     public boolean isEnabled() {
         return(DriverStation.getInstance().isEnabled());
+    }
+
+    public boolean isAutonomous() {
+        return(DriverStation.getInstance().isAutonomous());
     }
 
     public double getGyroAngle() {
