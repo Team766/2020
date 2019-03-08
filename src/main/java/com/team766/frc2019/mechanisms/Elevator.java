@@ -22,19 +22,19 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
     public static double targetPosition;
 
-    public static int LVL1 = 100000;
-    public static int LVL2 = 1480000;
-    public static int LVL3 = 3000000;
-    public static int MIN_LOWER_HEIGHT = 40000;
-    public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 100000;
-	public static int NEAR_MIN_LOWER_HEIGHT = 400000;
-    private static int NEAR_MAX_LOWER_HEIGHT = 1800000;
-    private static int MAX_LOWER_HEIGHT = 2130000;
+    public static int LVL1 = 100000 * 2/3;
+    public static int LVL2 = 1480000 * 2/3;
+    public static int LVL3 = 3000000 * 2/3;
+    public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
+    public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 100000 * 2/3;
+	public static int NEAR_MIN_LOWER_HEIGHT = 400000 * 2/3;
+    private static int NEAR_MAX_LOWER_HEIGHT = 1800000 ;
+    private static int MAX_LOWER_HEIGHT = 2130000 ;
 	public static int MIN_UPPER_HEIGHT = 0;
-    public static int NEAR_MIN_UPPER_HEIGHT = 200000;
+    public static int NEAR_MIN_UPPER_HEIGHT = 200000  * 2/3;
     private static int NEAR_MAX_UPPER_HEIGHT = 880000;
     private static int MAX_UPPER_HEIGHT = 920000;
-    private static int MID_HEIGHT_BIG = 1000000;
+    private static int MID_HEIGHT_BIG = 1000000 ;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
     private static int MAX_HEIGHT_SMALL = 900000;
@@ -298,21 +298,26 @@ public class Elevator extends Mechanism {
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
             //System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
         }
-        if (Robot.elevator.getUpperHeight() <= MIN_UPPER_HEIGHT) {
-            if (Robot.elevator.getLowerHeight() <= MIN_LOWER_HEIGHT || !getLowerMinLimitSwitch()) {
-                Robot.elevator.setLowerPower(0.0);
-                hover();
-            } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
-    //            System.out.println("Nearing Bottom");
-                Robot.elevator.setLowerPower(-0.4);
-            }  else {
-                Robot.elevator.setLowerPower(-0.9);
-            }
+        boolean upperDone = false;
+        boolean lowerDone = false;
+        if ((Robot.elevator.getUpperHeight() <= MIN_UPPER_HEIGHT) || !getUpperMinLimitSwitch()) {
             Robot.elevator.setUpperPower(0.0);
+            upperDone = true;
         } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
                 Robot.elevator.setUpperPower(-0.4);
         } else {
             Robot.elevator.setUpperPower(-1.0);
+        }
+
+        if ((Robot.elevator.getLowerHeight() <= MIN_LOWER_HEIGHT) || !getLowerMinLimitSwitch()) {
+            Robot.elevator.setLowerPower(0.0);
+            lowerDone = true;
+            hover();
+        } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
+//            System.out.println("Nearing Bottom");
+            Robot.elevator.setLowerPower(-0.4);
+        }  else {
+            Robot.elevator.setLowerPower(-0.9);
         }
     }
 
