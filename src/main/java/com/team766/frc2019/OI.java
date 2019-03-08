@@ -19,7 +19,7 @@ public class OI extends Command {
 	private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
-	private CalibrateElevator m_calibrate;
+	private CalibrateElevator m_calibrate = new CalibrateElevator();
 
 	private static int INTAKE_ACTUATE = 2;
 	private static int INTAKE_RETRACT = 1;
@@ -120,20 +120,22 @@ public class OI extends Command {
 		if(m_boxop.getRawButton(LOWER_UP) ) {
 			Robot.elevator.lowerStopTargeting = true;
 			Robot.elevator.setLowerPower(0.5);
+			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 			if (calibrate) {
 				Robot.elevator.resetLowerEncoder();
 				System.out.println("Calibrated");
 			}
-			System.out.println("LOWER POWER IS 0.5");
+			//System.out.println("LOWER POWER IS 0.5");
 			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 		} else if (m_boxop.getRawButton(LOWER_DOWN)) {
 			Robot.elevator.lowerStopTargeting = true;
 			Robot.elevator.setLowerPower(-0.5);
+			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 			if (calibrate) {
 				Robot.elevator.resetLowerEncoder();
 				System.out.println("Calibrated");
 			}
-			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
+			//System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 
 		} else {
 			Robot.elevator.lowerNeutral();
@@ -142,16 +144,17 @@ public class OI extends Command {
 		//SMALL ELEVATOR FORCED MOVEMENT 
 		if(m_boxop.getRawButton(UPPER_UP) ) {
 			Robot.elevator.upperStopTargeting = true;
-			Robot.elevator.setUpperPower(0.5);
-			System.out.println("UPPER POWER IS 0.5");
+			Robot.elevator.setUpperPower(0.9);
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
+		//	System.out.println("UPPER POWER IS 0.5");
+		//	System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 			if (calibrate) {
 				Robot.elevator.resetUpperEncoder();
 				System.out.println("Calibrated");
 			}
 		} else if (m_boxop.getRawButton(UPPER_DOWN)) {
 			Robot.elevator.upperStopTargeting = true;
-			Robot.elevator.setUpperPower(-0.5);
+			Robot.elevator.setUpperPower(-0.9);
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 			if (calibrate) {
 				Robot.elevator.resetUpperEncoder();
@@ -211,22 +214,21 @@ public class OI extends Command {
 	
 		// INTAKE FORWARD AND BACK
 		if (m_boxop.getRawButton(INTAKE_ACTUATE)) {
-			Robot.flowerActuator.extend();
-		} else if (m_boxop.getRawButton(INTAKE_RETRACT)) {
 			Robot.flowerActuator.retract();
+		} else if (m_boxop.getRawButton(INTAKE_RETRACT)) {
+			Robot.flowerActuator.extend();
 		}
 
 		// GRIPPER ACTIONS
 		if(m_boxop.getRawButton(INTAKE_IN) ) {
 			// user clicked on the intake in button
 			System.out.println(">>> INTAKE_OPEN pressed");
-			new ExtendGripper().start();
-
+			new RetractGripper().start();
 		}
 
 		if(m_boxop.getRawButton(INTAKE_OUT) ) {
-			// user clicked on the intake out button                                                                                                                                            ggbhhhhhhhhhhmmbb  
-			new RetractGripper().start();
+			// user clicked on the intake out button  
+			new ExtendGripper().start();  
 		}
 
 		// ELEVATOR LEVELS
