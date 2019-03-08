@@ -22,14 +22,14 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
     private double targetPosition;
 
-    public static int LVL1 = 100000 * 2/3;
-    public static int LVL2 = 1480000 * 2/3;
-    public static int LVL3 = 3000000 * 2/3;
+    public static int LVL1 = 100000;
+    public static int LVL2 = 1000000;
+    public static int LVL3 = 2000000;
     public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
-    public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 100000 * 2/3;
+    public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 80000 * 2/3;
 	public static int NEAR_MIN_LOWER_HEIGHT = 400000 * 2/3;
-    private static int NEAR_MAX_LOWER_HEIGHT = 1800000 ;
-    private static int MAX_LOWER_HEIGHT = 2130000 ;
+    private static int NEAR_MAX_LOWER_HEIGHT = 950000 ;
+    private static int MAX_LOWER_HEIGHT = 1200000 ;
 	public static int MIN_UPPER_HEIGHT = 0;
     public static int NEAR_MIN_UPPER_HEIGHT = 200000  * 2/3;
     private static int NEAR_MAX_UPPER_HEIGHT = 880000;
@@ -148,8 +148,8 @@ public class Elevator extends Mechanism {
     
     public void setCombinedPosition(double position) {
         currentPosition = position;
-        upperTarget = 92*position/305;
-        lowerTarget = 213*position/305;
+        upperTarget = 3*position/7;
+        lowerTarget = 4*position/7;
         if (lowerTarget > getLowerHeight()) {
             lowerDirection = 1;
         } else {
@@ -304,7 +304,7 @@ public class Elevator extends Mechanism {
             Robot.elevator.setUpperPower(0.0);
             upperDone = true;
         } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
-                Robot.elevator.setUpperPower(-0.4);
+                Robot.elevator.setUpperPower(-0.3);
         } else {
             Robot.elevator.setUpperPower(-1.0);
         }
@@ -315,9 +315,9 @@ public class Elevator extends Mechanism {
             hover();
         } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
 //            System.out.println("Nearing Bottom");
-            Robot.elevator.setLowerPower(-0.4);
+            Robot.elevator.setLowerPower(-0.3);
         }  else {
-            Robot.elevator.setLowerPower(-0.9);
+            Robot.elevator.setLowerPower(-0.8);
         }
     }
 

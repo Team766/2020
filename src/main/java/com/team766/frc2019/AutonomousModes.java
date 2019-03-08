@@ -15,12 +15,12 @@ import com.team766.frc2019.commands.DriveAuto7;
 import com.team766.frc2019.commands.TurnOnce;
 
 public enum AutonomousModes {
-    @AutonomousCommand(commandClass= DriveAuto4.class) DriveAuto4,
-    @AutonomousCommand(commandClass= DriveAuto1.class) DriveAuto1,
-    @AutonomousCommand(commandClass= DriveAuto2.class) DriveAuto2,
-    @AutonomousCommand(commandClass= DriveAuto3.class) DriveAuto3,
-    @AutonomousCommand(commandClass= DriveAuto5.class) DriveAuto5,
-    @AutonomousCommand(commandClass= DriveAuto6.class) DriveAuto6,
+  //  @AutonomousCommand(commandClass= DriveAuto4.class) DriveAuto4,
+  //  @AutonomousCommand(commandClass= DriveAuto1.class) DriveAuto1,
+  //  @AutonomousCommand(commandClass= DriveAuto2.class) DriveAuto2,
+  //  @AutonomousCommand(commandClass= DriveAuto3.class) DriveAuto3,
+  //  @AutonomousCommand(commandClass= DriveAuto5.class) DriveAuto5,
+  //  @AutonomousCommand(commandClass= DriveAuto6.class) DriveAuto6,
     @AutonomousCommand(commandClass= DriveAuto7.class) DriveAuto7,
     @AutonomousCommand(commandClass= Debug.class) Debug,
 
