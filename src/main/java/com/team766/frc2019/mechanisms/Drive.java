@@ -24,20 +24,24 @@ public class Drive extends Mechanism {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public static double P = 0.04;
-    public static double I = 0.002;
-    public static double D = 0.004;
-    public static double MP = 0.025;
-    public static double MI = 0.001;
-    public static double MD = 0.001;
-    public static double THRESHOLD = 3;
-    public static double MAX_TURN_SPEED = 0.75;
-    public static double MIN_TURN_SPEED = 0.1;
-    public static double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
-    public static double POSITION_PER_INCH = 20000;
-    public static double robotWidth = 2.8;
-    public static boolean m_secondVictor = true;
+    public final double P = 0.04;
+    public final double I = 0.002;
+    public final double D = 0.004;
+    public final double MP = 0.025;
+    public final double MI = 0.001;
+    public final double MD = 0.001;
+    public final double THRESHOLD = 3;
+    public final double MAX_TURN_SPEED = 0.75;
+    public final double MIN_TURN_SPEED = 0.1;
+    public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
+    public final double POSITION_PER_INCH = 20000;
+    public final double robotWidth = 2.8;
+    public boolean m_secondVictor = true;
     public double m_gyroDirection = 1.0;
+
+    public final double hatchHeight = 0;
+    public final double mountingHeight = 0;
+    public final double mountingAngle = 0;
     
 
     public Drive() { 

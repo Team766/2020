@@ -6,6 +6,7 @@ import com.team766.frc2019.mechanisms.Drive;
 import com.team766.frc2019.mechanisms.Elevator;
 import com.team766.frc2019.mechanisms.FlowerActuator;
 import com.team766.frc2019.mechanisms.FlowerGripper;
+import com.team766.frc2019.mechanisms.LimeLight;
 import com.team766.hal.MyRobot;
 import com.team766.hal.mock.Gyro;
 import com.team766.web.AutonomousSelector;
@@ -18,6 +19,7 @@ public class Robot extends MyRobot {
 	public static FlowerGripper flowerGripper;
 	public static FlowerActuator flowerActuator;
 	public static Elevator elevator;
+	public static LimeLight limeLight;
 
 	private OI m_oi;
 	
@@ -32,6 +34,7 @@ public class Robot extends MyRobot {
 		flowerGripper = new FlowerGripper();
 		elevator = new Elevator();
 		flowerActuator = new FlowerActuator();
+		limeLight = new LimeLight();
 		
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());
