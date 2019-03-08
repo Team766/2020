@@ -64,6 +64,8 @@ public class OI extends Command {
 	
 	public void run() {
 
+		//System.out.println("joystick1: " + m_joystick1 + "joystick2: " + m_joystick2);
+
 		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.05 ) {
 			fwd_power = 0;
 		} else {
@@ -73,7 +75,7 @@ public class OI extends Command {
 			turn_power = 0;
 		} else {
 			turn_power = 0.05*(Math.abs(m_joystick2.getRawAxis(0))/m_joystick2.getRawAxis(0)) + Math.pow(m_joystick2.getRawAxis(0), 3);
-			turn_power = 0.5 * turn_power;
+			turn_power = 0.4 * turn_power;
 			if (fwd_power > 0.5) {
 				turn_power = 0.8 * turn_power;
 			}
@@ -87,7 +89,7 @@ public class OI extends Command {
 		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
 
 		if (index++ % 50 == 0 && Robot.drive.isEnabled()) {
-			System.out.println("lower height: " + Robot.elevator.getLowerHeight());
+			//System.out.println("lower height: " + Robot.elevator.getLowerHeight());
 
 		}
 		index++;
@@ -120,20 +122,20 @@ public class OI extends Command {
 		if(m_boxop.getRawButton(LOWER_UP) ) {
 			Robot.elevator.lowerStopTargeting = true;
 			Robot.elevator.setLowerPower(0.5);
-			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
+		//	System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 			if (calibrate) {
 				Robot.elevator.resetLowerEncoder();
-				System.out.println("Calibrated");
+			//	System.out.println("Calibrated");
 			}
 			//System.out.println("LOWER POWER IS 0.5");
-			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
+			//System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 		} else if (m_boxop.getRawButton(LOWER_DOWN)) {
 			Robot.elevator.lowerStopTargeting = true;
 			Robot.elevator.setLowerPower(-0.5);
-			System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
+			//System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 			if (calibrate) {
 				Robot.elevator.resetLowerEncoder();
-				System.out.println("Calibrated");
+			//	System.out.println("Calibrated");
 			}
 			//System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 
@@ -145,20 +147,20 @@ public class OI extends Command {
 		if(m_boxop.getRawButton(UPPER_UP) ) {
 			Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(0.9);
-			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
+			//System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 		//	System.out.println("UPPER POWER IS 0.5");
 		//	System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 			if (calibrate) {
 				Robot.elevator.resetUpperEncoder();
-				System.out.println("Calibrated");
+			//	System.out.println("Calibrated");
 			}
 		} else if (m_boxop.getRawButton(UPPER_DOWN)) {
 			Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(-0.9);
-			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
+			//System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 			if (calibrate) {
 				Robot.elevator.resetUpperEncoder();
-				System.out.println("Calibrated");
+				//System.out.println("Calibrated");
 			}
 		} else {
 			Robot.elevator.upperNeutral();
@@ -206,7 +208,7 @@ public class OI extends Command {
 			if (calibrate) {
 				Robot.elevator.resetUpperEncoder();
 				Robot.elevator.resetLowerEncoder();
-				System.out.println("Calibrated");
+			//	System.out.println("Calibrated");
 			}
 		} else {
 			Robot.elevator.elevatorNeutral();
@@ -214,15 +216,15 @@ public class OI extends Command {
 	
 		// INTAKE FORWARD AND BACK
 		if (m_boxop.getRawButton(INTAKE_ACTUATE)) {
-			Robot.flowerActuator.retract();
-		} else if (m_boxop.getRawButton(INTAKE_RETRACT)) {
 			Robot.flowerActuator.extend();
+		} else if (m_boxop.getRawButton(INTAKE_RETRACT)) {
+			Robot.flowerActuator.retract();
 		}
 
 		// GRIPPER ACTIONS
 		if(m_boxop.getRawButton(INTAKE_IN) ) {
 			// user clicked on the intake in button
-			System.out.println(">>> INTAKE_OPEN pressed");
+		//	System.out.println(">>> INTAKE_OPEN pressed");
 			new RetractGripper().start();
 		}
 
