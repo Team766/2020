@@ -1,14 +1,16 @@
 package com.team766.frc2019.commands;
 import com.team766.framework.Subroutine;
+import com.team766.frc2019.Robot;
 
 
 public class FindAngle extends Subroutine {
-	public double compute(double h1, double h2, double distance, int pipeline) {
-		LimeLight.setPipeline(pipeline);
-		waitForSeconds(1.0);
-		return (Math.atan((h2 - h1) / distance) - LimeLight.ty());
-	}
 	protected void subroutine() {
-		System.out.println(LimeLight.distanceDumb(9.01862));
+		System.out.println(Robot.limeLight.distanceDumb(9.01862));
+	}
+
+	public double distanceToTarget(int pipeline, double angleToTarget) {
+		Robot.limeLight.setPipeline(pipeline);
+		waitForSeconds(1.0);
+		return (Robot.drive.hatchHeight - Robot.drive.mountingHeight) / Math.tan(Robot.drive.mountingAngle + angleToTarget);
 	}
 }
