@@ -42,13 +42,14 @@ public class Elevator extends Mechanism {
     public double upperTarget;
     public double lowerTarget;
     public double currentPosition;
+    public double targetPosition; 
     private int upperDirection;
     private int lowerDirection;
     private int currentUpperDirection;
     private int currentLowerDirection;
     private double upperDistance;
     private double lowerDistance;
-
+    
 
     
     private boolean setPositionRunning = false;
@@ -145,8 +146,13 @@ public class Elevator extends Mechanism {
         m_upperElevatorMotor.set(ControlMode.Position, position);
     }
 
+    public double getTargetPosition() {
+        return targetPosition;
+    }
+
     
     public void setCombinedPosition(double position) {
+        targetPosition = position;
         if (position < 0) {
             return;
         }
@@ -164,10 +170,6 @@ public class Elevator extends Mechanism {
         } else {
             upperDirection = -1;
         }
-        if (!setPositionRunning) {
-            movePosition();
-            System.out.println("going to movePosition()");
-         }
     }
 
     public void movePosition() {
