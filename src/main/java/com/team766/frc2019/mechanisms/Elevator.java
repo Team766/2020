@@ -42,13 +42,14 @@ public class Elevator extends Mechanism {
     public double upperTarget;
     public double lowerTarget;
     public double currentPosition;
+    public double currentTargetPosition;
     private int upperDirection;
     private int lowerDirection;
     private int currentUpperDirection;
     private int currentLowerDirection;
     private double upperDistance;
     private double lowerDistance;
-
+    
 
     
     private boolean setPositionRunning = false;
@@ -145,8 +146,16 @@ public class Elevator extends Mechanism {
         m_upperElevatorMotor.set(ControlMode.Position, position);
     }
 
+    public double getTargetPosition() {
+        return currentTargetPosition;
+    }
+
     
     public void setCombinedPosition(double position) {
+        currentTargetPosition = position;
+        if (position < 0) {
+            return;
+        }
         currentPosition = position;
         upperTarget = 3*position/7;
         lowerTarget = 4*position/7;
@@ -161,13 +170,12 @@ public class Elevator extends Mechanism {
         } else {
             upperDirection = -1;
         }
-        if (!setPositionRunning) {
-            movePosition();
-           // System.out.println("going to movePosition()");
-         }
     }
 
     public void movePosition() {
+        if (currentTargetPosition < 0) {
+            return; 
+        }
         setPositionRunning = true;
         combinedStopTargeting = false;
 
@@ -175,7 +183,6 @@ public class Elevator extends Mechanism {
         if (currentPosition > 0 && currentPosition < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
             boolean upperDone = false;
             boolean lowerDone = false;
-            do {
                 if ( !upperDone ) {
                     upperDistance = Math.abs(upperTarget - getUpperHeight());
                     if (upperDistance < 150000) {
@@ -185,7 +192,7 @@ public class Elevator extends Mechanism {
                         } else {
                             currentUpperDirection = -1;
                         }
-                        if (upperDirection != currentUpperDirection || !getUpperMinLimitSwitch()) {
+                        if ((upperDirection != currentUpperDirection || !getUpperMinLimitSwitch()) || upperDistance < 40000) {
                             setUpperPower(0.0);
                             upperDone = true;
                         }
@@ -195,24 +202,24 @@ public class Elevator extends Mechanism {
                 }
                 
                 if ( !lowerDone ) {
-                    lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
-                    if (lowerDistance < 100000) {
-                        setLowerPower(0.6 * lowerDirection);
-                        if (lowerTarget > getLowerHeight()) {
-                            currentLowerDirection = 1;
-                        } else {
-                            currentLowerDirection = -1;
-                        }
-                        if (lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) {
-                            setLowerPower(0.0);
-                            hover();
-                            lowerDone = true;
-                        }
+                lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
+                if (lowerDistance < 100000) {
+                    setLowerPower(0.6 * lowerDirection);
+                    if (lowerTarget > getLowerHeight()) {
+                        currentLowerDirection = 1;
                     } else {
-                        setLowerPower(1.0 * lowerDirection);
+                        currentLowerDirection = -1;
                     }
+                    if ((lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) || lowerDistance < 40000) {
+                        setLowerPower(0.0);
+                        hover();
+                        lowerDone = true;
+                    }
+                } else {
+                    setLowerPower(1.0 * lowerDirection);
                 }
-            } while ( !upperDone || !lowerDone && !combinedStopTargeting);
+            }
+
             //} 
 
 
