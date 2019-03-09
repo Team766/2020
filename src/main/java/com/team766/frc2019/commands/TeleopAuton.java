@@ -106,6 +106,4 @@ public class TeleopAuton extends Subroutine {
             yield();
         }
     }
-
-
 }
