@@ -10,40 +10,20 @@ public class DriveAuto3 extends Subroutine {
     }
 
     protected void subroutine() {
-        System.out.println("DRIVESQUARE STARTING");
-        Robot.drive.nukeRobot();
+        System.out.println("DriveAuto5 STARTING");
+        Robot.drive.resetEncoders();
+        Robot.drive.resetGyro();
 
-        callSubroutine(new PreciseDrive(0, 6.01, .75, .5));
-        callSubroutine(new PreciseTurnRadius(-90, 2.16, .75, .75));
-        callSubroutine(new PreciseTurnRadius(0, 2.24, .75, .75));
-        callSubroutine(new PreciseDrive(0, 2.0, .75, .75));
-        callSubroutine(new PreciseTurnRadius(90, 2.24, .75, .75));
-        callSubroutine(new PreciseDrive(90, 1, .75, 0));
-        //callSubroutine(new LimeLight.jpeg);
+        Robot.flowerActuator.retract();
         callSubroutine(new ExtendGripper());
-        callSubroutine(new PreciseDrive(90, -1, .75, .75));
-        callSubroutine(new PreciseTurnRadius(0, 3, -.75, -.75));
-        callSubroutine(new PreciseDrive(0, -5, .75, .75));
-        callSubroutine(new PreciseTurnRadius(90, 3, -.75, -.75));
-        callSubroutine(new PreciseTurnRadius(0, 3, -.75, -.75));
-        callSubroutine(new PreciseDrive(0, -3.5, .75, 0));
-        callSubroutine(new PreciseTurn(180));
-        callSubroutine(new ExtendGripper());
-        callSubroutine(new PreciseDrive(180, 3.5, .75, 0));
-        //callSubroutine(new LimeLight.jpeg);
+        waitForSeconds(1.0);
+        callSubroutine(new PreciseDrive(0, 8, .5, 0));
+        waitForSeconds(1.5);
         callSubroutine(new RetractGripper());
-        callSubroutine(new PreciseDrive(180, -3.5, .75, 0));
-        callSubroutine(new PreciseTurn(0));
-        callSubroutine(new PreciseDrive(0, 3.5, .75, .75));
-        callSubroutine(new PreciseTurnRadius(90, 3, .75, .75));
-        callSubroutine(new PreciseTurnRadius(0, 3, .75, .75));
-        callSubroutine(new PreciseDrive(0, 6.666666667, .75, .75));
-        callSubroutine(new PreciseTurnRadius(90, 3, .75, 0));
-        //callSubroutine(new LimeLight.jpeg);
-        callSubroutine(new ExtendGripper());
+        waitForSeconds(0.5);
+        callSubroutine(new PreciseDrive(0, -2, .5, 0));
         
-        
-        System.out.println("DRIVESQUARE IS DONE");
+        System.out.println("DriveAuto5 IS DONE");
         Robot.drive.nukeRobot();
         yield();
     }

@@ -10,37 +10,15 @@ public class DriveAuto4 extends Subroutine {
     }
 
     protected void subroutine() {
-        System.out.println("DriveAuto4 STARTING");
+        System.out.println("DriveAuto7 STARTING");
         Robot.drive.resetEncoders();
         Robot.drive.resetGyro();
 
-        Robot.flowerGripper.extend();
-        Robot.flowerActuator.retract();
-        waitForSeconds(1.5);
-        Robot.flowerGripper.retract();
-        callSubroutine(new PreciseDrive(0, 6.01, .5, 0));
-        System.out.println("first drive done");
-        callSubroutine(new PreciseTurnRadius(90, Robot.drive.robotWidth / 2, .75, 0));
-        callSubroutine(new PreciseDrive(90, 4, .5, 0));
-        callSubroutine(new PreciseTurnRadius(0, Robot.drive.robotWidth / 2, .75, 0));
-        callSubroutine(new PreciseDrive(0, 4.4, .5, 0));
-        callSubroutine(new PreciseTurnRadius(-90, Robot.drive.robotWidth / 2, .75, 0));
-        callSubroutine(new PreciseDrive(-90, 5, .5, 0));
-        Robot.flowerActuator.extend();
-        waitForSeconds(1.5);
-        Robot.flowerGripper.extend();
-        /*//callSubroutine(new LimeLight.jpg);
-        callSubroutine(new PreciseDrive(-90, -1, .5, 0));
-        callSubroutine(new PreciseTurn(-200));
-        callSubroutine(new PreciseDrive(-160, 10, .75, 0));
-        callSubroutine(new PreciseTurn(-180));
-        //callSubroutine(new LimeLight.jpg);
-        callSubroutine(new PreciseTurn(-10));
-        callSubroutine(new PreciseDrive(-10, 12, .75, 0));
-        callSubroutine(new PreciseTurn(-90));
-        //callSubroutine(new LimeLight.jpg);*/
+        callSubroutine(new PreciseDrive(0, 10, .5, 0));
+        callSubroutine(new PreciseTurn(180));
+        callSubroutine(new PreciseDrive(180, 10, .5, 0));
         
-        System.out.println("DriveAuto4 IS DONE");
+        System.out.println("DriveAuto7 IS DONE");
         Robot.drive.nukeRobot();
         yield();
     }

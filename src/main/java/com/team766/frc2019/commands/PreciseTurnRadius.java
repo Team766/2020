@@ -21,7 +21,7 @@ public class PreciseTurnRadius extends Subroutine {
     double m_initialAngle;
     double MIN_POWER = 0.25;
     double POWER_RAMP = 1.0;
-    double END_POWER_PERCENT = 0.85;
+    double END_POWER_PERCENT = 0.75;
     double moveDir = 1;
     boolean m_turnDirection;
     //true is left encoder false is right encoder
