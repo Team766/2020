@@ -42,7 +42,7 @@ public class Elevator extends Mechanism {
     public double upperTarget;
     public double lowerTarget;
     public double currentPosition;
-    public double targetPosition; 
+    public double currentTargetPosition;
     private int upperDirection;
     private int lowerDirection;
     private int currentUpperDirection;
@@ -147,12 +147,12 @@ public class Elevator extends Mechanism {
     }
 
     public double getTargetPosition() {
-        return targetPosition;
+        return currentTargetPosition;
     }
 
     
     public void setCombinedPosition(double position) {
-        targetPosition = position;
+        currentTargetPosition = position;
         if (position < 0) {
             return;
         }
@@ -173,6 +173,9 @@ public class Elevator extends Mechanism {
     }
 
     public void movePosition() {
+        if (currentTargetPosition < 0) {
+            return; 
+        }
         setPositionRunning = true;
         combinedStopTargeting = false;
 
@@ -199,23 +202,24 @@ public class Elevator extends Mechanism {
                 }
                 
                 if ( !lowerDone ) {
-                    lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
-                    if (lowerDistance < 100000) {
-                        setLowerPower(0.6 * lowerDirection);
-                        if (lowerTarget > getLowerHeight()) {
-                            currentLowerDirection = 1;
-                        } else {
-                            currentLowerDirection = -1;
-                        }
-                        if ((lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) || lowerDistance < 40000) {
-                            setLowerPower(0.0);
-                            hover();
-                            lowerDone = true;
-                        }
+                lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
+                if (lowerDistance < 100000) {
+                    setLowerPower(0.6 * lowerDirection);
+                    if (lowerTarget > getLowerHeight()) {
+                        currentLowerDirection = 1;
                     } else {
-                        setLowerPower(1.0 * lowerDirection);
+                        currentLowerDirection = -1;
                     }
+                    if ((lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) || lowerDistance < 40000) {
+                        setLowerPower(0.0);
+                        hover();
+                        lowerDone = true;
+                    }
+                } else {
+                    setLowerPower(1.0 * lowerDirection);
                 }
+            }
+
             //} 
 
 
