@@ -246,7 +246,7 @@ public class Elevator extends Mechanism {
                 */
             
         } else {
-            System.out.println("Cannot reach target position");
+           // System.out.println("Cannot reach target position");
         }
         setPositionRunning = false;
     }

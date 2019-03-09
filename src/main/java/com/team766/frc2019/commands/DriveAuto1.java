@@ -18,10 +18,11 @@ public class DriveAuto1 extends Subroutine {
         callSubroutine(new PreciseTurnRadius(0, 2.24, .5, .5));
         callSubroutine(new PreciseDrive(0, 2.0, .5, .5));
         callSubroutine(new PreciseTurnRadius(-90, 2.24, .5, .5));
-        callSubroutine(new PreciseDrive(-90, 1, .5, 0));
+        callSubroutine(new PreciseDrive(-90, 3, .5, 0));
         //callSubroutine(new LimeLight.jpeg);
         callSubroutine(new ExtendGripper());
-        callSubroutine(new PreciseDrive(-90, -1, .5, .5));
+        waitForSeconds(1.0);
+        callSubroutine(new PreciseDrive(-90, -3, .5, .5));
         callSubroutine(new PreciseTurnRadius(0, 3, -.5, -.5));
         callSubroutine(new PreciseDrive(0, -5, .5, .5));
         callSubroutine(new PreciseTurnRadius(-90, 3, -.5, -.5));
@@ -29,18 +30,22 @@ public class DriveAuto1 extends Subroutine {
         callSubroutine(new PreciseDrive(0, -3.5, .5, 0));
         callSubroutine(new PreciseTurn(180));
         callSubroutine(new ExtendGripper());
-        callSubroutine(new PreciseDrive(180, 3.5, .5, 0));
+        callSubroutine(new PreciseDrive(180, 4, .5, 0));
         //callSubroutine(new LimeLight.jpeg);
         callSubroutine(new RetractGripper());
-        callSubroutine(new PreciseDrive(180, -3.5, .5, 0));
+        waitForSeconds(1.0);
+        callSubroutine(new PreciseDrive(180, 4, .5, 0));
         callSubroutine(new PreciseTurn(0));
         callSubroutine(new PreciseDrive(0, 3.5, .5, .5));
         callSubroutine(new PreciseTurnRadius(-90, 3, .5, .5));
         callSubroutine(new PreciseTurnRadius(0, 3, .5, .5));
         callSubroutine(new PreciseDrive(0, 6.666666667, .5, .5));
         callSubroutine(new PreciseTurnRadius(-90, 3, .5, 0));
+        callSubroutine(new PreciseDrive(-90, 1, .5, 0));
         //callSubroutine(new LimeLight.jpeg);
         callSubroutine(new ExtendGripper());
+        waitForSeconds(1.0);
+        callSubroutine(new PreciseDrive(-90, 1, .5, 0));
         
         
         System.out.println("DRIVESQUARE IS DONE");

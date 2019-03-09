@@ -48,13 +48,20 @@ public class StraightTeleopAuton extends Subroutine {
 
     protected void subroutine() {
 
-        callSubroutine(new PreciseDrive(0, 8, .5, 0));
-        System.out.println("please dont show me again");
+        Robot.drive.resetGyro();
+        waitForSeconds(1.0);
+        callSubroutine(new RetractGripper());
+        callSubroutine(new PreciseDrive(0, 8, .35, 0));
+        callSubroutine(new PreciseDrive(0, 4, .2, 0));
+        waitForSeconds(2.0);
+        callSubroutine(new ExtendGripper());
+        callSubroutine(new PreciseDrive(0, -1, .35, 0));
+        waitForSeconds(1.5);
         
         while (Robot.drive.isAutonomous() == true) {
-           // System.out.println("joystick1: " + m_joystick1.getRawAxis(0) + "joystick2: " + m_joystick2.getRawAxis(1));
-           // System.out.println("iteration");
-           // System.out.println("joystick1: " + m_joystick1 + "joystick2: " + m_joystick2);
+            // System.out.println("joystick1: " + m_joystick1.getRawAxis(0) + "joystick2: " + m_joystick2.getRawAxis(1));
+            // System.out.println("iteration");
+            // System.out.println("joystick1: " + m_joystick1 + "joystick2: " + m_joystick2);
 
             if (Math.abs(m_joystick1.getRawAxis(1)) < 0.05 ) {
                 fwd_power = 0;
@@ -65,7 +72,7 @@ public class StraightTeleopAuton extends Subroutine {
                 turn_power = 0;
             } else {
                 turn_power = 0.05*(Math.abs(m_joystick2.getRawAxis(0))/m_joystick2.getRawAxis(0)) + Math.pow(m_joystick2.getRawAxis(0), 3);
-                turn_power = 0.4 * turn_power;
+                turn_power = 0.5 * turn_power;
                 if (fwd_power > 0.5) {
                     turn_power = 0.8 * turn_power;
                 }
@@ -109,6 +116,4 @@ public class StraightTeleopAuton extends Subroutine {
             yield();
         }
     }
-
-
 }

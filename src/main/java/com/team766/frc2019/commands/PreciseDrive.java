@@ -17,7 +17,7 @@ public class PreciseDrive extends Subroutine {
     double MIN_POWER = 0.25;
     double POWER_RAMP = 1.0;
     int driveDir = 1;
-    double END_POWER_PERCENT = 0.85;
+    double END_POWER_PERCENT = 0.75;
 
     /**
      * Precisely drives for the set parameters.
