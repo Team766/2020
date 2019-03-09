@@ -13,7 +13,7 @@ public class LimeDrive extends Subroutine {
     double m_endDistance;
     double MIN_POWER = 0.25;
     double POWER_RAMP = 1.0;
-    double END_POWER_PERCENT = 0.85;
+    double END_POWER_PERCENT = 0.75;
 
     /**
      * Precisely drives for the set parameters.
@@ -34,7 +34,7 @@ public class LimeDrive extends Subroutine {
         double targetAngle = Robot.limeLight.ty();
         m_turnController.setSetpoint(0.0);
         System.out.println("I shall seek and destroy/put on a hatch on something");
-        while(distanceToTarget > 0) {
+        while(distanceToTarget > m_endDistance) {
             distanceToTarget = Robot.limeLight.distanceToTarget(1, targetAngle);
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), Robot.limeLight.ty()), true);
             double turnPower = m_turnController.getOutput();
