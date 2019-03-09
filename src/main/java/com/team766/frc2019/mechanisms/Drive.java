@@ -69,8 +69,8 @@ public class Drive extends Mechanism {
         if (m_secondVictor) {
             m_rightVictor2.setInverted(true);
         }
-        // left true right false for new, both false for mule
-        m_leftTalon.setSensorPhase(true);
+        // left true right false for new, both false for mule and marie
+        m_leftTalon.setSensorPhase(false);
         m_rightTalon.setSensorPhase(false);
         m_leftTalon.configNominalOutputForward(0);
         m_leftTalon.configNominalOutputReverse(0);

@@ -48,8 +48,11 @@ public class StraightTeleopAuton extends Subroutine {
 
     protected void subroutine() {
 
+        callSubroutine(new ExtendGripper());
         callSubroutine(new PreciseDrive(0, 8, .5, 0));
-        System.out.println("please dont show me again");
+        waitForSeconds(4.0);
+        callSubroutine(new RetractGripper());
+        callSubroutine(new PreciseDrive(0, -1, .5, 0));
         
         while (Robot.drive.isAutonomous() == true) {
            // System.out.println("joystick1: " + m_joystick1.getRawAxis(0) + "joystick2: " + m_joystick2.getRawAxis(1));
