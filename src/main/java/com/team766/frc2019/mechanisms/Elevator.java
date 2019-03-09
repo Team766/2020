@@ -41,7 +41,6 @@ public class Elevator extends Mechanism {
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
     public double upperTarget;
     public double lowerTarget;
-    public double currentPosition;
     public double currentTargetPosition;
     private int upperDirection;
     private int lowerDirection;
@@ -156,7 +155,6 @@ public class Elevator extends Mechanism {
         if (position < 0) {
             return;
         }
-        currentPosition = position;
         upperTarget = 3*position/7;
         lowerTarget = 4*position/7;
         if (lowerTarget > getLowerHeight()) {
@@ -173,35 +171,34 @@ public class Elevator extends Mechanism {
     }
 
     public void movePosition() {
-        if (currentTargetPosition < 0) {
+        if (currentTargetPosition < 0 || currentTargetPosition > (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
             return; 
         }
         setPositionRunning = true;
         combinedStopTargeting = false;
 
         System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
-        if (currentPosition > 0 && currentPosition < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
-            boolean upperDone = false;
-            boolean lowerDone = false;
-                if ( !upperDone ) {
+                if ( upperTarget > 0 ) {
                     upperDistance = Math.abs(upperTarget - getUpperHeight());
                     if (upperDistance < 150000) {
-                        setUpperPower(0.6 * upperDirection);
                         if (upperTarget > getUpperHeight()) {
                             currentUpperDirection = 1;
                         } else {
                             currentUpperDirection = -1;
                         }
+                        setUpperPower(0.6 * upperDirection);
                         if ((upperDirection != currentUpperDirection || !getUpperMinLimitSwitch()) || upperDistance < 40000) {
+                            System.out.println("Stop upper");
                             setUpperPower(0.0);
-                            upperDone = true;
+                            upperTarget = -1;
                         }
                     } else {
                         setUpperPower(1.0 * upperDirection);
                     }
                 }
                 
-                if ( !lowerDone ) {
+                
+                if ( lowerTarget > 0 ) {
                 lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
                 if (lowerDistance < 100000) {
                     setLowerPower(0.6 * lowerDirection);
@@ -212,13 +209,12 @@ public class Elevator extends Mechanism {
                     }
                     if ((lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) || lowerDistance < 40000) {
                         setLowerPower(0.0);
-                        hover();
-                        lowerDone = true;
+                       hover();
+                        lowerTarget = -1;
                     }
                 } else {
                     setLowerPower(1.0 * lowerDirection);
                 }
-            }
 
             //} 
 
@@ -237,13 +233,6 @@ public class Elevator extends Mechanism {
         setPositionRunning = false;
     }
 
-    public void addToPosition( double position ) {
-        if (!setPositionRunning) {
-            currentPosition = getUpperHeight() + getLowerHeight(); 
-        }
-        currentPosition += position; 
-        setCombinedPosition(currentPosition);
-    }
 
 
     public double getUpperHeight() {
