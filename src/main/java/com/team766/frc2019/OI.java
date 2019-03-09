@@ -282,6 +282,9 @@ public class OI extends Command {
 			return;
 		}
 
+		if (index % 30 == 0) {
+			//System.out.println("Target Position: " + targetPosition);
+		}
 		Robot.elevator.movePosition(); 
 	}
 }
