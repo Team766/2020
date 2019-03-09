@@ -9,6 +9,7 @@ public class ADXRS450_Gyro extends edu.wpi.first.wpilibj.ADXRS450_Gyro implement
 		super(port);
 		if (!isConnected()) {
 			throw new RuntimeException("Gyro is not connected");
+		//	System.out.println("Gyro is not connected!");
 		} else {
 			System.out.println("Gyro is connected!");
 		}
