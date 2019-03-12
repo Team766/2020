@@ -57,7 +57,7 @@ public class OI extends Command {
 	private boolean addBigButton = false;
 	private boolean subBigButton = false;
 
-
+	public boolean driverControl = false;
 
 	public double targetPosition = -1; 
 
@@ -106,6 +106,7 @@ public class OI extends Command {
 		// SMALL ELEVATOR FORCED MANUAL MOVEMENT
 		
 		if(m_boxop.getRawButton(CALI_BUTTON) ) {
+			driverControl = true;
 			//CURRENTLY CALIBRATES
 			/*Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(0.5);
@@ -130,6 +131,7 @@ public class OI extends Command {
 
 		// BIG ELEVATOR FORCED MANUAL MOVEMENT
 		if(m_boxop.getRawButton(LOWER_UP) ) {
+			driverControl = true;
 			Robot.elevator.setCombinedPosition( -1);
 			Robot.elevator.lowerStopTargeting = true;
 			Robot.elevator.setLowerPower(0.5);
@@ -141,6 +143,7 @@ public class OI extends Command {
 			//System.out.println("LOWER POWER IS 0.5");
 			//System.out.println("Lower Height: " + Robot.elevator.getLowerHeight());
 		} else if (m_boxop.getRawButton(LOWER_DOWN)) {
+			driverControl = true;
 			Robot.elevator.setCombinedPosition( -1);
 			Robot.elevator.lowerStopTargeting = true;
 			Robot.elevator.setLowerPower(-0.5);
@@ -157,6 +160,7 @@ public class OI extends Command {
 
 		//SMALL ELEVATOR FORCED MOVEMENT 
 		if(m_boxop.getRawButton(UPPER_UP) ) {
+			driverControl = true;
 			Robot.elevator.setCombinedPosition( -1);
 			Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(0.9);
@@ -168,6 +172,7 @@ public class OI extends Command {
 			//	System.out.println("Calibrated");
 			}
 		} else if (m_boxop.getRawButton(UPPER_DOWN)) {
+			driverControl = true;
 			Robot.elevator.setCombinedPosition( -1);
 			Robot.elevator.upperStopTargeting = true;
 			Robot.elevator.setUpperPower(-0.9);
@@ -181,6 +186,7 @@ public class OI extends Command {
 		}
 		
 		if (m_boxop.getRawButton(ADD_SMALL)) {
+			driverControl = true;
 			if (!addSmallButton) {
 				addSmallButton = true;
 				Robot.elevator.setCombinedPosition( Robot.elevator.getTargetPosition() + 100000);
@@ -190,6 +196,7 @@ public class OI extends Command {
 		}
 
 		if (m_boxop.getRawButton(SUBTRACT_SMALL)) {
+			driverControl = true;
 			if (!subSmallButton) {
 				subSmallButton = true;
 				Robot.elevator.setCombinedPosition( Robot.elevator.getTargetPosition() - 100000);
@@ -199,6 +206,7 @@ public class OI extends Command {
 		}
 
 		if (m_boxop.getRawButton(ADD_BIG)) {
+			driverControl = true;
 			if (!addBigButton) {
 				addBigButton = true;
 				Robot.elevator.setCombinedPosition( Robot.elevator.getTargetPosition() + 400000);
@@ -208,6 +216,7 @@ public class OI extends Command {
 		}
 
 		if (m_boxop.getRawButton(SUBTRACT_BIG)) {
+			driverControl = true;
 			if (!subBigButton) {
 				subBigButton = true;
 				Robot.elevator.setCombinedPosition( Robot.elevator.getTargetPosition() - 400000);
@@ -218,6 +227,7 @@ public class OI extends Command {
 
 
 		if (m_boxop.getRawButton(CALI_SWITCH)) {
+			driverControl = true;
 			calibrate = true;
 			//System.out.println("Calibrated");
 		} else {
@@ -227,9 +237,11 @@ public class OI extends Command {
 
 		// COMBINED ELEVATOR MOVEMENT ALGORITHM
 		if (m_boxop.getRawButton(ELEVATOR_UP) ) {
+			driverControl = true;
 			Robot.elevator.setCombinedPosition(-1);
 			Robot.elevator.elevatorUp(); 
 		} else if (m_boxop.getRawButton(ELEVATOR_DOWN)) {
+			driverControl = true;
 			Robot.elevator.setCombinedPosition(-1);
 			Robot.elevator.elevatorDown();
 			if (calibrate) {
@@ -243,19 +255,23 @@ public class OI extends Command {
 	
 		// INTAKE FORWARD AND BACK
 		if (m_boxop.getRawButton(INTAKE_ACTUATE) || m_joystick1.getRawButton(1)) {
+			driverControl = true;
 			Robot.flowerActuator.extend();
 		} else if (m_boxop.getRawButton(INTAKE_RETRACT) || m_joystick1.getRawButton(2)) {
+			driverControl = true;
 			Robot.flowerActuator.retract();
 		}
 
 		// GRIPPER ACTIONS
 		if(m_boxop.getRawButton(INTAKE_IN) || m_joystick2.getRawButton(2)) {
+			driverControl = true;
 			// user clicked on the intake in button
 		//	System.out.println(">>> INTAKE_OPEN pressed");
 			new RetractGripper().start();
 		}
 
 		if(m_boxop.getRawButton(INTAKE_OUT) || m_joystick2.getRawButton(1)) {
+			driverControl = true;
 			// user clicked on the intake out button  
 			new ExtendGripper().start();  
 		}
@@ -266,12 +282,15 @@ public class OI extends Command {
 					m_boxop.getRawButton(ELEVATOR_LVL3) ? 3 : -1;
 		switch( tgtLvl ){
 			case 1:
+			driverControl = true;
 			Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
 				break;
 			case 2:
+			driverControl = true;
 			Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
 				break;
 			case 3:
+			driverControl = true;
 			Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
 				break;
 		}
