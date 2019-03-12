@@ -22,26 +22,30 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
     private double targetPosition;
 
-    public static int LVL1 = 100000;
+    public static int LVL1 = 5000;
     public static int LVL2 = 1000000;
-    public static int LVL3 = 2000000;
+    public static int LVL3 = 2050000;
     public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
     public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 80000 * 2/3;
 	public static int NEAR_MIN_LOWER_HEIGHT = 400000 * 2/3;
-    private static int NEAR_MAX_LOWER_HEIGHT = 950000 ;
-    private static int MAX_LOWER_HEIGHT = 1200000 ;
+    private static int NEAR_MAX_LOWER_HEIGHT = 950000;
+    private static int MAX_LOWER_HEIGHT = 1200000;
 	public static int MIN_UPPER_HEIGHT = 0;
-    public static int NEAR_MIN_UPPER_HEIGHT = 200000  * 2/3;
+    public static int NEAR_MIN_UPPER_HEIGHT = 200000 * 2/3;
     private static int NEAR_MAX_UPPER_HEIGHT = 880000;
     private static int MAX_UPPER_HEIGHT = 920000;
-    private static int MID_HEIGHT_BIG = 1000000 ;
+    private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
     private static int MAX_HEIGHT_SMALL = 900000;
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
+    public boolean setLow = false;
+    public double slowMultiplier;
+    public int setPosUpperNear;
+    public int setPosLowerNear;
+    public double lowerDownSpeed;
     public double upperTarget;
     public double lowerTarget;
-    public double currentPosition;
     public double currentTargetPosition;
     private int upperDirection;
     private int lowerDirection;
@@ -153,10 +157,22 @@ public class Elevator extends Mechanism {
     
     public void setCombinedPosition(double position) {
         currentTargetPosition = position;
+        if (currentTargetPosition <= 100000) {
+            setLow = true;
+            setPosUpperNear = NEAR_MIN_UPPER_HEIGHT;
+            setPosLowerNear = NEAR_MIN_LOWER_HEIGHT;
+            slowMultiplier = 0.3;
+            lowerDownSpeed = 0.9;
+        } else {
+            setPosUpperNear = 150000;
+            setPosLowerNear = 100000;
+            slowMultiplier = 0.6;
+            lowerDownSpeed = 1.0;
+
+        }
         if (position < 0) {
             return;
         }
-        currentPosition = position;
         upperTarget = 3*position/7;
         lowerTarget = 4*position/7;
         if (lowerTarget > getLowerHeight()) {
@@ -173,52 +189,50 @@ public class Elevator extends Mechanism {
     }
 
     public void movePosition() {
-        if (currentTargetPosition < 0) {
+        if (currentTargetPosition < 0 || currentTargetPosition > (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
             return; 
         }
         setPositionRunning = true;
         combinedStopTargeting = false;
 
-        //System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
-        if (currentPosition > 0 && currentPosition < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
-            boolean upperDone = false;
-            boolean lowerDone = false;
-                if ( !upperDone ) {
+        System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
+                if ( upperTarget > 0 ) {
                     upperDistance = Math.abs(upperTarget - getUpperHeight());
-                    if (upperDistance < 150000) {
-                        setUpperPower(0.6 * upperDirection);
+                    if (upperDistance < setPosUpperNear) {
                         if (upperTarget > getUpperHeight()) {
                             currentUpperDirection = 1;
                         } else {
                             currentUpperDirection = -1;
                         }
-                        if ((upperDirection != currentUpperDirection || !getUpperMinLimitSwitch()) || upperDistance < 40000) {
+                        setUpperPower(slowMultiplier * upperDirection);
+                        if ((upperDirection != currentUpperDirection || !getUpperMinLimitSwitch())) {
+                            System.out.println("Stop upper");
                             setUpperPower(0.0);
-                            upperDone = true;
+                            upperTarget = -1;
                         }
                     } else {
                         setUpperPower(1.0 * upperDirection);
                     }
                 }
                 
-                if ( !lowerDone ) {
+                
+                if ( lowerTarget > 0 ) {
                 lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
-                if (lowerDistance < 100000) {
-                    setLowerPower(0.6 * lowerDirection);
+                if (lowerDistance < setPosLowerNear) {
+                    setLowerPower(slowMultiplier * lowerDirection);
                     if (lowerTarget > getLowerHeight()) {
                         currentLowerDirection = 1;
                     } else {
                         currentLowerDirection = -1;
                     }
-                    if ((lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) || lowerDistance < 40000) {
+                    if ((lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch())) {
                         setLowerPower(0.0);
-                        hover();
-                        lowerDone = true;
+                       hover();
+                        lowerTarget = -1;
                     }
                 } else {
-                    setLowerPower(1.0 * lowerDirection);
+                    setLowerPower(lowerDownSpeed * lowerDirection);
                 }
-            }
 
             //} 
 
@@ -237,13 +251,6 @@ public class Elevator extends Mechanism {
         setPositionRunning = false;
     }
 
-    public void addToPosition( double position ) {
-        if (!setPositionRunning) {
-            currentPosition = getUpperHeight() + getLowerHeight(); 
-        }
-        currentPosition += position; 
-        setCombinedPosition(currentPosition);
-    }
 
 
     public double getUpperHeight() {
