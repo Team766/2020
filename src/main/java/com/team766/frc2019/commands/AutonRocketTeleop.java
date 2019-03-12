@@ -7,7 +7,7 @@ import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
-public class StraightTeleopAuton extends Subroutine {
+public class AutonRocketTeleop extends Subroutine {
 
     private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
@@ -40,7 +40,7 @@ public class StraightTeleopAuton extends Subroutine {
 	private double leftPower = 0;
 	private double rightPower = 0;
 
-    public StraightTeleopAuton() {
+    public AutonRocketTeleop() {
         m_joystick1 = RobotProvider.instance.getJoystick(1);
 		m_joystick2 = RobotProvider.instance.getJoystick(2);
 		m_boxop = RobotProvider.instance.getJoystick(3);
@@ -49,14 +49,12 @@ public class StraightTeleopAuton extends Subroutine {
     protected void subroutine() {
 
         Robot.drive.resetGyro();
-        waitForSeconds(1.0);
         callSubroutine(new RetractGripper());
-        callSubroutine(new PreciseDrive(0, 8, .35, 0));
-        callSubroutine(new PreciseDrive(0, 4, .2, 0));
-        waitForSeconds(2.0);
-        callSubroutine(new ExtendGripper());
-        callSubroutine(new PreciseDrive(0, -1, .35, 0));
-        waitForSeconds(1.5);
+        callSubroutine(new PreciseDrive(0, 2, .35, 0));
+        waitForSeconds(1.0);
+        callSubroutine(new PreciseTurn(45));
+        waitForSeconds(0.5);
+        callSubroutine(new PreciseDrive(45, 12, .5, 0));
         
         while (Robot.drive.isAutonomous() == true) {
             // System.out.println("joystick1: " + m_joystick1.getRawAxis(0) + "joystick2: " + m_joystick2.getRawAxis(1));
