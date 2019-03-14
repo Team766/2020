@@ -2,6 +2,7 @@ package com.team766.frc2019;
 
 import com.team766.framework.AutonomousCommand;
 import com.team766.frc2019.commands.Debug;
+import com.team766.frc2019.commands.LimeDebug;
 import com.team766.frc2019.commands.DriveAuto1;
 import com.team766.frc2019.commands.DriveAuto2;
 import com.team766.frc2019.commands.DriveAuto3;
@@ -15,5 +16,6 @@ public enum AutonomousModes {
     @AutonomousCommand(commandClass= DriveAuto2.class) DriveAuto2,
     @AutonomousCommand(commandClass= DriveAuto3.class) DriveAuto3,
     @AutonomousCommand(commandClass= Debug.class) Debug,
+    @AutonomousCommand(commandClass= LimeDebug.class) LimeDebug,
 
 }

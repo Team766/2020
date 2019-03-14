@@ -22,7 +22,7 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
     private double targetPosition;
 
-    public static int LVL1 = 5000;
+    /*public static int LVL1 = 5000;
     public static int LVL2 = 1000000;
     public static int LVL3 = 2050000;
     public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
@@ -37,7 +37,23 @@ public class Elevator extends Mechanism {
     private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
-    private static int MAX_HEIGHT_SMALL = 900000;
+    private static int MAX_HEIGHT_SMALL = 900000; comp robot*/
+    public static int LVL1 = 5000;
+    public static int LVL2 = 1480000;
+    public static int LVL3 = 3000000;
+    public static int MIN_LOWER_HEIGHT = 40000;
+    public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 100000;
+	public static int NEAR_MIN_LOWER_HEIGHT = 400000;
+    private static int NEAR_MAX_LOWER_HEIGHT = 1800000;
+    private static int MAX_LOWER_HEIGHT = 2130000;
+	public static int MIN_UPPER_HEIGHT = 0;
+    public static int NEAR_MIN_UPPER_HEIGHT = 200000;
+    private static int NEAR_MAX_UPPER_HEIGHT = 880000;
+    private static int MAX_UPPER_HEIGHT = 920000;
+    private static int MID_HEIGHT_BIG = 1000000;
+	private static int MAX_HEIGHT_BIG = 1930000;
+	private static int MID_HEIGHT_SMALL = 500000;
+    private static int MAX_HEIGHT_SMALL = 900000;//rev a
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
     public boolean setLow = false;
     public double slowMultiplier;
@@ -173,8 +189,10 @@ public class Elevator extends Mechanism {
         if (position < 0) {
             return;
         }
-        upperTarget = 3*position/7;
-        lowerTarget = 4*position/7;
+        /*upperTarget = 3*position/7;
+        lowerTarget = 4*position/7;*/
+        upperTarget = 92*position/305;
+        lowerTarget = 213*position/305;
         if (lowerTarget > getLowerHeight()) {
             lowerDirection = 1;
         } else {
