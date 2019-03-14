@@ -2,6 +2,7 @@ package com.team766.frc2019.commands;
 
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
+import com.team766.frc2019.mechanisms.Drive;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
 
@@ -14,22 +15,59 @@ public class LimeDrive extends Subroutine {
     double MIN_POWER = 0.25;
     double POWER_RAMP = 1.0;
     double END_POWER_PERCENT = 0.75;
+    double yError;
+    double currentX;
+    double turnAdjust;
+    double straightPower;
+    double pOut;
 
     /**
      * Precisely drives for the set parameters.
      * @param targetPower
      * @param endPower
      */
-    public LimeDrive(double targetPower, double endPower, double endDistance) {
-        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
-        m_targetPower = targetPower;
-        m_endPower = endPower;
-        m_endDistance = endDistance;
+    
+    public LimeDrive() {
+        m_turnController = new PIDController(Drive.P,Drive.I, Drive.D, Drive.THRESHOLD);
     }
 
     protected void subroutine() {
+        m_turnController.reset();
         Robot.drive.resetEncoders();
         double index = 0;
+        currentX = Robot.limeLight.tx();
+        yError = Robot.limeLight.ty();
+        System.out.print("y error = " + yError);
+        m_turnController.setSetpoint(0.0);
+        while ( Math.abs(currentX) < 20 ) {
+            currentX = Robot.limeLight.tx();
+            yError = Robot.limeLight.ty();
+            //System.out.print("y error = " + yError + " x error " + currentX);
+            straightPower = 1.0 * Math.pow(Math.E, -0.19*Math.abs(currentX));
+            m_turnController.calculate( yError, true);
+            pOut = m_turnController.getOutput();
+            System.out.println(pOut);
+            if (pOut != Double.NaN) {
+                turnAdjust = pOut;
+            }
+            System.out.println("straight power: " + straightPower + " turn adjust: " + turnAdjust + "y error = " + yError + " x error " + currentX);
+            if (turnAdjust > 0) {
+                Robot.drive.setDrive(straightPower - turnAdjust, straightPower, ControlMode.PercentOutput);
+            } else {
+               Robot.drive.setDrive(straightPower, straightPower - turnAdjust, ControlMode.PercentOutput);
+            }
+        }
+
+    }
+
+
+
+
+
+
+
+
+/*
         double distanceToTarget = Robot.limeLight.distanceToTarget(1, Robot.limeLight.tx());
         double targetAngle = Robot.limeLight.ty();
         m_turnController.setSetpoint(0.0);
@@ -60,6 +98,7 @@ public class LimeDrive extends Subroutine {
         yield();
         return;
     }
+    */
 
     public double getCurrentDistance() {
         return(((Robot.drive.rightEncoderDistance() + Robot.drive.leftEncoderDistance())*Robot.drive.DIST_PER_PULSE)/2.0);
