@@ -24,13 +24,13 @@ public class Drive extends Mechanism {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public final double P = 0.06;
-    public final double I = 0.003;
-    public final double D = 0.004;
+    public static final double P = 0.06;
+    public static final double I = 0.003;
+    public static final double D = 0.004;
     public final double MP = 0.025;
     public final double MI = 0.001;
     public final double MD = 0.001;
-    public final double THRESHOLD = 2;
+    public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.1;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
     public final double POSITION_PER_INCH = 20000;
