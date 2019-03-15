@@ -3,6 +3,7 @@ package com.team766.hal;
 import java.util.HashMap;
 
 import com.team766.config.ConfigFileReader;
+import com.team766.controllers.TimeProviderI;
 
 public abstract class RobotProvider {
 	
@@ -38,6 +39,10 @@ public abstract class RobotProvider {
 	public abstract GyroReader getGyro(int index);
 	
 	public abstract CameraReader getCamera(String id, String value);
+
+	public static TimeProviderI getTimeProvider(){
+		return () -> instance.getClock().getTime();
+	}
 	
 	//Config-driven methods
 	public SpeedController getMotor(String configName) {

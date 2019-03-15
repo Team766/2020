@@ -4,6 +4,7 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.team766.hal.RobotProvider;
 
 public class PreciseTurnRadius extends Subroutine {
 
@@ -54,7 +55,7 @@ public class PreciseTurnRadius extends Subroutine {
         m_arcLength = 2 * Math.PI * radius * (Math.abs(m_angleDiff) / 360);
         m_insideArcLength = 2 * Math.PI * (radius - (Robot.drive.robotWidth / 2.0)) * (Math.abs(m_angleDiff) / 360);
         m_outsideArcLength = 2 * Math.PI * (radius + (Robot.drive.robotWidth / 2.0)) * (Math.abs(m_angleDiff) / 360);
-        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
+        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
         m_targetPower = targetPower;
         m_endPower = endPower;
         

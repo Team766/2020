@@ -4,6 +4,7 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.team766.hal.RobotProvider;
 
 public class PreciseDrive extends Subroutine {
 
@@ -27,7 +28,7 @@ public class PreciseDrive extends Subroutine {
      * @param endPower
      */
     public PreciseDrive(double targetAngle, double driveDistance, double targetPower, double endPower) {
-        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
+        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
         m_driveDistance = driveDistance;
         if (m_driveDistance < 0) {
             driveDir = -1;
