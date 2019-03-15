@@ -15,7 +15,7 @@ import com.team766.config.ConfigFileReader;
 
 
 
-public class Drive extends Mechanism { 
+public class Drive extends Mechanism  implements DriveI {
 
     private CANSpeedController m_leftVictor1;
     private CANSpeedController m_leftVictor2;
@@ -24,8 +24,8 @@ public class Drive extends Mechanism {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public static final double P = 0.06;
-    public static final double I = 0.003;
+    public static final double P = 0.20;
+    public static final double I = 0.00;
     public static final double D = 0.004;
     public final double MP = 0.025;
     public final double MI = 0.001;
@@ -93,6 +93,11 @@ public class Drive extends Mechanism {
         m_rightTalon.configClosedLoopRamp(0.5, 0);
         //encodersDistancePerPulse(DIST_PER_PULSE);
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
+    }
+
+    @Override
+    public double getDistPerPulse() {
+        return DIST_PER_PULSE;
     }
 
     /**

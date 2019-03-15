@@ -5,6 +5,7 @@ package com.team766.frc2019;
 import com.team766.framework.Command;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.commands.CalibrateElevator;
+import com.team766.frc2019.commands.LimeDrive;
 import com.team766.frc2019.commands.ExtendGripper;
 import com.team766.frc2019.commands.RetractGripper;
 import com.team766.hal.JoystickReader;
@@ -20,6 +21,7 @@ public class OI extends Command {
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
 	private CalibrateElevator m_calibrate = new CalibrateElevator();
+	private LimeDrive m_limeDrive = new LimeDrive(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 
 	private static int INTAKE_ACTUATE = 2;
 	private static int INTAKE_RETRACT = 1;
@@ -126,7 +128,10 @@ public class OI extends Command {
 			Robot.elevator.upperNeutral();
 		}
 		*/
-		
+
+		if (m_boxop.getRawButton(23)) {
+			m_limeDrive.start();
+		}
 
 		// BIG ELEVATOR FORCED MANUAL MOVEMENT
 		if(m_boxop.getRawButton(LOWER_UP) ) {

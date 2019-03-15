@@ -4,6 +4,7 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.team766.hal.RobotProvider;
 
 public class PreciseTurn extends Subroutine {
 
@@ -12,7 +13,7 @@ public class PreciseTurn extends Subroutine {
 
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;
-        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
+        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
         //takeControl(Robot.drive);
     }
 
