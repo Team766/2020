@@ -6,8 +6,10 @@ import com.team766.framework.Command;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.commands.CalibrateElevator;
 import com.team766.frc2019.commands.LimeDrive;
+import com.team766.frc2019.commands.LimeDrive2;
 import com.team766.frc2019.commands.ExtendGripper;
 import com.team766.frc2019.commands.RetractGripper;
+import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
@@ -22,6 +24,8 @@ public class OI extends Command {
 	private JoystickReader m_boxop;
 	private CalibrateElevator m_calibrate = new CalibrateElevator();
 	private LimeDrive m_limeDrive = new LimeDrive(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+	private LimeDrive2 m_limeDrive2 = new LimeDrive2(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+
 
 	private static int INTAKE_ACTUATE = 2;
 	private static int INTAKE_RETRACT = 1;
@@ -129,9 +133,14 @@ public class OI extends Command {
 		}
 		*/
 
-		if (m_boxop.getRawButton(23)) {
+		if (m_boxop.getRawButton(23) || m_joystick1.getRawButton(1)) {
 			m_limeDrive.start();
 		}
+
+		if (m_boxop.getRawButton(22) || m_joystick1.getRawButton(2)) {
+			m_limeDrive2.start();
+		}
+
 
 		// BIG ELEVATOR FORCED MANUAL MOVEMENT
 		if(m_boxop.getRawButton(LOWER_UP) ) {
@@ -247,9 +256,9 @@ public class OI extends Command {
 		}
 	
 		// INTAKE FORWARD AND BACK
-		if (m_boxop.getRawButton(INTAKE_ACTUATE) || m_joystick1.getRawButton(1)) {
+		if (m_boxop.getRawButton(INTAKE_ACTUATE)) {
 			Robot.flowerActuator.extend();
-		} else if (m_boxop.getRawButton(INTAKE_RETRACT) || m_joystick1.getRawButton(2)) {
+		} else if (m_boxop.getRawButton(INTAKE_RETRACT)) {
 			Robot.flowerActuator.retract();
 		}
 

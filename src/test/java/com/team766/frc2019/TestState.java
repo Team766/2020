@@ -8,7 +8,7 @@ public class TestState {
     public void tick() {
 
         try {
-            Thread.currentThread().sleep(2000);
+            Thread.currentThread().sleep(100);
         } catch (InterruptedException e) {
         }
         ty += 0.5;
