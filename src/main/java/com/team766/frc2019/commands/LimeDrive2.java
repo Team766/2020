@@ -11,7 +11,7 @@ import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
-public class LimeDrive extends Subroutine {
+public class LimeDrive2 extends Subroutine {
 
     PIDController m_turnController;
     double m_targetPower;
@@ -30,7 +30,6 @@ public class LimeDrive extends Subroutine {
     LimeLightI limeLight;
     private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
     private JoystickReader m_joystick2 = RobotProvider.instance.getJoystick(2);
-  
 
     /**
      * Precisely drives for the set parameters.
@@ -42,76 +41,66 @@ public class LimeDrive extends Subroutine {
     }
     */
 
-    public LimeDrive(DriveI drive, LimeLightI limeLight, TimeProviderI timeProvider ) {
+    public LimeDrive2(DriveI drive, LimeLightI limeLight, TimeProviderI timeProvider ) {
         this.drive = drive;
         this.limeLight = limeLight;
         m_turnController = new PIDController(Drive.P,Drive.I, Drive.D, Drive.THRESHOLD, timeProvider );
     }
 
     protected void subroutine() {
-            turnAdjust = 0;
-            m_turnController.reset();
-            drive.resetEncoders();
+        turnAdjust = 0;
+        m_turnController.reset();
+        drive.resetEncoders();
+        currentX = limeLight.tx();
+        yError = limeLight.ty();
+        System.out.print("y error = " + yError);
+        m_turnController.setSetpoint(0.0);
+        callSubroutine(new RetractGripper());
+        while ( Math.abs(currentX) < 19.9 && Math.abs(m_joystick1.getRawAxis(1)) < .2) {
             currentX = limeLight.tx();
             yError = limeLight.ty();
-            System.out.print("y error = " + yError);
-            m_turnController.setSetpoint(0.0);
-            callSubroutine(new ExtendGripper());
-            while ( Math.abs(currentX) < 19.9 && Math.abs(m_joystick1.getRawAxis(1)) < .2) {
-                currentX = limeLight.tx();
-                yError = limeLight.ty();
-                if (Math.abs(yError) > 0) {
-                    straightPower = 0.5 * Math.pow(Math.E, -0.10*Math.abs(currentX));
-                } else {
-                    straightPower = 0;
-                }
-                m_turnController.calculate( yError, true);
-                pOut = m_turnController.getOutput();
-                //System.out.println(pOut);
-                if (!Double.isNaN( pOut )) {
-                    turnAdjust = 0.7 * pOut;
-                }
-                if (index++ == 10000) {
-                    index = 0;
-                    System.out.println("y error: " + yError + " turn adjust: " + turnAdjust + " current x: " + currentX + " straight power: " + straightPower);
-                }
-                pOut = m_turnController.getOutput();
-                //System.out.println(pOut);
-                if (!Double.isNaN( pOut )) {
-                    turnAdjust = pOut;
-                }
-                    if (turnAdjust < 0) {
-                        drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust), ControlMode.PercentOutput);
-                    } else {
-                    drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust), ControlMode.PercentOutput);
-                    // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
-                    }
+            if (Math.abs(yError) > 0) {
+                straightPower = 0.5 * Math.pow(Math.E, -0.10*Math.abs(currentX));
+            } else {
+                straightPower = 0;
+            }            m_turnController.calculate( yError, true);
+            pOut = m_turnController.getOutput();
+            //System.out.println(pOut);
+            if (!Double.isNaN( pOut )) {
+                turnAdjust = 0.7 * pOut;
             }
+            if (index++ == 10000) {
+                index = 0;
+                System.out.println("y error: " + yError + " turn adjust: " + turnAdjust + " current x: " + currentX + " straight power: " + straightPower);
+            }
+            pOut = m_turnController.getOutput();
+            //System.out.println(pOut);
+            if (!Double.isNaN( pOut )) {
+                turnAdjust = pOut;
+            }
+                if (turnAdjust < 0) {
+                    drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust), ControlMode.PercentOutput);
+                } else {
+                drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust), ControlMode.PercentOutput);
+                // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
+                }
+        }
             callSubroutine(new Actuate());
             drive.setDrive(.3, .3, ControlMode.PercentOutput);
             waitForSeconds(0.4);
             drive.setDrive(0, 0, ControlMode.PercentOutput);
-            //waitForSeconds(0.5);
-            callSubroutine(new RetractGripper());
-            //waitForSeconds(0.2);
-            drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
-            waitForSeconds(0.7);
-            callSubroutine(new Retract());
-            drive.setDrive(0.0 , 0.0  , ControlMode.PercentOutput);
-
-            /*
-            waitForSeconds(0.05);
-            callSubroutine(new RetractGripper());
-            //waitForSeconds(0.2);
-            drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
-            waitForSeconds(0.05);
             callSubroutine(new ExtendGripper());
+            //waitForSeconds(0.2);
+            //drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
+            waitForSeconds(0.4);
+            //callSubroutine(new ExtendGripper());
             callSubroutine(new Retract());
             drive.setDrive(0.0 , 0.0  , ControlMode.PercentOutput);
-            */
+        
+    
 
-            //callSubroutine(new PreciseDrive(drive.getGyroAngle(), -1.0, 0.7, 0));
-
+        //callSubroutine(new PreciseDrive(drive.getGyroAngle(), -1.0, 0.7, 0));
+        
 
     }
 

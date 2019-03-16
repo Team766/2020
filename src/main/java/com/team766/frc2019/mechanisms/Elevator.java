@@ -213,7 +213,7 @@ public class Elevator extends Mechanism {
         setPositionRunning = true;
         combinedStopTargeting = false;
 
-        System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
+      //  System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
                 if ( upperTarget > 0 ) {
                     upperDistance = Math.abs(upperTarget - getUpperHeight());
                     if (upperDistance < setPosUpperNear) {
@@ -355,7 +355,7 @@ public class Elevator extends Mechanism {
 
     public void elevatorNeutral() {
         if (combinedStopTargeting == true) {
-            System.out.println("Setting elevator to neutral");
+         //   System.out.println("Setting elevator to neutral");
             Robot.elevator.setUpperPower(0.0);
             Robot.elevator.setLowerPower(0.0);
             hover();
@@ -388,7 +388,7 @@ public class Elevator extends Mechanism {
 
     public void upperNeutral() {
         if (upperStopTargeting == true) {
-            System.out.println("Setting upper to neutral");
+       //     System.out.println("Setting upper to neutral");
             Robot.elevator.setUpperPower(0.0);
             targetPosition = getUpperHeight() + getLowerHeight();
             upperStopTargeting = false;
@@ -397,7 +397,7 @@ public class Elevator extends Mechanism {
 
     public void lowerNeutral() {
         if (lowerStopTargeting == true) {
-            System.out.println("Setting lower to neutral");
+         //   System.out.println("Setting lower to neutral");
             Robot.elevator.setLowerPower(0.0);
             targetPosition = getUpperHeight() + getLowerHeight();
             lowerStopTargeting = false;

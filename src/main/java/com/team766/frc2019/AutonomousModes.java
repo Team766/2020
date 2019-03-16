@@ -9,6 +9,7 @@ import com.team766.frc2019.commands.DriveAuto3;
 import com.team766.frc2019.commands.DriveAuto4;
 
 public enum AutonomousModes {
+    @AutonomousCommand(commandClass= com.team766.frc2019.commands.LimeDriveAuto.class) LimeDriveAuto,
     @AutonomousCommand(commandClass= com.team766.frc2019.commands.TeleopAuton.class) TeleopAuton,
     @AutonomousCommand(commandClass= com.team766.frc2019.commands.LimeDrive.class) LimeDrive,
     @AutonomousCommand(commandClass= com.team766.frc2019.commands.AutonRocketTeleop.class) AutonRocketTeleop,
