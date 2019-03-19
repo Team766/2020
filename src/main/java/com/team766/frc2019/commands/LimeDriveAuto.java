@@ -18,6 +18,6 @@ public class LimeDriveAuto extends Subroutine {
         System.out.println("LimeDrive STARTING");
         Robot.drive.nukeRobot();
 
-            callSubroutine(new LimeDrive(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+            callSubroutine(new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
     }
 }

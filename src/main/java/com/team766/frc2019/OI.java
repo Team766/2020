@@ -5,8 +5,8 @@ package com.team766.frc2019;
 import com.team766.framework.Command;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.commands.CalibrateElevator;
-import com.team766.frc2019.commands.LimeDrive;
-import com.team766.frc2019.commands.LimeDrive2;
+import com.team766.frc2019.commands.LimePickup;
+import com.team766.frc2019.commands.LimeScore;
 import com.team766.frc2019.commands.ExtendGripper;
 import com.team766.frc2019.commands.RetractGripper;
 import com.team766.frc2019.mechanisms.LimeLightI;
@@ -23,8 +23,8 @@ public class OI extends Command {
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
 	private CalibrateElevator m_calibrate = new CalibrateElevator();
-	private LimeDrive m_limeDrive = new LimeDrive(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-	private LimeDrive2 m_limeDrive2 = new LimeDrive2(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+	private LimePickup m_limePickup = new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+	private LimeScore m_limeScore = new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 
 
 	private static int INTAKE_ACTUATE = 2;
@@ -134,11 +134,11 @@ public class OI extends Command {
 		*/
 
 		if (m_boxop.getRawButton(23) || m_joystick1.getRawButton(1)) {
-			m_limeDrive.start();
+			m_limePickup.start();
 		}
 
 		if (m_boxop.getRawButton(22) || m_joystick1.getRawButton(2)) {
-			m_limeDrive2.start();
+			m_limeScore.start();
 		}
 
 
