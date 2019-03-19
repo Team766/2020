@@ -78,23 +78,23 @@ public class LimeScore extends Subroutine {
                 turnAdjust = pOut;
             }
                 if (turnAdjust < 0) {
-                    m_drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust), ControlMode.PercentOutput);
+                    m_drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust));
                 } else {
-                m_drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust), ControlMode.PercentOutput);
+                m_drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust));
                 // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
                 }
         }
             callSubroutine(new Actuate());
-            m_drive.setDrive(.3, .3, ControlMode.PercentOutput);
+            m_drive.setDrive(.3, .3);
             waitForSeconds(0.4);
-            m_drive.setDrive(0, 0, ControlMode.PercentOutput);
+            m_drive.setDrive(0, 0);
             callSubroutine(new ExtendGripper());
             //waitForSeconds(0.2);
             //drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
             waitForSeconds(0.4);
             //callSubroutine(new ExtendGripper());
             callSubroutine(new Retract());
-            m_drive.setDrive(0.0 , 0.0  , ControlMode.PercentOutput);
+            m_drive.setDrive(0.0 , 0.0);
         
     
 

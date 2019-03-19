@@ -101,7 +101,7 @@ public class OI extends Command {
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
 		//System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
-		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
+		Robot.drive.setDrive(leftPower, rightPower);
 
 		if (index++ % 50 == 0 && Robot.drive.isEnabled()) {
 			//System.out.println("lower height: " + Robot.elevator.getLowerHeight());
