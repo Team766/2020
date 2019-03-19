@@ -4,7 +4,7 @@ import com.team766.controllers.PIDController;
 import com.team766.hal.CANSpeedController;
 
 public interface DriveI {
-    void setDrive(double leftSetting, double rightSetting, CANSpeedController.ControlMode controlMode);
+    void setDrive(double leftSetting, double rightSetting);
 
     public double getDistPerPulse();
 

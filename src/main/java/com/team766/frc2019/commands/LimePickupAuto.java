@@ -6,18 +6,18 @@ import com.team766.frc2019.mechanisms.LimeLightI;
 //import com.team766.hal.RobotProvider;
 import com.team766.hal.RobotProvider;
 
-public class LimeDriveAuto extends Subroutine {
+public class LimePickupAuto extends Subroutine {
 
     LimeLightI limeLight;
 
-    public LimeDriveAuto() {
+    public LimePickupAuto() {
         takeControl(Robot.drive);
     }
 
     protected void subroutine() {
         System.out.println("LimeDrive STARTING");
-        Robot.drive.nukeRobot();
 
-            callSubroutine(new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+        callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+        
     }
 }

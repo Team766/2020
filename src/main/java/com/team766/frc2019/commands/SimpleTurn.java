@@ -12,12 +12,12 @@ public class SimpleTurn extends Subroutine {
     }
     protected void subroutine() {
         Robot.drive.resetGyro();
-        Robot.drive.setDrive(0.75, -0.75, ControlMode.PercentOutput);
+        Robot.drive.setDrive(0.75, -0.75);
         double startTime = new Date().getTime();
         while((new Date().getTime() - startTime) < 2000) {
             System.out.println(Robot.drive.getGyroAngle() + ", " + new Date().getTime());
             yield();
         }
-        Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
+        Robot.drive.setDrive(0.0, 0.0);
     }  
 }
