@@ -81,7 +81,7 @@ public class AutonRocketTeleop extends Subroutine {
             double leftPower = (fwd_power + turn_power);
             double rightPower = (fwd_power - turn_power);
             //System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
-            Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
+            Robot.drive.setDrive(leftPower, rightPower);
 
             if(m_boxop.getRawButton(CALI_BUTTON) ) {
                 //CURRENTLY CALIBRATES

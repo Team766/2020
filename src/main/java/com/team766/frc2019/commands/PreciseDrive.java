@@ -50,15 +50,15 @@ public class PreciseDrive extends Subroutine {
             double straightPower = calcPower(Math.abs(getCurrentDistance() / m_driveDistance)) * driveDir;
             if (driveDir < 0) {
                 if (turnPower > 0) {
-                    Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
+                    Robot.drive.setDrive(straightPower, straightPower + turnPower);
                 } else {
-                    Robot.drive.setDrive(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
+                    Robot.drive.setDrive(straightPower - turnPower, straightPower);
                 }
             } else {
                 if (turnPower > 0) {
-                    Robot.drive.setDrive(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
+                    Robot.drive.setDrive(straightPower - turnPower, straightPower);
                 } else {
-                    Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
+                    Robot.drive.setDrive(straightPower, straightPower + turnPower);
                 }
             }
             if (index % 15 == 0 && Robot.drive.isEnabled()) {
@@ -72,7 +72,7 @@ public class PreciseDrive extends Subroutine {
             }
         }
         System.out.println("PreciseDrive finished");
-        Robot.drive.setDrive(m_endPower, m_endPower, ControlMode.PercentOutput);
+        Robot.drive.setDrive(m_endPower, m_endPower);
         Robot.drive.resetEncoders();
         yield();
         return;

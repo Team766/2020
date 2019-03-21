@@ -3,7 +3,7 @@ package com.team766.frc2019.mechanisms;
 import com.team766.frc2019.Robot;
 
 public interface LimeLightI {
-     boolean isTarget();
+    boolean isTarget();
 
     double tx();
 
