@@ -1,19 +1,36 @@
 package com.team766.frc2019.mechanisms;
 
 import com.team766.frc2019.Robot;
-
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight implements LimeLightI {
 	private static NetworkTableInstance table = null;
 
-    private NetworkTableEntry getValue(String key) {
+    private static NetworkTableEntry getValue(String key) {
 		if (table == null) {
 			table = NetworkTableInstance.getDefault();
 		}
 
 		return table.getTable("limelight").getEntry(key);
+	}
+
+	public static enum LightMode {
+		eOn, eOff, eBlink
+	}
+
+	public static enum CameraMode {
+		eVision, eDriver
+	}
+
+	public static void setLedMode(LightMode mode) {
+		getValue("ledMode").setNumber(mode.ordinal());
+	}
+
+	public static void setCameraMode(CameraMode evision) {
+		getValue("camMode").setNumber(evision.ordinal());
 	}
 	
 	//if everything goes wrong for some unexplainable reason define the 

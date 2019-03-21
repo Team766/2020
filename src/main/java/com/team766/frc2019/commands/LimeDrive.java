@@ -5,7 +5,10 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.mechanisms.Drive;
 import com.team766.frc2019.mechanisms.DriveI;
+import com.team766.frc2019.mechanisms.LimeLight;
 import com.team766.frc2019.mechanisms.LimeLightI;
+import com.team766.frc2019.mechanisms.LimeLight.CameraMode;
+import com.team766.frc2019.mechanisms.LimeLight.LightMode;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
@@ -49,6 +52,8 @@ public class LimeDrive extends Subroutine {
     }
 
     protected void subroutine() {
+            LimeLight.setLedMode(LightMode.eOn);
+            LimeLight.setCameraMode(CameraMode.eVision);
             turnAdjust = 0;
             m_turnController.reset();
             drive.resetEncoders();
@@ -61,7 +66,7 @@ public class LimeDrive extends Subroutine {
                 currentX = limeLight.tx();
                 yError = limeLight.ty();
                 if (Math.abs(yError) > 0) {
-                    straightPower = 0.5 * Math.pow(Math.E, -0.10*Math.abs(currentX));
+                    straightPower = 0.54 * Math.pow(Math.E, -0.08*Math.abs(currentX));
                 } else {
                     straightPower = 0;
                 }
@@ -69,7 +74,7 @@ public class LimeDrive extends Subroutine {
                 pOut = m_turnController.getOutput();
                 //System.out.println(pOut);
                 if (!Double.isNaN( pOut )) {
-                    turnAdjust = 0.7 * pOut;
+                    turnAdjust = 1.0 * pOut;
                 }
                 if (index++ == 10000) {
                     index = 0;
@@ -87,17 +92,21 @@ public class LimeDrive extends Subroutine {
                     // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
                     }
             }
-            callSubroutine(new Actuate());
-            drive.setDrive(.3, .3, ControlMode.PercentOutput);
-            waitForSeconds(0.4);
-            drive.setDrive(0, 0, ControlMode.PercentOutput);
-            //waitForSeconds(0.5);
-            callSubroutine(new RetractGripper());
-            //waitForSeconds(0.2);
-            drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
-            waitForSeconds(0.7);
-            callSubroutine(new Retract());
-            drive.setDrive(0.0 , 0.0  , ControlMode.PercentOutput);
+            if ((m_joystick1.getRawAxis(1)) < .2) {
+                callSubroutine(new Actuate());
+                drive.setDrive(.3, .3, ControlMode.PercentOutput);
+                waitForSeconds(0.4);
+                drive.setDrive(0, 0, ControlMode.PercentOutput);
+                //waitForSeconds(0.5);
+                callSubroutine(new RetractGripper());
+                //waitForSeconds(0.2);
+                drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
+                waitForSeconds(0.7);
+                callSubroutine(new Retract());
+                drive.setDrive(0.0 , 0.0  , ControlMode.PercentOutput);
+                LimeLight.setLedMode(LightMode.eOff);
+                LimeLight.setCameraMode(CameraMode.eDriver);
+            }
 
             /*
             waitForSeconds(0.05);

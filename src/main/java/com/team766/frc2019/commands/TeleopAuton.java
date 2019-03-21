@@ -3,6 +3,9 @@ package com.team766.frc2019.commands;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.OI;
 import com.team766.frc2019.Robot;
+import com.team766.frc2019.mechanisms.LimeLight;
+import com.team766.frc2019.mechanisms.LimeLight.CameraMode;
+import com.team766.frc2019.mechanisms.LimeLight.LightMode;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
@@ -12,6 +15,9 @@ public class TeleopAuton extends Subroutine {
     private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
     private JoystickReader m_boxop;
+    private LimeDrive m_limeDrive = new LimeDrive(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+	private LimeDrive2 m_limeDrive2 = new LimeDrive2(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+
     
     private CalibrateElevator m_calibrate = new CalibrateElevator();
 
@@ -47,6 +53,8 @@ public class TeleopAuton extends Subroutine {
     }
 
     protected void subroutine() {
+        LimeLight.setLedMode(LightMode.eOff);
+        LimeLight.setCameraMode(CameraMode.eDriver);
         
         while (Robot.drive.isAutonomous() == true) {
            // System.out.println("joystick1: " + m_joystick1.getRawAxis(0) + "joystick2: " + m_joystick2.getRawAxis(1));
@@ -84,6 +92,14 @@ public class TeleopAuton extends Subroutine {
                 if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
                     m_calibrate.start();
                 }
+            }
+
+            if (m_boxop.getRawButton(23) || m_joystick1.getRawButton(1)) {
+                m_limeDrive.start();
+            }
+    
+            if (m_boxop.getRawButton(22) || m_joystick1.getRawButton(2)) {
+                m_limeDrive2.start();
             }
 
             if (m_boxop.getRawButton(INTAKE_ACTUATE)) {

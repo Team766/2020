@@ -4,12 +4,15 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
 public class PreciseTurn extends Subroutine {
 
     double m_turnAngle;
     PIDController m_turnController;
+    private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
+    public static boolean turning = false;
 
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;
@@ -18,12 +21,13 @@ public class PreciseTurn extends Subroutine {
     }
 
     protected void subroutine() {
+        turning = true;
         double power = 0;
         double index = 0;
         System.out.println("hey im gonna turn");
         m_turnController.setSetpoint(0.0);
         m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
-        while(!(Robot.drive.isTurnDone(m_turnController))) {
+        while(!(Robot.drive.isTurnDone(m_turnController)) && Math.abs(m_joystick1.getRawAxis(1)) < .2) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
             power = m_turnController.getOutput();
             if (Math.abs(power) < Robot.drive.MIN_TURN_SPEED) {
@@ -46,6 +50,7 @@ public class PreciseTurn extends Subroutine {
         Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
         Robot.drive.resetEncoders();
         yield();
+        turning = false;
         return;
     }
 }
