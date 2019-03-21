@@ -7,8 +7,10 @@ import com.team766.frc2019.Robot;
 import com.team766.frc2019.commands.CalibrateElevator;
 import com.team766.frc2019.commands.LimeDrive;
 import com.team766.frc2019.commands.LimeDrive2;
+import com.team766.frc2019.commands.PreciseTurn;
 import com.team766.frc2019.commands.ExtendGripper;
 import com.team766.frc2019.commands.RetractGripper;
+import com.team766.frc2019.commands.TurnInertia;
 import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
@@ -25,6 +27,7 @@ public class OI extends Command {
 	private CalibrateElevator m_calibrate = new CalibrateElevator();
 	private LimeDrive m_limeDrive = new LimeDrive(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 	private LimeDrive2 m_limeDrive2 = new LimeDrive2(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+	private PreciseTurn m_preciseTurn;
 
 
 	private static int INTAKE_ACTUATE = 2;
@@ -140,6 +143,24 @@ public class OI extends Command {
 		if (m_boxop.getRawButton(22) || m_joystick1.getRawButton(2)) {
 			m_limeDrive2.start();
 		}
+
+		/*
+		if (m_joystick1.getRawButton(6)) {
+			if (!PreciseTurn.turning) {
+				m_preciseTurn = new PreciseTurn((Robot.drive.getGyroAngle() - 180)% 360);
+				m_preciseTurn.start();
+			} else {
+				return;
+			}
+		}
+
+		if (m_joystick1.getRawButton(5)) {
+			if (!PreciseTurn.turning) {
+				m_preciseTurn = new PreciseTurn((Robot.drive.getGyroAngle() + 180)% 360);
+				m_preciseTurn.start();
+			}
+		}
+		*/
 
 
 		// BIG ELEVATOR FORCED MANUAL MOVEMENT

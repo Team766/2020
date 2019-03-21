@@ -5,7 +5,10 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.mechanisms.Drive;
 import com.team766.frc2019.mechanisms.DriveI;
+import com.team766.frc2019.mechanisms.LimeLight;
 import com.team766.frc2019.mechanisms.LimeLightI;
+import com.team766.frc2019.mechanisms.LimeLight.CameraMode;
+import com.team766.frc2019.mechanisms.LimeLight.LightMode;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
@@ -48,6 +51,8 @@ public class LimeDrive2 extends Subroutine {
     }
 
     protected void subroutine() {
+        LimeLight.setLedMode(LightMode.eOn);
+        LimeLight.setCameraMode(CameraMode.eVision);
         turnAdjust = 0;
         m_turnController.reset();
         drive.resetEncoders();
@@ -60,7 +65,7 @@ public class LimeDrive2 extends Subroutine {
             currentX = limeLight.tx();
             yError = limeLight.ty();
             if (Math.abs(yError) > 0) {
-                straightPower = 0.5 * Math.pow(Math.E, -0.10*Math.abs(currentX));
+                straightPower = 0.5 * Math.pow(Math.E, -0.08*Math.abs(currentX));
             } else {
                 straightPower = 0;
             }            m_turnController.calculate( yError, true);
@@ -85,6 +90,7 @@ public class LimeDrive2 extends Subroutine {
                 // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
                 }
         }
+        if ((m_joystick1.getRawAxis(1)) < .2) {
             callSubroutine(new Actuate());
             drive.setDrive(.3, .3, ControlMode.PercentOutput);
             waitForSeconds(0.4);
@@ -96,7 +102,9 @@ public class LimeDrive2 extends Subroutine {
             //callSubroutine(new ExtendGripper());
             callSubroutine(new Retract());
             drive.setDrive(0.0 , 0.0  , ControlMode.PercentOutput);
-        
+            LimeLight.setLedMode(LightMode.eOff);
+            LimeLight.setCameraMode(CameraMode.eDriver);
+        }
     
 
         //callSubroutine(new PreciseDrive(drive.getGyroAngle(), -1.0, 0.7, 0));
