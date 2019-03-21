@@ -15,8 +15,8 @@ public class TeleopAuton extends Subroutine {
     private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
     private JoystickReader m_boxop;
-    private LimeDrive m_limeDrive = new LimeDrive(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-	private LimeDrive2 m_limeDrive2 = new LimeDrive2(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+    private LimePickup m_limePickup = new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+	private LimeScore m_limeScore = new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 
     
     private CalibrateElevator m_calibrate = new CalibrateElevator();
@@ -95,11 +95,11 @@ public class TeleopAuton extends Subroutine {
             }
 
             if (m_boxop.getRawButton(23) || m_joystick1.getRawButton(1)) {
-                m_limeDrive.start();
+                m_limePickup.start();
             }
     
             if (m_boxop.getRawButton(22) || m_joystick1.getRawButton(2)) {
-                m_limeDrive2.start();
+                m_limeScore.start();
             }
 
             if (m_boxop.getRawButton(INTAKE_ACTUATE)) {
