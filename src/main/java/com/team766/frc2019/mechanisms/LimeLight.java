@@ -8,6 +8,11 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class LimeLight implements LimeLightI {
 	private static NetworkTableInstance table = null;
 
+    public static final double P = 0.035;
+    public static final double I = 0.0;
+    public static final double D = 0.01;
+    public static final double THRESHOLD = 2;
+
     private NetworkTableEntry getValue(String key) {
 		if (table == null) {
 			table = NetworkTableInstance.getDefault();
