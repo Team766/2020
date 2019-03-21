@@ -15,7 +15,7 @@ public class TurnAround extends Subroutine {
     protected void subroutine() {
         System.out.println("TurnAround STARTING");
 
-        callSubroutine(new PreciseTurn((Robot.drive.getGyroAngle() - 180) % 360));
+        callSubroutine(new PreciseTurn((Robot.drive.getGyroAngle() + 180) % 360));
         
     }
 }

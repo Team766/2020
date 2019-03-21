@@ -24,10 +24,10 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public static final double P = 0.035;
-    public static final double I = 0.0;
-    public static final double D = 0.01;
-    public final double MP = 0.01;
+    public static double P = 0.04;
+    public static double I = 0.0;
+    public static double D = 0.004;
+    public final double MP = 0.02;
     public final double MI = 0.01;
     public final double MD = 0.01;
     public static final double THRESHOLD = 2;
@@ -41,7 +41,7 @@ public class Drive extends Mechanism  implements DriveI {
     public final double mountingHeight = 0;
     public final double mountingAngle = 0;
 
-    public final double velocityFactor = 1500.0;
+    public final double velocityFactor = 500.0;
 
     public Drive() { 
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
@@ -105,8 +105,8 @@ public class Drive extends Mechanism  implements DriveI {
     * Each Talon is followed by 2 Victors, which mirror the Talon's output.
     */
     public void setDrive(double leftSetting, double rightSetting) {
-        m_leftTalon.set(ControlMode.Velocity, leftSetting);
-        m_rightTalon.set(ControlMode.Velocity, rightSetting);
+        m_leftTalon.set(ControlMode.Velocity, leftSetting * velocityFactor);
+        m_rightTalon.set(ControlMode.Velocity, rightSetting * velocityFactor);
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor == true) {

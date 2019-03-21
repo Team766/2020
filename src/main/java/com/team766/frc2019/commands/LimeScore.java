@@ -4,6 +4,7 @@ import com.team766.controllers.TimeProviderI;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.mechanisms.Drive;
 import com.team766.frc2019.mechanisms.DriveI;
+import com.team766.frc2019.mechanisms.LimeLight;
 import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
@@ -43,7 +44,7 @@ public class LimeScore extends Subroutine {
     public LimeScore(DriveI drive, LimeLightI limeLight, TimeProviderI timeProvider ) {
         m_drive = drive;
         m_limeLight = limeLight;
-        m_turnController = new PIDController(Drive.P,Drive.I, Drive.D, Drive.THRESHOLD, timeProvider );
+        m_turnController = new PIDController(LimeLight.P, LimeLight.I, LimeLight.D, LimeLight.THRESHOLD, timeProvider );
     }
 
     protected void subroutine() {
