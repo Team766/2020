@@ -24,16 +24,15 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public static final double P = 0.035;
-    public static final double I = 0.0;
-    public static final double D = 0.01;
-    public final double MP = 0.025;
-    public final double MI = 0.00;
+    public static double P = 0.04;
+    public static double I = 0.0;
+    public static double D = 0.004;
+    public final double MP = 0.02;
+    public final double MI = 0.01;
     public final double MD = 0.01;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.1;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
-    public final double POSITION_PER_INCH = 20000;
     public final double robotWidth = 2.8;
     public boolean m_secondVictor = true;
     public double m_gyroDirection = 1.0;
@@ -41,7 +40,8 @@ public class Drive extends Mechanism  implements DriveI {
     public final double hatchHeight = 0;
     public final double mountingHeight = 0;
     public final double mountingAngle = 0;
-    
+
+    public final double velocityFactor = 500.0;
 
     public Drive() { 
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
@@ -69,7 +69,7 @@ public class Drive extends Mechanism  implements DriveI {
             m_rightVictor2.setInverted(true);
         }
         // left true right false for new, both false for mule and marie
-        m_leftTalon.setSensorPhase(false);
+        m_leftTalon.setSensorPhase(true);
         m_rightTalon.setSensorPhase(false);
         m_leftTalon.configNominalOutputForward(0);
         m_leftTalon.configNominalOutputReverse(0);
@@ -104,9 +104,9 @@ public class Drive extends Mechanism  implements DriveI {
     * Sets the mode and value for the left and right Talon controllers.
     * Each Talon is followed by 2 Victors, which mirror the Talon's output.
     */
-    public void setDrive(double leftSetting, double rightSetting, ControlMode percentoutput) {
-        m_leftTalon.set(percentoutput, leftSetting);
-        m_rightTalon.set(percentoutput, rightSetting);
+    public void setDrive(double leftSetting, double rightSetting) {
+        m_leftTalon.set(ControlMode.Velocity, leftSetting * velocityFactor);
+        m_rightTalon.set(ControlMode.Velocity, rightSetting * velocityFactor);
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor == true) {

@@ -6,11 +6,11 @@ import com.team766.frc2019.mechanisms.LimeLightI;
 //import com.team766.hal.RobotProvider;
 import com.team766.hal.RobotProvider;
 
-public class LimeDriveAuto2 extends Subroutine {
+public class LimeScoreAuto extends Subroutine {
 
     LimeLightI limeLight;
 
-    public LimeDriveAuto2() {
+    public LimeScoreAuto() {
         takeControl(Robot.drive);
     }
 
@@ -19,7 +19,7 @@ public class LimeDriveAuto2 extends Subroutine {
       //  Robot.drive.nukeRobot();
 
         if (limeLight.ta() != 0) {
-            callSubroutine(new LimeDrive2(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+            callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
         }
     }
 }

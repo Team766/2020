@@ -5,8 +5,8 @@ package com.team766.frc2019;
 import com.team766.framework.Command;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.commands.CalibrateElevator;
-import com.team766.frc2019.commands.LimeDrive;
-import com.team766.frc2019.commands.LimeDrive2;
+import com.team766.frc2019.commands.LimePickup;
+import com.team766.frc2019.commands.LimeScore;
 import com.team766.frc2019.commands.PreciseTurn;
 import com.team766.frc2019.commands.ExtendGripper;
 import com.team766.frc2019.commands.RetractGripper;
@@ -25,8 +25,8 @@ public class OI extends Command {
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
 	private CalibrateElevator m_calibrate = new CalibrateElevator();
-	private LimeDrive m_limeDrive = new LimeDrive(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-	private LimeDrive2 m_limeDrive2 = new LimeDrive2(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+	private LimePickup m_limePickup = new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
+	private LimeScore m_limeScore = new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 	private PreciseTurn m_preciseTurn;
 
 
@@ -104,7 +104,7 @@ public class OI extends Command {
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
 		//System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
-		Robot.drive.setDrive(leftPower, rightPower, ControlMode.PercentOutput);
+		Robot.drive.setDrive(leftPower, rightPower);
 
 		if (index++ % 50 == 0 && Robot.drive.isEnabled()) {
 			//System.out.println("lower height: " + Robot.elevator.getLowerHeight());
@@ -137,11 +137,11 @@ public class OI extends Command {
 		*/
 
 		if (m_boxop.getRawButton(23) || m_joystick1.getRawButton(1)) {
-			m_limeDrive.start();
+			m_limePickup.start();
 		}
 
 		if (m_boxop.getRawButton(22) || m_joystick1.getRawButton(2)) {
-			m_limeDrive2.start();
+			m_limeScore.start();
 		}
 
 		/*
