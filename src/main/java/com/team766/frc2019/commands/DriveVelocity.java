@@ -2,7 +2,6 @@ package com.team766.frc2019.commands;
 
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
-import com.team766.hal.CANSpeedController.ControlMode;
 
 public class DriveVelocity extends Subroutine {
 
@@ -14,7 +13,7 @@ public class DriveVelocity extends Subroutine {
     }
 
     protected void subroutine() {
-        Robot.drive.setDrive(0.0, 0.0);
+        /*Robot.drive.setDrive(0.0, 0.0);
         index = 0;
         velocity = 0;
         while (Robot.drive.isEnabled()) {
@@ -25,6 +24,7 @@ public class DriveVelocity extends Subroutine {
             index++;
             index = index % 100;
             velocity++;
-        }
+    }*/
+        Robot.drive.setDrive(1.0, 1.0);
     }
 }
