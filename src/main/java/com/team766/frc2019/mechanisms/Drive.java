@@ -24,12 +24,12 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public static double P = 0.04;
-    public static double I = 0.0;
-    public static double D = 0.004;
-    public final double MP = 0.02;
-    public final double MI = 0.01;
-    public final double MD = 0.01;
+    public final double P = 0.04;
+    public final double I = 0.0;
+    public final double D = 0.004;
+    public final double MP = 1.0;
+    public final double MI = 0.0;
+    public final double MD = 0.0;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.1;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
@@ -41,7 +41,7 @@ public class Drive extends Mechanism  implements DriveI {
     public final double mountingHeight = 0;
     public final double mountingAngle = 0;
 
-    public final double velocityFactor = 500.0;
+    public final double velocityFactor = 1260.0;
 
     public Drive() { 
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
@@ -84,14 +84,13 @@ public class Drive extends Mechanism  implements DriveI {
         m_leftTalon.config_kD(0, MD, 0);
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
-        m_rightTalon.config_kD(0, MP, 0);
-        m_leftTalon.setNeutralMode(NeutralMode.Brake);
-        m_rightTalon.setNeutralMode(NeutralMode.Brake);
+        m_rightTalon.config_kD(0, MD, 0);
+        m_leftTalon.setNeutralMode(NeutralMode.Coast);
+        m_rightTalon.setNeutralMode(NeutralMode.Coast);
         m_leftTalon.configOpenLoopRamp(0.5, 0);
         m_leftTalon.configClosedLoopRamp(0.5, 0);
         m_rightTalon.configOpenLoopRamp(0.5, 0);
         m_rightTalon.configClosedLoopRamp(0.5, 0);
-        //encodersDistancePerPulse(DIST_PER_PULSE);
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
     }
 
