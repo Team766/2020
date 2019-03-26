@@ -31,6 +31,7 @@ public class LimePickup extends Subroutine {
     double pOut;
     DriveI m_drive;
     LimeLightI m_limeLight;
+    int timeOut = 0;
     private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
     private JoystickReader m_joystick2 = RobotProvider.instance.getJoystick(2);
   
@@ -62,11 +63,15 @@ public class LimePickup extends Subroutine {
             System.out.print("y error = " + yError);
             m_turnController.setSetpoint(0.0);
             callSubroutine(new ExtendGripper());
-            while ( Math.abs(currentX) < 19.9 && (Math.abs(m_joystick1.getRawAxis(1)) < .2 || Math.abs(m_joystick2.getRawAxis(0)) < .2)) {
+            while ( Math.abs(currentX) < 19.9 && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
                 currentX = m_limeLight.tx();
                 yError = m_limeLight.ty();
                 if (Math.abs(yError) > 0) {
-                    straightPower = 0.54 * Math.pow(Math.E, -0.08*Math.abs(currentX));
+                    if ( (straightPower > .3)) {
+                        straightPower = 1.0 * Math.pow(Math.E, -0.047*Math.abs(currentX));
+                    } else {
+                        straightPower = .3;
+                    }
                 } else {
                     straightPower = 0;
                 }
@@ -93,6 +98,8 @@ public class LimePickup extends Subroutine {
                     }
             }
             if ((m_joystick1.getRawAxis(1)) < .2) {
+                LimeLight.setLedMode(LightMode.eOff);
+                LimeLight.setCameraMode(CameraMode.eDriver);
                 callSubroutine(new Actuate());
                 m_drive.setDrive(.3, .3);
                 waitForSeconds(0.4);
@@ -104,8 +111,6 @@ public class LimePickup extends Subroutine {
                 waitForSeconds(0.7);
                 callSubroutine(new Retract());
                 m_drive.setDrive(0.0 , 0.0);
-                LimeLight.setLedMode(LightMode.eOff);
-                LimeLight.setCameraMode(CameraMode.eDriver);
             }
 
             /*
