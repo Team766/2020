@@ -84,16 +84,16 @@ public class OI extends Command {
 
 		//System.out.println("joystick1: " + m_joystick1 + "joystick2: " + m_joystick2);
 
-		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.05 ) {
+		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.13 ) {
 			fwd_power = 0;
 		} else {
 			fwd_power = -(0.05*(Math.abs(m_joystick1.getRawAxis(1))/m_joystick1.getRawAxis(1)) + Math.pow(m_joystick1.getRawAxis(1), 3));
 		}
-		if (Math.abs(m_joystick2.getRawAxis(0)) < 0.05 ) {
+		if (Math.abs(m_joystick2.getRawAxis(0)) < 0.13 ) {
 			turn_power = 0;
 		} else {
-			turn_power = 0.05*(Math.abs(m_joystick2.getRawAxis(0))/m_joystick2.getRawAxis(0)) + Math.pow(m_joystick2.getRawAxis(0), 3);
-			turn_power = 0.4 * turn_power;
+			turn_power = 0.35 *(Math.abs(m_joystick2.getRawAxis(0))*1.3/m_joystick2.getRawAxis(0)) + Math.pow(m_joystick2.getRawAxis(0), 3);
+			turn_power = 0.6 * turn_power;
 			if (fwd_power > 0.5) {
 				turn_power = 0.8 * turn_power;
 			}
@@ -103,6 +103,11 @@ public class OI extends Command {
 		double normalizer = Math.max(Math.abs(fwd_power),Math.abs(turn_power))/(Math.abs(fwd_power) + Math.abs(turn_power)); // divides both motor powers by the larger one to keep the ratio and keep power at or below 1
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
+		//System.out.println(index);
+		if (index++ > 200) {
+			index = 0;
+			System.out.println(" leftPower: " + leftPower + " rightPower: " + rightPower);
+		}
 		//System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
 		Robot.drive.setDrive(leftPower, rightPower);
 
@@ -144,7 +149,7 @@ public class OI extends Command {
 			m_limeScore.start();
 		}
 
-		/*
+		
 		if (m_joystick1.getRawButton(6)) {
 			if (!PreciseTurn.turning) {
 				m_preciseTurn = new PreciseTurn((Robot.drive.getGyroAngle() - 180)% 360);
@@ -153,14 +158,14 @@ public class OI extends Command {
 				return;
 			}
 		}
-
+/*
 		if (m_joystick1.getRawButton(5)) {
 			if (!PreciseTurn.turning) {
 				m_preciseTurn = new PreciseTurn((Robot.drive.getGyroAngle() + 180)% 360);
 				m_preciseTurn.start();
 			}
 		}
-		*/
+*/
 
 
 		// BIG ELEVATOR FORCED MANUAL MOVEMENT

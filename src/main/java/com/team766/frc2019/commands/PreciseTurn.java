@@ -30,6 +30,7 @@ public class PreciseTurn extends Subroutine {
         while(!(Robot.drive.isTurnDone(m_turnController)) && Math.abs(m_joystick1.getRawAxis(1)) < .2) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
             power = m_turnController.getOutput();
+            
             if (Math.abs(power) < Robot.drive.MIN_TURN_SPEED) {
                 if (power < 0) {
                     power = -Robot.drive.MIN_TURN_SPEED;
@@ -37,9 +38,10 @@ public class PreciseTurn extends Subroutine {
                     power = Robot.drive.MIN_TURN_SPEED;
                 }
             }
-            Robot.drive.setDrive(-power / 1.75, power / 1.75);
-            if (index++ % 10 == 0) {
-                System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) + " POut: " + m_turnController.getOutput());
+            Robot.drive.setDrive(-power / 1.1, power / 1.1);
+            if (index++ == 1000) {
+                index = 0;
+               System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) + " POut: " + m_turnController.getOutput());
             }
             if (!Robot.drive.isEnabled()){
                 Robot.drive.nukeRobot();
@@ -51,6 +53,7 @@ public class PreciseTurn extends Subroutine {
         Robot.drive.resetEncoders();
         yield();
         turning = false;
+        System.out.println("exited loop");
         return;
     }
 }
