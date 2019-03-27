@@ -148,12 +148,12 @@ public class Elevator extends Mechanism {
 
     public void setLowerPower(double elevatorPower) {
         //System.out.println("*** setting lower power to " + elevatorPower + " ***");
-        m_lowerElevatorMotor.set(ControlMode.Velocity, elevatorPower * Robot.drive.velocityFactor);
+        m_lowerElevatorMotor.set(ControlMode.PercentOutput, elevatorPower);
     }
 
     public void setUpperPower(double actuatorPower) {
         //System.out.println("*** setting upper power to " + actuatorPower + " ***");
-        m_upperElevatorMotor.set(ControlMode.Velocity, actuatorPower * Robot.drive.velocityFactor);
+        m_upperElevatorMotor.set(ControlMode.PercentOutput, actuatorPower);
     }
 
     public void setLowerPosition(double position) {

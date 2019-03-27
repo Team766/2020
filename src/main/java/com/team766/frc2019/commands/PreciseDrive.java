@@ -4,10 +4,12 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
 public class PreciseDrive extends Subroutine {
 
+    private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
     PIDController m_turnController;
     double m_driveDistance;
     double m_targetAngle;
@@ -41,10 +43,11 @@ public class PreciseDrive extends Subroutine {
 
     protected void subroutine() {
         Robot.drive.resetEncoders();
+        System.out.println("Reset encoders, current distance: " + getCurrentDistance());
         double index = 0;
         m_turnController.setSetpoint(0.0);
         System.out.println("I'm driving to: " + m_targetAngle + " and the difference is : " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " with an power of: " + m_targetPower + " to a distance of: " + m_driveDistance);
-        while(getCurrentDistance() * driveDir < Math.abs(m_driveDistance)) {
+        while(getCurrentDistance() * driveDir < Math.abs(m_driveDistance) && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle), true);
             double turnPower = m_turnController.getOutput();
             double straightPower = calcPower(Math.abs(getCurrentDistance() / m_driveDistance)) * driveDir;
@@ -61,10 +64,11 @@ public class PreciseDrive extends Subroutine {
                     Robot.drive.setDrive(straightPower, straightPower + turnPower);
                 }
             }
-            if (index % 15 == 0 && Robot.drive.isEnabled()) {
-                System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Power: " + calcPower(Math.abs(getCurrentDistance() / m_driveDistance))+ " Left Power: " + Robot.drive.leftMotorVelocity() + " Right Power: " + Robot.drive.rightMotorVelocity() + " DriveDir: " + driveDir);
+            if (index++ > 1000 && Robot.drive.isEnabled()) {
+                index = 0;
+              //  System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Power: " + calcPower(Math.abs(getCurrentDistance() / m_driveDistance))+ " Left Power: " + Robot.drive.leftMotorVelocity() + " Right Power: " + Robot.drive.rightMotorVelocity() + " DriveDir: " + driveDir);
+              System.out.println("current distance: " + getCurrentDistance());
             }
-            index++;
             if (!Robot.drive.isEnabled()){
                 Robot.drive.nukeRobot();
                 m_turnController.reset();

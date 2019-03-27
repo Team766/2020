@@ -10,8 +10,8 @@ import com.team766.frc2019.commands.LimeScoreAuto;
 import com.team766.frc2019.commands.TurnAround;
 import com.team766.frc2019.commands.DriveAuto1;
 import com.team766.frc2019.commands.DriveAuto2;
-import com.team766.frc2019.commands.DriveAuto3;
-import com.team766.frc2019.commands.DriveAuto4;
+import com.team766.frc2019.commands.RightLvl1RightSideCargo;
+import com.team766.frc2019.commands.MiddleLvl1StraightCargo;
 import com.team766.frc2019.commands.DriveVelocity;
 
 public enum AutonomousModes {
@@ -26,8 +26,9 @@ public enum AutonomousModes {
     //auton paths
     @AutonomousCommand(commandClass= DriveAuto1.class) DriveAuto1,
     @AutonomousCommand(commandClass= DriveAuto2.class) DriveAuto2,
-    @AutonomousCommand(commandClass= DriveAuto3.class) DriveAuto3,
-    @AutonomousCommand(commandClass= DriveAuto4.class) DriveAuto4,
+    @AutonomousCommand(commandClass= RightLvl1RightSideCargo.class) RightLvl1RightSideCargo,
+    @AutonomousCommand(commandClass= MiddleLvl1StraightCargo.class) MiddleLvl1StraightCargo,
+
     //debug
     @AutonomousCommand(commandClass= Debug.class) Debug,
     @AutonomousCommand(commandClass= LimeDebug.class) LimeDebug,
