@@ -7,6 +7,8 @@ import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -24,14 +26,14 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public final double P = 0.04;
-    public final double I = 0.0;
-    public final double D = 0.004;
-    public final double MP = 1.0;
-    public final double MI = 0.0;
-    public final double MD = 0.0;
+    public static double P = 0.04;
+    public static double I = 0.00;
+    public static double D = 0.0125;
+    public final double MP = 0.02;
+    public final double MI = 0.00;
+    public final double MD = 0.00;
     public static final double THRESHOLD = 2;
-    public final double MIN_TURN_SPEED = 0.1;
+    public final double MIN_TURN_SPEED = 0.05;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
     public final double robotWidth = 2.8;
     public boolean m_secondVictor = true;
@@ -41,7 +43,11 @@ public class Drive extends Mechanism  implements DriveI {
     public final double mountingHeight = 0;
     public final double mountingAngle = 0;
 
-    public final double velocityFactor = 1260.0;
+    public double leftSensorBasePosition;
+    public double rightSensorBasePosition;
+
+
+    public final double velocityFactor = 30000.0; 
 
     public Drive() { 
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
@@ -49,7 +55,7 @@ public class Drive extends Mechanism  implements DriveI {
         if (ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
             m_secondVictor = true;
             m_leftVictor2 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor2");
-            m_rightVictor2 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor2");
+            m_rightVictor2 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor2");    
         } else {
             m_secondVictor = false;
         }
@@ -82,16 +88,25 @@ public class Drive extends Mechanism  implements DriveI {
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
         m_leftTalon.config_kD(0, MD, 0);
+        //m_leftTalon.setFeedForward(0.7869);
+        //m_rightTalon.setFeedForward(0.7869);
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MD, 0);
-        m_leftTalon.setNeutralMode(NeutralMode.Coast);
-        m_rightTalon.setNeutralMode(NeutralMode.Coast);
+        m_leftTalon.setNeutralMode(NeutralMode.Brake);
+        m_rightTalon.setNeutralMode(NeutralMode.Brake);
         m_leftTalon.configOpenLoopRamp(0.5, 0);
         m_leftTalon.configClosedLoopRamp(0.5, 0);
         m_rightTalon.configOpenLoopRamp(0.5, 0);
         m_rightTalon.configClosedLoopRamp(0.5, 0);
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
+
+        LiveWindow.addActuator("Drivetrain", "Left Talon", (Sendable)m_leftTalon);
+        LiveWindow.addActuator("Drivetrain", "Left Victor 1", (Sendable)m_leftVictor1);
+        LiveWindow.addActuator("Drivetrain", "Left Victor 2", (Sendable)m_leftVictor2);
+        LiveWindow.addActuator("Drivetrain", "Right Talon", (Sendable)m_rightTalon);
+        LiveWindow.addActuator("Drivetrain", "Right Victor 1", (Sendable)m_rightVictor1);
+        LiveWindow.addActuator("Drivetrain", "Right Victor 2", (Sendable)m_rightVictor2);
     }
 
     @Override
@@ -104,8 +119,16 @@ public class Drive extends Mechanism  implements DriveI {
     * Each Talon is followed by 2 Victors, which mirror the Talon's output.
     */
     public void setDrive(double leftSetting, double rightSetting) {
-        m_leftTalon.set(ControlMode.Velocity, leftSetting * velocityFactor);
-        m_rightTalon.set(ControlMode.Velocity, rightSetting * velocityFactor);
+        if (leftSetting >= 0) {
+            m_leftTalon.set(ControlMode.Velocity, (leftSetting * velocityFactor) + 3000);
+        } else {
+            m_leftTalon.set(ControlMode.Velocity, (leftSetting * velocityFactor) - 3000);
+        }
+        if (rightSetting >= 0) {
+            m_rightTalon.set(ControlMode.Velocity, (rightSetting * velocityFactor) + 3000);
+        } else {
+            m_rightTalon.set(ControlMode.Velocity, (rightSetting * velocityFactor) + 3000);
+        }
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor == true) {
@@ -135,16 +158,16 @@ public class Drive extends Mechanism  implements DriveI {
     }
 
     public void resetEncoders() {
-        m_leftTalon.setPosition(0);
-        m_rightTalon.setPosition(0);
+        leftSensorBasePosition =  m_leftTalon.getSensorPosition();
+        rightSensorBasePosition = m_rightTalon.getSensorPosition();
     }
 
     public double leftEncoderDistance() {
-        return(m_leftTalon.getSensorPosition());
+        return(m_leftTalon.getSensorPosition() - leftSensorBasePosition);
     }
 
     public double rightEncoderDistance() {
-        return(m_rightTalon.getSensorPosition());
+        return(m_rightTalon.getSensorPosition() - rightSensorBasePosition);
     }
 
     public double leftMotorVelocity() {
