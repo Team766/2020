@@ -13,7 +13,7 @@ import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
-public class LimeScore extends Subroutine {
+public class Rocket extends Subroutine {
 
     PIDController m_turnController;
     double m_targetPower;
@@ -44,7 +44,7 @@ public class LimeScore extends Subroutine {
     }
     */
 
-    public LimeScore(DriveI drive, LimeLightI limeLight, TimeProviderI timeProvider ) {
+    public Rocket(DriveI drive, LimeLightI limeLight, TimeProviderI timeProvider ) {
         m_drive = drive;
         m_limeLight = limeLight;
         m_turnController = new PIDController(LimeLight.P, LimeLight.I, LimeLight.D, LimeLight.THRESHOLD, timeProvider );
@@ -66,10 +66,10 @@ public class LimeScore extends Subroutine {
             currentX = m_limeLight.tx();
             yError = m_limeLight.ty();
             if (Math.abs(currentX) > 0) {
-                if ( (straightPower > .38)) {
+                if ( (straightPower > .3)) {
                     straightPower = 1.0 * Math.pow(Math.E, -0.47*Math.abs(yError));
                 } else {
-                    straightPower = 0.38;
+                    straightPower = 0.3;
                 }
             } else {
                 straightPower = 0;
@@ -97,24 +97,7 @@ public class LimeScore extends Subroutine {
                 // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
                 }
         }
-        if ((m_joystick1.getRawAxis(1)) < .2) {
-            LimeLight.setLedMode(LightMode.eOff);
-            LimeLight.setCameraMode(CameraMode.eDriver);
-            
-            callSubroutine(new Actuate());
-            m_drive.setDrive(.3, .3);
-            waitForSeconds(0.6);
-            m_drive.setDrive(0, 0);
-            callSubroutine(new ExtendGripper());
-            //waitForSeconds(0.2);
-            //drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
-            waitForSeconds(0.4);
-            //callSubroutine(new ExtendGripper());
-            callSubroutine(new Retract());
-            m_drive.setDrive(0.0 , 0.0);
 
-        }
-    
 
         //callSubroutine(new PreciseDrive(drive.getGyroAngle(), -1.0, 0.7, 0));
         

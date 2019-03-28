@@ -23,12 +23,19 @@ public class RightLvl1RightSideCargo extends Subroutine {
            waitForSeconds(0.5);
         //    callSubroutine(new PreciseDrive(0, 15 , 0.9, 0.9));
             //callSubroutine(new PreciseTurn(30));
-           callSubroutine(new PreciseDrive(0, 2, 0.6, 0));
-            callSubroutine(new PreciseTurn(90));
-            callSubroutine(new PreciseDrive(90, 3, 0.6, 0));
+           //callSubroutine(new PreciseDrive(0, 2, 0.6, 0));
+            //callSubroutine(new PreciseTurn(45));
+           // callSubroutine(new PreciseTurn(0));
+           // callSubroutine(new PreciseDrive(0, 3, 0.6, 0));
+          //  callSubroutine(new PreciseTurn(180));
+         // callSubroutine(new PreciseDrive(0, 3, 0.6, 0));
+          callSubroutine(new PreciseTurnRadius(90, 2, 0.8, 0));
+
+
+
             //callSubroutine(new PreciseDrive(Robot.drive.getGyroAngle(), 2, 0.9, 0));
 
-            //m_limeScore.start();
+           // m_limeScore.start();
 
             //callSubroutine(new PreciseDrive(0, -2, .5, 0));
             
