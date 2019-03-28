@@ -62,19 +62,19 @@ public class LimePickup extends Subroutine {
             System.out.print("y error = " + yError);
             m_turnController.setSetpoint(0.0);
             callSubroutine(new ExtendGripper());
-            while ( Math.abs(currentX) < 19.9 && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
+            while ((yError) > -13.5 && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
                 currentX = m_limeLight.tx();
                 yError = m_limeLight.ty();
-                if (Math.abs(yError) > 0) {
-                    if ( (straightPower > .3)) {
-                        straightPower = 1.0 * Math.pow(Math.E, -0.047*Math.abs(currentX));
+                if (Math.abs(currentX) > 0) {
+                    if ( (straightPower > .38)) {
+                        straightPower = 1.0 * Math.pow(Math.E, -0.047*Math.abs(yError));
                     } else {
-                        straightPower = .3;
+                        straightPower = .38;
                     }
                 } else {
                     straightPower = 0;
                 }
-                m_turnController.calculate( yError, true);
+                m_turnController.calculate( currentX, true);
                 pOut = m_turnController.getOutput();
                 //System.out.println(pOut);
                 if (!Double.isNaN( pOut )) {
@@ -89,7 +89,7 @@ public class LimePickup extends Subroutine {
                 if (!Double.isNaN( pOut )) {
                     turnAdjust = pOut;
                 }
-                    if (turnAdjust < 0) {
+                    if (turnAdjust > 0) {
                         m_drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust));
                     } else {
                     m_drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust));
