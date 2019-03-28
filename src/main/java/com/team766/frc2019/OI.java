@@ -10,6 +10,7 @@ import com.team766.frc2019.commands.LimeScore;
 import com.team766.frc2019.commands.PreciseTurn;
 import com.team766.frc2019.commands.ExtendGripper;
 import com.team766.frc2019.commands.RetractGripper;
+import com.team766.frc2019.commands.Rocket;
 import com.team766.frc2019.commands.TurnInertia;
 import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.hal.JoystickReader;
@@ -31,6 +32,7 @@ public class OI extends Command {
 	private LimePickup m_limePickup = new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 	private LimeScore m_limeScore = new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 	private PreciseTurn m_preciseTurn;
+	private Rocket m_rocket = new Rocket(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 
 
 	private static int INTAKE_ACTUATE = 2;
@@ -149,6 +151,10 @@ public class OI extends Command {
 
 		if (m_boxop.getRawButton(23) || m_joystick1.getRawButton(1)) {
 			m_limePickup.start();
+		}
+
+		if (m_joystick1.getRawButton(3)) {
+			m_rocket.start();
 		}
 
 		if (m_boxop.getRawButton(22) || m_joystick1.getRawButton(2)) {
