@@ -251,18 +251,6 @@ public class Elevator extends Mechanism {
                 } else {
                     setLowerPower(lowerDownSpeed * lowerDirection);
                 }
-
-            //} 
-
-
-
-                /* OLD SET POSITION CODE
-                System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget: " + upperTarget + " lowerTarget: " + lowerTarget);
-                setLowerPosition(lowerTarget);
-                setUpperPosition(upperTarget);
-                targetPosition = position;
-                */
-            
         } else {
            // System.out.println("Cannot reach target position");
         }
