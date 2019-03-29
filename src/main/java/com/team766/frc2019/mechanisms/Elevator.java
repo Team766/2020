@@ -22,7 +22,7 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
     private double targetPosition;
 
-    /*public static int LVL1 = 5000;
+    public static int LVL1 = 5000;
     public static int LVL2 = 1000000;
     public static int LVL3 = 2050000;
     public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
@@ -37,7 +37,8 @@ public class Elevator extends Mechanism {
     private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
-    private static int MAX_HEIGHT_SMALL = 900000; comp robot*/
+    private static int MAX_HEIGHT_SMALL = 900000; 
+    /*
     public static int LVL1 = 5000;
     public static int LVL2 = 1480000;
     public static int LVL3 = 3000000;
@@ -54,6 +55,7 @@ public class Elevator extends Mechanism {
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
     private static int MAX_HEIGHT_SMALL = 900000;//rev a
+    */
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
     public boolean setLow = false;
     public double slowMultiplier;

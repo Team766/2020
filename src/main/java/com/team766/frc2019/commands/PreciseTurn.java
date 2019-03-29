@@ -27,7 +27,7 @@ public class PreciseTurn extends Subroutine {
         System.out.println("hey im gonna turn");
         m_turnController.setSetpoint(0.0);
         m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
-        while(!(Robot.drive.isTurnDone(m_turnController)) && Math.abs(m_joystick1.getRawAxis(1)) < .2) {
+        while((!(Robot.drive.isTurnDone(m_turnController)) && Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
             power = m_turnController.getOutput();
             
@@ -48,6 +48,9 @@ public class PreciseTurn extends Subroutine {
                 yield();
                 return;
             }
+        }
+        if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
+            callSubroutine(new TeleopAuton());
         }
         Robot.drive.setDrive(0.0, 0.0);
         Robot.drive.resetEncoders();

@@ -68,10 +68,10 @@ public class LimeScore extends Subroutine {
             currentX = m_limeLight.tx();
             yError = m_limeLight.ty();
             if (Math.abs(currentX) > 0) {
-                if ( (straightPower > .38)) {
-                    straightPower = 1.0 * Math.pow(Math.E, -0.47*Math.abs(yError));
+                if ( (straightPower > .30)) {
+                    straightPower = 1.0 * Math.pow(Math.E, -0.67*Math.abs(5 - yError));
                 } else {
-                    straightPower = 0.38;
+                    straightPower = 0.30;
                 }
             } else {
                 straightPower = 0;
@@ -116,6 +116,8 @@ public class LimeScore extends Subroutine {
             Robot.flowerActuator.extend();
             //callSubroutine(new Retract());
             m_drive.setDrive(0.0 , 0.0);
+        } else if ((!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) && Robot.drive.isAutonomous()) {
+            callSubroutine(new TeleopAuton());
         }
         yield();
         return;
