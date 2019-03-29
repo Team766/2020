@@ -66,10 +66,10 @@ public class LimePickup extends Subroutine {
                 currentX = m_limeLight.tx();
                 yError = m_limeLight.ty();
                 if (Math.abs(currentX) > 0) {
-                    if ( (straightPower > .38)) {
-                        straightPower = 1.0 * Math.pow(Math.E, -0.047*Math.abs(yError));
+                    if ( (straightPower > .30)) {
+                        straightPower = 1.0 * Math.pow(Math.E, -0.067*Math.abs(5 - yError));
                     } else {
-                        straightPower = .38;
+                        straightPower = .30;
                     }
                 } else {
                     straightPower = 0;
@@ -110,6 +110,8 @@ public class LimePickup extends Subroutine {
                 waitForSeconds(0.7);
                 callSubroutine(new Retract());
                 m_drive.setDrive(0.0 , 0.0);
+            } else if ((!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) && Robot.drive.isAutonomous()) {
+                callSubroutine(new TeleopAuton());
             }
 
             /*

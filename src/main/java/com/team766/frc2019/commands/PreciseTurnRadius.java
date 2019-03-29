@@ -4,6 +4,7 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
 public class PreciseTurnRadius extends Subroutine {
@@ -25,6 +26,8 @@ public class PreciseTurnRadius extends Subroutine {
     double END_POWER_PERCENT = 0.75;
     double moveDir = 1;
     boolean m_turnDirection;
+    private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
+
     //true is left encoder false is right encoder
     //opposite direction of turn (true is right turn false is left turn)
 
@@ -81,7 +84,7 @@ public class PreciseTurnRadius extends Subroutine {
         m_turnController.setSetpoint(0.0);
         currentDistance = Robot.drive.getOutsideEncoderDistance(m_turnDirection) * Robot.drive.DIST_PER_PULSE;
         System.out.println("I'm turning from: " + m_initialAngle + " to: " + m_targetAngle + " and the difference is : " + m_angleDiff + " with an outside arc length of: " + m_outsideArcLength + " Current Dist: " + currentDistance);
-        while(currentDistance * moveDir < Math.abs(m_outsideArcLength)) {
+        while((currentDistance * moveDir < Math.abs(m_outsideArcLength) && (Math.abs(m_joystick1.getRawAxis(1)) < .2))) {
             currentDistance = Robot.drive.getOutsideEncoderDistance(m_turnDirection) * Robot.drive.DIST_PER_PULSE;
             
             arcPercent = (currentDistance * moveDir) / m_outsideArcLength;
@@ -126,6 +129,9 @@ public class PreciseTurnRadius extends Subroutine {
                 yield();
                 return;
             }
+        }
+        if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
+            callSubroutine(new TeleopAuton());
         }
         System.out.println("PreciseTurnRadius loop done");
         Robot.drive.setDrive(m_endPower, m_endPower);
