@@ -38,7 +38,7 @@ public class PreciseTurn extends Subroutine {
                     power = Robot.drive.MIN_TURN_SPEED;
                 }
             }
-            Robot.drive.setDrive(-power / 1.1, power / 1.1);
+            Robot.drive.setDrive(-power, power);
             if (index++ == 1000) {
                 index = 0;
                System.out.println("Current Angle : " + Robot.drive.getGyroAngle() + " Target Angle: " + m_turnAngle + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) + " POut: " + m_turnController.getOutput());

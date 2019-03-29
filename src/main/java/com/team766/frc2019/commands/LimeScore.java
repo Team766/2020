@@ -2,6 +2,7 @@ package com.team766.frc2019.commands;
 
 import com.team766.controllers.TimeProviderI;
 import com.team766.framework.Subroutine;
+import com.team766.frc2019.Robot;
 import com.team766.frc2019.mechanisms.Drive;
 import com.team766.frc2019.mechanisms.DriveI;
 import com.team766.frc2019.mechanisms.LimeLight;
@@ -15,6 +16,7 @@ import com.team766.hal.RobotProvider;
 
 public class LimeScore extends Subroutine {
 
+    
     PIDController m_turnController;
     double m_targetPower;
     double m_endPower;
@@ -100,21 +102,23 @@ public class LimeScore extends Subroutine {
         if ((m_joystick1.getRawAxis(1)) < .2) {
             LimeLight.setLedMode(LightMode.eOff);
             LimeLight.setCameraMode(CameraMode.eDriver);
-            
-            callSubroutine(new Actuate());
+            Robot.flowerActuator.extend();
+            //callSubroutine(new Actuate());
             m_drive.setDrive(.3, .3);
             waitForSeconds(0.6);
             m_drive.setDrive(0, 0);
-            callSubroutine(new ExtendGripper());
+            Robot.flowerGripper.extend();
+            //callSubroutine(new ExtendGripper());
             //waitForSeconds(0.2);
             //drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
             waitForSeconds(0.4);
             //callSubroutine(new ExtendGripper());
-            callSubroutine(new Retract());
+            Robot.flowerActuator.extend();
+            //callSubroutine(new Retract());
             m_drive.setDrive(0.0 , 0.0);
-
         }
-    
+        yield();
+        return;
 
         //callSubroutine(new PreciseDrive(drive.getGyroAngle(), -1.0, 0.7, 0));
         

@@ -25,13 +25,13 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
     public static double P = 0.04;
-    public static double I = 0.00;
-    public static double D = 0.0125;
+    public static double I = 0.0005;
+    public static double D = 0.010;
     public final double MP = 0.02;
     public final double MI = 0.00;
     public final double MD = 0.00;
     public static final double THRESHOLD = 2;
-    public final double MIN_TURN_SPEED = 0.05;
+    public final double MIN_TURN_SPEED = 0.3;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
     public final double robotWidth = 2.8;
     public boolean m_secondVictor = true;
@@ -86,8 +86,7 @@ public class Drive extends Mechanism  implements DriveI {
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
         m_leftTalon.config_kD(0, MD, 0);
-        //m_leftTalon.setFeedForward(0.7869);
-        //m_rightTalon.setFeedForward(0.7869);
+
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MD, 0);
