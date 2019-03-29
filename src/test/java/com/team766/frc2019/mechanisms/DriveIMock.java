@@ -13,7 +13,7 @@ public class DriveIMock implements DriveI {
     }
 
     @Override
-    public void setDrive(double leftSetting, double rightSetting, CANSpeedController.ControlMode controlMode) {
+    public void setDrive(double leftSetting, double rightSetting) {
 
     }
 

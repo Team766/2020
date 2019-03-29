@@ -7,6 +7,8 @@ import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -96,8 +98,14 @@ public class Drive extends Mechanism  implements DriveI {
         m_leftTalon.configClosedLoopRamp(0.5, 0);
         m_rightTalon.configOpenLoopRamp(0.5, 0);
         m_rightTalon.configClosedLoopRamp(0.5, 0);
-        //encodersDistancePerPulse(DIST_PER_PULSE);
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
+
+        LiveWindow.addActuator("Drivetrain", "Left Talon", (Sendable)m_leftTalon);
+        LiveWindow.addActuator("Drivetrain", "Left Victor 1", (Sendable)m_leftVictor1);
+        LiveWindow.addActuator("Drivetrain", "Left Victor 2", (Sendable)m_leftVictor2);
+        LiveWindow.addActuator("Drivetrain", "Right Talon", (Sendable)m_rightTalon);
+        LiveWindow.addActuator("Drivetrain", "Right Victor 1", (Sendable)m_rightVictor1);
+        LiveWindow.addActuator("Drivetrain", "Right Victor 2", (Sendable)m_rightVictor2);
     }
 
     @Override

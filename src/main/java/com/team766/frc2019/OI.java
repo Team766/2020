@@ -17,6 +17,9 @@ import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -105,7 +108,10 @@ public class OI extends Command {
 		double normalizer = Math.max(Math.abs(fwd_power),Math.abs(turn_power))/(Math.abs(fwd_power) + Math.abs(turn_power)); // divides both motor powers by the larger one to keep the ratio and keep power at or below 1
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
-		//System.out.println(index);
+		SmartDashboard.putNumber("Forward Power", fwd_power);
+		SmartDashboard.putNumber("Turn Power", turn_power);
+		SmartDashboard.putNumber("Left Power", leftPower);
+		SmartDashboard.putNumber("Right Power", rightPower);
 		if (index++ > 200) {
 			index = 0;
 			System.out.println(" leftPower: " + leftPower + " rightPower: " + rightPower);
@@ -172,7 +178,6 @@ public class OI extends Command {
 			}
 		}
 */
-
 
 		// BIG ELEVATOR FORCED MANUAL MOVEMENT
 		if(m_boxop.getRawButton(LOWER_UP) ) {
