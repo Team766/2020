@@ -9,7 +9,6 @@ import com.team766.frc2019.mechanisms.LimeLight;
 import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.frc2019.mechanisms.LimeLight.CameraMode;
 import com.team766.frc2019.mechanisms.LimeLight.LightMode;
-import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
