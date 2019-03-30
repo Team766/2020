@@ -1,5 +1,6 @@
 package com.team766.hal.wpilib;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -101,7 +102,8 @@ public class CANVictorSpeedController extends WPI_VictorSPX implements CANSpeedC
 	}
 
 	@Override
-	public void setFeedForward(double value) {
-		m_feedForward = value;
+	public ErrorCode config_kF(int slotIdx, double value, int timeoutMs) {
+		super.config_kF(slotIdx, value, timeoutMs);
+		return ErrorCode.OK;
 	}
 }

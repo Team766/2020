@@ -17,10 +17,19 @@ public class MiddleLvl1StraightCargo extends Subroutine {
         System.out.println("DriveAuto7 STARTING");
         Robot.drive.resetEncoders();
         Robot.drive.resetGyro();
-        callSubroutine(new PreciseDrive(0, 10, .7, 0)); 
-        m_limePickup.start();
-       // callSubroutine(new PreciseTurn(180));
-       // callSubroutine(new PreciseDrive(180, 10, .5, 0));
+
+        callSubroutine(new PreciseDrive(0, 6, 0.6, 0)); 
+        waitForSeconds(3.0);
+       // callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+        callSubroutine(new PreciseTurn(230)); 
+        //callSubroutine(new PreciseDrive(0, -3, 0.6, 0.6)); 
+       // callSubroutine(new PreciseTurnRadius(230, 2, -0.6, -0.6));
+        callSubroutine(new PreciseDrive(230, 10, 0.6, 0.6));
+        callSubroutine(new PreciseTurnRadius(0, 2, 0.6, 0.6)); 
+        waitForSeconds(3.0);
+       // callSubroutine(new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+        callSubroutine(new PreciseDrive(0, -3, 1.0, 0));
+        callSubroutine(new TeleopAuton()); 
         
         System.out.println("DriveAuto7 IS DONE");
         Robot.drive.nukeRobot();
