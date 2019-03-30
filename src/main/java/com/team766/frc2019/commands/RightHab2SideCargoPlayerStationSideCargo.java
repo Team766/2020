@@ -19,33 +19,56 @@ public class RightHab2SideCargoPlayerStationSideCargo extends Subroutine {
             Robot.drive.resetGyro();
 
             waitForSeconds(0.3);
-            callSubroutine(new PreciseDrive(0, 6 , 1.0, 0.0));
-            callSubroutine(new PreciseTurnRadius(15, 2 ,1.0 , 0));
-            callSubroutine(new PreciseDrive(15, 15, 1.0, 0));
-            callSubroutine(new PreciseTurnRadius(300, 3, 1.0, 0.7));
-            callSubroutine(new PreciseDrive(270, 1, 1.0, 0));
-            waitForSeconds(3); 
-           // callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
-            callSubroutine(new PreciseDrive(270, -3, 1.0, 0));
-            callSubroutine(new PreciseTurn(170));
-            callSubroutine(new PreciseDrive(170, 15, 1.0, 0));
-            waitForSeconds(3); 
-            //callSubroutine(new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
-            callSubroutine(new PreciseDrive(170, -3, 1.0, 0));
-            //callSubroutine(new PreciseTurnRadius(175, 2 ,1.0 , 1.0));
-            callSubroutine(new PreciseDrive(175, -20, 1.0, 0));
-            callSubroutine(new PreciseTurn(270));
-            waitForSeconds(3); 
-            //callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+            callSubroutine(new PreciseDrive(0, 6 , 0.6, 0.0));
+            callSubroutine(new PreciseTurnRadius(15, 2 ,0.6 , 0.6));
+            callSubroutine(new PreciseDrive(15, 15, 0.6, 0.6));
+            callSubroutine(new PreciseTurnRadius(270, 2, 0.6, 0));
+            callSubroutine(new PreciseDrive(270, 3, 0.6, 0));
+            callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+            callSubroutine(new PreciseDrive(270, -2 , 0.6, 0));
+            callSubroutine(new PreciseDrive(160, -3, 0.6, 0));
+            callSubroutine(new PreciseDrive(160, 15, 0.6, 0));
+            callSubroutine(new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+            callSubroutine(new PreciseDrive(180, -3, 0.6, 0.0));
+            callSubroutine(new TeleopAuton());
+            /*
+            callSubroutine(new PreciseDrive(170, -22, 0.6, 0));
+            callSubroutine(new PreciseDrive(175, 3, 0.6, 0.6));
+            callSubroutine(new PreciseTurnRadius(270, 2, 0.6, 0));
+            callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
             waitForSeconds(0.3);
-            callSubroutine(new PreciseDrive(270, -3, 1.0, 0));
-            callSubroutine(new PreciseTurn(170));
-            callSubroutine(new PreciseDrive(170, 15, 1.0, 0));
+            callSubroutine(new PreciseDrive(270, -3, 0.6, 0));
+            callSubroutine(new PreciseDrive(180, -3, 0.6, 0));
+            callSubroutine(new PreciseDrive(170, 15, 0.6, 0));
+            */
+            
         
             System.out.println("Right cargo IS DONE");
             Robot.drive.nukeRobot();
             yield();
         }
+
+        /*
+        waitForSeconds(0.3);
+        callSubroutine(new PreciseDrive(0, 6 , 0.6, 0.0));
+        callSubroutine(new PreciseTurnRadius(15, 2 ,0.6 , 0.6));
+        callSubroutine(new PreciseDrive(15, 15, 0.6, 0.6));
+        callSubroutine(new PreciseTurnRadius(270, 2, 0.6, 0));
+        callSubroutine(new PreciseDrive(270, 1, 0.6, 0));
+        callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+        callSubroutine(new PreciseDrive(270, -2, 0.6, 0));
+        callSubroutine(new PreciseTurn(170));
+        callSubroutine(new PreciseDrive(170, 15, 0.6, 0));
+        callSubroutine(new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+        callSubroutine(new PreciseDrive(170, -3, 0.6, 0));
+        callSubroutine(new PreciseDrive(170, -20, 0.6, 0.6));
+        callSubroutine(new PreciseTurn(270));
+        callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
+        waitForSeconds(0.3);
+        callSubroutine(new PreciseDrive(270, -3, 0.6, 0));
+        callSubroutine(new PreciseTurn(170));
+        callSubroutine(new PreciseDrive(170, 15, 0.6, 0));
+        */
 
 
 }
