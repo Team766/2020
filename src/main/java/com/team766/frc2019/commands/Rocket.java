@@ -33,6 +33,7 @@ public class Rocket extends Subroutine {
     
     private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
     private JoystickReader m_joystick2 = RobotProvider.instance.getJoystick(2);
+    private JoystickReader m_boxop = RobotProvider.instance.getJoystick(3);		
 
     /**
      * Precisely drives for the set parameters.
@@ -62,14 +63,14 @@ public class Rocket extends Subroutine {
         System.out.print("y error = " + yError);
         m_turnController.setSetpoint(0.0);
         //callSubroutine(new RetractGripper());
-        while ( (yError) > -13.5 && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
+        while ( (((yError) > -10 && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) && !(m_boxop.getRawButton(14))) && !m_boxop.getRawButton(13)) {
             currentX = m_limeLight.tx();
             yError = m_limeLight.ty();
             if (Math.abs(currentX) > 0) {
-                if ( (straightPower > .3)) {
-                    straightPower = 1.0 * Math.pow(Math.E, -0.47*Math.abs(yError));
+                if ( (yError) >  7) {
+                    straightPower = 0.8;
                 } else {
-                    straightPower = 0.3;
+                    straightPower = 0.30;
                 }
             } else {
                 straightPower = 0;

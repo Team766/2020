@@ -23,8 +23,8 @@ public class Elevator extends Mechanism {
     private double targetPosition;
 
     public static int LVL1 = 5000;
-    public static int LVL2 = 1000000;
-    public static int LVL3 = 2050000;
+    public static int LVL2 = 1115000;
+    public static int LVL3 = 2150000;
     public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
     public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 80000 * 2/3;
 	public static int NEAR_MIN_LOWER_HEIGHT = 400000 * 2/3;
@@ -106,11 +106,11 @@ public class Elevator extends Mechanism {
         m_lowerElevatorMotor.config_kP(0, 0.01, 0);
         m_lowerElevatorMotor.config_kI(0, 0.0, 0);
         m_lowerElevatorMotor.config_kD(0, 0.01, 0);
-        m_lowerElevatorMotor.setFeedForward(0.0);
+        m_lowerElevatorMotor.config_kF(0, 0.0, 0);
         m_upperElevatorMotor.config_kP(0, 0.01, 0);
         m_upperElevatorMotor.config_kI(0, 0.0, 0);
         m_upperElevatorMotor.config_kD(0, 0.01, 0);
-        m_upperElevatorMotor.setFeedForward(0.0);
+        m_upperElevatorMotor.config_kF(0, 0.0, 0);
         m_lowerElevatorMotor.setNeutralMode(NeutralMode.Brake);
         m_upperElevatorMotor.setNeutralMode(NeutralMode.Brake);
         m_upperElevatorMotor.setPosition(0);
@@ -191,10 +191,12 @@ public class Elevator extends Mechanism {
         if (position < 0) {
             return;
         }
-        /*upperTarget = 3*position/7;
-        lowerTarget = 4*position/7;*/
+        upperTarget = 3*position/7;
+        lowerTarget = 4*position/7;
+        /*
         upperTarget = 92*position/305;
         lowerTarget = 213*position/305;
+        */
         if (lowerTarget > getLowerHeight()) {
             lowerDirection = 1;
         } else {
@@ -294,7 +296,7 @@ public class Elevator extends Mechanism {
     public void elevatorUp() {
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-            System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+            //System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
         }
         if (Robot.elevator.getLowerHeight() > NEAR_MAX_LOWER_HEIGHT) {
             if (Robot.elevator.getLowerHeight() >= MAX_LOWER_HEIGHT) {
@@ -316,6 +318,9 @@ public class Elevator extends Mechanism {
     }
 
     public void elevatorDown() {
+        if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
+          //  System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+        }
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
             //System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());

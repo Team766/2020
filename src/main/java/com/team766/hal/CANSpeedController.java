@@ -85,8 +85,8 @@ public interface CANSpeedController extends SpeedController {
 	ErrorCode config_kI(int slotIdx, double value, int timeoutMs);
 
 	ErrorCode config_kD(int slotIdx, double value, int timeoutMs);
-
-	void setFeedForward(double value);
+	
+	ErrorCode config_kF(int slotIdx, double value, int timeoutMs);
 
 	ErrorCode configSelectedFeedbackSensor(FeedbackDevice feedbackDevice);
 

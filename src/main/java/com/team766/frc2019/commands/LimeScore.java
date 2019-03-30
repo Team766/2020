@@ -10,6 +10,9 @@ import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.frc2019.mechanisms.LimeLight.CameraMode;
 import com.team766.frc2019.mechanisms.LimeLight.LightMode;
 import com.team766.hal.CANSpeedController.ControlMode;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
@@ -62,14 +65,14 @@ public class LimeScore extends Subroutine {
         currentX = m_limeLight.tx();
         yError = m_limeLight.ty();
         System.out.print("y error = " + yError);
-        m_turnController.setSetpoint(0.0);
+        m_turnController.setSetpoint(1.0);
         //callSubroutine(new RetractGripper());
-        while ( (yError) > -13.5 && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
+        while ( (yError) > -10 && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
             currentX = m_limeLight.tx();
             yError = m_limeLight.ty();
             if (Math.abs(currentX) > 0) {
-                if ( (straightPower > .30)) {
-                    straightPower = 1.0 * Math.pow(Math.E, -0.67*Math.abs(5 - yError));
+                if ( (yError) >  7) {
+                    straightPower = 0.8;
                 } else {
                     straightPower = 0.30;
                 }
@@ -78,26 +81,22 @@ public class LimeScore extends Subroutine {
             }           
              m_turnController.calculate( currentX, true);
             pOut = m_turnController.getOutput();
-            //System.out.println(pOut);
             if (!Double.isNaN( pOut )) {
                 turnAdjust = 0.7 * pOut;
             }
-            if (index++ == 1000) {
-                index = 0;
-                System.out.println("power: " + straightPower);
-                //System.out.println("y error: " + yError + " turn adjust: " + turnAdjust + " current x: " + currentX + " straight power: " + straightPower);
+            /*
+            SmartDashboard.putNumber("PID Output", pOut);
+            SmartDashboard.putNumber("Straight Power", straightPower);
+            SmartDashboard.putNumber("Turn Adjust", turnAdjust);
+            SmartDashboard.putNumber("Current X", currentX);
+            SmartDashboard.putNumber("Y Error", yError);
+            */
+            if (turnAdjust > 0) {
+                m_drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust));
+            } else {
+            m_drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust));
+            // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
             }
-            pOut = m_turnController.getOutput();
-            //System.out.println(pOut);
-            if (!Double.isNaN( pOut )) {
-                turnAdjust = pOut;
-            }
-                if (turnAdjust > 0) {
-                    m_drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust));
-                } else {
-                m_drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust));
-                // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
-                }
         }
         if ((m_joystick1.getRawAxis(1)) < .2) {
             LimeLight.setLedMode(LightMode.eOff);

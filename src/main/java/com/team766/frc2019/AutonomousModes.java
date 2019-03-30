@@ -12,6 +12,7 @@ import com.team766.frc2019.commands.LimeScoreAuto;
 import com.team766.frc2019.commands.TurnAround;
 import com.team766.frc2019.commands.LeftHab2SideCargoPlayerStationSideCargo;
 import com.team766.frc2019.commands.RightHab2SideCargoPlayerStationSideCargo;
+import com.team766.frc2019.commands.MiddleLvl1StraightCargo;
 //import com.team766.frc2019.commands.MiddleLvl1StraightCargo;
 import com.team766.frc2019.commands.DriveVelocity;
 
@@ -31,6 +32,8 @@ public enum AutonomousModes {
     @AutonomousCommand(commandClass = RightHab2SideCargoPlayerStationSideCargo.class) RightHab2SideCargoPlayerStationSideCargo,
     @AutonomousCommand(commandClass = LeftHab2SideCargoPlayerStationSideCargo.class) LeftHab2SideCargoPlayerStationSideCargo,
     @AutonomousCommand(commandClass = RightHab2RocketPlayerStationBackRocket.class) RightHab2RocketPlayerStationBackRocket,
+    @AutonomousCommand(commandClass = MiddleLvl1StraightCargo.class) MiddleLvl1StraightCargo,
+
 
    // @AutonomousCommand(commandClass= MiddleLvl1StraightCargo.class) MiddleLvl1StraightCargo,
 

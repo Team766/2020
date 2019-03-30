@@ -4,6 +4,7 @@ import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.controllers.PIDController;
+import com.team766.hal.CANSpeedController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
@@ -11,8 +12,8 @@ public class PreciseTurn extends Subroutine {
 
     double m_turnAngle;
     PIDController m_turnController;
-    private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
-    public static boolean turning = false;
+    private JoystickReader m_joystick1 = RobotProvider.instance.getJoystick(1);
+    public static boolean turning = false; 
 
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;

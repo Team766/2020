@@ -3,6 +3,11 @@ package com.team766.frc2019.commands;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
@@ -64,11 +69,17 @@ public class PreciseDrive extends Subroutine {
                     Robot.drive.setDrive(straightPower, straightPower + turnPower);
                 }
             }
-            if (index++ > 1000 && Robot.drive.isEnabled()) {
-                index = 0;
-              //  System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Power: " + calcPower(Math.abs(getCurrentDistance() / m_driveDistance))+ " Left Power: " + Robot.drive.leftMotorVelocity() + " Right Power: " + Robot.drive.rightMotorVelocity() + " DriveDir: " + driveDir);
-              System.out.println("current distance: " + getCurrentDistance());
-            }
+            /*
+            SmartDashboard.putNumber("Target Angle", m_targetAngle);
+            SmartDashboard.putNumber("Current Angle", Robot.drive.getGyroAngle());
+            SmartDashboard.putNumber("Current Error", m_turnController.getCurrentError());
+            SmartDashboard.putNumber("PID Output", m_turnController.getOutput());
+            SmartDashboard.putNumber("Current Distance", getCurrentDistance());
+            SmartDashboard.putNumber("Target Power", calcPower(Math.abs(getCurrentDistance() / m_driveDistance)));
+            SmartDashboard.putNumber("Left Power", Robot.drive.leftMotorVelocity());
+            SmartDashboard.putNumber("Right Power", Robot.drive.rightMotorVelocity());
+            SmartDashboard.putNumber("Drive Direction", driveDir);
+            */
             if (!Robot.drive.isEnabled()){
                 Robot.drive.nukeRobot();
                 m_turnController.reset();
