@@ -29,8 +29,7 @@ public class Drive extends Mechanism  implements DriveI {
     public static double P = 0.04;
     public static double I = 0.0005;
     public static double D = 0.0012;
-    public final double MF = 1.2251497005988;
-    public final double MP = 0.00; //0.02
+    public final double MP = 0.02;
     public final double MI = 0.00;
     public final double MD = 0.00;
     public static final double THRESHOLD = 2;
@@ -48,7 +47,7 @@ public class Drive extends Mechanism  implements DriveI {
     public double rightSensorBasePosition;
 
 
-    public final double velocityFactor = 800.0; 
+    public final double velocityFactor = 30000.0; 
 
     public Drive() { 
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
@@ -86,16 +85,14 @@ public class Drive extends Mechanism  implements DriveI {
         m_rightTalon.configNominalOutputReverse(0);
         m_rightTalon.configPeakOutputForward(1);
         m_rightTalon.configPeakOutputReverse(-1);
-        m_leftTalon.config_kF(0, MF, 0);
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
         m_leftTalon.config_kD(0, MD, 0);
-        m_rightTalon.config_kF(0, MF, 0);
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MD, 0);
-        m_leftTalon.setNeutralMode(NeutralMode.Coast);
-        m_rightTalon.setNeutralMode(NeutralMode.Coast);
+        m_leftTalon.setNeutralMode(NeutralMode.Brake);
+        m_rightTalon.setNeutralMode(NeutralMode.Brake);
         m_leftTalon.configOpenLoopRamp(0.5, 0);
         m_leftTalon.configClosedLoopRamp(0.5, 0);
         m_rightTalon.configOpenLoopRamp(0.5, 0);
@@ -120,7 +117,7 @@ public class Drive extends Mechanism  implements DriveI {
     * Each Talon is followed by 2 Victors, which mirror the Talon's output.
     */
     public void setDrive(double leftSetting, double rightSetting) {
-        /*if (leftSetting >= 0) {
+        if (leftSetting >= 0) {
             m_leftTalon.set(ControlMode.Velocity, (leftSetting * velocityFactor) + 3000);
         } else {
             m_leftTalon.set(ControlMode.Velocity, (leftSetting * velocityFactor) - 3000);
@@ -129,9 +126,7 @@ public class Drive extends Mechanism  implements DriveI {
             m_rightTalon.set(ControlMode.Velocity, (rightSetting * velocityFactor) + 3000);
         } else {
             m_rightTalon.set(ControlMode.Velocity, (rightSetting * velocityFactor) + 3000);
-        }*/
-        m_leftTalon.set(ControlMode.Velocity, leftSetting * velocityFactor);
-        m_rightTalon.set(ControlMode.Velocity, rightSetting * velocityFactor);
+        }
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor == true) {
