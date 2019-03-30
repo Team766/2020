@@ -32,7 +32,7 @@ public class PreciseTurn extends Subroutine {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
             power = m_turnController.getOutput();
             
-            if (Math.abs(power) < Robot.drive.MIN_TURN_SPEED) {
+            if ((Math.abs(power) < Robot.drive.MIN_TURN_SPEED) || Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) > 90) {
                 if (power < 0) {
                     power = -Robot.drive.MIN_TURN_SPEED;
                 } else {

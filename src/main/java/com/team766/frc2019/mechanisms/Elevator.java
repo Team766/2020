@@ -24,16 +24,16 @@ public class Elevator extends Mechanism {
 
     public static int LVL1 = 5000;
     public static int LVL2 = 1115000;
-    public static int LVL3 = 2150000;
+    public static int LVL3 = 2200000;
     public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
     public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 80000 * 2/3;
 	public static int NEAR_MIN_LOWER_HEIGHT = 400000 * 2/3;
     private static int NEAR_MAX_LOWER_HEIGHT = 950000;
-    private static int MAX_LOWER_HEIGHT = 1200000;
+    private static int MAX_LOWER_HEIGHT = 1250000;
 	public static int MIN_UPPER_HEIGHT = 0;
     public static int NEAR_MIN_UPPER_HEIGHT = 200000 * 2/3;
     private static int NEAR_MAX_UPPER_HEIGHT = 880000;
-    private static int MAX_UPPER_HEIGHT = 920000;
+    private static int MAX_UPPER_HEIGHT = 960000;
     private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
