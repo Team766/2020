@@ -19,17 +19,20 @@ public class RightHab2SideCargoPlayerStationSideCargo extends Subroutine {
             Robot.drive.resetGyro();
 
             waitForSeconds(0.3);
-            callSubroutine(new PreciseDrive(0, 6 , 0.6, 0.0));
+            callSubroutine(new PreciseDrive(0, 12 , 0.6, 0.0));
             callSubroutine(new PreciseTurnRadius(15, 2 ,0.6 , 0.6));
-            callSubroutine(new PreciseDrive(15, 15, 0.6, 0.6));
+            callSubroutine(new PreciseDrive(15, 19, 0.6, 0.6));
             callSubroutine(new PreciseTurnRadius(270, 2, 0.6, 0));
-            callSubroutine(new PreciseDrive(270, 3, 0.6, 0));
+            callSubroutine(new PreciseDrive(270, -3, 0.6, 0));
+            callSubroutine(new PreciseDrive(270, 1.5, 0.5, 0));
             callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
-            callSubroutine(new PreciseDrive(270, -2 , 0.6, 0));
-            callSubroutine(new PreciseDrive(160, -3, 0.6, 0));
+            waitForSeconds(0.1);
+            callSubroutine(new PreciseDrive(270, -3.5 , 0.6, 0));
+            //callSubroutine(new PreciseDrive(160, -3, 0.6, 0));
             callSubroutine(new PreciseDrive(160, 15, 0.6, 0));
             callSubroutine(new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
             callSubroutine(new PreciseDrive(180, -3, 0.6, 0.0));
+            callSubroutine(new PreciseDrive(170, -25, 0.6, 0));
             callSubroutine(new TeleopAuton());
             /*
             callSubroutine(new PreciseDrive(170, -22, 0.6, 0));

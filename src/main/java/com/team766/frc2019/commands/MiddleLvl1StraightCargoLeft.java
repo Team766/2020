@@ -25,8 +25,10 @@ public class MiddleLvl1StraightCargoLeft extends Subroutine {
         callSubroutine(new PreciseDrive(230, 14, 0.6, 0.6));
         callSubroutine(new PreciseTurnRadius(180 , 3, 0.6, 0.6)); 
         callSubroutine(new PreciseDrive(180, 3, 0.6, 0.6));
+        /*
         callSubroutine(new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
         callSubroutine(new PreciseDrive(180, -3, 0.6, 0));
+        */
         callSubroutine(new TeleopAuton()); 
         
         System.out.println("DriveAuto7 IS DONE");

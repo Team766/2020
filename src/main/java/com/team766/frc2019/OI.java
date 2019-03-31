@@ -116,7 +116,7 @@ public class OI extends Command {
 		*/
 		if (index++ > 200) {
 			index = 0;
-			//System.out.println(" leftPower: " + leftPower + " rightPower: " + rightPower);
+			System.out.println(" leftPower: " + leftPower + " rightPower: " + rightPower);
 		}
 		//System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
 		Robot.drive.setDrive(leftPower, rightPower);
@@ -245,7 +245,7 @@ public class OI extends Command {
 		if (m_boxop.getRawButton(SUBTRACT_SMALL)) {
 			if (!subSmallButton) {
 				subSmallButton = true;
-				Robot.elevator.setCombinedPosition( Robot.elevator.getTargetPosition() - 100000);
+				Robot.elevator.setCombinedPosition( Robot.elevator.getTargetPosition() - 30000);
 			}
 		} else {
 			subSmallButton = false;

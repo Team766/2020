@@ -25,6 +25,6 @@ public class DriveVelocity extends Subroutine {
             index = index % 100;
             velocity++;
     }*/
-        Robot.drive.setDrive(1.0, 1.0);
+        Robot.drive.setDrive(1.588, 1.588);
     }
 }

@@ -90,12 +90,14 @@ public class LimePickup extends Subroutine {
                 m_turnController.calculate( currentX, true);
                 pOut = m_turnController.getOutput();
                 if (!Double.isNaN( pOut )) {
-                    turnAdjust = 1.0 * pOut;
+                    turnAdjust = 0.7 * pOut;
                 }
                 if (turnAdjust > 0) {
                     m_drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust));
+                    System.out.println("left: "+ (straightPower - Math.abs(turnAdjust)) + "right: " +( straightPower + Math.abs(turnAdjust)));
                 } else {
                     m_drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust));
+                    System.out.println("left: "+ (straightPower + Math.abs(turnAdjust)) + "right: " +( straightPower - Math.abs(turnAdjust)));
                 }
                 /*
                 SmartDashboard.putNumber("PID Output", pOut);
