@@ -29,9 +29,12 @@ public class Drive extends Mechanism  implements DriveI {
     public static double P = 0.04;
     public static double I = 0.0005;
     public static double D = 0.0012;
+    //i'm a saucy boy which is why we won't be implementing feed-forward gain in our robot -this is yarden btw
+    //public final double MF = 1.1366666666666666666666666666666666667;
+    //public final double MF = 0.0;
     public final double MP = 0.02;
-    public final double MI = 0.00;
-    public final double MD = 0.00;
+    public final double MI = 0.0;
+    public final double MD = 0.0;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
@@ -85,9 +88,11 @@ public class Drive extends Mechanism  implements DriveI {
         m_rightTalon.configNominalOutputReverse(0);
         m_rightTalon.configPeakOutputForward(1);
         m_rightTalon.configPeakOutputReverse(-1);
+       // m_leftTalon.config_kF(0, MF, 0);
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
         m_leftTalon.config_kD(0, MD, 0);
+       // m_rightTalon.config_kF(0, MF, 0);
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MD, 0);
@@ -119,14 +124,20 @@ public class Drive extends Mechanism  implements DriveI {
     public void setDrive(double leftSetting, double rightSetting) {
         if (leftSetting >= 0) {
             m_leftTalon.set(ControlMode.Velocity, (leftSetting * velocityFactor) + 3000);
+            System.out.println("left: " + ((leftSetting * velocityFactor) + 3000));
         } else {
             m_leftTalon.set(ControlMode.Velocity, (leftSetting * velocityFactor) - 3000);
+            System.out.println("left: " + ((leftSetting * velocityFactor) - 3000));
         }
         if (rightSetting >= 0) {
             m_rightTalon.set(ControlMode.Velocity, (rightSetting * velocityFactor) + 3000);
+            System.out.println("right: " + ((rightSetting * velocityFactor) + 3000));
         } else {
-            m_rightTalon.set(ControlMode.Velocity, (rightSetting * velocityFactor) + 3000);
+            m_rightTalon.set(ControlMode.Velocity, (rightSetting * velocityFactor) - 3000);
+            System.out.println("right: " + ((rightSetting * velocityFactor) - 3000));
         }
+      //  m_leftTalon.set(ControlMode.Velocity, leftSetting * velocityFactor);
+       // m_rightTalon.set(ControlMode.Velocity, rightSetting * velocityFactor);
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor == true) {

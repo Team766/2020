@@ -24,7 +24,7 @@ public class Elevator extends Mechanism {
 
     public static int LVL1 = 5000;
     public static int LVL2 = 1115000;
-    public static int LVL3 = 2200000;
+    public static int LVL3 = 2130000;
     public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
     public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 80000 * 2/3;
 	public static int NEAR_MIN_LOWER_HEIGHT = 400000 * 2/3;
