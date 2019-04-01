@@ -59,17 +59,7 @@ public class Drive extends Mechanism  implements DriveI {
         
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
-
-        /*m_leftTalon.configNominalOutputForward(0);
-        m_leftTalon.configNominalOutputReverse(0);
-        m_leftTalon.configPeakOutputForward(1);
-        m_leftTalon.configPeakOutputReverse(-1);
-        m_rightTalon.configNominalOutputForward(0);
-        m_rightTalon.configNominalOutputReverse(0);
-        m_rightTalon.configPeakOutputForward(1);
-        m_rightTalon.configPeakOutputReverse(-1);
-        m_leftTalon.configFactoryDefault();
-        m_rightTalon.configFactoryDefault(); probably unnecessary*/
+        
         m_leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.setInverted(true);

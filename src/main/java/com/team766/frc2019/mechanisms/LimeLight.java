@@ -1,6 +1,5 @@
 package com.team766.frc2019.mechanisms;
 
-import com.team766.frc2019.Robot;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
