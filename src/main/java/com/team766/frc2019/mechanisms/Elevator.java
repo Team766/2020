@@ -37,7 +37,7 @@ public class Elevator extends Mechanism {
     private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
-    private static int MAX_HEIGHT_SMALL = 900000; 
+    private static int MAX_HEIGHT_SMALL = 900000;//marie
     /*
     public static int LVL1 = 5000;
     public static int LVL2 = 1480000;

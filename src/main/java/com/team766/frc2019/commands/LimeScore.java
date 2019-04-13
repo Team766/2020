@@ -39,16 +39,6 @@ public class LimeScore extends Subroutine {
     private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
     private JoystickReader m_joystick2 = RobotProvider.instance.getJoystick(2);
 
-    /**
-     * Precisely drives for the set parameters.
-     */
-
-    /*
-    public LimeDrive() {
-        takeControl(Robot.drive);
-    }
-    */
-
     public LimeScore(DriveI drive, LimeLightI limeLight, TimeProviderI timeProvider ) {
         m_drive = drive;
         m_limeLight = limeLight;
@@ -94,8 +84,7 @@ public class LimeScore extends Subroutine {
             if (turnAdjust > 0) {
                 m_drive.setDrive(straightPower - Math.abs(turnAdjust), straightPower + Math.abs(turnAdjust));
             } else {
-            m_drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust));
-            // System.out.println("straightPower + turn adjust " + (straightPower + turnAdjust) + (straightPower - turnAdjust));
+                m_drive.setDrive(straightPower + Math.abs(turnAdjust), straightPower - Math.abs(turnAdjust));
             }
         }
         if ((m_joystick1.getRawAxis(1)) < .2) {
