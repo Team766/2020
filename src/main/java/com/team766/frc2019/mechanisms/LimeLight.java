@@ -1,8 +1,5 @@
 package com.team766.frc2019.mechanisms;
 
-import com.team766.frc2019.Robot;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -37,9 +34,6 @@ public class LimeLight implements LimeLightI {
 	public static void setCameraMode(CameraMode evision) {
 		getValue("camMode").setNumber(evision.ordinal());
 	}
-	
-	//if everything goes wrong for some unexplainable reason define the 
-	//tv tx and ta and all that before hand like the documentation online does
     
 	@Override
 	public boolean isTarget() {
@@ -83,11 +77,11 @@ public class LimeLight implements LimeLightI {
 	}
 
 	public static double thor() {
-		return Robot.limeLight.getValue("thor").getDouble(0.0);
+		return LimeLight.getValue("thor").getDouble(0.0);
 	}
 
 	public static void setPipeline(int number) {
-		Robot.limeLight.getValue("pipeline").setNumber(number);
+		LimeLight.getValue("pipeline").setNumber(number);
 	}
 
 	/**
@@ -97,10 +91,9 @@ public class LimeLight implements LimeLightI {
 	* @param angleToTarget
 	* the angle between the camera and target, just pass in ty()
 	*/
-	@Override
+	@Deprecated
 	public double distanceToTarget(int pipeline, double angleToTarget) {
-		Robot.limeLight.setPipeline(pipeline);
-		//should probably wait here but idk how to
-		return (Robot.drive.hatchHeight - Robot.drive.mountingHeight) / Math.tan(Robot.drive.mountingAngle + angleToTarget);
+		return 0.0;
+		//return (Robot.drive.hatchHeight - Robot.drive.mountingHeight) / Math.tan(Robot.drive.mountingAngle + angleToTarget);
 	}
 }

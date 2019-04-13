@@ -1,14 +1,12 @@
 package com.team766.frc2019.commands;
 
 import com.team766.framework.Subroutine;
-import com.team766.frc2019.OI;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.mechanisms.LimeLight;
 import com.team766.frc2019.mechanisms.LimeLight.CameraMode;
 import com.team766.frc2019.mechanisms.LimeLight.LightMode;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
-import com.team766.hal.CANSpeedController.ControlMode;
 
 public class TeleopAuton extends Subroutine {
 
