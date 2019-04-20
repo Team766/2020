@@ -33,7 +33,7 @@ public class OI extends Command {
 	private PreciseTurn m_preciseTurn;
 	private Rocket m_rocket = new Rocket(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 
-
+	//defines variables of buttons
 	private static int INTAKE_ACTUATE = 2;
 	private static int INTAKE_RETRACT = 1;
 	private static int INTAKE_IN = 3;
@@ -54,12 +54,11 @@ public class OI extends Command {
 	private static int ELEVATOR_LVL2 = 14;
 	private static int ELEVATOR_LVL1 = 15;
 	
-	private double fwd_power = 0;
-	private double turn_power = 0;
+	private double fwdPower = 0;
+	private double turnPower = 0;
+	private double normalizer = 1;
 	private double leftPower = 0;
 	private double rightPower = 0;
-
-	private int index = 0;
 
 	private static double TURN_THRESHOLD = 0.05;
 
@@ -76,6 +75,7 @@ public class OI extends Command {
 
 	public static boolean calibrate;
 
+	//default constructor
 	public OI() {
 		m_joystick1 = RobotProvider.instance.getJoystick(1);
 		m_joystick2 = RobotProvider.instance.getJoystick(2);
@@ -83,9 +83,6 @@ public class OI extends Command {
 	}
 	
 	public void run() {
-
-		//System.out.println("joystick1: " + m_joystick1 + "joystick2: " + m_joystick2);
-
 		/*if (Math.abs(m_joystick1.getRawAxis(1)) < 0.13 ) {
 			fwd_power = 0;
 		} else {
@@ -101,14 +98,31 @@ public class OI extends Command {
 			}
 		} yarden wtf even is this */
 
-		double normalizer = 1 / (Math.abs(fwd_power) + Math.abs(turn_power));
-		double leftPower = (fwd_power + turn_power) * normalizer;
-		double rightPower = (fwd_power - turn_power) * normalizer;
+		//reads joystick input
+		fwdPower = -m_joystick1.getRawAxis(1);
+		turnPower = m_joystick2.getRawAxis(0);
+
+		//sets motor power
+		leftPower = (fwdPower + turnPower);
+		rightPower = (fwdPower - turnPower);
+
+		/* If right and/or left motor power is greater than an advisable amount (in this case 1), multiply
+		   both values by the exact fraction necessary to set them less than or equal to 1.
+           Otherwise, multiply both values by 1 because no change is needed. */
+		if (rightPower > 1 || leftPower > 1) {
+			normalizer = 1 / (Math.abs(fwdPower) + Math.abs(turnPower));
+		} else {
+			normalizer = 1;
+		}
+
+		leftPower *= normalizer;
+		rightPower *= normalizer;
 		
+		//when run, updates SmartDashboard values
 		SmartDashboard.putNumber("Left Joystick", m_joystick1.getRawAxis(1));
 		SmartDashboard.putNumber("Right Joystick", m_joystick2.getRawAxis(0));
-		SmartDashboard.putNumber("Forward Power", fwd_power);
-		SmartDashboard.putNumber("Turn Power", turn_power);
+		SmartDashboard.putNumber("Forward Power", fwdPower);
+		SmartDashboard.putNumber("Turn Power", turnPower);
 		SmartDashboard.putNumber("Left Power", leftPower);
 		SmartDashboard.putNumber("Right Power", rightPower);
 		
@@ -125,6 +139,7 @@ public class OI extends Command {
 		}
 		index++;*/
 
+		//sets robot speed
 		Robot.drive.setDrive(leftPower, rightPower);
 
 		// SMALL ELEVATOR FORCED MANUAL MOVEMENT
@@ -135,6 +150,8 @@ public class OI extends Command {
 			Robot.elevator.setUpperPower(0.5);
 			System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
 			*/
+
+			//makes sure calibrate isnt run multiple times (only runs when button is pressed)
 			if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
 				Robot.elevator.setCombinedPosition( -1);
 				m_calibrate.start();
@@ -151,6 +168,8 @@ public class OI extends Command {
 		}
 		*/
 
+
+		//starts various auton modes
 		if (m_boxop.getRawButton(23) || m_joystick1.getRawButton(1)) {
 			m_limePickup.start();
 		}
@@ -333,10 +352,6 @@ public class OI extends Command {
 			Robot.drive.nukeRobot();
 			m_calibrate.stop();
 			return;
-		}
-
-		if (index % 30 == 0) {
-			//System.out.println("Target Position: " + targetPosition);
 		}
 		Robot.elevator.movePosition(); 
 	}
