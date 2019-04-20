@@ -11,7 +11,6 @@ import com.team766.frc2019.commands.PreciseTurn;
 import com.team766.frc2019.commands.ExtendGripper;
 import com.team766.frc2019.commands.RetractGripper;
 import com.team766.frc2019.commands.Rocket;
-import com.team766.frc2019.commands.TurnInertia;
 import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
@@ -62,8 +61,6 @@ public class OI extends Command {
 
 	private int index = 0;
 
-	private static double MIN_ROBOT_VELOCITY = 2000.0;
-	private static double MAX_ROBOT_VELOCITY = 20000.0;
 	private static double TURN_THRESHOLD = 0.05;
 
 	private boolean addSmallButton = false;
@@ -82,14 +79,14 @@ public class OI extends Command {
 	public OI() {
 		m_joystick1 = RobotProvider.instance.getJoystick(1);
 		m_joystick2 = RobotProvider.instance.getJoystick(2);
-		m_boxop = RobotProvider.instance.getJoystick(3);		
+		m_boxop = RobotProvider.instance.getJoystick(3);
 	}
 	
 	public void run() {
 
 		//System.out.println("joystick1: " + m_joystick1 + "joystick2: " + m_joystick2);
 
-		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.13 ) {
+		/*if (Math.abs(m_joystick1.getRawAxis(1)) < 0.13 ) {
 			fwd_power = 0;
 		} else {
 			fwd_power = -(0.05*(Math.abs(m_joystick1.getRawAxis(1))/m_joystick1.getRawAxis(1)) + Math.pow(m_joystick1.getRawAxis(1), 3));
@@ -102,30 +99,33 @@ public class OI extends Command {
 			if (Math.abs(fwd_power) > 0.5) {
 				turn_power = 0.6 * turn_power;
 			}
+		} yarden wtf even is this */
 
-
-		}
-		double normalizer = Math.max(Math.abs(fwd_power),Math.abs(turn_power))/(Math.abs(fwd_power) + Math.abs(turn_power)); // divides both motor powers by the larger one to keep the ratio and keep power at or below 1
-		double leftPower = (fwd_power + turn_power);
-		double rightPower = (fwd_power - turn_power);
-		/*
+		double normalizer = 1 / (Math.abs(fwd_power) + Math.abs(turn_power));
+		double leftPower = (fwd_power + turn_power) * normalizer;
+		double rightPower = (fwd_power - turn_power) * normalizer;
+		
+		SmartDashboard.putNumber("Left Joystick", m_joystick1.getRawAxis(1));
+		SmartDashboard.putNumber("Right Joystick", m_joystick2.getRawAxis(0));
 		SmartDashboard.putNumber("Forward Power", fwd_power);
 		SmartDashboard.putNumber("Turn Power", turn_power);
 		SmartDashboard.putNumber("Left Power", leftPower);
 		SmartDashboard.putNumber("Right Power", rightPower);
-		*/
-		if (index++ > 200) {
+		
+		/*if (index++ > 200) {
 			index = 0;
 			System.out.println(" leftPower: " + leftPower + " rightPower: " + rightPower);
 		}
 		//System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
-		Robot.drive.setDrive(leftPower, rightPower);
+	
 
 		if (index++ % 50 == 0 && Robot.drive.isEnabled()) {
 			//System.out.println("lower height: " + Robot.elevator.getLowerHeight());
 
 		}
-		index++;
+		index++;*/
+
+		Robot.drive.setDrive(leftPower, rightPower);
 
 		// SMALL ELEVATOR FORCED MANUAL MOVEMENT
 		
