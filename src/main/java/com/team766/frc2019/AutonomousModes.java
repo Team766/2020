@@ -2,6 +2,7 @@ package com.team766.frc2019;
 
 import com.team766.framework.AutonomousCommand;
 import com.team766.frc2019.commands.Debug;
+import com.team766.frc2019.commands.DriveForwards;
 import com.team766.frc2019.commands.LimeDebug;
 import com.team766.frc2019.commands.TeleopAuton;
 import com.team766.frc2019.commands.LeftHab2RocketPlayerStationBackRocket;
@@ -19,7 +20,8 @@ import com.team766.frc2019.commands.DriveVelocity;
 
 public enum AutonomousModes {
     //commands
-    @AutonomousCommand(commandClass = TurnAround.class) TurnAround, 
+    @AutonomousCommand(commandClass = TurnAround.class) TurnAround,
+    @AutonomousCommand(commandClass = DriveForwards.class) DriveForwards,
 
     //engage limelight
     @AutonomousCommand(commandClass= LimeScoreAuto.class) LimeScoreAuto,
