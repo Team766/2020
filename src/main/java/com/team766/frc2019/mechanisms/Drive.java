@@ -7,6 +7,7 @@ import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -25,13 +26,13 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public static double P = 0.04;
-    public static double I = 0.0005;
-    public static double D = 0.0012;
-    public final double MF = 1.1366666666666666666666666;
-    public final double MP = 0.00; //0.02
+    public static double P = 0.02;
+    public static double I = 0.00;
+    public static double D = 0.00;
+    public final double MF = 1.13666666666666666;
+    public final double MP = 0.931; //0.931
     public final double MI = 0.00;
-    public final double MD = 0.00;
+    public final double MD = 9.31;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
@@ -119,6 +120,8 @@ public class Drive extends Mechanism  implements DriveI {
             m_leftVictor2.follow(m_leftTalon);
             m_rightVictor2.follow(m_rightTalon);
         }
+        SmartDashboard.putNumber("Left Motor Input", leftSetting * maximumRPM * 256 / 600);
+        SmartDashboard.putNumber("Right Motor Input", rightSetting * maximumRPM * 256 / 600);
     }
 
     public boolean isEnabled() {

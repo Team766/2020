@@ -53,6 +53,7 @@ public class PreciseTurn extends Subroutine {
             SmartDashboard.putNumber("PID Output", m_turnController.getOutput());
 
             if (!Robot.drive.isEnabled()){
+                turning = false;
                 Robot.drive.nukeRobot();
                 yield();
                 return;

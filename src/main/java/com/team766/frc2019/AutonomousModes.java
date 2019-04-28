@@ -4,6 +4,7 @@ import com.team766.framework.AutonomousCommand;
 import com.team766.frc2019.commands.Debug;
 import com.team766.frc2019.commands.DriveForwards;
 import com.team766.frc2019.commands.LimeDebug;
+import com.team766.frc2019.commands.DriveSquare;
 import com.team766.frc2019.commands.TeleopAuton;
 import com.team766.frc2019.commands.LeftHab2RocketPlayerStationBackRocket;
 import com.team766.frc2019.commands.RightHab2RocketPlayerStationBackRocket;
@@ -29,8 +30,8 @@ public enum AutonomousModes {
     //teleop auton
     @AutonomousCommand(commandClass= TeleopAuton.class) TeleopAuton,
     @AutonomousCommand(commandClass= AutonRocketTeleop.class) AutonRocketTeleop,
-    //auton paths
 
+    //auton paths
     @AutonomousCommand(commandClass = LeftHab2RocketPlayerStationBackRocket.class) LeftHab2RocketPlayerStationBackRocket,
     @AutonomousCommand(commandClass = RightHab2SideCargoPlayerStationSideCargo.class) RightHab2SideCargoPlayerStationSideCargo,
     @AutonomousCommand(commandClass = LeftHab2SideCargoPlayerStationSideCargo.class) LeftHab2SideCargoPlayerStationSideCargo,
@@ -45,4 +46,7 @@ public enum AutonomousModes {
     @AutonomousCommand(commandClass= Debug.class) Debug,
     @AutonomousCommand(commandClass= LimeDebug.class) LimeDebug,
     @AutonomousCommand(commandClass= DriveVelocity.class) DriveVelocity,
+
+    //cool things
+    @AutonomousCommand(commandClass= DriveSquare.class) DriveSquare,
 }

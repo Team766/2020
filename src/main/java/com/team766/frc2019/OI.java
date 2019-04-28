@@ -98,9 +98,17 @@ public class OI extends Command {
 			}
 		} yarden wtf even is this */
 
-		//reads joystick input
-		fwdPower = -m_joystick1.getRawAxis(1);
-		turnPower = m_joystick2.getRawAxis(0);
+		//reads joystick input and applies deadzones
+		if (Math.abs(m_joystick1.getRawAxis(1)) > 0.05) {
+			fwdPower = -m_joystick1.getRawAxis(1);
+		} else {
+			fwdPower = 0.0;
+		}
+		if (Math.abs(m_joystick2.getRawAxis(0)) > 0.05) {
+			turnPower = m_joystick2.getRawAxis(0) / 2;
+		} else {
+			turnPower = 0.0;
+		}
 
 		//sets motor power
 		leftPower = (fwdPower + turnPower);
