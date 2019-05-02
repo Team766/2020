@@ -6,6 +6,8 @@ import com.team766.hal.CANSpeedController.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.Date;
+
 import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
@@ -123,9 +125,24 @@ public class PreciseTurnRadius extends Subroutine {
                 rightPower = (straightPower + rightAdjust);
             }
             Robot.drive.setDrive(leftPower, rightPower);
-            if (index % 15 == 0) {
-                System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + " sp: " + roundOff(straightPower, 2) + " td: " + roundOff(m_outsideArcLength, 2) + " cd: " + roundOff(currentDistance, 2) + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2) + " Left: " + roundOff(leftPower, 4) + " Right: " +  roundOff(rightPower, 4) + " MoveDir: " + moveDir);
-            }
+            //if (index % 15 == 0) {
+                //System.out.println("AngDif: " + roundOff(m_angleDiff, 2) + "   ArcPrc: " + roundOff(arcPercent, 2) + "   Err: " + roundOff(error, 2) + "   ta: " + roundOff(turnAdjust, 2) + " sp: " + roundOff(straightPower, 2) + " td: " + roundOff(m_outsideArcLength, 2) + " cd: " + roundOff(currentDistance, 2) + " turn dir: " + m_turnDirection + " ca: " + roundOff(Robot.drive.getGyroAngle(), 2) + "   CurTar: " + roundOff(m_initialAngle + (m_angleDiff * arcPercent), 2) + " Left: " + roundOff(leftPower, 4) + " Right: " +  roundOff(rightPower, 4) + " MoveDir: " + moveDir);
+                //System.out.println(m_turnController);
+            //}
+            SmartDashboard.putNumber("Angle Difference", m_angleDiff);
+            SmartDashboard.putNumber("Arc Percent", arcPercent);
+            SmartDashboard.putNumber("Current Error", error);
+            SmartDashboard.putNumber("Current Angle", Robot.drive.getGyroAngle());
+            SmartDashboard.putNumber("Current Target", m_initialAngle + (m_angleDiff * arcPercent));
+            SmartDashboard.putNumber("Turn Adjust", turnAdjust);
+            SmartDashboard.putNumber("Left Power", leftPower);
+            SmartDashboard.putNumber("Right Power", rightPower);
+            SmartDashboard.putNumber("Current Distance", currentDistance);
+            SmartDashboard.putNumber("Target Distance", m_outsideArcLength);
+            SmartDashboard.putBoolean("Turn Direction", m_turnDirection);
+            SmartDashboard.putNumber("Move Direction", moveDir);
+
+
             index++;
             if (!Robot.drive.isEnabled()) {
                 Robot.drive.nukeRobot();
