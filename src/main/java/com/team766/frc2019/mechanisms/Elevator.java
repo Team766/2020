@@ -319,7 +319,7 @@ public class Elevator extends Mechanism {
 
     public void elevatorDown() {
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-          //  System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+          // System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
         }
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
