@@ -98,7 +98,7 @@ public class OI extends Command {
 			turn_power = 0;
 		} else {
 			turn_power = (Math.abs(m_joystick2.getRawAxis(0))*1.3/m_joystick2.getRawAxis(0)) + Math.pow(m_joystick2.getRawAxis(0), 3);
-			turn_power = 0.25 * turn_power;
+			turn_power = 0.20 * turn_power;
 			if (Math.abs(fwd_power) > 0.5) {
 				turn_power = 0.6 * turn_power;
 			}

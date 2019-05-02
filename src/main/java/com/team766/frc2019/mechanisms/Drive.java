@@ -7,6 +7,7 @@ import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -17,6 +18,7 @@ import com.team766.config.ConfigFileReader;
 
 public class Drive extends Mechanism  implements DriveI {
 
+    //vars (including PID)
     private CANSpeedController m_leftVictor1;
     private CANSpeedController m_leftVictor2;
     private CANSpeedController m_rightVictor1;
@@ -30,7 +32,7 @@ public class Drive extends Mechanism  implements DriveI {
     public final double MF = 1.1366666666666666666666666;
     public final double MP = 0.00; //0.02
     public final double MI = 0.00;
-    public final double MD = 0.00;
+    public final double MD = 9.31;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
@@ -44,9 +46,12 @@ public class Drive extends Mechanism  implements DriveI {
     public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
 
 
-    public Drive() { 
+    public Drive() {
+
+        //initializes victors
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
         m_rightVictor1 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor1");
+        //initialize second victor if it exists
         if (ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
             m_secondVictor = true;
             m_leftVictor2 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor2");
@@ -54,12 +59,16 @@ public class Drive extends Mechanism  implements DriveI {
         } else {
             m_secondVictor = false;
         }
+
+        //initializes talons
         m_leftTalon = RobotProvider.instance.getTalonCANMotor("drive.leftTalon");
         m_rightTalon = RobotProvider.instance.getTalonCANMotor("drive.rightTalon");
         
+        //initializes gyro
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
         
+        //configures the motors
         m_leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.setInverted(true);
@@ -67,9 +76,13 @@ public class Drive extends Mechanism  implements DriveI {
         if (m_secondVictor) {
             m_rightVictor2.setInverted(true);
         }
+
         // left true right false for new, both false for mule and marie
+        //inverts sensors
         m_leftTalon.setSensorPhase(false);
         m_rightTalon.setSensorPhase(false);
+
+        //configures pid
         m_leftTalon.config_kF(0, MF, 0);
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
@@ -78,12 +91,14 @@ public class Drive extends Mechanism  implements DriveI {
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MD, 0);
+
+        //sets resting modes for robot
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
         m_rightTalon.setNeutralMode(NeutralMode.Brake);
-        /*m_leftTalon.configOpenLoopRamp(0.5, 0);
-        m_leftTalon.configClosedLoopRamp(0.5, 0);
-        m_rightTalon.configOpenLoopRamp(0.5, 0);
-        m_rightTalon.configClosedLoopRamp(0.5, 0); IF SHIT BREAKS FOR THE LOVE OF GOD UNCOMMENT THIS*/
+        m_leftTalon.configOpenLoopRamp(0.25, 0);
+        m_leftTalon.configClosedLoopRamp(0.25, 0);
+        m_rightTalon.configOpenLoopRamp(0.25, 0);
+        m_rightTalon.configClosedLoopRamp(0.25, 0); //if something breaks that you can't figure out with acceleration (un)comment this
     }
 
     @Override
@@ -105,6 +120,8 @@ public class Drive extends Mechanism  implements DriveI {
             m_leftVictor2.follow(m_leftTalon);
             m_rightVictor2.follow(m_rightTalon);
         }
+        SmartDashboard.putNumber("Left Motor Input", leftSetting * maximumRPM * 256 / 600);
+        SmartDashboard.putNumber("Right Motor Input", rightSetting * maximumRPM * 256 / 600);
     }
 
     public boolean isEnabled() {

@@ -36,6 +36,7 @@ public class Robot extends MyRobot {
 		flowerActuator = new FlowerActuator();
 		limeLight = new LimeLight();
 		
+		//auton picker
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());
 		m_webServer.addHandler("/logs", new LogViewer());
@@ -45,6 +46,7 @@ public class Robot extends MyRobot {
 	}
 	
 	@Override
+	//initializes auton
 	public void autonomousInit() {
 		if (m_autonomous != null) {
 			m_autonomous.stop();
@@ -58,6 +60,7 @@ public class Robot extends MyRobot {
 	}
 	
 	@Override
+	//initializes teleop
 	public void teleopInit() {
 		if (m_autonomous != null) {
 			m_autonomous.stop();
