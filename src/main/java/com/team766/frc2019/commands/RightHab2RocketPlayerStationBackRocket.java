@@ -19,6 +19,12 @@ public class RightHab2RocketPlayerStationBackRocket extends Subroutine {
             Robot.drive.resetEncoders();
             Robot.drive.resetGyro();
 
+        callSubroutine(new PreciseDrive(0, 8, 0.5, 0));
+        callSubroutine(new PreciseTurnRadius(90, 2 , 0.5 , 0));
+        callSubroutine(new PreciseDrive(90, 3, 0.5, 0));
+
+
+            /*
         waitForSeconds(0.3);
         callSubroutine(new PreciseDrive(0, 8, 1.0, 0));
         callSubroutine(new PreciseTurnRadius(35, 2 ,1.0 , 0));
@@ -34,6 +40,7 @@ public class RightHab2RocketPlayerStationBackRocket extends Subroutine {
         callSubroutine(new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider()));
         waitForSeconds(0.3);
         callSubroutine(new PreciseDrive(131, -3 , 1.0, 0));
+        */
     
 
             System.out.println("Right cargo IS DONE");

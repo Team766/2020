@@ -3,6 +3,9 @@ package com.team766.frc2019.commands;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
@@ -85,6 +88,7 @@ public class PreciseTurnRadius extends Subroutine {
         currentDistance = Robot.drive.getOutsideEncoderDistance(m_turnDirection) * Robot.drive.DIST_PER_PULSE;
         System.out.println("I'm turning from: " + m_initialAngle + " to: " + m_targetAngle + " and the difference is : " + m_angleDiff + " with an outside arc length of: " + m_outsideArcLength + " Current Dist: " + currentDistance);
         while((currentDistance * moveDir < Math.abs(m_outsideArcLength) && (Math.abs(m_joystick1.getRawAxis(1)) < .2))) {
+            SmartDashboard.putNumber("Current angle", Robot.drive.getGyroAngle());
             currentDistance = Robot.drive.getOutsideEncoderDistance(m_turnDirection) * Robot.drive.DIST_PER_PULSE;
             
             arcPercent = (currentDistance * moveDir) / m_outsideArcLength;

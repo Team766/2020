@@ -24,9 +24,9 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_leftTalon;
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
-    public static double P = 0.04;
-    public static double I = 0.0005;
-    public static double D = 0.0012;
+    public static double P = 0.01; //0.04
+    public static double I = 0.0;//0.0005
+    public static double D = 0.0; //0.0012
     public final double MF = 1.1366666666666666666666666;
     public final double MP = 0.00; //0.02
     public final double MI = 0.00;
@@ -74,12 +74,12 @@ public class Drive extends Mechanism  implements DriveI {
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
         m_leftTalon.config_kD(0, MD, 0);
-       // m_rightTalon.config_kF(0, MF, 0);
+        m_rightTalon.config_kF(0, MF, 0);
         m_rightTalon.config_kP(0, MP, 0);
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MD, 0);
-        m_leftTalon.setNeutralMode(NeutralMode.Coast);
-        m_rightTalon.setNeutralMode(NeutralMode.Coast);
+        m_leftTalon.setNeutralMode(NeutralMode.Brake);
+        m_rightTalon.setNeutralMode(NeutralMode.Brake);
         /*m_leftTalon.configOpenLoopRamp(0.5, 0);
         m_leftTalon.configClosedLoopRamp(0.5, 0);
         m_rightTalon.configOpenLoopRamp(0.5, 0);
