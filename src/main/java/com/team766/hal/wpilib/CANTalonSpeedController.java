@@ -105,7 +105,8 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	}
 
 	@Override
-	public void setFeedForward(double value) {
-		m_feedForward = value;
+	public ErrorCode config_kF(int slotIdx, double value, int timeoutMs) {
+		super.config_kF(slotIdx, value, timeoutMs);
+		return ErrorCode.OK;
 	}
 }

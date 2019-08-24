@@ -3,10 +3,18 @@ package com.team766.frc2019.commands;
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.hal.CANSpeedController.ControlMode;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import com.team766.controllers.PIDController;
+import com.team766.hal.JoystickReader;
+import com.team766.hal.RobotProvider;
 
 public class PreciseDrive extends Subroutine {
 
+    private JoystickReader m_joystick1  = RobotProvider.instance.getJoystick(1);
     PIDController m_turnController;
     double m_driveDistance;
     double m_targetAngle;
@@ -17,7 +25,7 @@ public class PreciseDrive extends Subroutine {
     double MIN_POWER = 0.25;
     double POWER_RAMP = 1.0;
     int driveDir = 1;
-    double END_POWER_PERCENT = 0.85;
+    double END_POWER_PERCENT = 0.75;
 
     /**
      * Precisely drives for the set parameters.
@@ -27,7 +35,7 @@ public class PreciseDrive extends Subroutine {
      * @param endPower
      */
     public PreciseDrive(double targetAngle, double driveDistance, double targetPower, double endPower) {
-        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD);
+        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
         m_driveDistance = driveDistance;
         if (m_driveDistance < 0) {
             driveDir = -1;
@@ -40,38 +48,49 @@ public class PreciseDrive extends Subroutine {
 
     protected void subroutine() {
         Robot.drive.resetEncoders();
+        System.out.println("Reset encoders, current distance: " + getCurrentDistance());
         double index = 0;
         m_turnController.setSetpoint(0.0);
         System.out.println("I'm driving to: " + m_targetAngle + " and the difference is : " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " with an power of: " + m_targetPower + " to a distance of: " + m_driveDistance);
-        while(getCurrentDistance() * driveDir < Math.abs(m_driveDistance)) {
+        while(getCurrentDistance() * driveDir < Math.abs(m_driveDistance) && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle), true);
             double turnPower = m_turnController.getOutput();
             double straightPower = calcPower(Math.abs(getCurrentDistance() / m_driveDistance)) * driveDir;
             if (driveDir < 0) {
                 if (turnPower > 0) {
-                    Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
+                    Robot.drive.setDrive(straightPower, straightPower + turnPower);
                 } else {
-                    Robot.drive.setDrive(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
+                    Robot.drive.setDrive(straightPower - turnPower, straightPower);
                 }
             } else {
                 if (turnPower > 0) {
-                    Robot.drive.setDrive(straightPower - turnPower, straightPower, ControlMode.PercentOutput);
+                    Robot.drive.setDrive(straightPower - turnPower, straightPower);
                 } else {
-                    Robot.drive.setDrive(straightPower, straightPower + turnPower, ControlMode.PercentOutput);
+                    Robot.drive.setDrive(straightPower, straightPower + turnPower);
                 }
             }
-            if (index % 15 == 0 && Robot.drive.isEnabled()) {
-                System.out.println("TA: " + m_targetAngle + " Cu: " + Robot.drive.getGyroAngle() + " Diff: " + Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle) + " Pout: " + m_turnController.getOutput() + " Dist: " + getCurrentDistance() + " Power: " + calcPower(Math.abs(getCurrentDistance() / m_driveDistance))+ " Left Power: " + Robot.drive.leftMotorVelocity() + " Right Power: " + Robot.drive.rightMotorVelocity() + " DriveDir: " + driveDir);
-            }
-            index++;
+            /*
+            SmartDashboard.putNumber("Target Angle", m_targetAngle);
+            SmartDashboard.putNumber("Current Angle", Robot.drive.getGyroAngle());
+            SmartDashboard.putNumber("Current Error", m_turnController.getCurrentError());
+            SmartDashboard.putNumber("PID Output", m_turnController.getOutput());
+            SmartDashboard.putNumber("Current Distance", getCurrentDistance());
+            SmartDashboard.putNumber("Target Power", calcPower(Math.abs(getCurrentDistance() / m_driveDistance)));
+            SmartDashboard.putNumber("Left Power", Robot.drive.leftMotorVelocity());
+            SmartDashboard.putNumber("Right Power", Robot.drive.rightMotorVelocity());
+            SmartDashboard.putNumber("Drive Direction", driveDir);
+            */
             if (!Robot.drive.isEnabled()){
                 Robot.drive.nukeRobot();
                 m_turnController.reset();
                 return;
             }
         }
+        if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
+            callSubroutine(new TeleopAuton());
+        }
         System.out.println("PreciseDrive finished");
-        Robot.drive.setDrive(m_endPower, m_endPower, ControlMode.PercentOutput);
+        Robot.drive.setDrive(m_endPower, m_endPower);
         Robot.drive.resetEncoders();
         yield();
         return;
