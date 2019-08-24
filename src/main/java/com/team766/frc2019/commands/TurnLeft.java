@@ -19,10 +19,10 @@ public class TurnLeft extends Subroutine {
     }
 
     protected void subroutine() {
-        Robot.drive.setDrive(0.25, 0.25, ControlMode.PercentOutput);
+        Robot.drive.setDrive(0.25, 0.25);
         //waitForSeconds(m_turnTime);
         waitForSeconds(1.0);
 
-        Robot.drive.setDrive(0.0, 0.0, ControlMode.PercentOutput);
+        Robot.drive.setDrive(0.0, 0.0);
     }
 }

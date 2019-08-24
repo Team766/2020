@@ -22,33 +22,56 @@ public class Elevator extends Mechanism {
     public static double DIST_PER_PULSE = Robot.drive.DIST_PER_PULSE;
     private double targetPosition;
 
-    public static int LVL1 = 100000 * 2/3;
-    public static int LVL2 = 1480000 * 2/3;
-    public static int LVL3 = 3000000 * 2/3;
+    public static int LVL1 = 5000;
+    public static int LVL2 = 1115000;
+    public static int LVL3 = 2130000;
     public static int MIN_LOWER_HEIGHT = 40000 * 2/3;
-    public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 100000 * 2/3;
+    public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 80000 * 2/3;
 	public static int NEAR_MIN_LOWER_HEIGHT = 400000 * 2/3;
-    private static int NEAR_MAX_LOWER_HEIGHT = 1800000 ;
-    private static int MAX_LOWER_HEIGHT = 2130000 ;
+    private static int NEAR_MAX_LOWER_HEIGHT = 950000;
+    private static int MAX_LOWER_HEIGHT = 1250000;
 	public static int MIN_UPPER_HEIGHT = 0;
-    public static int NEAR_MIN_UPPER_HEIGHT = 200000  * 2/3;
+    public static int NEAR_MIN_UPPER_HEIGHT = 200000 * 2/3;
     private static int NEAR_MAX_UPPER_HEIGHT = 880000;
-    private static int MAX_UPPER_HEIGHT = 920000;
-    private static int MID_HEIGHT_BIG = 1000000 ;
+    private static int MAX_UPPER_HEIGHT = 960000;
+    private static int MID_HEIGHT_BIG = 1000000;
 	private static int MAX_HEIGHT_BIG = 1930000;
 	private static int MID_HEIGHT_SMALL = 500000;
-    private static int MAX_HEIGHT_SMALL = 900000;
+    private static int MAX_HEIGHT_SMALL = 900000;//marie
+    /*
+    public static int LVL1 = 5000;
+    public static int LVL2 = 1480000;
+    public static int LVL3 = 3000000;
+    public static int MIN_LOWER_HEIGHT = 40000;
+    public static int VERY_CLOSE_MIN_LOWER_HEIGHT = 100000;
+	public static int NEAR_MIN_LOWER_HEIGHT = 400000;
+    private static int NEAR_MAX_LOWER_HEIGHT = 1800000;
+    private static int MAX_LOWER_HEIGHT = 2130000;
+	public static int MIN_UPPER_HEIGHT = 0;
+    public static int NEAR_MIN_UPPER_HEIGHT = 200000;
+    private static int NEAR_MAX_UPPER_HEIGHT = 880000;
+    private static int MAX_UPPER_HEIGHT = 920000;
+    private static int MID_HEIGHT_BIG = 1000000;
+	private static int MAX_HEIGHT_BIG = 1930000;
+	private static int MID_HEIGHT_SMALL = 500000;
+    private static int MAX_HEIGHT_SMALL = 900000;//rev a
+    */
     public static int MAX_COMBINED_HEIGHT = MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT;
+    public boolean setLow = false;
+    public double slowMultiplier;
+    public int setPosUpperNear;
+    public int setPosLowerNear;
+    public double lowerDownSpeed;
     public double upperTarget;
     public double lowerTarget;
-    public double currentPosition;
+    public double currentTargetPosition;
     private int upperDirection;
     private int lowerDirection;
     private int currentUpperDirection;
     private int currentLowerDirection;
     private double upperDistance;
     private double lowerDistance;
-
+    
 
     
     private boolean setPositionRunning = false;
@@ -83,11 +106,11 @@ public class Elevator extends Mechanism {
         m_lowerElevatorMotor.config_kP(0, 0.01, 0);
         m_lowerElevatorMotor.config_kI(0, 0.0, 0);
         m_lowerElevatorMotor.config_kD(0, 0.01, 0);
-        m_lowerElevatorMotor.setFeedForward(0.0);
+        m_lowerElevatorMotor.config_kF(0, 0.0, 0);
         m_upperElevatorMotor.config_kP(0, 0.01, 0);
         m_upperElevatorMotor.config_kI(0, 0.0, 0);
         m_upperElevatorMotor.config_kD(0, 0.01, 0);
-        m_upperElevatorMotor.setFeedForward(0.0);
+        m_upperElevatorMotor.config_kF(0, 0.0, 0);
         m_lowerElevatorMotor.setNeutralMode(NeutralMode.Brake);
         m_upperElevatorMotor.setNeutralMode(NeutralMode.Brake);
         m_upperElevatorMotor.setPosition(0);
@@ -145,11 +168,35 @@ public class Elevator extends Mechanism {
         m_upperElevatorMotor.set(ControlMode.Position, position);
     }
 
+    public double getTargetPosition() {
+        return currentTargetPosition;
+    }
+
     
     public void setCombinedPosition(double position) {
-        currentPosition = position;
+        currentTargetPosition = position;
+        if (currentTargetPosition <= 100000) {
+            setLow = true;
+            setPosUpperNear = NEAR_MIN_UPPER_HEIGHT;
+            setPosLowerNear = NEAR_MIN_LOWER_HEIGHT;
+            slowMultiplier = 0.3;
+            lowerDownSpeed = 0.9;
+        } else {
+            setPosUpperNear = 150000;
+            setPosLowerNear = 100000;
+            slowMultiplier = 0.6;
+            lowerDownSpeed = 1.0;
+
+        }
+        if (position < 0) {
+            return;
+        }
+        upperTarget = 3*position/7;
+        lowerTarget = 4*position/7;
+        /*
         upperTarget = 92*position/305;
         lowerTarget = 213*position/305;
+        */
         if (lowerTarget > getLowerHeight()) {
             lowerDirection = 1;
         } else {
@@ -161,82 +208,59 @@ public class Elevator extends Mechanism {
         } else {
             upperDirection = -1;
         }
-        if (!setPositionRunning) {
-            movePosition();
-            System.out.println("going to movePosition()");
-         }
     }
 
     public void movePosition() {
+        if (currentTargetPosition < 0 || currentTargetPosition > (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
+            return; 
+        }
         setPositionRunning = true;
         combinedStopTargeting = false;
 
-        System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
-        if (currentPosition > 0 && currentPosition < (double)(MAX_LOWER_HEIGHT + MAX_UPPER_HEIGHT)) {
-            boolean upperDone = false;
-            boolean lowerDone = false;
-            do {
-                if ( !upperDone ) {
+      //  System.out.println("Setting lower position to: " + lowerTarget + ", target (U, L): " +upperTarget + ", " + lowerTarget);
+                if ( upperTarget > 0 ) {
                     upperDistance = Math.abs(upperTarget - getUpperHeight());
-                    if (upperDistance < 150000) {
-                        setUpperPower(0.6 * upperDirection);
+                    if (upperDistance < setPosUpperNear) {
                         if (upperTarget > getUpperHeight()) {
                             currentUpperDirection = 1;
                         } else {
                             currentUpperDirection = -1;
                         }
-                        if (upperDirection != currentUpperDirection || !getUpperMinLimitSwitch()) {
+                        setUpperPower(slowMultiplier * upperDirection);
+                        if ((upperDirection != currentUpperDirection || !getUpperMinLimitSwitch())) {
+                            System.out.println("Stop upper");
                             setUpperPower(0.0);
-                            upperDone = true;
+                            upperTarget = -1;
                         }
                     } else {
                         setUpperPower(1.0 * upperDirection);
                     }
                 }
                 
-                if ( !lowerDone ) {
-                    lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
-                    if (lowerDistance < 100000) {
-                        setLowerPower(0.6 * lowerDirection);
-                        if (lowerTarget > getLowerHeight()) {
-                            currentLowerDirection = 1;
-                        } else {
-                            currentLowerDirection = -1;
-                        }
-                        if (lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch()) {
-                            setLowerPower(0.0);
-                            hover();
-                            lowerDone = true;
-                        }
+                
+                if ( lowerTarget > 0 ) {
+                lowerDistance  = Math.abs(lowerTarget - getLowerHeight());
+                if (lowerDistance < setPosLowerNear) {
+                    setLowerPower(slowMultiplier * lowerDirection);
+                    if (lowerTarget > getLowerHeight()) {
+                        currentLowerDirection = 1;
                     } else {
-                        setLowerPower(1.0 * lowerDirection);
+                        currentLowerDirection = -1;
                     }
+                    if ((lowerDirection != currentLowerDirection || !getUpperMinLimitSwitch())) {
+                        setLowerPower(0.0);
+                       hover();
+                        lowerTarget = -1;
+                    }
+                } else {
+                    setLowerPower(lowerDownSpeed * lowerDirection);
                 }
-            } while ( !upperDone || !lowerDone && !combinedStopTargeting);
-            //} 
-
-
-
-                /* OLD SET POSITION CODE
-                System.out.println("TARGETPOSITION: " + targetPosition + " upperTarget: " + upperTarget + " lowerTarget: " + lowerTarget);
-                setLowerPosition(lowerTarget);
-                setUpperPosition(upperTarget);
-                targetPosition = position;
-                */
-            
         } else {
-            System.out.println("Cannot reach target position");
+           // System.out.println("Cannot reach target position");
         }
         setPositionRunning = false;
     }
 
-    public void addToPosition( double position ) {
-        if (!setPositionRunning) {
-            currentPosition = getUpperHeight() + getLowerHeight(); 
-        }
-        currentPosition += position; 
-        setCombinedPosition(currentPosition);
-    }
 
 
     public double getUpperHeight() {
@@ -272,7 +296,7 @@ public class Elevator extends Mechanism {
     public void elevatorUp() {
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
-            System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+            //System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
         }
         if (Robot.elevator.getLowerHeight() > NEAR_MAX_LOWER_HEIGHT) {
             if (Robot.elevator.getLowerHeight() >= MAX_LOWER_HEIGHT) {
@@ -294,6 +318,9 @@ public class Elevator extends Mechanism {
     }
 
     public void elevatorDown() {
+        if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
+          // System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
+        }
         combinedStopTargeting = true;
         if (index++ % 2000 == 0 && Robot.drive.isEnabled()) {
             //System.out.println("LH: " + Robot.elevator.getLowerHeight() + " UH: " + Robot.elevator.getUpperHeight());
@@ -304,7 +331,7 @@ public class Elevator extends Mechanism {
             Robot.elevator.setUpperPower(0.0);
             upperDone = true;
         } else if (Robot.elevator.getUpperHeight() <= NEAR_MIN_UPPER_HEIGHT) {
-                Robot.elevator.setUpperPower(-0.4);
+                Robot.elevator.setUpperPower(-0.3);
         } else {
             Robot.elevator.setUpperPower(-1.0);
         }
@@ -315,15 +342,15 @@ public class Elevator extends Mechanism {
             hover();
         } else if (Robot.elevator.getLowerHeight() < NEAR_MIN_LOWER_HEIGHT) {
 //            System.out.println("Nearing Bottom");
-            Robot.elevator.setLowerPower(-0.4);
+            Robot.elevator.setLowerPower(-0.3);
         }  else {
-            Robot.elevator.setLowerPower(-0.9);
+            Robot.elevator.setLowerPower(-0.8);
         }
     }
 
     public void elevatorNeutral() {
         if (combinedStopTargeting == true) {
-            System.out.println("Setting elevator to neutral");
+         //   System.out.println("Setting elevator to neutral");
             Robot.elevator.setUpperPower(0.0);
             Robot.elevator.setLowerPower(0.0);
             hover();
@@ -356,7 +383,7 @@ public class Elevator extends Mechanism {
 
     public void upperNeutral() {
         if (upperStopTargeting == true) {
-            System.out.println("Setting upper to neutral");
+       //     System.out.println("Setting upper to neutral");
             Robot.elevator.setUpperPower(0.0);
             targetPosition = getUpperHeight() + getLowerHeight();
             upperStopTargeting = false;
@@ -365,7 +392,7 @@ public class Elevator extends Mechanism {
 
     public void lowerNeutral() {
         if (lowerStopTargeting == true) {
-            System.out.println("Setting lower to neutral");
+         //   System.out.println("Setting lower to neutral");
             Robot.elevator.setLowerPower(0.0);
             targetPosition = getUpperHeight() + getLowerHeight();
             lowerStopTargeting = false;

@@ -144,7 +144,7 @@ public class Talon implements CANSpeedController{
 	}
 	
 	@Override
-	public void setFeedForward(double value) {
+	public ErrorCode config_kF(int slotIdx, double value, int timeoutMs) {
 		throw new UnsupportedOperationException();
 	}
 }
