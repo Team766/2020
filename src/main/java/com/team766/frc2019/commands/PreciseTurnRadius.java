@@ -40,34 +40,9 @@ public class PreciseTurnRadius extends Subroutine {
      * Drives the robot on an arc according to the given angle and radius.
      */
     public PreciseTurnRadius(double targetAngle, double radius, double targetPower, double endPower) {
-        m_initialAngle = Robot.drive.getGyroAngle();
-        m_targetAngle = targetAngle;
-        m_angleDiff = Robot.drive.AngleDifference(m_initialAngle, m_targetAngle);
-        if (moveDir < 0) {
-            if (m_angleDiff > 0) {
-                m_turnDirection = false;
-            } else {
-                m_turnDirection = true;
-            }
-        } else {
-            if (m_angleDiff > 0) {
-                m_turnDirection = true;
-            } else {
-                m_turnDirection = false;
-            }
-        }
-
-        if (targetPower < 0) {
-            moveDir = -1;
-        }
-        m_arcLength = 2 * Math.PI * radius * (Math.abs(m_angleDiff) / 360);
-        m_insideArcLength = 2 * Math.PI * (radius - (Robot.drive.robotWidth / 2.0)) * (Math.abs(m_angleDiff) / 360);
-        m_outsideArcLength = 2 * Math.PI * (radius + (Robot.drive.robotWidth / 2.0)) * (Math.abs(m_angleDiff) / 360);
-        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-        m_targetPower = targetPower;
-        m_endPower = endPower;
         
-        //takeControl(Robot.drive);
+
+        
     }
 
     protected void subroutine() {
