@@ -9,13 +9,11 @@ import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
 public class TeleopAuton extends Subroutine {
-
     private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
     private JoystickReader m_boxop;
     private LimePickup m_limePickup = new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
 	private LimeScore m_limeScore = new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-
     
     private CalibrateElevator m_calibrate = new CalibrateElevator();
 

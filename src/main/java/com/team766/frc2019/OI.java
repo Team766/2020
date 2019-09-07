@@ -321,13 +321,13 @@ public class OI extends Command {
 					m_boxop.getRawButton(ELEVATOR_LVL3) ? 3 : -1;
 		switch( tgtLvl ){
 			case 1:
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
+			    Robot.elevator.setCombinedPosition(Robot.elevator.LVL1);
 				break;
 			case 2:
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
+			    Robot.elevator.setCombinedPosition(Robot.elevator.LVL2);
 				break;
 			case 3:
-			Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
+			    Robot.elevator.setCombinedPosition(Robot.elevator.LVL3);
 				break;
 		}
 		
