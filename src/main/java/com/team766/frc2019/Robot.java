@@ -2,16 +2,26 @@ package com.team766.frc2019;
 
 import com.team766.framework.AutonomousCommandUtils;
 import com.team766.framework.Command;
+import com.team766.frc2019.mechanisms.Drive;
+import com.team766.frc2019.mechanisms.Elevator;
+import com.team766.frc2019.mechanisms.FlowerActuator;
+import com.team766.frc2019.mechanisms.FlowerGripper;
+import com.team766.frc2019.mechanisms.LimeLight;
 import com.team766.hal.MyRobot;
+import com.team766.hal.mock.Gyro;
 import com.team766.web.AutonomousSelector;
 import com.team766.web.ConfigUI;
 import com.team766.web.LogViewer;
 import com.team766.web.WebServer;
-
 public class Robot extends MyRobot {
 	// Declare mechanisms here
+	public static Drive drive;
+	public static FlowerGripper flowerGripper;
+	public static FlowerActuator flowerActuator;
+	public static Elevator elevator;
+	public static LimeLight limeLight;
 
-	private OI m_oi;
+	public static OI m_oi;
 	
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;
@@ -20,7 +30,13 @@ public class Robot extends MyRobot {
 	@Override
 	public void robotInit() {
 		// Initialize mechanisms here
+		drive = new Drive();
+		flowerGripper = new FlowerGripper();
+		elevator = new Elevator();
+		flowerActuator = new FlowerActuator();
+		limeLight = new LimeLight();
 		
+		//auton picker
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());
 		m_webServer.addHandler("/logs", new LogViewer());
@@ -30,6 +46,7 @@ public class Robot extends MyRobot {
 	}
 	
 	@Override
+	//initializes auton
 	public void autonomousInit() {
 		if (m_autonomous != null) {
 			m_autonomous.stop();
@@ -43,6 +60,7 @@ public class Robot extends MyRobot {
 	}
 	
 	@Override
+	//initializes teleop
 	public void teleopInit() {
 		if (m_autonomous != null) {
 			m_autonomous.stop();

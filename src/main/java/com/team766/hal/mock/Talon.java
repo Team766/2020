@@ -1,5 +1,8 @@
 package com.team766.hal.mock;
 
+import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.hal.CANSpeedController;
 
 public class Talon implements CANSpeedController{
@@ -69,5 +72,79 @@ public class Talon implements CANSpeedController{
 	public void setPosition(int position) {
 		sensorPosition = position;
 	}
+
+	@Override
+	public void follow(CANSpeedController leader) {
+		throw new UnsupportedOperationException();
+	}
 	
+	@Override
+	public void setNeutralMode(NeutralMode neutralMode) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ErrorCode config_kP(int slotIdx, double value, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ErrorCode config_kI(int slotIdx, double value, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ErrorCode config_kD(int slotIdx, double value, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public ErrorCode configSelectedFeedbackSensor(FeedbackDevice feedbackDevice) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ErrorCode configNominalOutputForward(double PercentOutput) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ErrorCode configNominalOutputReverse(double PercentOutput) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ErrorCode configPeakOutputForward(double PercentOutput) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ErrorCode configPeakOutputReverse(double PercentOutput) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setSensorPhase(boolean PhaseSensor) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ErrorCode configFactoryDefault() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void configOpenLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public ErrorCode config_kF(int slotIdx, double value, int timeoutMs) {
+		throw new UnsupportedOperationException();
+	}
 }
