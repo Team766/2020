@@ -12,10 +12,6 @@ public class TeleopAuton extends Subroutine {
     private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
     private JoystickReader m_boxop;
-    private LimePickup m_limePickup = new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-	private LimeScore m_limeScore = new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-    
-    private CalibrateElevator m_calibrate = new CalibrateElevator();
 
 	private static int INTAKE_ACTUATE = 2;
 	private static int INTAKE_RETRACT = 1;
@@ -78,44 +74,6 @@ public class TeleopAuton extends Subroutine {
             double rightPower = (fwd_power - turn_power);
             //System.out.println("forward power: " + fwd_power + " turn power: " + turn_power);
             Robot.drive.setDrive(leftPower, rightPower);
-
-            if(m_boxop.getRawButton(CALI_BUTTON) ) {
-                //CURRENTLY CALIBRATES
-                /*Robot.elevator.upperStopTargeting = true;
-                Robot.elevator.setUpperPower(0.5);
-                System.out.println("Upper Height: " + Robot.elevator.getUpperHeight());
-                */
-                if(!m_calibrate.isRunning() && Robot.drive.isEnabled()) {
-                    m_calibrate.start();
-                }
-            }
-
-            if (m_boxop.getRawButton(23) || m_joystick1.getRawButton(1)) {
-                m_limePickup.start();
-            }
-    
-            if (m_boxop.getRawButton(22) || m_joystick1.getRawButton(2)) {
-                m_limeScore.start();
-            }
-
-            if (m_boxop.getRawButton(INTAKE_ACTUATE)) {
-                Robot.flowerActuator.extend();
-            } else if (m_boxop.getRawButton(INTAKE_RETRACT)) {
-                Robot.flowerActuator.retract();
-            }
-    
-            // GRIPPER ACTIONS
-            if(m_boxop.getRawButton(INTAKE_IN) ) {
-                // user clicked on the intake in button
-                //System.out.println(">>> INTAKE_OPEN pressed");
-                new RetractGripper().start();
-            }
-    
-            if(m_boxop.getRawButton(INTAKE_OUT) ) {
-                // user clicked on the intake out button  
-                new ExtendGripper().start();  
-            }
-            yield();
         }
     }
 }
