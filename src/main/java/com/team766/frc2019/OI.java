@@ -4,15 +4,6 @@ package com.team766.frc2019;
 
 import com.team766.framework.Command;
 import com.team766.frc2019.Robot;
-import com.team766.frc2019.commands.CalibrateElevator;
-import com.team766.frc2019.commands.LimePickup;
-import com.team766.frc2019.commands.LimeScore;
-import com.team766.frc2019.commands.PreciseTurn;
-import com.team766.frc2019.commands.ExtendGripper;
-import com.team766.frc2019.commands.RetractGripper;
-import com.team766.frc2019.commands.Rocket;
-import com.team766.frc2019.commands.TurnInertia;
-import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
@@ -28,12 +19,6 @@ public class OI extends Command {
 	private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
-	private CalibrateElevator m_calibrate = new CalibrateElevator();
-	private LimePickup m_limePickup = new LimePickup(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-	private LimeScore m_limeScore = new LimeScore(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-	private PreciseTurn m_preciseTurn;
-	private Rocket m_rocket = new Rocket(Robot.drive, Robot.limeLight, RobotProvider.getTimeProvider());
-
 
 	private static int INTAKE_ACTUATE = 2;
 	private static int INTAKE_RETRACT = 1;
@@ -86,6 +71,7 @@ public class OI extends Command {
 	}
 	
 	public void run() {
+
 
 	}
 }
