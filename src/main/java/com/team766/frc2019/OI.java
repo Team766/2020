@@ -65,6 +65,8 @@ public class OI extends Command {
 	public static boolean calibrate;
 
 	public OI() {
+		// This allows the computer to recognize and act on the inputs from the joysticks. 
+		// We mainly use axes 0, 1, 2 which range from -1 to 1 for TeleOp
 		m_joystick1 = RobotProvider.instance.getJoystick(1);
 		m_joystick2 = RobotProvider.instance.getJoystick(2);
 		m_boxop = RobotProvider.instance.getJoystick(3);		
