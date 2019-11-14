@@ -22,7 +22,7 @@ public class Robot extends MyRobot {
 	@Override
 	public void robotInit() {
 		// Initialize mechanisms here
-		
+		drive = new Drive();
 		
 		//auton picker
 		m_webServer = new WebServer();
