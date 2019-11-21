@@ -20,25 +20,10 @@ public class OI extends Command {
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
 
-	private static int INTAKE_ACTUATE = 2;
-	private static int INTAKE_RETRACT = 1;
-	private static int INTAKE_IN = 3;
-	private static int INTAKE_OUT = 4;
-	private static int ELEVATOR_UP = 10;
-	private static int ELEVATOR_DOWN = 9;
-	private static int UPPER_UP = 21;
-	private static int UPPER_DOWN = 20;
-	private static int LOWER_UP = 19;
-	private static int LOWER_DOWN = 18;
-	private static int ADD_SMALL = 6;
-	private static int SUBTRACT_SMALL = 5;
-	private static int ADD_BIG = 8;
-	private static int SUBTRACT_BIG = 7;
-	private static int CALI_SWITCH = 17;
-	private static int CALI_BUTTON = 16;
-	private static int ELEVATOR_LVL3 = 13;
-	private static int ELEVATOR_LVL2 = 14;
-	private static int ELEVATOR_LVL1 = 15;
+	private static int Spool_Up = 1;
+	private static int Spool_Down = 3;
+	private static int Vacuum = 2;
+	private static int VacuumOff = 1;
 	
 	private double fwd_power = 0;
 	private double turn_power = 0;
@@ -52,7 +37,6 @@ public class OI extends Command {
 	private static double TURN_THRESHOLD = 0.05;
 
 	private boolean addSmallButton = false;
-	private boolean subSmallButton = false;
 	private boolean addBigButton = false;
 	private boolean subBigButton = false;
 
@@ -74,7 +58,24 @@ public class OI extends Command {
 	
 	public void run() {
 		// write your function here
-		Robot.drive.setDrivePower(m_joystick1.getRawAxis(1), m_joystick2.getRawAxis(1));
+		Robot.drive.setDrivePower(-m_joystick1.getRawAxis(1), -m_joystick2.getRawAxis(1));
+		if(m_joystick1.getRawButton(Spool_Up)){
+			Robot.drive.setSpoolPower(.3);
+		}
+		if(m_joystick1.getRawButton(Spool_Down)){
+			Robot.drive.setSpoolPower(-.3);
+		}
+		if(!m_joystick1.getRawButton(Spool_Up) && !m_joystick1.getRawButton(Spool_Down)){	
+			Robot.drive.setSpoolPower(0);
+		}
+		if(m_joystick2.getRawButton(Vacuum)){
+			Robot.drive.setVacuumPower(1);
+
+		}
+		if(m_joystick2.getRawButton(VacuumOff)){
+			Robot.drive.setVacuumPower(0);
+
+		}
 	}
 }
 
