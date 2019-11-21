@@ -19,6 +19,31 @@ public class Drive extends Mechanism {
         m_leftMotor.set(leftPower);
         m_rightMotor.set(rightPower);
     }
+
+    public void arcadeDrive(double fwdPower, double turnPower) {
+        double maximum = Math.max(Math.abs(fwdPower), Math.abs(turnPower));
+        double total = fwdPower + turnPower;
+        double difference = fwdPower - turnPower;
+
+        if (fwdPower >= 0) {
+            if (turnPower >= 0) {
+                m_leftMotor.set(maximum);
+                m_rightMotor.set(difference);
+            } else {
+                m_leftMotor.set(total);
+                m_rightMotor.set(maximum);
+            }
+        } else {
+            if (turnPower >= 0) {
+                m_leftMotor.set(total);
+                m_rightMotor.set(-maximum);
+            } else {
+                m_leftMotor.set(-maximum);
+                m_rightMotor.set(difference);
+            }
+        }
+    }
+
 }
 
 
