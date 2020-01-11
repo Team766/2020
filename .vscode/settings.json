@@ -11,5 +11,7 @@
     ".project": true
   },
   "wpilib.online": true,
-  "java.dependency.packagePresentation": "flat"
+  "java.dependency.packagePresentation": "flat",
+  "editor.tabSize": 4,
+  "editor.detectIndentation": true
 }
