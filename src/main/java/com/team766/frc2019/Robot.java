@@ -7,6 +7,7 @@ import com.team766.frc2019.mechanisms.Elevator;
 import com.team766.frc2019.mechanisms.FlowerActuator;
 import com.team766.frc2019.mechanisms.FlowerGripper;
 import com.team766.frc2019.mechanisms.LimeLight;
+// import com.team766.frc2019.mechanisms.CoprocessorCommunicator;
 import com.team766.hal.MyRobot;
 import com.team766.hal.mock.Gyro;
 import com.team766.web.AutonomousSelector;
@@ -20,6 +21,7 @@ public class Robot extends MyRobot {
 	public static FlowerActuator flowerActuator;
 	public static Elevator elevator;
 	public static LimeLight limeLight;
+	// public static CoprocessorCommunicator coprocessorCommunicator;
 
 	public static OI m_oi;
 	
@@ -35,7 +37,13 @@ public class Robot extends MyRobot {
 		elevator = new Elevator();
 		flowerActuator = new FlowerActuator();
 		limeLight = new LimeLight();
-		
+		// coprocessorCommunicator = new CoprocessorCommunicator("10.7.66.2");
+		// try {
+		// 	coprocessorCommunicator.get();
+		// } catch(Exception error) {
+
+		// }
+	
 		//auton picker
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());

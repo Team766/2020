@@ -5,6 +5,7 @@ package com.team766.frc2019;
 import com.team766.framework.Command;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.commands.PreciseTurn;
+import com.team766.frc2019.mechanisms.CoprocessorCommunicator;
 import com.team766.frc2019.mechanisms.LimeLightI;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
@@ -75,8 +76,15 @@ public class OI extends Command {
 	
 	public void run() {
 
+		
 		//System.out.println("joystick1: " + m_joystick1 + "joystick2: " + m_joystick2);
+		CoprocessorCommunicator coprocessorCommunicator = new CoprocessorCommunicator("10.7.66.2");
+		try {
+			coprocessorCommunicator.get();
+		} catch(Exception error) {
 
+		}
+		
 		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.13 ) {
 			fwd_power = 0;
 		} else {

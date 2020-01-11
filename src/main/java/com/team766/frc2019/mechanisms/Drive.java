@@ -14,9 +14,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
 
-
-
-public class Drive extends Mechanism  implements DriveI {
+public class Drive extends Mechanism implements DriveI {
 
     //vars (including PID)
     private CANSpeedController m_leftVictor1;
