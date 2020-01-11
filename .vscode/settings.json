@@ -11,5 +11,6 @@
     ".project": true
   },
   "wpilib.online": true,
-  "java.dependency.packagePresentation": "flat"
+  "java.dependency.packagePresentation": "flat",
+  "java.home":"C:\\Users\\Public\\frc2019\\jdk"
 }
