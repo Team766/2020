@@ -49,6 +49,7 @@ public class TeleopAuton extends Subroutine {
     }
 
     protected void subroutine() {
+
         LimeLight.setLedMode(LightMode.eOff);
         LimeLight.setCameraMode(CameraMode.eDriver);
         
