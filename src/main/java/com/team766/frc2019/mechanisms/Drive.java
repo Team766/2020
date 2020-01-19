@@ -253,6 +253,7 @@ public class Drive extends Mechanism  implements DriveI {
         yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
         
         if (index % 10 == 0) {
+            /*
             System.out.print("x:\t");
             System.out.printf("%.2f", xPosition);
             System.out.print(" y:\t");
@@ -260,6 +261,7 @@ public class Drive extends Mechanism  implements DriveI {
             System.out.printf("  angle:\t%.2f", getGyroAngle());
             System.out.printf("  time:\t%.2f", (System.currentTimeMillis() - initialTime) / 1000);
             System.out.println("");
+            */
         }
         index++;
         // System.out.println(currentLeftEncoderDistance * DIST_PER_PULSE);

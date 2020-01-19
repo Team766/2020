@@ -1,6 +1,7 @@
 package com.team766.frc2019;
 
 import com.team766.framework.AutonomousCommand;
+import com.team766.frc2019.Autonomous.BoilerGearToShootBlue;
 import com.team766.frc2019.commands.Debug;
 import com.team766.frc2019.commands.DriveForwards;
 import com.team766.frc2019.commands.LimeDebug;
@@ -20,6 +21,7 @@ import com.team766.frc2019.commands.MiddleLvl1StraightCargoLeft;
 import com.team766.frc2019.commands.DriveVelocity;
 
 public enum AutonomousModes {
+    
     //commands
     @AutonomousCommand(commandClass = TurnAround.class) TurnAround,
     @AutonomousCommand(commandClass = DriveForwards.class) DriveForwards,
