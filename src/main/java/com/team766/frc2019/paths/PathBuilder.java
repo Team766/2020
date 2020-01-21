@@ -30,6 +30,27 @@ public class PathBuilder {
         return p;
     }
 
+    /**
+     * adds points in between input points
+     * @param waypoints waypoints to interpolate
+     * @param spacing spacing between interpolated points
+     */
+    public static List<Waypoint> interpolateWaypoints(List<Waypoint> waypoints, float spacing) {     
+        // spacing = desired distance between points
+        // new_points = array to put new points into
+            // For every line segment in the path:
+                // ○ vector = end_point - start_point
+                // ○ num_points_that_fit = Math.ceil(vector.magnitude() / spacing)
+                // ○ vector = vector.normalize() * spacing
+                // ○ for (i = 0; i<num_points_that_fit; i++):
+        // ■ Add (start_point + vector * i) to new_p
+        List<Waypoint> newPoints;
+        for (Waypoint waypoint: waypoints) {
+            
+        }
+        return waypoints;
+    }
+
     private static Waypoint getPoint(List<Waypoint> w, int i) {
         if (i > w.size())
             return w.get(w.size() - 1);
