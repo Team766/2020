@@ -1,4 +1,4 @@
-package com.team766.frc2019.Autonomous;
+package com.team766.frc2019.paths;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.team766.lib.util.math.RigidTransform2d;
 import com.team766.lib.util.math.Rotation2d;
 import com.team766.lib.util.math.Translation2d;
 
-public class GeneratePath {
+public class PathBuilder {
     private static final double kEpsilon = 1E-9;
     private static final double kReallyBigNumber = 1E9;
 
@@ -145,7 +145,4 @@ public static class Waypoint {
 
         }
     }
-
-
 }
-

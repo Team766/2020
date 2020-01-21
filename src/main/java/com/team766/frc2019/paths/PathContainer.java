@@ -1,4 +1,4 @@
-package com.team766.frc2019.Autonomous;
+package com.team766.frc2019.paths;
 
 import com.team766.lib.util.control.Path;
 import com.team766.lib.util.math.RigidTransform2d;
