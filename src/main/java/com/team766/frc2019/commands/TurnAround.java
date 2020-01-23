@@ -20,15 +20,27 @@ public class TurnAround extends Subroutine {
         System.out.println("TurnAround STARTING");
 
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
-        waypoints.add(new Waypoint(116, 209, 0, 0));
-        waypoints.add(new Waypoint(105, 225, 0, 30));
-        waypoints.add(new Waypoint(5, 2250, 0, 30));
-        waypoints.add(new Waypoint(101, 235, 0, 60));
+        waypoints.add(new Waypoint(0, 0, 0, 0));
+        waypoints.add(new Waypoint(90, 0, 0, 30));
+        waypoints.add(new Waypoint(130, -50, 0, 30));
+        waypoints.add(new Waypoint(25, 10, 0, 30));
 
-        System.out.println("Waypoints" + waypoints);
+        // waypoints.add(new Waypoint(5, 2250, 0, 30));
+        // waypoints.add(new Waypoint(101, 235, 0, 60));
+
+        // System.out.println("Waypoints" + waypoints);
 
         // System.out.println(PathBuilder.GeneratePath(waypoints));
-        System.out.println(PathBuilder.interpolateWaypoints(waypoints, 6).toString());
+        ArrayList<Waypoint> path = new ArrayList<Waypoint>();
+        // path = PathBuilder.buildPath(waypoints);
+        path = PathBuilder.interpolateWaypoints(waypoints, 6);
+
+        System.out.println("path built");
+
+        for (int i = 0; i < path.size(); i++) {
+            System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
+        }
+        
 
        // callSubroutine(new PreciseTurn((Robot.drive.getGyroAngle() + 180) % 360));
         
