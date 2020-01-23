@@ -1,6 +1,6 @@
 package com.team766.frc2019.paths;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import com.team766.lib.util.control.Path;
 import com.team766.lib.util.control.PathSegment;
@@ -9,25 +9,20 @@ import com.team766.lib.util.math.Rotation2d;
 import com.team766.lib.util.math.Translation2d;
 
 public class PathBuilder {
+    private static final double spacing = 6;
     private static final double kEpsilon = 1E-9;
     private static final double kReallyBigNumber = 1E9;
 
-    public static Path GeneratePath(List<Waypoint> w) {
-        Path p = new Path();
-        if (w.size() < 2)
-            throw new Error("Path must contain at least 2 waypoints");
-        int i = 0;
-        if (w.size() > 2) {
-            do {
-                new Arc(getPoint(w, i), getPoint(w, i + 1), getPoint(w, i + 2)).addToPath(p);
-                i++;
-            } while (i < w.size() - 2);
-        }
-        new Line(w.get(w.size() - 2), w.get(w.size() - 1)).addToPath(p, 0);
-        p.extrapolateLast();
-        p.verifySpeeds();
-        // System.out.println(p);
-        return p;
+    /**
+     * makes a smooth path given a few waypoints to follow
+     * @param waypoints
+     * @return final path
+     */
+    public static ArrayList<Waypoint> buildPath(ArrayList<Waypoint> waypoints) {
+        ArrayList<Waypoint> newWaypoints = new ArrayList<Waypoint>();
+        newWaypoints = interpolateWaypoints(waypoints, spacing);
+        newWaypoints = smoother(newWaypoints, 0.2, 0.8, 0.001);
+        return(newWaypoints);
     }
 
     /**
@@ -35,65 +30,137 @@ public class PathBuilder {
      * @param waypoints waypoints to interpolate
      * @param spacing spacing between interpolated points
      */
-    public static List<Waypoint> interpolateWaypoints(List<Waypoint> waypoints, float spacing) {     
-        // spacing = desired distance between points
-        // new_points = array to put new points into
-            // For every line segment in the path:
-                // ○ vector = end_point - start_point
-                // ○ num_points_that_fit = Math.ceil(vector.magnitude() / spacing)
-                // ○ vector = vector.normalize() * spacing
-                // ○ for (i = 0; i<num_points_that_fit; i++):
-        // ■ Add (start_point + vector * i) to new_p
-        List<Waypoint> newPoints;
-        for (Waypoint waypoint: waypoints) {
-            
-        }
-        return waypoints;
+    public static ArrayList<Waypoint> interpolateWaypoints(ArrayList<Waypoint> waypoints, double spacing) {     //how's your day going?
+        ArrayList<Waypoint> newPoints = new ArrayList<Waypoint>();
+        for (int i = 0; i < waypoints.size() - 1; i++) {
+            Vector vector = new Vector(waypoints.get(i + 1).x - waypoints.get(i).x, waypoints.get(i + 1).y - waypoints.get(i).y);
+            int numberOfPointsThatFit = (int) Math.ceil(vector.magnitude() / spacing);
+            vector = vector.normalize().scale(spacing);
+            for (int j = 0; j < numberOfPointsThatFit; j++) {
+                newPoints.add(new Waypoint(waypoints.get(i).x + vector.getX() * j, waypoints.get(i).y + vector.getY() * j, 0, 0));
+            }
+        } 
+            newPoints.add(waypoints.get(waypoints.size() - 1));
+        return newPoints;
     }
 
-    private static Waypoint getPoint(List<Waypoint> w, int i) {
+    public static ArrayList<Waypoint> smoother(ArrayList<Waypoint> path, double weight_data, double weight_smooth, double tolerance) {
+
+		//copy array
+		ArrayList<Waypoint> newPath = path;
+
+        double change = tolerance;
+
+		while(change >= tolerance) {
+			change = 0.0;
+			for(int i = 1; i < path.size()-1; i++) {
+                double auxX = newPath.get(i).getX();
+                double changedPathX = newPath.get(i).getX();
+                changedPathX += weight_data * (path.get(i).getX() - newPath.get(i).getX()) + weight_smooth * (newPath.get(i-1).getX() + newPath.get(i+1).getX() - (2.0 * newPath.get(i).getX()));
+                //System.out.println("changed path x: " + changedPathX);
+                change += Math.abs(auxX - changedPathX);
+                System.out.println("changeX: " + change);	
+                
+                double auxY = newPath.get(i).getY();
+                double changedPathY = newPath.get(i).getX();
+                changedPathY += weight_data * (path.get(i).getY() - newPath.get(i).getY()) + weight_smooth * (newPath.get(i-1).getY() + newPath.get(i+1).getY() - (2.0 * newPath.get(i).getY()));
+                //System.out.println("changed path y: " + changedPathX);
+                change += Math.abs(auxY - changedPathY);
+                System.out.println("changeY: " + change);
+            }
+        }
+
+		return newPath;
+
+	}
+    
+
+    private static Waypoint getPoint(ArrayList<Waypoint> w, int i) {
         if (i > w.size())
             return w.get(w.size() - 1);
         return w.get(i);
     }
 
-/**
- * A waypoint along a path. Contains a position, radius (for creating curved
- * paths), and speed. The information from these waypoints is used by the
- * PathBuilder class to generate Paths. Waypoints also contain an optional
- * marker that is used by the WaitForPathMarkerAction.
- *
- * @see GeneratePath
- */
-public static class Waypoint {
-    Translation2d position;
-    double radius;
-    double speed;
-    String marker;
+    public static class Vector {
+        static double x;
+        static double y;
+        Vector(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+        
+        public static double magnitude() {
+            return(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+        }
 
-    public Waypoint(Waypoint other) {
-        this(other.position.x(), other.position.y(), other.radius, other.speed, other.marker);
+        public static Vector normalize() {
+            return(new Vector(x / magnitude(), y / magnitude()));
+        }
+
+        public static Vector scale(double scalar) {
+            return(new Vector(x * scalar, y * scalar));
+        }
+
+        public double getX() {
+            return x;
+        }
+
+        public double getY() {
+            return y;
+        }
     }
 
-    public Waypoint(double x, double y, double r, double s) {
-        position = new Translation2d(x, y);
-        radius = r;
-        speed = s;
-    }
+    /**
+     * A waypoint along a path. Contains a position, radius (for creating curved
+     * paths), and speed. The information from these waypoints is used by the
+     * PathBuilder class to generate Paths. Waypoints also contain an optional
+     * marker that is used by the WaitForPathMarkerAction.
+     *
+     * @see GeneratePath
+     */
+    public static class Waypoint {
+        Translation2d position;
+        double x;
+        double y;
+        double radius;
+        double speed;
+        String marker;
 
-    public Waypoint(Translation2d pos, double r, double s) {
-        position = pos;
-        radius = r;
-        speed = s;
-    }
+        public double getX() {
+            return x;
+        }
 
-    public Waypoint(double x, double y, double r, double s, String m) {
-        position = new Translation2d(x, y);
-        radius = r;
-        speed = s;
-        marker = m;
+        public double getY() {
+            return y;
+        }
+
+        public Waypoint(Waypoint other) {
+            this(other.position.x(), other.position.y(), other.radius, other.speed, other.marker);
+        }
+
+        public Waypoint(double x, double y, double r, double s) {
+            // position = new Translation2d(x, y);
+            this.x = x;
+            this.y = y;
+            radius = r;
+            speed = s;
+        }
+
+        // public Waypoint(Translation2d pos, double r, double s) {
+        //     position = pos;
+        //     radius = r;
+        //     speed = s;
+        // }
+
+        public Waypoint(double x, double y, double r, double s, String m) {
+            // position = new Translation2d(x, y);
+            this.x = x;
+            this.y = y;
+            radius = r;
+            speed = s;
+            marker = m;
+        }
     }
-}
 
     /**
      * An Arc object is formed by two Lines that share a common Waypoint. Contains a center position, radius, and speed.
