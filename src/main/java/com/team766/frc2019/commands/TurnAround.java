@@ -21,9 +21,8 @@ public class TurnAround extends Subroutine {
 
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
         waypoints.add(new Waypoint(0, 0, 0, 0));
-        waypoints.add(new Waypoint(90, 0, 0, 30));
-        waypoints.add(new Waypoint(130, -50, 0, 30));
-        waypoints.add(new Waypoint(25, 10, 0, 30));
+        waypoints.add(new Waypoint(90, 0, 0, 0));
+        waypoints.add(new Waypoint(130, -50, 0, 0));
 
         // waypoints.add(new Waypoint(5, 2250, 0, 30));
         // waypoints.add(new Waypoint(101, 235, 0, 60));
@@ -32,13 +31,13 @@ public class TurnAround extends Subroutine {
 
         // System.out.println(PathBuilder.GeneratePath(waypoints));
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
-        // path = PathBuilder.buildPath(waypoints);
-        path = PathBuilder.interpolateWaypoints(waypoints, 6);
+        path = PathBuilder.buildPath(waypoints);
 
         System.out.println("path built");
 
         for (int i = 0; i < path.size(); i++) {
-            System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
+            // System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
+            System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
         }
         
 
