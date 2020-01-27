@@ -8,6 +8,9 @@ import com.team766.lib.util.math.RigidTransform2d;
 import com.team766.lib.util.math.Rotation2d;
 import com.team766.lib.util.math.Translation2d;
 
+/**
+ * Build paths from a few weaypoints to use with path following
+ */
 public class PathBuilder {
     private static final double spacing = 6;
     private static final double kEpsilon = 1E-9;
@@ -32,17 +35,25 @@ public class PathBuilder {
      * @param spacing spacing between interpolated points
      * @return interpolated waypoints
      */
-    public static ArrayList<Waypoint> interpolateWaypoints(ArrayList<Waypoint> waypoints, double spacing) {     //how's your day going?
+    public static ArrayList<Waypoint> interpolateWaypoints(ArrayList<Waypoint> waypoints, double spacing) {
         ArrayList<Waypoint> newPoints = new ArrayList<Waypoint>();
+
         for (int i = 0; i < waypoints.size() - 1; i++) {
+            // compute vector between current point and next point
             Vector vector = new Vector(waypoints.get(i + 1).x - waypoints.get(i).x, waypoints.get(i + 1).y - waypoints.get(i).y);
+
             int numberOfPointsThatFit = (int) Math.ceil(vector.magnitude() / spacing);
+
+            // compute vector to add to current point
             vector = vector.normalize().scale(spacing);
+
+            // add interpolated points into return ArrayList
             for (int j = 0; j < numberOfPointsThatFit; j++) {
                 newPoints.add(new Waypoint(waypoints.get(i).x + vector.getX() * j, waypoints.get(i).y + vector.getY() * j, 0, 0));
             }
         } 
-            newPoints.add(waypoints.get(waypoints.size() - 1));
+        newPoints.add(waypoints.get(waypoints.size() - 1));
+
         return newPoints;
     }
 
@@ -51,40 +62,40 @@ public class PathBuilder {
      * Algorithm reference https://www.youtube.com/watch?v=v0-OUApP_5Q
      * https://www.youtube.com/watch?v=ffLPf8kI6qg
      * @param path
-     * @param weight_data
-     * @param weight_smooth
+     * @param weightData
+     * @param weightSmooth
      * @param tolerance when to stop optimizing (lower value converges slower)
      */
     public static ArrayList<Waypoint> smoother(ArrayList<Waypoint> path, double weightData, double weightSmooth, double tolerance) {
-        double weight_data = weightData;
-        double weight_smooth = weightSmooth;
+        // copy path into 2d array
         double[][] pathMatrix = new double[path.size()][2];
         for (int i = 0; i < path.size(); i++) {
             pathMatrix[i][0] = path.get(i).getX();
             pathMatrix[i][1] = path.get(i).getY();
-
         }
 
-        double[][] newPathMatrix = pathMatrix;
+        // copy pathMatrix into newPathMatrix
+        double[][] newPathMatrix = new double[pathMatrix.length][];
 
         for(int i = 0; i < pathMatrix.length; i++) {
             newPathMatrix[i] = pathMatrix[i].clone();
         }
 
-
+        // gradient descent
         double change = tolerance;
         while(change >= tolerance) {
             change = 0.0;
             for(int i = 1; i < pathMatrix.length - 1; i++) {
                 for(int j = 0; j < pathMatrix[i].length; j++) {
                     double aux = newPathMatrix[i][j];
-                    newPathMatrix[i][j] += weight_data * (pathMatrix[i][j] - newPathMatrix[i][j]);
-                    newPathMatrix[i][j] += weight_smooth * (newPathMatrix[i-1][j] + newPathMatrix[i+1][j] - (2.0 * newPathMatrix[i][j]));
+                    newPathMatrix[i][j] += weightData * (pathMatrix[i][j] - newPathMatrix[i][j]);
+                    newPathMatrix[i][j] += weightSmooth * (newPathMatrix[i-1][j] + newPathMatrix[i+1][j] - (2.0 * newPathMatrix[i][j]));
                     change += Math.abs(aux - newPathMatrix[i][j]);
                 }
             }
         }
 
+        // convert 2d array back to ArrayList<Waypoint>
         ArrayList<Waypoint> newPath = new ArrayList<Waypoint>();
 
         for (int i = 0; i < newPathMatrix.length; i++) {
@@ -93,40 +104,6 @@ public class PathBuilder {
 
         return newPath;
     }
-    // public static ArrayList<Waypoint> smoother(ArrayList<Waypoint> path, double weight_data, double weight_smooth, double tolerance) {
-
-		//copy array
-        // ArrayList<Waypoint> newPath = new ArrayList<Waypoint>();
-        // newPath = path;
-
-        // double change = tolerance;
-
-		// while(change >= tolerance) {
-		// 	change = 0.0;
-		// 	for(int i = 1; i < path.size()-1; i++) {
-        //         System.out.println("i: " + i);
-        //         double auxX = newPath.get(i).getX();
-        //         double changedPathX = newPath.get(i).getX();
-        //         changedPathX += weight_data * (path.get(i).getX() - newPath.get(i).getX()) + weight_smooth * (newPath.get(i-1).getX() + newPath.get(i+1).getX() - (2.0 * newPath.get(i).getX()));
-        //         //System.out.println("changed path x: " + changedPathX);
-        //         newPath.get(i).setX(changedPathX);
-        //         change += Math.abs(auxX - changedPathX);
-        //         System.out.println("changeX: " + change);	
-                
-        //         double auxY = newPath.get(i).getY();
-        //         double changedPathY = newPath.get(i).getX();
-        //         changedPathY += weight_data * (path.get(i).getY() - newPath.get(i).getY()) + weight_smooth * (newPath.get(i-1).getY() + newPath.get(i+1).getY() - (2.0 * newPath.get(i).getY()));
-        //         //System.out.println("changed path y: " + changedPathX);
-        //         newPath.get(i).setY(changedPathY);
-        //         change += Math.abs(auxY - changedPathY);
-        //         System.out.println("changeY: " + change);
-        //     }
-        // }
-
-		// return newPath;
-
-	// }
-    
 
     private static Waypoint getPoint(ArrayList<Waypoint> w, int i) {
         if (i > w.size())
@@ -189,7 +166,6 @@ public class PathBuilder {
 
         public void setX(double newX) {
             x = newX;
-
         }
 
         public void setY(double newY) {
