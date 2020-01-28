@@ -24,9 +24,6 @@ public class TurnAround extends Subroutine {
         waypoints.add(new Waypoint(90, 0, 0, 0));
         waypoints.add(new Waypoint(130, -50, 0, 0));
 
-        // waypoints.add(new Waypoint(5, 2250, 0, 30));
-        // waypoints.add(new Waypoint(101, 235, 0, 60));
-
         // System.out.println("Waypoints" + waypoints);
 
         // System.out.println(PathBuilder.GeneratePath(waypoints));
@@ -37,7 +34,8 @@ public class TurnAround extends Subroutine {
 
         for (int i = 0; i < path.size(); i++) {
             // System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
-            System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
+            // System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
+            System.out.println("total distance from start: " + path.get(i).getTotalDistanceFromFirstWaypoint());
         }
         
 
