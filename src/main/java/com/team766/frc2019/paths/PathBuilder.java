@@ -2,6 +2,7 @@ package com.team766.frc2019.paths;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Math;
 
 // import com.team766.lib.util.control.Path;
 // import com.team766.lib.util.control.PathSegment;
@@ -182,7 +183,7 @@ public class PathBuilder {
 
     
 
-    public static ArrayList<Waypoint> calcualteSpeeds(ArrayList<Waypoint> inputPath, double turnSpeedConstant) {
+    public static ArrayList<Waypoint> calculateSpeeds(ArrayList<Waypoint> inputPath, double turnSpeedConstant) {
         // copy input array into output array
         ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
         Iterator<Waypoint> iterator = inputPath.iterator();
@@ -196,6 +197,30 @@ public class PathBuilder {
         }
 
         return outputPath;
+    }
+
+    // you can delete me, I am deprecated and no longer needed to calculateSpeed
+    public static double[] generateVelocities(ArrayList<Waypoint> waypts) {
+        // this will generate output power level for the robot (N.B.: Power!=Velocity!)
+        double[] velocities = new double[waypts.size()];  
+        double k1;
+        double k2;
+        double b;
+        double a;
+        double r;
+        double power;
+        for (int i=1; i<waypts.size()-1; i++){
+            // power inversely related with curvature
+            k1 = 0.5*(Math.pow(waypts.get(i-1).x, 2) + Math.pow(waypts.get(i-1).y, 2)-(Math.pow(waypts.get(i).x, 2) + Math.pow(waypts.get(i).y, 2)))/(waypts.get(i-1).x - waypts.get(i).x + 0.0001);
+            k2 = (waypts.get(i-1).y - waypts.get(i).y)/(waypts.get(i-1).x - waypts.get(i).x);
+            b = 0.5*(Math.pow(waypts.get(i).x, 2) - 2*waypts.get(i).x*k1 + Math.pow(waypts.get(i).y, 2) - Math.pow(waypts.get(i+1).x, 2) + 2*waypts.get(i+1).x*k1 - Math.pow(waypts.get(i+1).y, 2))/(waypts.get(i+1).x*k2 - waypts.get(i+1).y + waypts.get(i).y - waypts.get(i).x*k2);
+            a = k1 - k2*b;
+            r = Math.sqrt(Math.pow(waypts.get(i-1).x - a, 2) + Math.pow(waypts.get(i-1).y - b, 2));
+
+            power = 1/(1 + Math.exp(-1*r)); // needs to be scaled correctly
+            velocities[i] = power;
+        } 
+        return velocities;
     }
 
     // private static Waypoint getPoint(ArrayList<Waypoint> w, int i) {
