@@ -14,8 +14,9 @@ import java.util.Iterator;
  */
 public class PathBuilder {
     private static final double spacing = 6;
-    private static final double kEpsilon = 1E-9;
-    private static final double kReallyBigNumber = 1E9;
+    private static final double maxSpeed = 10;
+    // private static final double kEpsilon = 1E-9;
+    // private static final double kReallyBigNumber = 1E9;
 
     /**
      * makes a smooth path given a few waypoints to follow
@@ -27,6 +28,7 @@ public class PathBuilder {
         newWaypoints = interpolateWaypoints(newWaypoints, spacing);
         newWaypoints = smoother(newWaypoints, .6, .4, 0.001);
         newWaypoints = calculateDistanceBetweenWaypoints(newWaypoints);
+        newWaypoints = calculateCurvature(newWaypoints);
 
         return(newWaypoints);
     }
@@ -52,7 +54,7 @@ public class PathBuilder {
 
             // add interpolated points into return ArrayList
             for (int j = 0; j < numberOfPointsThatFit; j++) {
-                newPoints.add(new Waypoint(waypoints.get(i).x + vector.getX() * j, waypoints.get(i).y + vector.getY() * j, 0, 0));
+                newPoints.add(new Waypoint(waypoints.get(i).x + vector.getX() * j, waypoints.get(i).y + vector.getY() * j));
             }
         } 
         newPoints.add(waypoints.get(waypoints.size() - 1));
@@ -102,7 +104,7 @@ public class PathBuilder {
         ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
 
         for (int i = 0; i < newPath.length; i++) {
-            outputPath.add(new Waypoint(newPath[i][0], newPath[i][1], 0, 0));
+            outputPath.add(new Waypoint(newPath[i][0], newPath[i][1]));
         }
 
         return outputPath;
@@ -128,11 +130,69 @@ public class PathBuilder {
         // distance at point i = distance at point (i − 1) + distance_formula(point i, point (i − 1))
             outputPath.get(i).setTotalDistanceFromFirstWaypoint(
                 outputPath.get(i - 1).getTotalDistanceFromFirstWaypoint() +
-                Math.sqrt(
-                    Math.pow(outputPath.get(i).getX() - outputPath.get(i - 1).getX(), 2) +
-                    Math.pow(outputPath.get(i).getY() - outputPath.get(i - 1).getY(), 2)
-                )
+                calculateDistanceBetweenTwoWaypoints(outputPath.get(i), outputPath.get(i-1))
             );
+        }
+
+        return outputPath;
+    }
+
+    public static ArrayList<Waypoint> calculateCurvature(ArrayList<Waypoint> inputPath) {
+        // copy input array into output array
+        ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
+        Iterator<Waypoint> iterator = inputPath.iterator();
+        while(iterator.hasNext()){
+            outputPath.add((Waypoint)(iterator.next()).clone());
+        }
+
+        // curvature calculations
+        outputPath.get(0).setCurvature(0);
+        outputPath.get(outputPath.size() - 1).setCurvature(0);
+        for (int i = 1; i < inputPath.size() - 1; i++) {
+            outputPath.get(i).setCurvature(
+                1 / calculateCircumradius(outputPath.get(i - 1), outputPath.get(i), outputPath.get(i + 1))
+            );
+        }
+
+        return outputPath;
+    }
+
+    /**
+     * used to calculate circumradius for determining maximum velocity during turns
+     * @param pointOne
+     * @param pointTwo
+     * @param pointThree
+     * @return
+     */
+    public static double calculateCircumradius(Waypoint pointA, Waypoint pointB, Waypoint pointC) {
+        double lengthAB = calculateDistanceBetweenTwoWaypoints(pointA, pointB);
+        double lengthBC = calculateDistanceBetweenTwoWaypoints(pointB, pointC);
+        double lengthAC = calculateDistanceBetweenTwoWaypoints(pointA, pointC);
+        return (lengthAB * lengthBC * lengthAC) / (4 * heronsFormula(lengthAB, lengthBC, lengthAC));
+    }
+
+    public static double calculateDistanceBetweenTwoWaypoints(Waypoint pointA, Waypoint pointB) {
+        return Math.sqrt(Math.pow(pointA.getX() - pointB.getX(), 2) + Math.pow(pointA.getY() - pointB.getY(), 2));
+    }
+
+    public static double heronsFormula(double lengthA, double lengthB, double lengthC) {
+        double semiPerimeter = (lengthA + lengthB + lengthC) / 2;
+        return Math.sqrt(semiPerimeter * (semiPerimeter - lengthA) * (semiPerimeter - lengthB) * (semiPerimeter - lengthC));
+    }
+
+    
+
+    public static ArrayList<Waypoint> calcualteSpeeds(ArrayList<Waypoint> inputPath, double turnSpeedConstant) {
+        // copy input array into output array
+        ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
+        Iterator<Waypoint> iterator = inputPath.iterator();
+        while(iterator.hasNext()){
+            outputPath.add((Waypoint)(iterator.next()).clone());
+        }
+
+        // curvature calculations
+        for (int i = 1; i < inputPath.size(); i++) {
+            outputPath.get(i).setSpeed(Math.min(maxSpeed, turnSpeedConstant / outputPath.get(i).getCurvature()));
         }
 
         return outputPath;
@@ -193,8 +253,11 @@ public class PathBuilder {
         // Translation2d position;
         private double x;
         private double y;
-        double radius;
-        double speed;
+        private double curvature;
+        // double radius;
+        // double speed;
+
+        private double speed;
 
         // used for calculating velocity and curvature
         // must be entered manually
@@ -205,15 +268,20 @@ public class PathBuilder {
         //     this(other.position.x(), other.position.y(), other.radius, other.speed, other.marker);
         // }
 
-        public Waypoint(double x, double y, double r, double s) {
-            // position = new Translation2d(x, y);
-            this.setX(x);
-            this.setY(y);
-            radius = r;
-            speed = s;
-        }
+        // public Waypoint(double x, double y, double r, double s) {
+        //     // position = new Translation2d(x, y);
+        //     this.setX(x);
+        //     this.setY(y);
+        //     radius = r;
+        //     speed = s;
+        // }
 
         public Waypoint() {};
+
+        public Waypoint(double x, double y) {
+            this.x = x;
+            this.y = y;
+        };
 
         // public Waypoint(Translation2d pos, double r, double s) {
         //     position = pos;
@@ -261,6 +329,22 @@ public class PathBuilder {
 
         public void setTotalDistanceFromFirstWaypoint(double totalDistanceFromFirstWaypoint) {
             this.totalDistanceFromFirstWaypoint = totalDistanceFromFirstWaypoint;
+        }
+
+        public double getCurvature() {
+            return this.curvature;
+        }
+
+        public void setCurvature(double curvature) {
+            this.curvature = curvature;
+        }
+
+        public double getSpeed() {
+            return this.speed;
+        }
+
+        public void setSpeed(double speed) {
+            this.speed = speed;
         }
     }
 

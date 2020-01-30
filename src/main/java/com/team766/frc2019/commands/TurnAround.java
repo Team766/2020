@@ -35,7 +35,7 @@ public class TurnAround extends Subroutine {
         for (int i = 0; i < path.size(); i++) {
             // System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
             // System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
-            System.out.println("total distance from start: " + path.get(i).getTotalDistanceFromFirstWaypoint());
+            System.out.println("curvature: " + path.get(i).getCurvature());
         }
         
 
