@@ -3,6 +3,8 @@ package com.team766.frc2019.paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.team766.frc2019.paths.Waypoint;
+
 // import com.team766.lib.util.control.Path;
 // import com.team766.lib.util.control.PathSegment;
 // import com.team766.lib.util.math.RigidTransform2d;
@@ -13,10 +15,10 @@ import java.util.Iterator;
  * Build paths from a few weaypoints to use with path following
  */
 public class PathBuilder {
+    // values are measured in inches and seconds
     private static final double spacing = 6;
-    private static final double maxSpeed = 10;
-    // private static final double kEpsilon = 1E-9;
-    // private static final double kReallyBigNumber = 1E9;
+    private static final double maxVelocity = 360;
+    private static final double maxAcceleration = 60;
 
     /**
      * makes a smooth path given a few waypoints to follow
@@ -29,6 +31,8 @@ public class PathBuilder {
         newWaypoints = smoother(newWaypoints, .6, .4, 0.001);
         newWaypoints = calculateDistanceBetweenWaypoints(newWaypoints);
         newWaypoints = calculateCurvature(newWaypoints);
+        newWaypoints = calculateMaximumVelocities(newWaypoints, 3);
+        newWaypoints = calculateTargetVelocities(newWaypoints);
 
         return(newWaypoints);
     }
@@ -181,8 +185,13 @@ public class PathBuilder {
     }
 
     
-
-    public static ArrayList<Waypoint> calcualteSpeeds(ArrayList<Waypoint> inputPath, double turnSpeedConstant) {
+    /**
+     * calculates maximum velocity the robot can go based on the curvature of
+     * the points and some constants
+     * @param inputPath
+     * @param turnVelocityConstant value between 1 - 5 (lower value is slower turn velocity)
+     */
+    public static ArrayList<Waypoint> calculateMaximumVelocities(ArrayList<Waypoint> inputPath, double turnVelocityConstant) {
         // copy input array into output array
         ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
         Iterator<Waypoint> iterator = inputPath.iterator();
@@ -190,19 +199,39 @@ public class PathBuilder {
             outputPath.add((Waypoint)(iterator.next()).clone());
         }
 
-        // curvature calculations
+        // max velocity calculations
         for (int i = 1; i < inputPath.size(); i++) {
-            outputPath.get(i).setSpeed(Math.min(maxSpeed, turnSpeedConstant / outputPath.get(i).getCurvature()));
+            outputPath.get(i).setVelocity(Math.min(maxVelocity, turnVelocityConstant / outputPath.get(i).getCurvature()));
         }
 
         return outputPath;
     }
+    public static ArrayList<Waypoint> calculateTargetVelocities(ArrayList<Waypoint> inputPath) {
+        // copy input array into output array
+        ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
+        Iterator<Waypoint> iterator = inputPath.iterator();
+        while(iterator.hasNext()){
+            outputPath.add((Waypoint)(iterator.next()).clone());
+        }
 
-    // private static Waypoint getPoint(ArrayList<Waypoint> w, int i) {
-    //     if (i > w.size())
-    //         return w.get(w.size() - 1);
-    //     return w.get(i);
-    // }
+        outputPath.get(outputPath.size() - 1).setVelocity(0);
+        // target velocity calculations
+        for (int i = inputPath.size() - 2; i >= 0; i--) {
+            outputPath.get(i).setVelocity(
+                Math.min(
+                outputPath.get(i).getVelocity(),
+                    Math.sqrt(
+                        Math.pow(
+                            outputPath.get(i + 1).getVelocity(), 2) +
+                            2 * maxAcceleration * calculateDistanceBetweenTwoWaypoints(outputPath.get(i), outputPath.get(i + 1)
+                        )
+                    )
+                )
+            );
+        }
+
+        return outputPath;
+    }
 
     public static class Vector {
         private double x;
@@ -241,182 +270,4 @@ public class PathBuilder {
         }
     }
 
-    /**
-     * A waypoint along a path. Contains a position, radius (for creating curved
-     * paths), and speed. The information from these waypoints is used by the
-     * PathBuilder class to generate Paths. Waypoints also contain an optional
-     * marker that is used by the WaitForPathMarkerAction.
-     *
-     * @see GeneratePath
-     */
-    public static class Waypoint {
-        // Translation2d position;
-        private double x;
-        private double y;
-        private double curvature;
-        // double radius;
-        // double speed;
-
-        private double speed;
-
-        // used for calculating velocity and curvature
-        // must be entered manually
-        private double totalDistanceFromFirstWaypoint;
-        // String marker;
-
-        // public Waypoint(Waypoint other) {
-        //     this(other.position.x(), other.position.y(), other.radius, other.speed, other.marker);
-        // }
-
-        // public Waypoint(double x, double y, double r, double s) {
-        //     // position = new Translation2d(x, y);
-        //     this.setX(x);
-        //     this.setY(y);
-        //     radius = r;
-        //     speed = s;
-        // }
-
-        public Waypoint() {};
-
-        public Waypoint(double x, double y) {
-            this.x = x;
-            this.y = y;
-        };
-
-        // public Waypoint(Translation2d pos, double r, double s) {
-        //     position = pos;
-        //     radius = r;
-        //     speed = s;
-        // }
-
-        // public Waypoint(double x, double y, double r, double s, String m) {
-        //     // position = new Translation2d(x, y);
-        //     this.x = x;
-        //     this.y = y;
-        //     radius = r;
-        //     speed = s;
-        //     // marker = m;
-        // }
-
-        public Waypoint clone(){
-            Waypoint waypoint = new Waypoint();
-
-            waypoint.setX(this.getX());
-            waypoint.setY(this.getY());
-            waypoint.setTotalDistanceFromFirstWaypoint(this.getTotalDistanceFromFirstWaypoint());
-            return waypoint;
-        }
-
-        public double getX() {
-            return x;
-        }
-
-        public void setX(double x) {
-            this.x = x;
-        }
-
-        public double getY() {
-            return y;
-        }
-
-        public void setY(double y) {
-            this.y = y;
-        }
-
-        public double getTotalDistanceFromFirstWaypoint() {
-            return this.totalDistanceFromFirstWaypoint;
-        }
-
-        public void setTotalDistanceFromFirstWaypoint(double totalDistanceFromFirstWaypoint) {
-            this.totalDistanceFromFirstWaypoint = totalDistanceFromFirstWaypoint;
-        }
-
-        public double getCurvature() {
-            return this.curvature;
-        }
-
-        public void setCurvature(double curvature) {
-            this.curvature = curvature;
-        }
-
-        public double getSpeed() {
-            return this.speed;
-        }
-
-        public void setSpeed(double speed) {
-            this.speed = speed;
-        }
-    }
-
-//     /**
-//      * An Arc object is formed by two Lines that share a common Waypoint. Contains a center position, radius, and speed.
-//      */
-//     static class Arc {
-//         Line a;
-//         Line b;
-//         Translation2d center;
-//         double radius;
-//         double speed;
-
-//         public Arc(Waypoint a, Waypoint b, Waypoint c) {
-//             this(new Line(a, b), new Line(b, c));
-//         }
-
-//         public Arc(Line a, Line b) {
-//             this.a = a;
-//             this.b = b;
-//             this.speed = (a.speed + b.speed) / 2;
-//             this.center = intersect(a, b);
-//             this.radius = new Translation2d(center, a.end).norm();
-//         }
-
-//         private void addToPath(Path p) {
-//             a.addToPath(p, speed);
-//             if (radius > kEpsilon && radius < kReallyBigNumber) {
-//                 p.addSegment(new PathSegment(a.end.x(), a.end.y(), b.start.x(), b.start.y(), center.x(), center.y(),
-//                         speed, p.getLastMotionState(), b.speed));
-//             }
-//         }
-
-//         private static Translation2d intersect(Line l1, Line l2) {
-//             final RigidTransform2d lineA = new RigidTransform2d(l1.end, new Rotation2d(l1.slope, true).normal());
-//             final RigidTransform2d lineB = new RigidTransform2d(l2.start, new Rotation2d(l2.slope, true).normal());
-//             return lineA.intersection(lineB);
-//         }
-//     }
-
-//     /**
-//      * A Line object is formed by two Waypoints. Contains a start and end position, slope, and speed.
-//      */
-//     static class Line {
-//         Waypoint a;
-//         Waypoint b;
-//         Translation2d start;
-//         Translation2d end;
-//         Translation2d slope;
-//         double speed;
-
-//         public Line(Waypoint a, Waypoint b) {
-//             this.a = a;
-//             this.b = b;
-//             slope = new Translation2d(a.position, b.position);
-//             speed = b.speed;
-//             start = a.position.translateBy(slope.scale(a.radius / slope.norm()));
-//             end = b.position.translateBy(slope.scale(-b.radius / slope.norm()));
-//         }
-
-//         private void addToPath(Path p, double endSpeed) {
-//             double pathLength = new Translation2d(end, start).norm();
-//             if (pathLength > kEpsilon) {
-//                 if (b.marker != null) {
-//                     p.addSegment(new PathSegment(start.x(), start.y(), end.x(), end.y(), b.speed,
-//                             p.getLastMotionState(), endSpeed, b.marker));
-//                 } else {
-//                     p.addSegment(new PathSegment(start.x(), start.y(), end.x(), end.y(), b.speed,
-//                             p.getLastMotionState(), endSpeed));
-//                 }
-//             }
-
-//         }
-//     }
 }
