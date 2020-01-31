@@ -2,15 +2,9 @@ package com.team766.frc2019.paths;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Math;
+import java.lang.Math;
 
 import com.team766.frc2019.paths.Waypoint;
-
-// import com.team766.lib.util.control.Path;
-// import com.team766.lib.util.control.PathSegment;
-// import com.team766.lib.util.math.RigidTransform2d;
-// import com.team766.lib.util.math.Rotation2d;
-// import com.team766.lib.util.math.Translation2d;
 
 /**
  * Build paths from a few weaypoints to use with path following
@@ -233,42 +227,4 @@ public class PathBuilder {
 
         return outputPath;
     }
-
-    public static class Vector {
-        private double x;
-        private double y;
-        Vector(double x, double y) {
-            this.setX(x);
-            this.setY(y);
-        }
-        
-        public double magnitude() {
-            return(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-        }
-
-        public Vector normalize() {
-            return(new Vector(x / magnitude(), y / magnitude()));
-        }
-
-        public  Vector scale(double scalar) {
-            return(new Vector(x * scalar, y * scalar));
-        }
-
-        public double getX() {
-            return x;
-        }
-
-        public void setX(double x) {
-            this.x = x;
-        }
-
-        public double getY() {
-            return y;
-        }
-
-        public void setY(double y) {
-            this.y = y;
-        }
-    }
-
 }
