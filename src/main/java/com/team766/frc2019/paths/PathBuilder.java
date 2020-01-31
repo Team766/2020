@@ -2,6 +2,7 @@ package com.team766.frc2019.paths;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Math;
 
 import com.team766.frc2019.paths.Waypoint;
 
