@@ -50,7 +50,7 @@ public class PathBuilder {
 
         for (int i = 0; i < waypoints.size() - 1; i++) {
             // compute vector between current point and next point
-            Vector vector = new Vector(waypoints.get(i + 1).x - waypoints.get(i).x, waypoints.get(i + 1).y - waypoints.get(i).y);
+            Vector vector = new Vector(waypoints.get(i + 1).getX() - waypoints.get(i).getX(), waypoints.get(i + 1).getY() - waypoints.get(i).getY());
 
             int numberOfPointsThatFit = (int) Math.ceil(vector.magnitude() / spacing);
 
@@ -59,7 +59,7 @@ public class PathBuilder {
 
             // add interpolated points into return ArrayList
             for (int j = 0; j < numberOfPointsThatFit; j++) {
-                newPoints.add(new Waypoint(waypoints.get(i).x + vector.getX() * j, waypoints.get(i).y + vector.getY() * j));
+                newPoints.add(new Waypoint(waypoints.get(i).getX() + vector.getX() * j, waypoints.get(i).getY() + vector.getY() * j));
             }
         } 
         newPoints.add(waypoints.get(waypoints.size() - 1));
