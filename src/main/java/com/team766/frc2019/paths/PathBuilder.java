@@ -129,7 +129,7 @@ public class PathBuilder {
         // distance at point i = distance at point (i − 1) + distance_formula(point i, point (i − 1))
             outputPath.get(i).setTotalDistanceFromFirstWaypoint(
                 outputPath.get(i - 1).getTotalDistanceFromFirstWaypoint() +
-                calculateDistanceBetweenTwoWaypoints(outputPath.get(i), outputPath.get(i-1))
+                Waypoint.calculateDistanceBetweenTwoWaypoints(outputPath.get(i), outputPath.get(i-1))
             );
         }
 
@@ -164,14 +164,10 @@ public class PathBuilder {
      * @return
      */
     public static double calculateCircumradius(Waypoint pointA, Waypoint pointB, Waypoint pointC) {
-        double lengthAB = calculateDistanceBetweenTwoWaypoints(pointA, pointB);
-        double lengthBC = calculateDistanceBetweenTwoWaypoints(pointB, pointC);
-        double lengthAC = calculateDistanceBetweenTwoWaypoints(pointA, pointC);
+        double lengthAB = Waypoint.calculateDistanceBetweenTwoWaypoints(pointA, pointB);
+        double lengthBC = Waypoint.calculateDistanceBetweenTwoWaypoints(pointB, pointC);
+        double lengthAC = Waypoint.calculateDistanceBetweenTwoWaypoints(pointA, pointC);
         return (lengthAB * lengthBC * lengthAC) / (4 * heronsFormula(lengthAB, lengthBC, lengthAC));
-    }
-
-    public static double calculateDistanceBetweenTwoWaypoints(Waypoint pointA, Waypoint pointB) {
-        return Math.sqrt(Math.pow(pointA.getX() - pointB.getX(), 2) + Math.pow(pointA.getY() - pointB.getY(), 2));
     }
 
     public static double heronsFormula(double lengthA, double lengthB, double lengthC) {
@@ -218,7 +214,7 @@ public class PathBuilder {
                     Math.sqrt(
                         Math.pow(
                             outputPath.get(i + 1).getVelocity(), 2) +
-                            2 * maxAcceleration * calculateDistanceBetweenTwoWaypoints(outputPath.get(i), outputPath.get(i + 1)
+                            2 * maxAcceleration * Waypoint.calculateDistanceBetweenTwoWaypoints(outputPath.get(i), outputPath.get(i + 1)
                         )
                     )
                 )

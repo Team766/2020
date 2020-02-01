@@ -21,32 +21,42 @@ public class TurnAround extends Subroutine {
         System.out.println("TurnAround STARTING");
 
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
-        waypoints.add(new Waypoint(0, 0));
-        waypoints.add(new Waypoint(90, 0));
-        waypoints.add(new Waypoint(130, -50));
+        waypoints.add(new Waypoint(0, 90));
+        waypoints.add(new Waypoint(45, 0));
+        waypoints.add(new Waypoint(30, -50));
 
         // System.out.println("Waypoints" + waypoints);
 
         // System.out.println(PathBuilder.GeneratePath(waypoints));
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
         path = PathBuilder.buildPath(waypoints);
-        PathFollower.followPath(path);
+        // PathFollower pathFollower = new PathFollower(path);
+        // pathFollower.calculatemotorspeeds(path);
 
         System.out.println("path built");
 
-
         for (int i = 0; i < path.size(); i++) {
-            // System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
+            System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
+            Waypoint position = new Waypoint(0, 0);
+            System.out.println("distance to 0,0 " + Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(i), position));
             // System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
-            System.out.println("curvature: " + path.get(i).getCurvature());
+            // System.out.println("curvature: " + path.get(i).getCurvature());
         }
 
-        System.out.println("Max speeds:");
-        for (int i = 0; i < path.size(); i++) {
-            // System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
-            // System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
-            System.out.println("max speed: " + path.get(i).getVelocity());
-        }
+        PathFollower pathFollower = new PathFollower(path);
+
+        // int closesetPointIndex = pathFollower.findClosestPointIndex(path, 0, Robot.drive.getXPosition(), Robot.drive.getYPosition());
+
+        int closestPointIndex = pathFollower.findClosestPointIndex(path, 0, 0, 0);
+
+        System.out.println("closest point index  " + closestPointIndex);
+        System.out.println("x, y " + path.get(closestPointIndex).getX() + ", " + path.get(closestPointIndex).getY());
+        // System.out.println("Max speeds:");
+        // for (int i = 0; i < path.size(); i++) {
+        //     // System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
+        //     // System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
+        //     System.out.println("max speed: " + path.get(i).getVelocity());
+        // }
 
        // callSubroutine(new PreciseTurn((Robot.drive.getGyroAngle() + 180) % 360));
         
