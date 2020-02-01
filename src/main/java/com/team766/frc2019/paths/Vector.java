@@ -7,7 +7,7 @@ public class Vector {
     private double x;
     private double y;
 
-    Vector(double x, double y) {
+    public Vector(double x, double y) {
         this.setX(x);
         this.setY(y);
     }
@@ -20,7 +20,7 @@ public class Vector {
         return(new Vector(x / magnitude(), y / magnitude()));
     }
 
-    public  Vector scale(double scalar) {
+    public Vector scale(double scalar) {
         return(new Vector(x * scalar, y * scalar));
     }
 
