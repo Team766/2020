@@ -18,7 +18,6 @@ import com.team766.config.ConfigFileReader;
 
 import com.team766.frc2019.Robot;
 
-
 public class Drive extends Mechanism  implements DriveI {
 
     //vars (including PID)
@@ -218,25 +217,34 @@ public class Drive extends Mechanism  implements DriveI {
 
     // variables for calculating position using odometry
     // should be moved later
-    public double xPosition = 0;
-    public double yPosition = 0;
-    public double theta = 0;
+    private static double xPosition = 0;
+    private static double yPosition = 0;
+    // heading is in degrees
+    private static double heading = 0; //aka angle
 
-    // public double previousGyroAngle = 0;
-    // public double previousLeftEncoderDistance = 0;
-    // public double previousRightEncoderDistance = 0;
-    public double previousTime = System.currentTimeMillis();
+    private double previousTime = System.currentTimeMillis();
 
-    public double currentGyroAngle = 0;
-    public double currentLeftEncoderDistance = 0;
-    public double currentRightEncoderDistance = 0;
-    public double initialTime = System.currentTimeMillis();
-    public double deltaTime = 0.0;
+    private double currentGyroAngle = 0;
+    private double currentLeftEncoderDistance = 0;
+    private double currentRightEncoderDistance = 0;
+    // private double initialTime = System.currentTimeMillis();
+    private double deltaTime = 0.0;
     int index = 0;
 
+    public static double getXPosition() {
+        return xPosition;
+    }
+
+    public static double getYPosition() {
+        return yPosition;
+    }
+
+    public static double getAngle() {
+        return heading;
+    }
+
     @Override
-    public void run() {
-        
+    public void run() {    
         if (index == 0) {
             resetEncoders();
             resetGyro();
@@ -251,37 +259,21 @@ public class Drive extends Mechanism  implements DriveI {
         deltaTime = System.currentTimeMillis() - previousTime;
         xPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
         yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
+
         
-        if (index % 10 == 0) {
-            /*
-            System.out.print("x:\t");
-            System.out.printf("%.2f", xPosition);
-            System.out.print(" y:\t");
-            System.out.printf("%.2f", yPosition);
-            System.out.printf("  angle:\t%.2f", getGyroAngle());
-            System.out.printf("  time:\t%.2f", (System.currentTimeMillis() - initialTime) / 1000);
-            System.out.println("");
-            */
-        }
+        // if (index % 10 == 0) {
+        //     /*
+        //     System.out.print("x:\t");
+        //     System.out.printf("%.2f", xPosition);
+        //     System.out.print(" y:\t");
+        //     System.out.printf("%.2f", yPosition);
+        //     System.out.printf("  angle:\t%.2f", getGyroAngle());
+        //     System.out.printf("  time:\t%.2f", (System.currentTimeMillis() - initialTime) / 1000);
+        //     System.out.println("");
+        //     */
+        // }
         index++;
-        // System.out.println(currentLeftEncoderDistance * DIST_PER_PULSE);
-        // if (Robot.drive.getGyroAngle() != 0.0) {
-        //     System.out.print("gyro:\t");
-        //     System.out.println(Robot.drive.getGyroAngle());
-        // }
-        // if (Robot.drive.leftEncoderDistance() != previousLeftEncoderDistance) {
-        //     System.out.print("left encoder\t");
-        //     System.out.println(Robot.drive.leftEncoderDistance());
-        // }
-        // if (Robot.drive.rightEncoderDistance() != previousRightEncoderDistance) {
-        //     System.out.println("right encoder\t");
-        //     System.out.println(Robot.drive.rightEncoderDistance());
-        // }
-        // System.out.println(System.currentTimeMillis());
-        // previousGyroAngle = currentGyroAngle;
-        // previousLeftEncoderDistance = currentLeftEncoderDistance;
-        // previousRightEncoderDistance = currentRightEncoderDistance;
+
         previousTime += System.currentTimeMillis();
-        // Robot.drive.resetGyro();
     }
 }

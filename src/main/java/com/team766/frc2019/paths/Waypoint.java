@@ -42,6 +42,10 @@ public class Waypoint {
         return waypoint;
     }
 
+    public static double calculateDistanceBetweenTwoWaypoints(Waypoint pointA, Waypoint pointB) {
+        return Math.sqrt(Math.pow(pointA.getX() - pointB.getX(), 2) + Math.pow(pointA.getY() - pointB.getY(), 2));
+    }
+
     public double getX() {
         return x;
     }
