@@ -40,6 +40,7 @@ public class Waypoint {
         waypoint.setCurvature(this.getCurvature());
         waypoint.setVelocity(this.getVelocity());
         return waypoint;
+
     }
 
     public static double calculateDistanceBetweenTwoWaypoints(Waypoint pointA, Waypoint pointB) {
