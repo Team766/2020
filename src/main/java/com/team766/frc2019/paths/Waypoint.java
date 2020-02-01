@@ -14,8 +14,6 @@ public class Waypoint {
     private double y;
     private double curvature;
     // double radius;
-    // double velocity;
-
     private double velocity;
 
     // used for calculating velocity and curvature
@@ -31,18 +29,20 @@ public class Waypoint {
         this.velocity = 0;
     };
 
-    public Waypoint clone(){
-        Waypoint waypoint = new Waypoint();
-
-        waypoint.setX(this.getX());
-        waypoint.setY(this.getY());
-        waypoint.setTotalDistanceFromFirstWaypoint(this.getTotalDistanceFromFirstWaypoint());
-        waypoint.setCurvature(this.getCurvature());
-        waypoint.setVelocity(this.getVelocity());
-        return waypoint;
-
+    public Waypoint(double x, double y, double curvature, double velocity, double totalDistanceFromFirstWaypoint) {
+        this.x = x;
+        this.y = y;
+        this.curvature = curvature;
+        this.velocity = velocity;
+        this.totalDistanceFromFirstWaypoint = totalDistanceFromFirstWaypoint;
     }
 
+    // returns new waypoint with the same variables as this waypoint
+    public Waypoint clone(){
+        return new Waypoint(this.getX(), this.getY(), this.getCurvature(), this.getVelocity(), this.getTotalDistanceFromFirstWaypoint());
+    }
+
+    
     public static double calculateDistanceBetweenTwoWaypoints(Waypoint pointA, Waypoint pointB) {
         return Math.sqrt(Math.pow(pointA.getX() - pointB.getX(), 2) + Math.pow(pointA.getY() - pointB.getY(), 2));
     }
