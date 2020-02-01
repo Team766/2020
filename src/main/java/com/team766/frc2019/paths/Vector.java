@@ -8,8 +8,8 @@ public class Vector {
     private double y;
 
     public Vector(double x, double y) {
-        this.setX(x);
-        this.setY(y);
+        this.x = x;
+        this.y = y;
     }
     
     public double magnitude() {
