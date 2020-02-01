@@ -8,7 +8,6 @@ import com.team766.frc2019.paths.PathBuilder;
 import com.team766.frc2019.paths.PathFollower;
 import com.team766.frc2019.paths.Waypoint;
 // import com.team766.frc2019.mechanisms.LimeLightI;
-//import com.team766.hal.RobotProvider;
 // import com.team766.hal.RobotProvider;
 
 public class TurnAround extends Subroutine {
@@ -29,37 +28,17 @@ public class TurnAround extends Subroutine {
         // System.out.println(PathBuilder.GeneratePath(waypoints));
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
         path = PathBuilder.buildPath(waypoints);
-        // PathFollower pathFollower = new PathFollower(path);
-        // pathFollower.calculatemotorspeeds(path);
 
         System.out.println("path built");
 
         for (int i = 0; i < path.size(); i++) {
             System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")");
-            // Waypoint position = new Waypoint(0, 0);
-            // System.out.println("distance to 0,0 " + Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(i), position));
-            // System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
-            // System.out.println("curvature: " + path.get(i).getCurvature());
         }
 
         PathFollower pathFollower = new PathFollower(path);
 
-        // int closesetPointIndex = pathFollower.findClosestPointIndex(path, 0, Robot.drive.getXPosition(), Robot.drive.getYPosition());
-
-        // int closestPointIndex = pathFollower.findClosestPointIndex(path, 0, 0, 0);
-
-        Waypoint lookaheadPoint = pathFollower.findLookaheadPoint(path, 80, 17, 14, 13);
-
-        // System.out.println("closest point index  " + lookaheadPoint);
+        Waypoint lookaheadPoint = pathFollower.findLookaheadPoint(Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
         System.out.println("(" + lookaheadPoint.getX() + "," + lookaheadPoint.getY() + ")");
-        // System.out.println("Max speeds:");
-        // for (int i = 0; i < path.size(); i++) {
-        //     // System.out.println("Point " + i + ": " + path.get(i).getX() + " " + path.get(i).getY());
-        //     // System.out.println("("  + path.get(i).getX() + ", " + path.get(i).getY() + ")");
-        //     System.out.println("max speed: " + path.get(i).getVelocity());
-        // }
-
-       // callSubroutine(new PreciseTurn((Robot.drive.getGyroAngle() + 180) % 360));
         
     }
 }
