@@ -2,7 +2,7 @@ package com.team766.frc2019;
 
 import com.team766.framework.AutonomousCommandUtils;
 import com.team766.framework.Command;
-import com.team766.frc2019.mechanisms.Drive;
+//import com.team766.frc2019.mechanisms.Drive;
 import com.team766.hal.MyRobot;
 import com.team766.hal.mock.Gyro;
 import com.team766.web.AutonomousSelector;
@@ -11,7 +11,7 @@ import com.team766.web.LogViewer;
 import com.team766.web.WebServer;
 public class Robot extends MyRobot {
 	// Declare mechanisms here
-	public static Drive drive;
+	//public static Drive drive;
 
 	public static OI m_oi;
 	
@@ -22,7 +22,7 @@ public class Robot extends MyRobot {
 	@Override
 	public void robotInit() {
 		// Initialize mechanisms here
-		drive = new Drive();
+		//drive = new Drive();
 		
 		//auton picker
 		m_webServer = new WebServer();

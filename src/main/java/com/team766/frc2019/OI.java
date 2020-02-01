@@ -75,7 +75,7 @@ public class OI extends Command {
 	public void run() {
 		// write your function here
 		// When the joystick is down, set the motor speed to the degree of which it's pulled down
-		Robot.drive.setDrivePower(m_joystick1.getRawAxis(1), m_joystick2.getRawAxis(1));
+		
 	}
 }
 
