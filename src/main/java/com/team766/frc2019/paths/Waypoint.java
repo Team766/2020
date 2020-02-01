@@ -46,6 +46,10 @@ public class Waypoint {
         return Math.sqrt(Math.pow(pointA.getX() - pointB.getX(), 2) + Math.pow(pointA.getY() - pointB.getY(), 2));
     }
 
+    public Waypoint add(Waypoint a) {
+        return new Waypoint(a.getX() + this.getX(), a.getY() + this.getY());
+    }
+
     public double getX() {
         return x;
     }

@@ -20,8 +20,12 @@ public class Vector {
         return(new Vector(x / magnitude(), y / magnitude()));
     }
 
-    public  Vector scale(double scalar) {
+    public Vector scale(double scalar) {
         return(new Vector(x * scalar, y * scalar));
+    }
+    
+    public double dot(Vector a) {
+        return a.getX() * this.getX() + a.getY() * this.getY();
     }
 
     public double getX() {
