@@ -220,7 +220,6 @@ public class PathBuilder {
                 )
             );
         }
-
         return outputPath;
     }
 }
