@@ -28,6 +28,10 @@ public class Vector {
         return a.getX() * this.getX() + a.getY() * this.getY();
     }
 
+    public double crossMagnitude(Vector a) {
+        return this.getX() * a.getY() - this.getY() * a.getX();
+    }
+
     public double getX() {
         return x;
     }
