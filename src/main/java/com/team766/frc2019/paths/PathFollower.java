@@ -51,7 +51,7 @@ public class PathFollower {
                 }
             }
         }
-        //otherwise, no intersection
+        // otherwise, no intersection
         return getPath().get(getPreviousLookaheadPointIndex());
     }
 
@@ -76,6 +76,13 @@ public class PathFollower {
 
     public double findTargetVelocity(double xPosition, double yPosition) {
         return getPath().get(findClosestPointIndex(xPosition, yPosition)).getVelocity();
+    }
+
+    public double calculateSteeringError(double heading, double xPosition, double yPosition){
+        // based on angle
+        Vector headingUnitVector = new Vector(Math.sin(heading), Math.cos(heading));
+        Vector lookaheadVector = new Vector(getPath().get(previousLookaheadPointIndex).getX() - xPosition, getPath().get(previousLookaheadPointIndex).getY() - yPosition);
+        return Math.acos((headingUnitVector.dot(lookaheadVector))/(headingUnitVector.magnitude() * lookaheadVector.magnitude()));
     }
 
     public int getPreviousLookaheadPointIndex() {
