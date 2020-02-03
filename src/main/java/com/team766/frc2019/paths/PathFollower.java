@@ -3,6 +3,9 @@ package com.team766.frc2019.paths;
 import java.util.ArrayList;
 
 import com.team766.frc2019.paths.Waypoint;
+import com.team766.hal.RobotProvider;
+import com.team766.controllers.PIDController;
+import com.team766.frc2019.Robot;
 import com.team766.frc2019.paths.Vector;
 
 public class PathFollower {
@@ -12,9 +15,14 @@ public class PathFollower {
     private double heading = 0;
     private double xPosition = 0;
     private double yPosition = 0;
+    PIDController m_turnController;
+
+
+
 
     public PathFollower(ArrayList<Waypoint> path) {
         this.path = path;
+        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
     }
 
     /**
