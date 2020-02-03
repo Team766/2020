@@ -15,10 +15,13 @@ public class PathFollower {
     }
 
     /**
+     * @param xPosition x position of robot
+     * @param yPosition y position of robot
      * @param lookaheadDistance radius of look ahead distance (values between 12 - 15 are good)
      */
     public Waypoint findLookaheadPoint(double xPosition, double yPosition, double lookaheadDistance) {
         for (int i = getPreviousLookaheadPointIndex(); i < getPath().size() - 1; i++) {
+            // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899
             Vector lineSegmentVector = new Vector(getPath().get(i + 1).getX() - getPath().get(i).getX(), getPath().get(i + 1).getY() - getPath().get(i).getY());
             Vector centerToRayStartVector = new Vector(
                 getPath().get(i).getX() - xPosition,
@@ -55,6 +58,9 @@ public class PathFollower {
         return getPath().get(getPreviousLookaheadPointIndex());
     }
 
+    /**
+     * finds closest point in PathFollower's path to (xPosition, yPosition)
+     */
     public int findClosestPointIndex(double xPosition, double yPosition) {
         Waypoint position = new Waypoint(xPosition, yPosition);
 
@@ -74,6 +80,9 @@ public class PathFollower {
         return smallestIndex;
     }
 
+    /**
+     * returns target velocity of closest point to (xPosition, yPosition) in path
+     */
     public double findTargetVelocity(double xPosition, double yPosition) {
         return getPath().get(findClosestPointIndex(xPosition, yPosition)).getVelocity();
     }
