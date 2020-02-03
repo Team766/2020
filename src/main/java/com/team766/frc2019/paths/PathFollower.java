@@ -9,6 +9,9 @@ public class PathFollower {
     private ArrayList<Waypoint> path = new ArrayList<Waypoint>();
     private int previousLookaheadPointIndex = 0;
     private int lastClosestPointIndex = 0;
+    private double heading = 0;
+    private double xPosition = 0;
+    private double yPosition = 0;
 
     public PathFollower(ArrayList<Waypoint> path) {
         this.path = path;
@@ -19,13 +22,13 @@ public class PathFollower {
      * @param yPosition y position of robot
      * @param lookaheadDistance radius of look ahead distance (values between 12 - 15 are good)
      */
-    public Waypoint findLookaheadPoint(double xPosition, double yPosition, double lookaheadDistance) {
-        for (int i = getPreviousLookaheadPointIndex(); i < getPath().size() - 1; i++) {
+    public Waypoint findLookaheadPoint(ArrayList<Waypoint> path, double xPosition, double yPosition, double lookaheadDistance) {
+        for (int i = getPreviousLookaheadPointIndex(); i < path.size() - 1; i++) {
             // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899
-            Vector lineSegmentVector = new Vector(getPath().get(i + 1).getX() - getPath().get(i).getX(), getPath().get(i + 1).getY() - getPath().get(i).getY());
+            Vector lineSegmentVector = new Vector(path.get(i + 1).getX() - path.get(i).getX(), path.get(i + 1).getY() - path.get(i).getY());
             Vector centerToRayStartVector = new Vector(
-                getPath().get(i).getX() - xPosition,
-                getPath().get(i).getY() - yPosition
+                path.get(i).getX() - xPosition,
+                path.get(i).getY() - yPosition
             );
             // a b and c are from the quadratic formula
             double a = lineSegmentVector.dot(lineSegmentVector);
@@ -45,23 +48,30 @@ public class PathFollower {
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection
                     setPreviousLookaheadPointIndex(i);
-                    return getPath().get(i).add(new Waypoint(lineSegmentVector.getX() * t1, lineSegmentVector.getY() * t2));
+                    return path.get(i).add(new Waypoint(lineSegmentVector.getX() * t1, lineSegmentVector.getY() * t2));
                 }
                 if (t2 >= 0 && t2 <=1) {
                     //return t2 intersection
                     setPreviousLookaheadPointIndex(i);
-                    return getPath().get(i).add(new Waypoint(lineSegmentVector.getX() * t2, lineSegmentVector.getY() * t2));
+                    return path.get(i).add(new Waypoint(lineSegmentVector.getX() * t2, lineSegmentVector.getY() * t2));
                 }
             }
         }
         // otherwise, no intersection
-        return getPath().get(getPreviousLookaheadPointIndex());
+        return path.get(getPreviousLookaheadPointIndex());
+    }
+    
+    /**
+     * finds lookahead point with variables stored in PathFollower
+     */
+    public Waypoint findLookaheadPoint(double lookaheadDistance) {
+        return findLookaheadPoint(this.path, this.xPosition, this.yPosition, lookaheadDistance);
     }
 
     /**
      * finds closest point in PathFollower's path to (xPosition, yPosition)
      */
-    public int findClosestPointIndex(double xPosition, double yPosition) {
+    public int findClosestPointIndex(ArrayList<Waypoint> path, double xPosition, double yPosition) {
         Waypoint position = new Waypoint(xPosition, yPosition);
 
         // set smallest distance to last known smallest point
@@ -70,7 +80,7 @@ public class PathFollower {
         int smallestIndex = getLastClosestPointIndex();
 
         // start at the point after the one we already calculated
-        for (int i = lastClosestPointIndex + 1; i < getPath().size() - 1; i++) {
+        for (int i = lastClosestPointIndex + 1; i < path.size() - 1; i++) {
             double currentDistance = Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(i), position);
             if (currentDistance < smallestDistance) {
                 smallestDistance = currentDistance;
@@ -81,17 +91,38 @@ public class PathFollower {
     }
 
     /**
-     * returns target velocity of closest point to (xPosition, yPosition) in path
+     * finds closest point with variables stored in PathFollower
      */
-    public double findTargetVelocity(double xPosition, double yPosition) {
-        return getPath().get(findClosestPointIndex(xPosition, yPosition)).getVelocity();
+    public int findClosestPointIndex() {
+        return findClosestPointIndex(this.path, this.xPosition, this.yPosition);
     }
 
-    public double calculateSteeringError(double heading, double xPosition, double yPosition){
+    /**
+     * returns target velocity of closest point to (xPosition, yPosition) in path
+     */
+    public double findTargetVelocity(ArrayList<Waypoint> path, double xPosition, double yPosition) {
+        return path.get(findClosestPointIndex(path, xPosition, yPosition)).getVelocity();
+    }
+
+    /**
+     * finds target velocity using variables stored in PathFollower
+     */
+    public double findTargetVelocity() {
+        return findTargetVelocity(this.path, this.xPosition, this.yPosition);
+    }
+
+    public double calculateSteeringError(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition){
         // based on angle
         Vector headingUnitVector = new Vector(Math.sin(heading), Math.cos(heading));
-        Vector lookaheadVector = new Vector(getPath().get(previousLookaheadPointIndex).getX() - xPosition, getPath().get(previousLookaheadPointIndex).getY() - yPosition);
+        Vector lookaheadVector = new Vector(path.get(previousLookaheadPointIndex).getX() - xPosition, path.get(previousLookaheadPointIndex).getY() - yPosition);
         return Math.acos((headingUnitVector.dot(lookaheadVector))/(headingUnitVector.magnitude() * lookaheadVector.magnitude()));
+    }
+
+    /**
+     * calculates steering error with variables stored in PathFollower
+     */
+    public double calculateSterringError() {
+        return calculateSteeringError(this.path, this.heading, this.xPosition, this.yPosition);
     }
 
     public int getPreviousLookaheadPointIndex() {
@@ -116,5 +147,14 @@ public class PathFollower {
 
     public void setLastClosestPointIndex(int lastClosestPointIndex) {
         this.lastClosestPointIndex = lastClosestPointIndex;
+    }
+
+    public void setPosition(double xPosition, double yPosition) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+    }
+
+    public void setHeading(double heading) {
+        this.heading = heading;
     }
 }
