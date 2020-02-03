@@ -37,9 +37,9 @@ public class TurnAround extends Subroutine {
 
         PathFollower pathFollower = new PathFollower(path);
 
-        // Waypoint lookaheadPoint = pathFollower.findLookaheadPoint(Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
-        // System.out.println("(" + lookaheadPoint.getX() + "," + lookaheadPoint.getY() + ")");
+        Waypoint lookaheadPoint = pathFollower.findLookaheadPoint(Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
+        System.out.println("(" + lookaheadPoint.getX() + "," + lookaheadPoint.getY() + ")");
 
-        pathFollower.calculateSteeringError(0, 0, 0);
+        System.out.println("heading error: " + pathFollower.calculateSteeringError(0, 0, 0));
     }
 }

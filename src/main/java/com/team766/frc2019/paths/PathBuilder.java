@@ -136,6 +136,10 @@ public class PathBuilder {
         return outputPath;
     }
 
+    /**
+     * calculates curvature at each point based on circumradius of the
+     * 2 points next to the point
+     */
     public static ArrayList<Waypoint> calculateCurvature(ArrayList<Waypoint> inputPath) {
         // copy input array into output array
         ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
@@ -197,6 +201,10 @@ public class PathBuilder {
 
         return outputPath;
     }
+
+    /**
+     * Calculates target velocities based on curvature values in inputPath
+     */
     public static ArrayList<Waypoint> calculateTargetVelocities(ArrayList<Waypoint> inputPath) {
         // copy input array into output array
         ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
