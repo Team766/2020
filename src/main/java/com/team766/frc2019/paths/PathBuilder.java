@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Math;
 
+import com.team766.frc2019.Robot;
 import com.team766.frc2019.paths.Waypoint;
 
 /**
@@ -41,6 +42,7 @@ public class PathBuilder {
      */
     public static ArrayList<Waypoint> interpolateWaypoints(ArrayList<Waypoint> waypoints, double spacing) {
         ArrayList<Waypoint> newPoints = new ArrayList<Waypoint>();
+        PathFollower pathFollower = new PathFollower(waypoints);
 
         for (int i = 0; i < waypoints.size() - 1; i++) {
             // compute vector between current point and next point
@@ -54,6 +56,7 @@ public class PathBuilder {
             // add interpolated points into return ArrayList
             for (int j = 0; j < numberOfPointsThatFit; j++) {
                 newPoints.add(new Waypoint(waypoints.get(i).getX() + vector.getX() * j, waypoints.get(i).getY() + vector.getY() * j));
+
             }
         } 
         newPoints.add(waypoints.get(waypoints.size() - 1));
@@ -101,10 +104,13 @@ public class PathBuilder {
 
         // convert 2d array back to ArrayList<Waypoint>
         ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
+        PathFollower pathFollower = new PathFollower(outputPath);
+
 
         for (int i = 0; i < newPath.length; i++) {
             outputPath.add(new Waypoint(newPath[i][0], newPath[i][1]));
-        }
+            pathFollower.findLookaheadPoint(outputPath, Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
+         }
 
         return outputPath;
     }

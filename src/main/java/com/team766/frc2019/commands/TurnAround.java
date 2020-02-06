@@ -12,7 +12,7 @@ import com.team766.frc2019.paths.Waypoint;
 
 public class TurnAround extends Subroutine {
     public TurnAround() {
-        takeControl(Robot.drive);
+        //takeControl(Robot.drive);
     }
 
     protected void subroutine() {
@@ -21,25 +21,27 @@ public class TurnAround extends Subroutine {
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
         waypoints.add(new Waypoint(0, 0));
         waypoints.add(new Waypoint(90, 0));
-        waypoints.add(new Waypoint(130, -50));
+        //waypoints.add(new Waypoint(130, -50));
 
         // System.out.println("Waypoints" + waypoints);
 
         // System.out.println(PathBuilder.GeneratePath(waypoints));
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
+        PathFollower pathFollower = new PathFollower(path);
+        //Waypoint lookaheadPoint = pathFollower.findLookaheadPoint(path, Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
+
         path = PathBuilder.buildPath(waypoints);
 
         System.out.println("path built");
 
         for (int i = 0; i < path.size(); i++) {
             System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")");
+            //System.out.println("heading error: " + pathFollower.calculateSteeringError(path, 0.0, Robot.drive.getXPosition(), Robot.drive.getYPosition(), i));
         }
 
-        PathFollower pathFollower = new PathFollower(path);
+        pathFollower.followPath(path);
 
-        Waypoint lookaheadPoint = pathFollower.findLookaheadPoint(path, Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
-        System.out.println("(" + lookaheadPoint.getX() + "," + lookaheadPoint.getY() + ")");
+        // System.out.println("(" + lookaheadPoint.getX() + "," + lookaheadPoint.getY() + ")");
 
-        System.out.println("heading error: " + pathFollower.calculateSteeringError(path, 0, 0, 0));
     }
 }
