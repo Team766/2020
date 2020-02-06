@@ -15,6 +15,7 @@ public class PathFollower {
     private double heading = 0;
     private double xPosition = 0;
     private double yPosition = 0;
+    private boolean isPathDone = false;
     PIDController m_turnController;
 
 
@@ -30,6 +31,39 @@ public class PathFollower {
      * @param yPosition y position of robot
      * @param lookaheadDistance radius of look ahead distance (values between 12 - 15 are good)
      */
+
+    public void followPath(ArrayList<Waypoint> path) {
+        
+        m_turnController.setSetpoint(0.0);
+
+        while(!isPathDone) {
+            //System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
+            findLookaheadPoint(path, Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
+
+            m_turnController.calculate(calculateSteeringError(path, Robot.drive.getGyroAngle(), Robot.drive.getXPosition(), Robot.drive.getYPosition()), true);
+            double turnPower = m_turnController.getOutput();
+            double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
+            if (turnPower > 0) {
+                Robot.drive.setDrive(straightPower, straightPower + turnPower);
+            } else {
+                Robot.drive.setDrive(straightPower - turnPower, straightPower);
+            }
+
+            if (turnPower > 0) {
+                Robot.drive.setDrive(straightPower - turnPower, straightPower);
+            } else {
+                Robot.drive.setDrive(straightPower, straightPower + turnPower);
+            }
+            System.out.println("previousLookaheadPointIndex: " + previousLookaheadPointIndex + " Path size: " + path.size());
+            if (previousLookaheadPointIndex == path.size() - 1) {
+                isPathDone = true; 
+                Robot.drive.setDrive(0, 0);
+                System.out.println("path followed");
+            } 
+        }
+        
+    }
+
     public Waypoint findLookaheadPoint(ArrayList<Waypoint> path, double xPosition, double yPosition, double lookaheadDistance) {
         for (int i = getPreviousLookaheadPointIndex(); i < path.size() - 1; i++) {
             // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899
@@ -121,17 +155,17 @@ public class PathFollower {
 
     public double calculateSteeringError(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition){
         // based on angle
-        Vector headingUnitVector = new Vector(Math.sin(heading), Math.cos(heading));
+        Vector headingUnitVector = new Vector(Math.cos(heading), Math.sin(heading));
         Vector lookaheadVector = new Vector(path.get(previousLookaheadPointIndex).getX() - xPosition, path.get(previousLookaheadPointIndex).getY() - yPosition);
-        return Math.acos((headingUnitVector.dot(lookaheadVector))/(headingUnitVector.magnitude() * lookaheadVector.magnitude()));
+        return Math.acos((headingUnitVector.dot(lookaheadVector))/(0.000001 + headingUnitVector.magnitude() * lookaheadVector.magnitude()));
     }
 
     /**
      * calculates steering error with variables stored in PathFollower
      */
-    public double calculateSterringError() {
-        return calculateSteeringError(this.path, this.heading, this.xPosition, this.yPosition);
-    }
+    // public double calculateSteeringError() {
+    //     return calculateSteeringError(this.path, this.heading, this.xPosition, this.yPosition);
+    // }
 
     public int getPreviousLookaheadPointIndex() {
         return this.previousLookaheadPointIndex;
@@ -156,6 +190,8 @@ public class PathFollower {
     public void setLastClosestPointIndex(int lastClosestPointIndex) {
         this.lastClosestPointIndex = lastClosestPointIndex;
     }
+
+
 
     public void setPosition(double xPosition, double yPosition) {
         this.xPosition = xPosition;
