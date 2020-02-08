@@ -19,27 +19,29 @@ public class TurnAround extends Subroutine {
         System.out.println("TurnAround STARTING");
 
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
-        waypoints.add(new Waypoint(0, 0));
-        waypoints.add(new Waypoint(90, 0));
+        waypoints.add(new Waypoint(0, 0, 50, 50, 50));
+        waypoints.add(new Waypoint(0, 500, 50, 50, 50));
         //waypoints.add(new Waypoint(130, -50));
 
         // System.out.println("Waypoints" + waypoints);
 
         // System.out.println(PathBuilder.GeneratePath(waypoints));
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
-        PathFollower pathFollower = new PathFollower(path);
         //Waypoint lookaheadPoint = pathFollower.findLookaheadPoint(path, Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
 
         path = PathBuilder.buildPath(waypoints);
 
-        System.out.println("path built");
-
         for (int i = 0; i < path.size(); i++) {
-            System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")");
+            System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")" + "velocity " + path.get(i).getVelocity());
             //System.out.println("heading error: " + pathFollower.calculateSteeringError(path, 0.0, Robot.drive.getXPosition(), Robot.drive.getYPosition(), i));
         }
 
-        pathFollower.followPath(path);
+        // make sure to pick waypoints or path correctly if testing
+        PathFollower pathFollower = new PathFollower(path);
+
+        System.out.println("path built");
+
+        pathFollower.followPath();
 
         // System.out.println("(" + lookaheadPoint.getX() + "," + lookaheadPoint.getY() + ")");
 

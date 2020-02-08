@@ -29,6 +29,12 @@ public class Waypoint {
         this.velocity = 0;
     };
 
+    public Waypoint(double x, double y, double velocity) {
+        this.x = x;
+        this.y = y;
+        this.velocity = velocity;
+    };
+
     public Waypoint(double x, double y, double curvature, double velocity, double totalDistanceFromFirstWaypoint) {
         this.x = x;
         this.y = y;
