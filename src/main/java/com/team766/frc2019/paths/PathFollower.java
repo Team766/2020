@@ -15,57 +15,14 @@ public class PathFollower {
     private double heading = 0;
     private double xPosition = 0;
     private double yPosition = 0;
-    private boolean isPathDone = false;
-    PIDController m_turnController;
+    public static boolean isPathDone = false;
+    private Waypoint lookaheadWaypoint;
 
     public PathFollower(ArrayList<Waypoint> path) {
         // TODO: add copy function for path
         this.path = path;
-        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-    }
-
-    public void followPath() {
-        ArrayList<Waypoint> path = this.path;
-        
-        m_turnController.setSetpoint(0.0);
-        int i = 0;
-        while(!isPathDone) {
-            if (i % 1000 == 0) {
-                System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
-            }
-            i++;
-
-
-            setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
-            findLookaheadPoint(13);
-
-            m_turnController.calculate(calculateSteeringError(), true);
-            double turnPower = m_turnController.getOutput();
-            // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
-            // System.out.println("closest point index" + findClosestPointIndex());
-            double straightPower = path.get(findClosestPointIndex()).getVelocity();
-            // System.out.println("straight power: " + straightPower);
-
-            if (turnPower > 0) {
-                Robot.drive.setDrive(0.5, 1);
-                // Robot.drive.setDrive(straightPower, straightPower + turnPower);
-            } else {
-                Robot.drive.setDrive(0.5, 1);
-                // Robot.drive.setDrive(straightPower - turnPower, straightPower);
-            }
-
-            // if (turnPower > 0) {
-            //     Robot.drive.setDrive(straightPower - turnPower, straightPower);
-            // } else {
-            //     Robot.drive.setDrive(straightPower, straightPower + turnPower);
-            // }
-            // System.out.println("previousLookaheadPointIndex: " + previousLookaheadPointIndex + " Path size: " + this.path.size());
-            if (previousLookaheadPointIndex == path.size() - 1) {
-                isPathDone = true; 
-                Robot.drive.setDrive(0, 0);
-                System.out.println("path followed");
-            }
-        }
+        // change this from magic number
+        lookaheadWaypoint = findLookaheadPoint(13);
     }
 
     /**
@@ -109,7 +66,14 @@ public class PathFollower {
                 }
             }
         }
-        System.out.println(" no intersection previous lookahead point index is " + getPreviousLookaheadPointIndex());
+        // move this into new function
+        //System.out.println(" no intersection previous lookahead point index is " + getPreviousLookaheadPointIndex());
+        if (getPreviousLookaheadPointIndex() >= 160) {
+            isPathDone = true; 
+            Robot.drive.setDrive(0, 0);
+            System.out.println("path followed");
+        }
+        //System.out.println(" no intersection previous lookahead point index is " + getPreviousLookaheadPointIndex());
         // System.out.println("path velocity at zero is " + path.get(0).getVelocity());
         // otherwise, no intersection
         return path.get(getPreviousLookaheadPointIndex());
@@ -165,11 +129,29 @@ public class PathFollower {
         return findTargetVelocity(this.path, this.xPosition, this.yPosition);
     }
 
+    /**
+     * calculates angle between vector between robot and lookahead point and
+     * robot heading unit vector
+     * @param path
+     * @param heading
+     * @param xPosition
+     * @param yPosition
+     * @return
+     */
     public double calculateSteeringError(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition){
-        // based on angle
-        Vector headingUnitVector = new Vector(Math.cos(heading), Math.sin(heading));
-        Vector lookaheadVector = new Vector(path.get(previousLookaheadPointIndex).getX() - xPosition, path.get(previousLookaheadPointIndex).getY() - yPosition);
-        return Math.acos((headingUnitVector.dot(lookaheadVector))/(0.000001 + headingUnitVector.magnitude() * lookaheadVector.magnitude()));
+        Vector headingUnitVector = new Vector(Math.sin(Math.toRadians(heading)), Math.cos(Math.toRadians(heading)));
+        Vector lookaheadVector = new Vector(this.lookaheadWaypoint.getX() - xPosition, this.lookaheadWaypoint.getY() - yPosition);
+        double error =  Math.toDegrees(Math.acos(
+            (headingUnitVector.dot(lookaheadVector)) /
+            (0.000001 + headingUnitVector.magnitude() * lookaheadVector.magnitude())
+        ));
+
+        // make error negative if headingUnitVector is more counterclockwise than lookaheadVector
+        if (headingUnitVector.crossMagnitude(lookaheadVector) < 0) {
+            return error * -1;
+        } else {
+            return error;
+        }
     }
 
     /**
@@ -203,8 +185,6 @@ public class PathFollower {
         this.lastClosestPointIndex = lastClosestPointIndex;
     }
 
-
-
     public void setPosition(double xPosition, double yPosition) {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -212,5 +192,13 @@ public class PathFollower {
 
     public void setHeading(double heading) {
         this.heading = heading;
+    }
+
+    public Waypoint getLookaheadWaypoint() {
+        return this.lookaheadWaypoint;
+    }
+    
+    public void setLookaheadWaypoint(Waypoint lookaheadWaypoint) {
+        this.lookaheadWaypoint = lookaheadWaypoint;
     }
 }

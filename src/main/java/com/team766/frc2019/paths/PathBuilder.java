@@ -8,13 +8,13 @@ import com.team766.frc2019.Robot;
 import com.team766.frc2019.paths.Waypoint;
 
 /**
- * Build paths from a few weaypoints to use with path following
+ * Build paths from a few waypoints to use with path following
  */
 public class PathBuilder {
     // values are measured in inches and seconds
     private static final double spacing = 6;
-    private static final double maxVelocity = 360;
-    private static final double maxAcceleration = 60;
+    private static final double maxVelocity = 1000;//360
+    private static final double maxAcceleration = 500;
 
     /**
      * makes a smooth path given a few waypoints to follow
@@ -104,12 +104,9 @@ public class PathBuilder {
 
         // convert 2d array back to ArrayList<Waypoint>
         ArrayList<Waypoint> outputPath = new ArrayList<Waypoint>();
-        PathFollower pathFollower = new PathFollower(outputPath);
-
 
         for (int i = 0; i < newPath.length; i++) {
             outputPath.add(new Waypoint(newPath[i][0], newPath[i][1]));
-            pathFollower.findLookaheadPoint(outputPath, Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
          }
 
         return outputPath;
