@@ -18,12 +18,54 @@ public class PathFollower {
     private boolean isPathDone = false;
     PIDController m_turnController;
 
-
-
-
     public PathFollower(ArrayList<Waypoint> path) {
+        // TODO: add copy function for path
         this.path = path;
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+    }
+
+    public void followPath() {
+        ArrayList<Waypoint> path = this.path;
+        
+        m_turnController.setSetpoint(0.0);
+        int i = 0;
+        while(!isPathDone) {
+            if (i % 1000 == 0) {
+                System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
+            }
+            i++;
+
+
+            setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
+            findLookaheadPoint(13);
+
+            m_turnController.calculate(calculateSteeringError(), true);
+            double turnPower = m_turnController.getOutput();
+            // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
+            // System.out.println("closest point index" + findClosestPointIndex());
+            double straightPower = path.get(findClosestPointIndex()).getVelocity();
+            // System.out.println("straight power: " + straightPower);
+
+            if (turnPower > 0) {
+                Robot.drive.setDrive(0.5, 1);
+                // Robot.drive.setDrive(straightPower, straightPower + turnPower);
+            } else {
+                Robot.drive.setDrive(0.5, 1);
+                // Robot.drive.setDrive(straightPower - turnPower, straightPower);
+            }
+
+            // if (turnPower > 0) {
+            //     Robot.drive.setDrive(straightPower - turnPower, straightPower);
+            // } else {
+            //     Robot.drive.setDrive(straightPower, straightPower + turnPower);
+            // }
+            // System.out.println("previousLookaheadPointIndex: " + previousLookaheadPointIndex + " Path size: " + this.path.size());
+            if (previousLookaheadPointIndex == path.size() - 1) {
+                isPathDone = true; 
+                Robot.drive.setDrive(0, 0);
+                System.out.println("path followed");
+            }
+        }
     }
 
     /**
@@ -31,39 +73,7 @@ public class PathFollower {
      * @param yPosition y position of robot
      * @param lookaheadDistance radius of look ahead distance (values between 12 - 15 are good)
      */
-
-    public void followPath(ArrayList<Waypoint> path) {
-        
-        m_turnController.setSetpoint(0.0);
-
-        while(!isPathDone) {
-            //System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
-            findLookaheadPoint(path, Robot.drive.getXPosition(), Robot.drive.getYPosition(), 13);
-
-            m_turnController.calculate(calculateSteeringError(path, Robot.drive.getGyroAngle(), Robot.drive.getXPosition(), Robot.drive.getYPosition()), true);
-            double turnPower = m_turnController.getOutput();
-            double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
-            if (turnPower > 0) {
-                Robot.drive.setDrive(straightPower, straightPower + turnPower);
-            } else {
-                Robot.drive.setDrive(straightPower - turnPower, straightPower);
-            }
-
-            if (turnPower > 0) {
-                Robot.drive.setDrive(straightPower - turnPower, straightPower);
-            } else {
-                Robot.drive.setDrive(straightPower, straightPower + turnPower);
-            }
-            System.out.println("previousLookaheadPointIndex: " + previousLookaheadPointIndex + " Path size: " + path.size());
-            if (previousLookaheadPointIndex == path.size() - 1) {
-                isPathDone = true; 
-                Robot.drive.setDrive(0, 0);
-                System.out.println("path followed");
-            } 
-        }
-        
-    }
-
+    // TODO: add errors if path is length of zero
     public Waypoint findLookaheadPoint(ArrayList<Waypoint> path, double xPosition, double yPosition, double lookaheadDistance) {
         for (int i = getPreviousLookaheadPointIndex(); i < path.size() - 1; i++) {
             // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899
@@ -99,6 +109,8 @@ public class PathFollower {
                 }
             }
         }
+        System.out.println(" no intersection previous lookahead point index is " + getPreviousLookaheadPointIndex());
+        // System.out.println("path velocity at zero is " + path.get(0).getVelocity());
         // otherwise, no intersection
         return path.get(getPreviousLookaheadPointIndex());
     }
@@ -163,9 +175,9 @@ public class PathFollower {
     /**
      * calculates steering error with variables stored in PathFollower
      */
-    // public double calculateSteeringError() {
-    //     return calculateSteeringError(this.path, this.heading, this.xPosition, this.yPosition);
-    // }
+    public double calculateSteeringError() {
+        return calculateSteeringError(this.path, this.heading, this.xPosition, this.yPosition);
+    }
 
     public int getPreviousLookaheadPointIndex() {
         return this.previousLookaheadPointIndex;

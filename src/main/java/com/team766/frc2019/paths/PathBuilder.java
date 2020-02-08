@@ -184,7 +184,6 @@ public class PathBuilder {
         double semiPerimeter = (lengthA + lengthB + lengthC) / 2;
         return Math.sqrt(semiPerimeter * (semiPerimeter - lengthA) * (semiPerimeter - lengthB) * (semiPerimeter - lengthC));
     }
-
     
     /**
      * calculates maximum velocity the robot can go based on the curvature of
@@ -201,7 +200,7 @@ public class PathBuilder {
         }
 
         // max velocity calculations
-        for (int i = 1; i < inputPath.size(); i++) {
+        for (int i = 0; i < inputPath.size(); i++) {
             outputPath.get(i).setVelocity(Math.min(maxVelocity, turnVelocityConstant / outputPath.get(i).getCurvature()));
         }
 

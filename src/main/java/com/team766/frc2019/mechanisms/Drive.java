@@ -254,16 +254,19 @@ public class Drive extends Mechanism  implements DriveI {
         currentGyroAngle = getGyroAngle();
         currentLeftEncoderDistance = leftEncoderDistance();
         currentRightEncoderDistance = rightEncoderDistance();
-        if (index % 10 == 0) {
-            System.out.println("encoders: "+ currentLeftEncoderDistance + ", "+ currentRightEncoderDistance);
-        }
-        //Robot.drive.resetEncoders();
+        Robot.drive.resetEncoders();
         // currentTime = System.currentTimeMillis();
         deltaTime = System.currentTimeMillis() - previousTime;
         xPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
         yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
         
+        if (index % 100 == 0) {
+            System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            // System.out.println("gyro angle  " + currentGyroAngle);
+            // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
+        }
+
         // if (index % 10 == 0) {
         //     /*
         //     System.out.print("x:\t");
