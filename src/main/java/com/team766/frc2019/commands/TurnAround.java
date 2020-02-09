@@ -33,7 +33,8 @@ public class TurnAround extends Subroutine {
         path = PathBuilder.buildPath(waypoints);
 
         for (int i = 0; i < path.size(); i++) {
-            System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")" + "velocity " + path.get(i).getVelocity());
+            // System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")" + "velocity " + path.get(i).getVelocity());
+            System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")");
             //System.out.println("heading error: " + pathFollower.calculateSteeringError(path, 0.0, Robot.drive.getXPosition(), Robot.drive.getYPosition(), i));
         }
 
@@ -76,16 +77,6 @@ public class TurnAround extends Subroutine {
             double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
 
             Robot.drive.setDrive(straightPower + turnPower, straightPower - turnPower);
-
-            // if (true || turnPower > 0) {
-            // } else {
-            //     //Robot.drive.setDrive(0.5, 1);
-            //     // Robot.drive.setDrive(straightPower - turnPower, straightPower + turnPower);
-            // }
-
-            // if (getLastClosestPointIndex() >= 83) {
-            //     isPathDone = true;
-            // }
             
             // allow odometry and other stuff to happen
             yield();
