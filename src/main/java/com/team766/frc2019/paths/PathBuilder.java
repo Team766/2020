@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Math;
 
-import com.team766.frc2019.Robot;
 import com.team766.frc2019.paths.Waypoint;
 
 /**

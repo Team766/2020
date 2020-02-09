@@ -24,7 +24,9 @@ public class TurnAround extends Subroutine {
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
         waypoints.add(new Waypoint(0, 0, 50, 50, 50));
         waypoints.add(new Waypoint(0, 100, 50, 100, 50));
-        waypoints.add(new Waypoint(-100, 100, 50, 0, 50));
+        waypoints.add(new Waypoint(100, 100, 50, 100, 50));
+        waypoints.add(new Waypoint(100, 0, 50, 100, 50));
+        waypoints.add(new Waypoint(0, 0, 50, 0, 50));
 
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
 
@@ -40,66 +42,53 @@ public class TurnAround extends Subroutine {
 
         System.out.println("path built");
 
+        System.out.println(path.size() + " waypoints");
+
         PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
         boolean isPathDone = false;
 
         m_turnController.setSetpoint(0.0);
         int i = 0;
-            while(!isPathDone) {
-                if (i % 100 == 0) {
-                    // System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
-                    System.out.printf("heading %.2f steering error angle %.2f pid output %.2f \n", Robot.drive.getGyroAngle(), pathFollower.calculateSteeringError(), m_turnController.getOutput());
-                    //System.out.println("last closest point index" + pathFollower.getLastClosestPointIndex());
-                    // System.out.println("lookahead point: " + pathFollower.getLookaheadWaypoint().getX() + ", " + pathFollower.getLookaheadWaypoint().getY());
-                }
-                i++;
-    
-                pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
-                pathFollower.setHeading(Robot.drive.getGyroAngle());
-                pathFollower.setLookaheadWaypoint(pathFollower.findLookaheadPoint(13));
+        while(!isPathDone) {
+            if (i % 100 == 0) {
+                // System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
+                System.out.printf("heading %.2f steering error angle %.2f pid output %.2f \n", Robot.drive.getGyroAngle(), pathFollower.calculateSteeringError(), m_turnController.getOutput());
+                System.out.println("last closest point index" + pathFollower.getLastClosestPointIndex());
+                // System.out.println("lookahead point: " + pathFollower.getLookaheadWaypoint().getX() + ", " + pathFollower.getLookaheadWaypoint().getY());
+            }
+            i++;
 
-                if (pathFollower.isPathDone) {
-                    Robot.drive.setDrive(0, 0);
-                    System.out.println("path followed");
-                    return;
-                }
-    
-                m_turnController.calculate(pathFollower.calculateSteeringError(), true);
-                double turnPower = m_turnController.getOutput() * 3500;
-                // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
-                // System.out.println("closest point index" + findClosestPointIndex());
-                double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
-                // System.out.println("straight power: " + straightPower);
+            pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
+            pathFollower.setHeading(Robot.drive.getGyroAngle());
+            pathFollower.update();
 
-
-                if (i % 50 == 0) {
-                //    System.out.println("error: " + pathFollower.calculateSteeringError() + " pid output: " + m_turnController.getOutput());
-                }
-    
-                if (true || turnPower > 0) {
-                    //Robot.drive.setDrive(0.3, 1);
-                    // Robot.drive.setDrive(straightPower - turnPower, straightPower + turnPower);
-                } else {
-                    //Robot.drive.setDrive(0.5, 1);
-                    // Robot.drive.setDrive(straightPower - turnPower, straightPower + turnPower);
-                }
-
-                // if (getLastClosestPointIndex() >= 83) {
-                //     isPathDone = true;
-                // }
-               
-               
-                // System.out.println("previousLookaheadPointIndex: " + previousLookaheadPointIndex + " Path size: " + this.path.size());
-
-
-                yield();
+            if (pathFollower.isPathDone()) {
+                Robot.drive.setDrive(0, 0);
+                System.out.println("path followed");
+                return;
             }
 
+            m_turnController.calculate(pathFollower.calculateSteeringError(), true);
+            double turnPower = m_turnController.getOutput() * 500;
+            // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
+            // System.out.println("closest point index" + findClosestPointIndex());
+            double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
 
-        // pathFollower.followPath();
+            Robot.drive.setDrive(straightPower + turnPower, straightPower - turnPower);
 
-        // System.out.println("(" + lookaheadPoint.getX() + "," + lookaheadPoint.getY() + ")");
+            // if (true || turnPower > 0) {
+            // } else {
+            //     //Robot.drive.setDrive(0.5, 1);
+            //     // Robot.drive.setDrive(straightPower - turnPower, straightPower + turnPower);
+            // }
 
+            // if (getLastClosestPointIndex() >= 83) {
+            //     isPathDone = true;
+            // }
+            
+            // allow odometry and other stuff to happen
+            yield();
+        }
     }
 }
