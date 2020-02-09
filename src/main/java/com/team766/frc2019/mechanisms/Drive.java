@@ -224,24 +224,20 @@ public class Drive extends Mechanism  implements DriveI {
     // heading is in degrees
     private static double heading = 0; //aka angle
 
-    private double previousTime = System.currentTimeMillis();
-
     private double currentGyroAngle = 0;
     private double currentLeftEncoderDistance = 0;
     private double currentRightEncoderDistance = 0;
-    // private double initialTime = System.currentTimeMillis();
-    private double deltaTime = 0.0;
     int index = 0;
 
-    public static double getXPosition() {
+    public double getXPosition() {
         return xPosition;
     }
 
-    public static double getYPosition() {
+    public double getYPosition() {
         return yPosition;
     }
 
-    public static double getAngle() {
+    public double getAngle() {
         return heading;
     }
 
@@ -257,31 +253,15 @@ public class Drive extends Mechanism  implements DriveI {
         currentLeftEncoderDistance = leftEncoderDistance();
         currentRightEncoderDistance = rightEncoderDistance();
         Robot.drive.resetEncoders();
-        // currentTime = System.currentTimeMillis();
-        deltaTime = System.currentTimeMillis() - previousTime;
         xPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
         yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
         
         if (index % 100 == 0) {
-            //System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
         }
-
-        // if (index % 10 == 0) {
-        //     /*
-        //     System.out.print("x:\t");
-        //     System.out.printf("%.2f", xPosition);
-        //     System.out.print(" y:\t");
-        //     System.out.printf("%.2f", yPosition);
-        //     System.out.printf("  angle:\t%.2f", getGyroAngle());
-        //     System.out.printf("  time:\t%.2f", (System.currentTimeMillis() - initialTime) / 1000);
-        //     System.out.println("");
-        //     */
-        // }
         index++;
-
-        previousTime += System.currentTimeMillis();
     }
 }

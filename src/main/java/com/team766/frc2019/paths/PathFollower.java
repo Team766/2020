@@ -3,9 +3,6 @@ package com.team766.frc2019.paths;
 import java.util.ArrayList;
 
 import com.team766.frc2019.paths.Waypoint;
-import com.team766.hal.RobotProvider;
-import com.team766.controllers.PIDController;
-import com.team766.frc2019.Robot;
 import com.team766.frc2019.paths.Vector;
 
 public class PathFollower {
@@ -25,7 +22,14 @@ public class PathFollower {
         lookaheadWaypoint = findLookaheadPoint(13);
     }
 
+    public void update() {
+        setLastClosestPointIndex(findClosestPointIndex());
+        setLookaheadWaypoint(findLookaheadPoint(13));
+    }
+
     /**
+     * finds lookahead point on path (connect the dots between path waypoints) based on lookahead radius
+     * if no points are found then return the last lookahead point
      * @param xPosition x position of robot
      * @param yPosition y position of robot
      * @param lookaheadDistance radius of look ahead distance (values between 12 - 15 are good)
@@ -66,15 +70,6 @@ public class PathFollower {
                 }
             }
         }
-        // move this into new function
-        //System.out.println(" no intersection previous lookahead point index is " + getPreviousLookaheadPointIndex());
-        if (getPreviousLookaheadPointIndex() >= 160) {
-            isPathDone = true; 
-            Robot.drive.setDrive(0, 0);
-            System.out.println("path followed");
-        }
-        //System.out.println(" no intersection previous lookahead point index is " + getPreviousLookaheadPointIndex());
-        // System.out.println("path velocity at zero is " + path.get(0).getVelocity());
         // otherwise, no intersection
         return path.get(getPreviousLookaheadPointIndex());
     }
@@ -136,7 +131,7 @@ public class PathFollower {
      * @param heading
      * @param xPosition
      * @param yPosition
-     * @return
+     * @return positive value robot needs to turn counterclockwise, negative if robot needs to turn clockwise
      */
     public double calculateSteeringError(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition){
         Vector headingUnitVector = new Vector(Math.sin(Math.toRadians(heading)), Math.cos(Math.toRadians(heading)));
@@ -151,6 +146,14 @@ public class PathFollower {
             return error * -1;
         } else {
             return error;
+        }
+    }
+
+    public boolean isPathDone() {
+        if (this.lastClosestPointIndex == (getPath().size() - 1)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
