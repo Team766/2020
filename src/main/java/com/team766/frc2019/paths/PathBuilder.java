@@ -41,7 +41,6 @@ public class PathBuilder {
      */
     public static ArrayList<Waypoint> interpolateWaypoints(ArrayList<Waypoint> waypoints, double spacing) {
         ArrayList<Waypoint> newPoints = new ArrayList<Waypoint>();
-        PathFollower pathFollower = new PathFollower(waypoints);
 
         for (int i = 0; i < waypoints.size() - 1; i++) {
             // compute vector between current point and next point
