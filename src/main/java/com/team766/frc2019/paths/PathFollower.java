@@ -8,23 +8,22 @@ import com.team766.frc2019.paths.Vector;
 public class PathFollower {
     private ArrayList<Waypoint> path = new ArrayList<Waypoint>();
     private int previousLookaheadPointIndex = 0;
-    private int lastClosestPointIndex = 0;
-    private double heading = 0;
+    private int closestPointIndex = 0;
+    private Waypoint lookaheadWaypoint;
     private double xPosition = 0;
     private double yPosition = 0;
-    public static boolean isPathDone = false;
-    private Waypoint lookaheadWaypoint;
+    private double heading = 0;
 
-    public PathFollower(ArrayList<Waypoint> path) {
+    public PathFollower(ArrayList<Waypoint> path, double lookaheadDistance) {
         // TODO: add copy function for path
         this.path = path;
-        // change this from magic number
-        lookaheadWaypoint = findLookaheadPoint(13);
+
+        lookaheadWaypoint = findLookaheadPoint(lookaheadDistance);
     }
 
-    public void update() {
-        setLastClosestPointIndex(findClosestPointIndex());
-        setLookaheadWaypoint(findLookaheadPoint(13));
+    public void update(double lookaheadDistance) {
+        setClosestPointIndex(findClosestPointIndex());
+        setLookaheadWaypoint(findLookaheadPoint(lookaheadDistance));
     }
 
     /**
@@ -58,6 +57,8 @@ public class PathFollower {
 
                 // Point = E + (t value of intersection) * d
                 // if intersection exists find values
+                // TODO: check to make sure this picks the right point if the path
+                // goes left/up/down
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection
                     setPreviousLookaheadPointIndex(i);
@@ -89,8 +90,9 @@ public class PathFollower {
 
         // set smallest distance to last known smallest point
         // and set smallest index to that point
-        double smallestDistance = Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(getLastClosestPointIndex()), position);
-        int smallestIndex = getLastClosestPointIndex();
+        double smallestDistance = Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(getClosestPointIndex()), position);
+        int lastClosestPointIndex = getClosestPointIndex();
+        int smallestIndex = getClosestPointIndex();
 
         // start at the point after the one we already calculated
         for (int i = lastClosestPointIndex + 1; i < path.size() - 1; i++) {
@@ -131,7 +133,7 @@ public class PathFollower {
      * @param heading
      * @param xPosition
      * @param yPosition
-     * @return positive value robot needs to turn counterclockwise, negative if robot needs to turn clockwise
+     * @return positive value r obot needs to turn counterclockwise, negative if robot needs to turn clockwise
      */
     public double calculateSteeringError(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition){
         Vector headingUnitVector = new Vector(Math.sin(Math.toRadians(heading)), Math.cos(Math.toRadians(heading)));
@@ -150,7 +152,7 @@ public class PathFollower {
     }
 
     public boolean isPathDone() {
-        if (this.lastClosestPointIndex == (getPath().size() - 1)) {
+        if (getClosestPointIndex() == (getPath().size() - 1)) {
             return true;
         } else {
             return false;
@@ -180,12 +182,12 @@ public class PathFollower {
         this.path = path;
     }
 
-    public int getLastClosestPointIndex() {
-        return this.lastClosestPointIndex;
+    public int getClosestPointIndex() {
+        return this.closestPointIndex;
     }
 
-    public void setLastClosestPointIndex(int lastClosestPointIndex) {
-        this.lastClosestPointIndex = lastClosestPointIndex;
+    public void setClosestPointIndex(int closestPointIndex) {
+        this.closestPointIndex = closestPointIndex;
     }
 
     public void setPosition(double xPosition, double yPosition) {

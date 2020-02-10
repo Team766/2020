@@ -39,7 +39,7 @@ public class TurnAround extends Subroutine {
         }
 
         // make sure to pick waypoints or path correctly if testing
-        PathFollower pathFollower = new PathFollower(path);
+        PathFollower pathFollower = new PathFollower(path, 13);
 
         System.out.println("path built");
 
@@ -47,28 +47,20 @@ public class TurnAround extends Subroutine {
 
         PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
-        boolean isPathDone = false;
-
         m_turnController.setSetpoint(0.0);
         int i = 0;
-        while(!isPathDone) {
+        while(!pathFollower.isPathDone()) {
             if (i % 100 == 0) {
                 // System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
                 System.out.printf("heading %.2f steering error angle %.2f pid output %.2f \n", Robot.drive.getGyroAngle(), pathFollower.calculateSteeringError(), m_turnController.getOutput());
-                System.out.println("last closest point index" + pathFollower.getLastClosestPointIndex());
+                System.out.println("closest point index" + pathFollower.getClosestPointIndex());
                 // System.out.println("lookahead point: " + pathFollower.getLookaheadWaypoint().getX() + ", " + pathFollower.getLookaheadWaypoint().getY());
             }
             i++;
 
             pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
             pathFollower.setHeading(Robot.drive.getGyroAngle());
-            pathFollower.update();
-
-            if (pathFollower.isPathDone()) {
-                Robot.drive.setDrive(0, 0);
-                System.out.println("path followed");
-                return;
-            }
+            pathFollower.update(13);
 
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
             double turnPower = m_turnController.getOutput() * 500;
@@ -81,5 +73,7 @@ public class TurnAround extends Subroutine {
             // allow odometry and other stuff to happen
             yield();
         }
+        Robot.drive.setDrive(0, 0);
+        System.out.println("path followed");
     }
 }
