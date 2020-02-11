@@ -66,9 +66,9 @@ public class PathBuilder {
      * Smooths a path of points (order of points determines path)
      * Algorithm reference https://www.youtube.com/watch?v=v0-OUApP_5Q
      * https://www.youtube.com/watch?v=ffLPf8kI6qg
-     * @param path
-     * @param weightData
-     * @param weightSmooth
+     * @param path list of waypoints
+     * @param weightData how strong to bias towards point
+     * @param weightSmooth bias to smooth more
      * @param tolerance when to stop optimizing (lower value converges slower)
      */
     public static ArrayList<Waypoint> smoother(ArrayList<Waypoint> inputPath, double weightData, double weightSmooth, double tolerance) {
