@@ -1,8 +1,6 @@
 package com.team766.frc2019.commands;
 
 import com.team766.frc2019.Robot;
-import com.team766.framework.Command;
-import com.team766.framework.Subroutine;
 
 public class AutonElevator extends CalibrateElevator {
 
