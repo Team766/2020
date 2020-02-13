@@ -140,6 +140,7 @@ public class Drive extends Mechanism  implements DriveI {
         return((m_gyro.getAngle() % 360) * m_gyroDirection);
     }
 
+
     public void resetGyro() {
         m_gyro.reset(); 
     }
