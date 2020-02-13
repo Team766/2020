@@ -37,7 +37,11 @@ public class PathFollower {
 
         for (int i = getPreviousLookaheadPointIndex(); i < path.size() - 1; i++) {
             // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899
-            Vector lineSegmentVector = new Vector(path.get(i + 1).getX() - path.get(i).getX(), path.get(i + 1).getY() - path.get(i).getY());
+            try{
+                Vector lineSegmentVector = new Vector(path.get(i + 1).getX() - path.get(i).getX(), path.get(i + 1).getY() - path.get(i).getY());
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("path length invalid (outofbounds)");
+            } 
             
             Vector centerToRayStartVector = new Vector(
                 path.get(i).getX() - xPosition,
@@ -62,19 +66,14 @@ public class PathFollower {
                 // goes left/up/down (choose point with higher index)
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection
-                    if (getPreviousLookaheadPointIndex() < i) {
-                        setPreviousLookaheadPointIndex(i);
-                        return path.get(i).add(new Waypoint(lineSegmentVector.getX() * t1, lineSegmentVector.getY() * t2));
-                    }    
+                    setPreviousLookaheadPointIndex(i);
+                    return path.get(i).add(new Waypoint(lineSegmentVector.getX() * t1, lineSegmentVector.getY() * t2));
                 }
                 if (t2 >= 0 && t2 <=1) {
                     //return t2 intersection
-                    if (getPreviousLookaheadPointIndex() < i) {
-                        setPreviousLookaheadPointIndex(i);
-                        return path.get(i).add(new Waypoint(lineSegmentVector.getX() * t2, lineSegmentVector.getY() * t2));
-                    }    
+                    setPreviousLookaheadPointIndex(i);
+                    return path.get(i).add(new Waypoint(lineSegmentVector.getX() * t2, lineSegmentVector.getY() * t2));
                 }
-                return path.get(getPreviousLookaheadPointIndex());
             }
         }
         // otherwise, no intersection
