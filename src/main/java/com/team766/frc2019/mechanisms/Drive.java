@@ -146,7 +146,7 @@ public class Drive extends Mechanism  implements DriveI {
         return isInverted;
     }
 
-    public static void setInverted(boolean isItInverted) {
+    public static void setInvertStatus(boolean isItInverted) {
         isInverted = isItInverted;
     }
 
