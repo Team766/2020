@@ -71,8 +71,8 @@ public class TurnAround extends Subroutine {
 
             pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
             
-            if ((pathFollower.calculateSteeringError() > 90) || (pathFollower.calculateSteeringError()< -90)) {
-                Drive.setInverted(true);
+            if ((pathFollower.calculateSteeringError() > 90) || (pathFollower.calculateSteeringError() < -90)) {
+                Drive.setInvertStatus(true);
                 Drive.invertMotors();
             }
             
