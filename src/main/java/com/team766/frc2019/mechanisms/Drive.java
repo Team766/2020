@@ -1,5 +1,7 @@
 package com.team766.frc2019.mechanisms;
 
+import java.lang.Math.*;
+
 import com.team766.framework.Mechanism;
 import com.team766.hal.GyroReader;
 import com.team766.hal.CANSpeedController;
@@ -18,7 +20,7 @@ import com.team766.frc2019.Robot;
 
 public class Drive extends Mechanism  implements DriveI {
 
-    // vars (including PID)
+    //vars (including PID)
     private CANSpeedController m_leftVictor1;
     private CANSpeedController m_leftVictor2;
     private CANSpeedController m_rightVictor1;
@@ -27,7 +29,7 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
     public static double P = 0.01; //0.04
-    public static double I = 0.0; //0.0005
+    public static double I = 0.0;//0.0005
     public static double D = 0.0; //0.0012
     public final double MF = 1.1366666666666666666666666;
     public final double MP = 0.00; //0.02
@@ -43,15 +45,15 @@ public class Drive extends Mechanism  implements DriveI {
     public double leftSensorBasePosition;
     public double rightSensorBasePosition;
 
-    public final double maximumRPM = 15 * 12 * 60 / 6.25; // first is feet/second, converts to RPM
+    public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
 
 
     public Drive() {
 
-        // initializes victors
+        //initializes victors
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
         m_rightVictor1 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor1");
-        // initialize second victor if it exists
+        //initialize second victor if it exists
         if (ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
             m_secondVictor = true;
             m_leftVictor2 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor2");
@@ -60,15 +62,15 @@ public class Drive extends Mechanism  implements DriveI {
             m_secondVictor = false;
         }
 
-        // initializes talons
+        //initializes talons
         m_leftTalon = RobotProvider.instance.getTalonCANMotor("drive.leftTalon");
         m_rightTalon = RobotProvider.instance.getTalonCANMotor("drive.rightTalon");
         
-        // initializes gyro
+        //initializes gyro
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
         
-        // configures the motors
+        //configures the motors
         m_leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.setInverted(true);
@@ -78,11 +80,11 @@ public class Drive extends Mechanism  implements DriveI {
         }
 
         // left true right false for new, both false for mule and marie
-        // inverts sensors
+        //inverts sensors
         m_leftTalon.setSensorPhase(false);
         m_rightTalon.setSensorPhase(false);
 
-        // configures pid
+        //configures pid
         m_leftTalon.config_kF(0, MF, 0);
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
@@ -92,13 +94,13 @@ public class Drive extends Mechanism  implements DriveI {
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MD, 0);
 
-        // sets resting modes for robot
+        //sets resting modes for robot
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
         m_rightTalon.setNeutralMode(NeutralMode.Brake);
         m_leftTalon.configOpenLoopRamp(0.25, 0);
         m_leftTalon.configClosedLoopRamp(0.25, 0);
         m_rightTalon.configOpenLoopRamp(0.25, 0);
-        m_rightTalon.configClosedLoopRamp(0.25, 0); // if something breaks that you can't figure out with acceleration (un)comment this
+        m_rightTalon.configClosedLoopRamp(0.25, 0); //if something breaks that you can't figure out with acceleration (un)comment this
     }
 
     @Override
@@ -142,7 +144,7 @@ public class Drive extends Mechanism  implements DriveI {
         m_gyro.reset(); 
     }
 
-    // makes encoders act like relative encoders
+    //makes encoders act like relative encoders
     public void resetEncoders() {
         leftSensorBasePosition = m_leftTalon.getSensorPosition();
         rightSensorBasePosition = m_rightTalon.getSensorPosition();
@@ -254,7 +256,7 @@ public class Drive extends Mechanism  implements DriveI {
         xPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
         yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
-        // handy debugging place
+        
         if (index % 100 == 0) {
             System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
