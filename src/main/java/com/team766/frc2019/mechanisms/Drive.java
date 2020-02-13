@@ -45,6 +45,8 @@ public class Drive extends Mechanism  implements DriveI {
     public double leftSensorBasePosition;
     public double rightSensorBasePosition;
 
+    public static boolean isInverted = false;
+
     public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
 
 
@@ -140,6 +142,23 @@ public class Drive extends Mechanism  implements DriveI {
         return((m_gyro.getAngle() % 360) * m_gyroDirection);
     }
 
+    public static boolean getInverted() {
+        return isInverted;
+    }
+
+    public static void setInverted(boolean isItInverted) {
+        isInverted = isItInverted;
+    }
+
+    public void invertMotors(){ //makes motors go backwards
+            m_rightTalon.setInverted(false);
+            m_leftTalon.setInverted(true);
+    }
+
+    public void resetMotorOrientation() { //makes motors go backwards
+        m_rightTalon.setInverted(true);
+        m_leftTalon.setInverted(false);
+    }
 
     public void resetGyro() {
         m_gyro.reset(); 

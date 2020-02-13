@@ -9,6 +9,7 @@ import com.team766.frc2019.paths.PathFollower;
 import com.team766.frc2019.paths.Waypoint;
 import com.team766.hal.RobotProvider;
 import com.team766.controllers.PIDController;
+import com.team766.frc2019.mechanisms.Drive;
 
 // import com.team766.frc2019.mechanisms.LimeLightI;
 // import com.team766.hal.RobotProvider;
@@ -69,11 +70,22 @@ public class TurnAround extends Subroutine {
             i++;
 
             pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
-            pathFollower.setHeading(Robot.drive.getGyroAngle());
+            
+            if ((pathFollower.calculateSteeringError() > 90) || (pathFollower.calculateSteeringError()< -90)) {
+                Drive.setInverted(true);
+                Drive.invertMotors();
+            }
+            
+            if (!Drive.getInverted()) { //TODO: Make sure this angle stuff behaves properly (domain of angles and stuff)
+                pathFollower.setHeading(Robot.drive.getGyroAngle());
+            } else {
+                pathFollower.setHeading(Robot.drive.getGyroAngle() + 180);
+            }
             pathFollower.update();
 
             if (pathFollower.isPathDone()) {
                 Robot.drive.setDrive(0, 0);
+                Drive.resetMotorOrientation();
                 System.out.println("path followed");
                 return;
             }
@@ -84,7 +96,11 @@ public class TurnAround extends Subroutine {
             // System.out.println("closest point index" + findClosestPointIndex());
             double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
 
-            Robot.drive.setDrive(straightPower + turnPower, straightPower - turnPower);
+            if (!Drive.getInverted()) { 
+                Robot.drive.setDrive(straightPower + turnPower, straightPower - turnPower);
+            } else {
+                Robot.drive.setDrive(straightPower - turnPower, straightPower + turnPower);
+            }
             
             // allow odometry and other stuff to happen
             yield();
