@@ -22,11 +22,19 @@ public class TurnAround extends Subroutine {
         System.out.println("TurnAround STARTING");
 
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
+
         waypoints.add(new Waypoint(0, 0, 50, 50, 50));
         waypoints.add(new Waypoint(0, 100, 50, 100, 50));
         waypoints.add(new Waypoint(100, 100, 50, 100, 50));
         waypoints.add(new Waypoint(100, 0, 50, 100, 50));
         waypoints.add(new Waypoint(0, 0, 50, 0, 50));
+
+        // SQUARE WAYPOINTS
+        // waypoints.add(new Waypoint(0, 0, 50, 50, 50));
+        // waypoints.add(new Waypoint(0, 100, 50, 100, 50));
+        // waypoints.add(new Waypoint(100, 100, 50, 100, 50));
+        // waypoints.add(new Waypoint(100, 0, 50, 100, 50));
+        // waypoints.add(new Waypoint(0, 0, 50, 0, 50));
 
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
 
