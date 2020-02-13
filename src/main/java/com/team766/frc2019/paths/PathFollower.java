@@ -63,7 +63,7 @@ public class PathFollower {
                     System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
                 }
 
-                if (getPreviousLookaheadPointIndex() >= path.size()-2) {
+                if (getPreviousLookaheadPointIndex() >= path.size()-5) {
                     System.out.println("Path is done yay");
                     isPathDone = true;
                 }

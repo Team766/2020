@@ -28,6 +28,7 @@ public class PathBuilder {
         newWaypoints = calculateCurvature(newWaypoints);
         newWaypoints = calculateMaximumVelocities(newWaypoints, 3);
         newWaypoints = calculateTargetVelocities(newWaypoints);
+        newWaypoints = addEndBuffer(newWaypoints, 5);
 
         return(newWaypoints);
     }
@@ -230,5 +231,19 @@ public class PathBuilder {
             );
         }
         return outputPath;
+    }
+
+    /**
+     * add points to end to make robot actually reach last goal waypoint from path
+     * @param buffer num extra waypoints to add
+     * @return input path plus #buffer collinear points
+     */
+    public static ArrayList<Waypoint> addEndBuffer(ArrayList<Waypoint> inputPath, int buffer) {
+        double deltaX = inputPath.get(inputPath.size()-1).getX() - inputPath.get(inputPath.size()-2).getX();
+        double deltaY = inputPath.get(inputPath.size()-1).getY() - inputPath.get(inputPath.size()-2).getY();
+        for (int i = 0; i < buffer; i++) {
+            inputPath.add(new Waypoint(inputPath.get(inputPath.size()-1).getX() + i*deltaX, inputPath.get(inputPath.size()-1).getY() + i*deltaY));
+         }
+        return inputPath;
     }
 }
