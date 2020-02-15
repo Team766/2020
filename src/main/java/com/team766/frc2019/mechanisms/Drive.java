@@ -1,5 +1,7 @@
 package com.team766.frc2019.mechanisms;
 
+import java.lang.Math.*;
+
 import com.team766.framework.Mechanism;
 import com.team766.hal.GyroReader;
 import com.team766.hal.CANSpeedController;
@@ -14,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
 
-
+import com.team766.frc2019.Robot;
 
 public class Drive extends Mechanism  implements DriveI {
 
@@ -23,8 +25,8 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_leftVictor2;
     private CANSpeedController m_rightVictor1;
     private CANSpeedController m_rightVictor2;
-    private CANSpeedController m_leftTalon;
-    private CANSpeedController m_rightTalon;
+    private static CANSpeedController m_leftTalon;
+    private static CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
@@ -42,6 +44,8 @@ public class Drive extends Mechanism  implements DriveI {
 
     public double leftSensorBasePosition;
     public double rightSensorBasePosition;
+
+    public static boolean isInverted = false;
 
     public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
 
@@ -112,8 +116,10 @@ public class Drive extends Mechanism  implements DriveI {
     * Speed will be [-maximumRPM, maximumRPM], depending on joystick input.
     */
     public void setDrive(double leftSetting, double rightSetting) {
-        m_leftTalon.set(ControlMode.Velocity, leftSetting * maximumRPM * 256 / 600); //RPM times units per rev / 100ms per min
-        m_rightTalon.set(ControlMode.Velocity, rightSetting * maximumRPM * 256 / 600); //basically converts from RPM to units/100ms for the PID to use
+        // m_leftTalon.set(ControlMode.Velocity, leftSetting * maximumRPM * 256 / 600); //RPM times units per rev / 100ms per min
+        // m_rightTalon.set(ControlMode.Velocity, rightSetting * maximumRPM * 256 / 600); //basically converts from RPM to units/100ms for the PID to use
+        m_leftTalon.set(ControlMode.Velocity, leftSetting); //RPM times units per rev / 100ms per min
+        m_rightTalon.set(ControlMode.Velocity, rightSetting); //basically converts from RPM to units/100ms for the PID to use
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor) {
@@ -134,6 +140,24 @@ public class Drive extends Mechanism  implements DriveI {
 
     public double getGyroAngle() {
         return((m_gyro.getAngle() % 360) * m_gyroDirection);
+    }
+
+    public static boolean getInverted() {
+        return isInverted;
+    }
+
+    public static void setInvertStatus(boolean isItInverted) {
+        isInverted = isItInverted;
+    }
+
+    public static void invertMotors(){ //makes motors go backwards
+            m_rightTalon.setInverted(false);
+            m_leftTalon.setInverted(true);
+    }
+
+    public static void resetMotorOrientation() { //makes motors go backwards
+        m_rightTalon.setInverted(true);
+        m_leftTalon.setInverted(false);
     }
 
     public void resetGyro() {
@@ -198,10 +222,69 @@ public class Drive extends Mechanism  implements DriveI {
         //return diff;
     }
 
+    // public class EncoderData {
+
+    // }
+
+    // public encoderData getEncoderData() {
+
+    // }
+
     //you die now
     public void nukeRobot() {
         shutdown();
         resetEncoders();
         resetGyro();
+    }
+
+    // variables for calculating position using odometry
+    // should be moved later
+    private static double xPosition = 0;
+    private static double yPosition = 0;
+    // heading is in degrees
+    private static double heading = 0; //aka angle
+
+    private double currentGyroAngle = 0;
+    private double currentLeftEncoderDistance = 0;
+    private double currentRightEncoderDistance = 0;
+    int index = 0;
+
+    public double getXPosition() {
+        return xPosition;
+    }
+
+    public double getYPosition() {
+        return yPosition;
+    }
+
+    public double getAngle() {
+        return heading;
+    }
+
+    @Override
+    public void run() {    
+        if (index == 0) {
+            resetEncoders();
+            resetGyro();
+            index = 1;
+        }
+
+        currentGyroAngle = getGyroAngle();
+        currentLeftEncoderDistance = leftEncoderDistance();
+        currentRightEncoderDistance = rightEncoderDistance();
+        Robot.drive.resetEncoders();
+        xPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
+        yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
+
+        
+        if (index % 10 == 0) {
+            SmartDashboard.putNumber("X position", xPosition);
+            SmartDashboard.putNumber("Y position", yPosition);
+            SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
+            // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            // System.out.println("gyro angle  " + currentGyroAngle);
+            // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
+        }
+        index++;
     }
 }
