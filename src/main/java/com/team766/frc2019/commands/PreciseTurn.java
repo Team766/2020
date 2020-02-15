@@ -60,7 +60,7 @@ public class PreciseTurn extends Subroutine {
             }
         }
         if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
-            callSubroutine(new TeleopAuton());
+            //callSubroutine(new TeleopAuton());
         }
         Robot.drive.setDrive(0.0, 0.0);
         Robot.drive.resetEncoders();
