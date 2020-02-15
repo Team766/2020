@@ -62,11 +62,6 @@ public class PathFollower {
                 if (index++ % 50 == 0) {
                     System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
                 }
-
-                if (getPreviousLookaheadPointIndex() >= path.size()-5) {
-                    System.out.println("Path is done yay");
-                    isPathDone = true;
-                }
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection
                     setPreviousLookaheadPointIndex(i);
@@ -159,7 +154,11 @@ public class PathFollower {
     }
 
     public boolean isPathDone() {
-        return isPathDone;
+        if (this.getLastClosestPointIndex() >= (getPath().size() - 5)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
