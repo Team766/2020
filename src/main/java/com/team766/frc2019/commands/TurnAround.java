@@ -42,9 +42,7 @@ public class TurnAround extends Subroutine {
         path = PathBuilder.buildPath(waypoints);
 
         for (int i = 0; i < path.size(); i++) {
-            // System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")" + "velocity " + path.get(i).getVelocity());
             System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")");
-            //System.out.println("heading error: " + pathFollower.calculateSteeringError(path, 0.0, Robot.drive.getXPosition(), Robot.drive.getYPosition(), i));
         }
 
         // make sure to pick waypoints or path correctly if testing

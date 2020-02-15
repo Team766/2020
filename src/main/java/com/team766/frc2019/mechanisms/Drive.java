@@ -25,8 +25,8 @@ public class Drive extends Mechanism  implements DriveI {
     private CANSpeedController m_leftVictor2;
     private CANSpeedController m_rightVictor1;
     private CANSpeedController m_rightVictor2;
-    private CANSpeedController m_leftTalon;
-    private CANSpeedController m_rightTalon;
+    private static CANSpeedController m_leftTalon;
+    private static CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
@@ -150,12 +150,12 @@ public class Drive extends Mechanism  implements DriveI {
         isInverted = isItInverted;
     }
 
-    public void invertMotors(){ //makes motors go backwards
+    public static void invertMotors(){ //makes motors go backwards
             m_rightTalon.setInverted(false);
             m_leftTalon.setInverted(true);
     }
 
-    public void resetMotorOrientation() { //makes motors go backwards
+    public static void resetMotorOrientation() { //makes motors go backwards
         m_rightTalon.setInverted(true);
         m_leftTalon.setInverted(false);
     }
