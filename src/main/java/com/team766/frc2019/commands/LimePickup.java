@@ -63,7 +63,7 @@ public class LimePickup extends Subroutine {
             yError = m_limeLight.ty();
             System.out.print("y error = " + yError);
             m_turnController.setSetpoint(1.0);
-            callSubroutine(new ExtendGripper());
+            //callSubroutine(new ExtendGripper());
             while ((yError) > -10 && (Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
                 currentX = m_limeLight.tx();
                 yError = m_limeLight.ty();
@@ -112,19 +112,19 @@ public class LimePickup extends Subroutine {
             if ((m_joystick1.getRawAxis(1)) < .2) {
                 LimeLight.setLedMode(LightMode.eOff);
                 LimeLight.setCameraMode(CameraMode.eDriver);
-                callSubroutine(new Actuate());
+                //callSubroutine(new Actuate());
                 m_drive.setDrive(.3, .3);
                 waitForSeconds(0.4);
                 m_drive.setDrive(0, 0);
                 //waitForSeconds(0.5);
-                callSubroutine(new RetractGripper());
+                //callSubroutine(new RetractGripper());
                 //waitForSeconds(0.2);
                 m_drive.setDrive(-0.3 ,-0.3);
                 waitForSeconds(0.7);
-                callSubroutine(new Retract());
+                //callSubroutine(new Retract());
                 m_drive.setDrive(0.0 , 0.0);
             } else if ((!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) && Robot.drive.isAutonomous()) {
-                callSubroutine(new TeleopAuton());
+                //callSubroutine(new TeleopAuton());
             }
 
             /*

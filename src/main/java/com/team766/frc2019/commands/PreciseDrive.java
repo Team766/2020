@@ -87,7 +87,7 @@ public class PreciseDrive extends Subroutine {
             }
         }
         if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
-            callSubroutine(new TeleopAuton());
+            //callSubroutine(new TeleopAuton());
         }
         System.out.println("PreciseDrive finished");
         Robot.drive.setDrive(m_endPower, m_endPower);
