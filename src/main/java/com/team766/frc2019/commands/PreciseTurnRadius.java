@@ -152,7 +152,7 @@ public class PreciseTurnRadius extends Subroutine {
             }
         }
         if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
-            callSubroutine(new TeleopAuton());
+            //callSubroutine(new TeleopAuton());
         }
         System.out.println("PreciseTurnRadius loop done");
         Robot.drive.setDrive(m_endPower, m_endPower);
