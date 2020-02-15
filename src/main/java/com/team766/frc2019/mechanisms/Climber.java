@@ -10,7 +10,7 @@ public class Climber extends Mechanism {
     private CANSpeedController m_climber;
 
     public Climber() {
-        m_climber = RobotProvider.instance.getInsertMotorHereorwhateveritis("climber.motor");
+        //m_climber = RobotProvider.instance.getInsertMotorHereorwhateveritis("climber.motor");
     }
 
     public void extend() {
