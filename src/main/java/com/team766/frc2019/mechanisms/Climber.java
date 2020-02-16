@@ -7,10 +7,11 @@ import com.team766.hal.CANSpeedController;
 
 public class Climber extends Mechanism {
 
+    // Climber is pneumatics so I'm not sure how that's going to work
+
     private CANSpeedController m_climber;
 
     public Climber() {
-        //m_climber = RobotProvider.instance.getInsertMotorHereorwhateveritis("climber.motor");
     }
 
     public void extend() {

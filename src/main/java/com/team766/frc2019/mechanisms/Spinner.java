@@ -1,33 +1,19 @@
 package com.team766.frc2019.mechanisms;
 
 import com.team766.framework.Mechanism;
-import com.team766.frc2019.Robot;
-import com.team766.hal.CANSpeedController;
 import com.team766.hal.RobotProvider;
-import com.team766.hal.SolenoidController;
-import com.team766.hal.CANSpeedController.ControlMode;
+import com.team766.hal.CANSpeedController;
+
 
 public class Spinner extends Mechanism {
-    
-    private CANSpeedController wheelMotor;
-    private SolenoidController extensionPiston;
-    private SolenoidController stoppingPiston;
+
+    private CANSpeedController m_talon;
 
     public Spinner() {
-        wheelMotor = RobotProvider.instance.getVictorCANMotor("spinner.wheelMotor");
-        extensionPiston = RobotProvider.instance.getSolenoid("spinner.wheelMotor");
-        stoppingPiston = RobotProvider.instance.getSolenoid("spinner.wheelMotor");
+        m_talon = RobotProvider.instance.getTalonCANMotor("spinner.talon");
     }
 
-    public void setWheelPower(double wheelPower) {
-        wheelMotor.set(ControlMode.PercentOutput, wheelPower);
-    }
-
-    public void setExtensionState(boolean newState) {
-        extensionPiston.set(newState);
-    }
-
-    public void setStoppingState(boolean newState) {
-        stoppingPiston.set(newState);
+    public void setPower(double spinnerPower) {
+        m_talon.set(spinnerPower);
     }
 }
