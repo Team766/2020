@@ -37,7 +37,6 @@ public class PathFollower {
      * @param yPosition y position of robot
      * @param lookaheadDistance radius of look ahead distance (values between 12 - 15 are good)
      */
-    // TODO: add errors if path is length of zero
     public Waypoint findLookaheadPoint(ArrayList<Waypoint> path, double xPosition, double yPosition, double lookaheadDistance) {
         for (int i = getPreviousLookaheadPointIndex(); i < path.size() - 1; i++) {
             // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899

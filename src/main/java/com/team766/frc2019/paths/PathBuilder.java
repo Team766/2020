@@ -28,7 +28,7 @@ public class PathBuilder {
         newWaypoints = calculateCurvature(newWaypoints);
         newWaypoints = calculateMaximumVelocities(newWaypoints, 3);
         newWaypoints = calculateTargetVelocities(newWaypoints);
-        newWaypoints = addEndBuffer(newWaypoints, 5);
+        newWaypoints = addEndBuffer(newWaypoints);
 
         return(newWaypoints);
     }
@@ -238,7 +238,7 @@ public class PathBuilder {
      * @param buffer num extra waypoints to add
      * @return input path plus #buffer collinear points
      */
-    public static ArrayList<Waypoint> addEndBuffer(ArrayList<Waypoint> inputPath, int buffer) {
+    public static ArrayList<Waypoint> addEndBuffer(ArrayList<Waypoint> inputPath) {
         double deltaX = inputPath.get(inputPath.size()-1).getX() - inputPath.get(inputPath.size()-2).getX();
         double deltaY = inputPath.get(inputPath.size()-1).getY() - inputPath.get(inputPath.size()-2).getY();
         for (int i = 1000; i < 1001; i++) {
