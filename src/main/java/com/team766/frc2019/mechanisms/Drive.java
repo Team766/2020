@@ -276,9 +276,9 @@ public class Drive extends Mechanism  implements DriveI {
 
         
         if (index % 10 == 0) {
-            SmartDashboard.putNumber("X position", xPosition);
-            SmartDashboard.putNumber("Y position", yPosition);
-            SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
+            SmartDashboard.putNumber("X position",  Math.floor(xPosition * 100) / 100);
+            SmartDashboard.putNumber("Y position", Math.floor(yPosition * 100) / 100);
+            SmartDashboard.putNumber("Gyro angle", Math.floor(currentGyroAngle * 100) / 100);
             // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);

@@ -2,6 +2,8 @@ package com.team766.frc2019.paths;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.team766.frc2019.paths.Waypoint;
 import com.team766.frc2019.paths.Vector;
 
@@ -60,7 +62,8 @@ public class PathFollower {
                 // Point = E + (t value of intersection) * d
                 // if intersection exists find values
                 if (index++ % 50 == 0) {
-                    System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
+                    SmartDashboard.putNumber("X position",  getPreviousLookaheadPointIndex());
+                    // System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
                 }
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection

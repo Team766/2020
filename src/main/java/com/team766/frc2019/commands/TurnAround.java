@@ -2,6 +2,8 @@ package com.team766.frc2019.commands;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.paths.PathBuilder;
@@ -24,11 +26,11 @@ public class TurnAround extends Subroutine {
 
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
-        waypoints.add(new Waypoint(0, 0, 50, 50, 50));
-        waypoints.add(new Waypoint(0, 100, 50, 100, 50));
-        waypoints.add(new Waypoint(100, 100, 50, 100, 50));
-        waypoints.add(new Waypoint(100, 0, 50, 100, 50));
-        waypoints.add(new Waypoint(0, 0, 50, 0, 50));
+        waypoints.add(new Waypoint(0, 0));
+        waypoints.add(new Waypoint(0, 100));
+        waypoints.add(new Waypoint(100, 100));
+        waypoints.add(new Waypoint(100, 0));
+        waypoints.add(new Waypoint(0, 0));
 
         // SQUARE WAYPOINTS
         // waypoints.add(new Waypoint(0, 0, 50, 50, 50));
@@ -52,6 +54,8 @@ public class TurnAround extends Subroutine {
 
         System.out.println(path.size() + " waypoints");
 
+        SmartDashboard.putNumber("number of waypoints", path.size());
+
         PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
         m_turnController.setSetpoint(0.0);
@@ -59,8 +63,9 @@ public class TurnAround extends Subroutine {
         while(!pathFollower.isPathDone()) {
             if (i % 100 == 0) {
                 // System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
-                System.out.printf("heading %.2f steering error angle %.2f pid output %.2f \n", Robot.drive.getGyroAngle(), pathFollower.calculateSteeringError(), m_turnController.getOutput());
-                System.out.println("last closest point index" + pathFollower.getLastClosestPointIndex());
+                // System.out.printf("heading %.2f steering error angle %.2f pid output %.2f \n", Robot.drive.getGyroAngle(), pathFollower.calculateSteeringError(), m_turnController.getOutput());
+                // System.out.println("last closest point index" + pathFollower.getLastClosestPointIndex());
+                SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
                 // System.out.println("lookahead point: " + pathFollower.getLookaheadWaypoint().getX() + ", " + pathFollower.getLookaheadWaypoint().getY());
             }
             i++;
