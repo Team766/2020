@@ -116,10 +116,8 @@ public class Drive extends Mechanism  implements DriveI {
     * Speed will be [-maximumRPM, maximumRPM], depending on joystick input.
     */
     public void setDrive(double leftSetting, double rightSetting) {
-        // m_leftTalon.set(ControlMode.Velocity, leftSetting * maximumRPM * 256 / 600); //RPM times units per rev / 100ms per min
-        // m_rightTalon.set(ControlMode.Velocity, rightSetting * maximumRPM * 256 / 600); //basically converts from RPM to units/100ms for the PID to use
-        m_leftTalon.set(ControlMode.Velocity, leftSetting); //RPM times units per rev / 100ms per min
-        m_rightTalon.set(ControlMode.Velocity, rightSetting); //basically converts from RPM to units/100ms for the PID to use
+        m_leftTalon.set(ControlMode.Velocity, leftSetting * maximumRPM * 256 / 600); //RPM times units per rev / 100ms per min
+        m_rightTalon.set(ControlMode.Velocity, rightSetting * maximumRPM * 256 / 600); //basically converts from RPM to units/100ms for the PID to use
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor) {
