@@ -90,22 +90,22 @@ public class LimeScore extends Subroutine {
         if ((m_joystick1.getRawAxis(1)) < .2) {
             LimeLight.setLedMode(LightMode.eOff);
             LimeLight.setCameraMode(CameraMode.eDriver);
-            Robot.flowerActuator.extend();
+            //Robot.flowerActuator.extend();
             //callSubroutine(new Actuate());
             m_drive.setDrive(.3, .3);
             waitForSeconds(0.6);
             m_drive.setDrive(0, 0);
-            Robot.flowerGripper.extend();
+            //Robot.flowerGripper.extend();
             //callSubroutine(new ExtendGripper());
             //waitForSeconds(0.2);
             //drive.setDrive(-0.3 ,-0.3  , ControlMode.PercentOutput);
             waitForSeconds(0.4);
             //callSubroutine(new ExtendGripper());
-            Robot.flowerActuator.extend();
+            //Robot.flowerActuator.extend();
             //callSubroutine(new Retract());
             m_drive.setDrive(0.0 , 0.0);
         } else if ((!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) && Robot.drive.isAutonomous()) {
-            callSubroutine(new TeleopAuton());
+            //callSubroutine(new TeleopAuton());
         }
         yield();
         return;
