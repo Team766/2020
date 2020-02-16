@@ -91,7 +91,7 @@ public class TurnAround extends Subroutine {
             // } else {
             //     Robot.drive.setDrive(straightPower - turnPower, straightPower + turnPower);
             // }
-            Robot.drive.setDrive(straightPower + turnPower, straightPower - turnPower);
+            Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
             
             // allow odometry and other stuff to happen
             yield();
