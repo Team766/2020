@@ -23,14 +23,15 @@ public class TurnAround extends Subroutine {
 
     protected void subroutine() {
         System.out.println("TurnAround STARTING");
-
+        boolean inverted = false;
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
         waypoints.add(new Waypoint(0, 0));
-        waypoints.add(new Waypoint(0, 100));
-        waypoints.add(new Waypoint(100, 100));
-        waypoints.add(new Waypoint(100, 0));
+        waypoints.add(new Waypoint(0, 50));
+        waypoints.add(new Waypoint(50, 50));
+        waypoints.add(new Waypoint(50, 0));
         waypoints.add(new Waypoint(0, 0));
+
 
         // SQUARE WAYPOINTS
         // waypoints.add(new Waypoint(0, 0, 50, 50, 50));
@@ -71,18 +72,11 @@ public class TurnAround extends Subroutine {
             i++;
 
             pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
-            pathFollower.setHeading(Robot.drive.getGyroAngle());
-
-            // if ((pathFollower.calculateSteeringError() > 90) || (pathFollower.calculateSteeringError() < -90)) {
-            //     Drive.setInvertStatus(true);
-            //     Drive.invertMotors();
-            // }
-            
-            // if (!Drive.getInverted()) { //TODO: Make sure this angle stuff behaves properly (domain of angles and stuff)
-            //     pathFollower.setHeading(Robot.drive.getGyroAngle());
-            // } else {
-            //     pathFollower.setHeading(Robot.drive.getGyroAngle() + 180);
-            // }
+            if (!inverted) { 
+                pathFollower.setHeading(Robot.drive.getGyroAngle());
+            } else {
+                pathFollower.setHeading((Robot.drive.getGyroAngle() + 180) % 360);
+            }
             pathFollower.update();
 
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
@@ -91,12 +85,11 @@ public class TurnAround extends Subroutine {
             // System.out.println("closest point index" + findClosestPointIndex());
             double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
 
-            // if (!Drive.getInverted()) { 
-            //     Robot.drive.setDrive(straightPower + turnPower, straightPower - turnPower);
-            // } else {
-            //     Robot.drive.setDrive(straightPower - turnPower, straightPower + turnPower);
-            // }
-            Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
+            if (!inverted) { 
+                Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
+            } else {
+                Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
+            }       
             
             // allow odometry and other stuff to happen
             yield();
