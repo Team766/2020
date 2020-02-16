@@ -7,6 +7,13 @@ import java.awt.Toolkit;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import java.awt.event.MouseAdapter;
+import com.team766.frc2019.gui.*;
+
+import java.awt.event.MouseEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 class DemoPaint extends JComponent {
 
@@ -17,6 +24,7 @@ class DemoPaint extends JComponent {
     g2.drawImage(picture, 10, 10, this);
     g2.finalize();
   }
+  
 }
 
 
