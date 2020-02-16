@@ -27,41 +27,9 @@ public class OI extends Command {
 	private PreciseTurn m_preciseTurn;
 
 
-	private static int INTAKE_ACTUATE = 2;
-	private static int INTAKE_RETRACT = 1;
-	private static int INTAKE_IN = 3;
-	private static int INTAKE_OUT = 4;
-	private static int ELEVATOR_UP = 10;
-	private static int ELEVATOR_DOWN = 9;
-	private static int UPPER_UP = 21;
-	private static int UPPER_DOWN = 20;
-	private static int LOWER_UP = 19;
-	private static int LOWER_DOWN = 18;
-	private static int ADD_SMALL = 6;
-	private static int SUBTRACT_SMALL = 5;
-	private static int ADD_BIG = 8;
-	private static int SUBTRACT_BIG = 7;
-	private static int CALI_SWITCH = 17;
-	private static int CALI_BUTTON = 16;
-	private static int ELEVATOR_LVL3 = 13;
-	private static int ELEVATOR_LVL2 = 14;
-	private static int ELEVATOR_LVL1 = 15;
 	
 	private double fwd_power = 0;
 	private double turn_power = 0;
-	private double leftPower = 0;
-	private double rightPower = 0;
-
-	private int index = 0;
-
-	private static double MIN_ROBOT_VELOCITY = 2000.0;
-	private static double MAX_ROBOT_VELOCITY = 20000.0;
-	private static double TURN_THRESHOLD = 0.05;
-
-	private boolean addSmallButton = false;
-	private boolean subSmallButton = false;
-	private boolean addBigButton = false;
-	private boolean subBigButton = false;
 
 	public static boolean driverControl = false;
 
@@ -79,8 +47,6 @@ public class OI extends Command {
 	
 	public void run() {
 
-		//System.out.println("joystick1: " + m_joystick1 + "joystick2: " + m_joystick2);
-
 		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.13 ) {
 			fwd_power = 0;
 		} else {
@@ -94,9 +60,8 @@ public class OI extends Command {
 			if (Math.abs(fwd_power) > 0.5) {
 				turn_power = 0.6 * turn_power;
 			}
-
-
 		}
+
 		double normalizer = Math.max(Math.abs(fwd_power),Math.abs(turn_power))/(Math.abs(fwd_power) + Math.abs(turn_power)); // divides both motor powers by the larger one to keep the ratio and keep power at or below 1
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
