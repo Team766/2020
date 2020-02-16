@@ -52,10 +52,11 @@ public class Drive extends Mechanism  implements DriveI {
 
     public Drive() {
 
-        //initializes victors
+        // Initialize victors
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
         m_rightVictor1 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor1");
-        //initialize second victor if it exists
+
+        // Initialize second victors if they exist
         if (ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
             m_secondVictor = true;
             m_leftVictor2 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor2");
@@ -64,15 +65,15 @@ public class Drive extends Mechanism  implements DriveI {
             m_secondVictor = false;
         }
 
-        //initializes talons
+        // Initializes talons
         m_leftTalon = RobotProvider.instance.getTalonCANMotor("drive.leftTalon");
         m_rightTalon = RobotProvider.instance.getTalonCANMotor("drive.rightTalon");
         
-        //initializes gyro
+        // Initialize gyro
         m_gyro = RobotProvider.instance.getGyro("drive.gyro");
         m_gyroDirection = ConfigFileReader.getInstance().getDouble("drive.gyroDirection").get();
         
-        //configures the motors
+        // Configure the motors, Set inversion
         m_leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         m_rightTalon.setInverted(true);
@@ -81,12 +82,12 @@ public class Drive extends Mechanism  implements DriveI {
             m_rightVictor2.setInverted(true);
         }
 
-        // left true right false for new, both false for mule and marie
-        //inverts sensors
+        // Left true right false for new robot, both false for mule and marie
+        // Invert sensors
         m_leftTalon.setSensorPhase(false);
         m_rightTalon.setSensorPhase(false);
 
-        //configures pid
+        // Configure pid
         m_leftTalon.config_kF(0, MF, 0);
         m_leftTalon.config_kP(0, MP, 0);
         m_leftTalon.config_kI(0, MI, 0);
@@ -96,7 +97,7 @@ public class Drive extends Mechanism  implements DriveI {
         m_rightTalon.config_kI(0, MI, 0);
         m_rightTalon.config_kD(0, MD, 0);
 
-        //sets resting modes for robot
+        // Set resting modes for robot
         m_leftTalon.setNeutralMode(NeutralMode.Brake);
         m_rightTalon.setNeutralMode(NeutralMode.Brake);
         m_leftTalon.configOpenLoopRamp(0.25, 0);
@@ -128,6 +129,26 @@ public class Drive extends Mechanism  implements DriveI {
         }
         SmartDashboard.putNumber("Left Motor Input", leftSetting * maximumRPM * 256 / 600);
         SmartDashboard.putNumber("Right Motor Input", rightSetting * maximumRPM * 256 / 600);
+    }
+
+    public void arcadeDrive(double fwdPower, double turnPower) {
+        double maximum = Math.max(Math.abs(fwdPower), Math.abs(turnPower));
+        double total = fwdPower + turnPower;
+        double difference = fwdPower - turnPower;
+
+        if (fwdPower >= 0) {
+            if (turnPower >= 0) {
+                setDrive(maximum, difference);
+            } else {
+                setDrive(total, maximum);
+            }
+        } else {
+            if (turnPower >= 0) {
+                setDrive(total, -maximum);
+            } else {
+                setDrive(-maximum, difference);
+            }
+        }
     }
 
     public boolean isEnabled() {
