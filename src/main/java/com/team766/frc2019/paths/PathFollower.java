@@ -154,7 +154,7 @@ public class PathFollower {
     }
 
     public boolean isPathDone() {
-        if (this.getLastClosestPointIndex() >= (getPath().size() - 5)) {
+        if (this.getLastClosestPointIndex() >= (getPath().size() - 2)) {
             return true;
         } else {
             return false;

@@ -241,7 +241,7 @@ public class PathBuilder {
     public static ArrayList<Waypoint> addEndBuffer(ArrayList<Waypoint> inputPath, int buffer) {
         double deltaX = inputPath.get(inputPath.size()-1).getX() - inputPath.get(inputPath.size()-2).getX();
         double deltaY = inputPath.get(inputPath.size()-1).getY() - inputPath.get(inputPath.size()-2).getY();
-        for (int i = 0; i < buffer; i++) {
+        for (int i = 1000; i < 1001; i++) {
             inputPath.add(new Waypoint(inputPath.get(inputPath.size()-1).getX() + i*deltaX, inputPath.get(inputPath.size()-1).getY() + i*deltaY));
          }
         return inputPath;
