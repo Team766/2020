@@ -23,7 +23,7 @@ public class PreciseTurn extends Subroutine {
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-        //takeControl(Robot.drive);
+        takeControl(Robot.drive);
     }
     
     protected void subroutine() {
@@ -36,14 +36,6 @@ public class PreciseTurn extends Subroutine {
         while((!(Robot.drive.isTurnDone(m_turnController)) && Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
             m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
             power = m_turnController.getOutput();
-            
-            /*if ((Math.abs(power) < Robot.drive.MIN_TURN_SPEED)) { //|| Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle) > 90) { yarden wtf is this
-                if (power < 0) {
-                    power = -Robot.drive.MIN_TURN_SPEED;
-                } else {
-                    power = Robot.drive.MIN_TURN_SPEED;
-                }
-            } should be accurate at low powers anyway*/
 
             Robot.drive.setDrive(-power, power);
 
@@ -59,14 +51,14 @@ public class PreciseTurn extends Subroutine {
                 return;
             }
         }
-        if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
-            //callSubroutine(new TeleopAuton());
-        }
+        // if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
+        //     //callSubroutine(new TeleopAuton());
+        // }
         Robot.drive.setDrive(0.0, 0.0);
-        Robot.drive.resetEncoders();
+        // Robot.drive.resetEncoders();
         yield();
         turning = false;
-        System.out.println("exited loop");
+        // System.out.println("exited loop");
         return;
     }
 }

@@ -12,6 +12,7 @@ import com.team766.frc2019.paths.Waypoint;
 import com.team766.hal.RobotProvider;
 import com.team766.controllers.PIDController;
 import com.team766.frc2019.mechanisms.Drive;
+import com.team766.frc2019.commands.PreciseTurn;
 
 // import com.team766.frc2019.mechanisms.LimeLightI;
 // import com.team766.hal.RobotProvider;
@@ -24,6 +25,7 @@ public class TurnAround extends Subroutine {
     protected void subroutine() {
         System.out.println("TurnAround STARTING");
         boolean inverted = false;
+        double endOrientation;
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
         waypoints.add(new Waypoint(0, 0));
@@ -31,7 +33,7 @@ public class TurnAround extends Subroutine {
         waypoints.add(new Waypoint(50, 50));
         waypoints.add(new Waypoint(50, 0));
         waypoints.add(new Waypoint(0, 0));
-
+        endOrientation = 0;
 
         // SQUARE WAYPOINTS
         // waypoints.add(new Waypoint(0, 0, 50, 50, 50));
@@ -96,5 +98,7 @@ public class TurnAround extends Subroutine {
         }
         Robot.drive.setDrive(0, 0);
         System.out.println("path followed");
+        // PreciseTurn(endOrientation);  WHAT IS GOING ON IN THAT????????
+        System.out.println("final orientated");
     }
 }

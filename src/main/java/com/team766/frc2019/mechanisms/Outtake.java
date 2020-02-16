@@ -21,11 +21,7 @@ public class Outtake extends Mechanism {
     private final double THRESHOLD = 0.25;
     private final double idlePower = 0;
 
-    // SmartDashboard.putNumber("Outtake P",  P);
-    // SmartDashboard.putNumber("Outtake I",  I);
-    // SmartDashboard.putNumber("Outtake D",  D);
-    // SmartDashboard.putNumber("Outtake Threshold",  THRESHOLD);
-
+    // SmartDashboard.putNumber("Outtake bla",  bla);
 
     public Outtake() {
         m_talon1 = RobotProvider.instance.getTalonCANMotor("outtake.talon1");
