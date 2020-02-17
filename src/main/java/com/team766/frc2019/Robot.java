@@ -4,6 +4,7 @@ import com.team766.framework.AutonomousCommandUtils;
 import com.team766.framework.Command;
 import com.team766.frc2019.mechanisms.Drive;
 import com.team766.frc2019.mechanisms.LimeLight;
+import com.team766.frc2019.mechanisms.Waterwheel;
 import com.team766.hal.MyRobot;
 import com.team766.hal.mock.Gyro;
 import com.team766.web.AutonomousSelector;
@@ -14,6 +15,7 @@ public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
 	public static LimeLight limeLight;
+	public static Waterwheel waterWheel;
 
 	public static OI m_oi;
 	
@@ -26,6 +28,7 @@ public class Robot extends MyRobot {
 		// Initialize mechanisms here
 		drive = new Drive();
 		limeLight = new LimeLight();
+		waterWheel = new Waterwheel();
 		
 		//auton picker
 		m_webServer = new WebServer();
