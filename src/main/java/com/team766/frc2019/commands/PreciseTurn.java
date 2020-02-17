@@ -23,7 +23,7 @@ public class PreciseTurn extends Subroutine {
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;
         m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-        takeControl(Robot.drive);
+        // takeControl(Robot.drive);
     }
     
     protected void subroutine() {
@@ -58,7 +58,7 @@ public class PreciseTurn extends Subroutine {
         // Robot.drive.resetEncoders();
         yield();
         turning = false;
-        // System.out.println("exited loop");
+        System.out.println("exited loop");
         return;
     }
 }

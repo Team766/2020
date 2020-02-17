@@ -15,7 +15,6 @@ import com.team766.frc2019.paths.PathWebSocketServer;
 import com.team766.hal.RobotProvider;
 import com.team766.controllers.PIDController;
 import com.team766.frc2019.mechanisms.Drive;
-import com.team766.frc2019.commands.PreciseTurn;
 
 // import com.team766.frc2019.mechanisms.LimeLightI;
 // import com.team766.hal.RobotProvider;
@@ -25,14 +24,14 @@ public class TurnAround extends Subroutine {
     protected void subroutine() {
         System.out.println("TurnAround STARTING");
 	        
-        boolean inverted = false;
+        boolean inverted = true;
         double endOrientation;
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
         waypoints.add(new Waypoint(0, 0));
-        waypoints.add(new Waypoint(0, 25));
-        waypoints.add(new Waypoint(25, 25));
-        waypoints.add(new Waypoint(25, 0));
+        waypoints.add(new Waypoint(0, -25));
+        waypoints.add(new Waypoint(-25, -25));
+        waypoints.add(new Waypoint(-25, 0));
         waypoints.add(new Waypoint(0, 0));
         endOrientation = 0;
 
@@ -83,6 +82,9 @@ public class TurnAround extends Subroutine {
             pathFollower.update();
 
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
+
+            System.out.println("steering error " + pathFollower.calculateSteeringError());
+
             double turnPower = m_turnController.getOutput() * 500;
             // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
             // System.out.println("closest point index" + findClosestPointIndex());
@@ -99,7 +101,46 @@ public class TurnAround extends Subroutine {
         }
         Robot.drive.setDrive(0, 0);
         System.out.println("path followed");
-        // PreciseTurn(endOrientation);  WHAT IS GOING ON IN THAT????????
+        callSubroutine(new PreciseTurn(endOrientation));
+        // PreciseTurn(endOrientation); 
         System.out.println("final orientated");
     }
+
+
+// why did i put this here? bruh
+	// private void PreciseTurn(double endOrientation) {
+    //     PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+    //     boolean turning = true;
+    //     double power = 0;
+    //     double m_turnAngle = endOrientation;
+    //     System.out.println("hey im gonna turn");
+    //     m_turnController.setSetpoint(0.0);
+    //     m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
+    //     while((!(Robot.drive.isTurnDone(m_turnController)))) {
+    //         m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
+    //         power = m_turnController.getOutput();
+
+    //         Robot.drive.setDrive(-power, power);
+
+    //         SmartDashboard.putNumber("Current Angle", Robot.drive.getGyroAngle());
+    //         SmartDashboard.putNumber("Target Angle", m_turnAngle);
+    //         SmartDashboard.putNumber("Angle Difference", Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle));
+    //         SmartDashboard.putNumber("PID Output", m_turnController.getOutput());
+
+    //         if (!Robot.drive.isEnabled()){
+    //             turning = false;
+    //             Robot.drive.nukeRobot();
+    //             yield();
+    //             return;
+    //         }
+    //     }
+    //     // if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
+    //     //     //callSubroutine(new TeleopAuton());
+    //     // }
+    //     Robot.drive.setDrive(0.0, 0.0);
+    //     // Robot.drive.resetEncoders();
+    //     yield();
+    //     turning = false;
+    //     System.out.println("exited loop");
+	// }
 }
