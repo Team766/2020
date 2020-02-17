@@ -1,7 +1,7 @@
 package com.team766;
 
 import com.team766.framework.AutonomousCommandUtils;
-import com.team766.frc2020.AutonomousModes;
+import com.team766.frc2019.AutonomousModes;
 
 import org.junit.Test;
 
