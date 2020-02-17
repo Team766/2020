@@ -98,5 +98,6 @@ public class PathRunner extends Subroutine {
         System.out.println("path followed");
         callSubroutine(new PreciseTurn(endOrientation));
         System.out.println("final orientated");
+        callSubroutine(new PathRunner());
     }
 }

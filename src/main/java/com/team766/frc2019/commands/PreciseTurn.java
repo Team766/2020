@@ -22,7 +22,10 @@ public class PreciseTurn extends Subroutine {
     //default constructor that sets values for the instance of the subiroutine
     public PreciseTurn(double turnAngle) {
         m_turnAngle = turnAngle;
-        m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+        m_turnController = new PIDController(0.001, 0.001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+        // TODO: change these hard coded PID values when we start doing the tuning 
+        // (note I hard coded because there was a problem with overshooting and the robot 
+        // just thinking it's done and not taking into account inertia that makes it keep going after ending)
         // takeControl(Robot.drive);
     }
     
@@ -51,9 +54,7 @@ public class PreciseTurn extends Subroutine {
                 return;
             }
         }
-        // if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
-        //     //callSubroutine(new TeleopAuton());
-        // }
+
         Robot.drive.setDrive(0.0, 0.0);
         // Robot.drive.resetEncoders();
         yield();
