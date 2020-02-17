@@ -2,18 +2,27 @@ package com.team766.frc2019.mechanisms;
 
 import com.team766.framework.Mechanism;
 import com.team766.hal.RobotProvider;
+import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.hal.CANSpeedController;
+import com.team766.hal.DigitalInputReader;
 import com.team766.hal.SolenoidController;
 
 
-public class WaterWheel extends Mechanism {
+public class Waterwheel extends Mechanism {
 
     private CANSpeedController m_talon;
     private SolenoidController m_ballPusher;
 
-    public WaterWheel() {
+    private CANSpeedController m_wheelMotor;
+    private DigitalInputReader wheelLimitSwitch;    
+
+
+    public Waterwheel() {
         m_talon = RobotProvider.instance.getTalonCANMotor("waterwheel.talon");
         m_ballPusher = RobotProvider.instance.getSolenoid("waterwheel.pusher");
+
+        m_wheelMotor = RobotProvider.instance.getTalonCANMotor("waterwheel.motor");
+        wheelLimitSwitch = RobotProvider.instance.getDigitalInput("waterwheel.limitswitch");
     }
 
     public void setPower(double wheelPower) {
@@ -26,5 +35,17 @@ public class WaterWheel extends Mechanism {
 
     public void retractPusher() {
         m_ballPusher.set(false);
+    }
+
+    public double getWheelPosition() {
+        return m_wheelMotor.getSensorPosition();
+    }
+
+    public double getWheelVelocity() {
+        return m_wheelMotor.getSensorVelocity();
+    }
+
+    public void setWheelVelocity(double wheelVelocity) {
+        m_wheelMotor.set(ControlMode.Velocity, wheelVelocity);
     }
 }

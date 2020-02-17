@@ -43,7 +43,6 @@ public class NextBall extends Subroutine {
 
             System.out.println("Wheel velocity: " + waterWheel.getWheelVelocity() + " Velocity difference: " + velocityDifference); 
             waterWheel.setWheelVelocity(motionProfile.getVelocityAtTime(currentTime) + velocityDifference);
-            
 
         }
 
