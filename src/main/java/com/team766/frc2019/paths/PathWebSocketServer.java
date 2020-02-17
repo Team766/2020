@@ -6,10 +6,18 @@ import java.nio.ByteBuffer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import java.util.ArrayList;
+import com.team766.frc2019.paths.Waypoint;
 
 public class PathWebSocketServer extends WebSocketServer {
-	public PathWebSocketServer(InetSocketAddress address) {
-		super(address);
+    ArrayList<Waypoint> path;
+	public PathWebSocketServer(InetSocketAddress address, ArrayList<Waypoint> path) {
+        super(address);
+        this.path = path;
+    }
+    
+    public PathWebSocketServer(InetSocketAddress address) {
+        super(address);
 	}
 
 	@Override
@@ -18,6 +26,25 @@ public class PathWebSocketServer extends WebSocketServer {
 		// broadcast( "new connection: " + handshake.getResourceDescriptor() ); //This method sends a message to all clients connected
 		System.out.println("new connection to " + conn.getRemoteSocketAddress());
         // broadcast("hello333");
+
+        broadcastPath(path);
+    }
+
+    public void broadcastPath(ArrayList<Waypoint> path) {
+        String pathString = "";
+
+        pathString += "{\"path\": [";
+        
+        for (int i = 0; i < path.size(); i++) {
+            pathString += "{\"x\": " + path.get(i).getX() + ", \"y\": " + path.get(i).getY() + "}";
+            if (i != (path.size() - 1)) {
+                pathString += ",";
+            }
+        }
+
+        pathString += "]}";
+
+        broadcast(pathString);
     }
 
     @Override
