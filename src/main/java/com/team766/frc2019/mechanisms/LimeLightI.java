@@ -1,6 +1,6 @@
-package com.team766.frc2020.mechanisms;
+package com.team766.frc2019.mechanisms;
 
-import com.team766.frc2020.Robot;
+import com.team766.frc2019.Robot;
 
 public interface LimeLightI {
     boolean isTarget();

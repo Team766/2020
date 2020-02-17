@@ -1,4 +1,4 @@
-package com.team766.frc2020.paths;
+package com.team766.frc2019.paths;
 
 /**
  * A waypoint along a path. Contains a position, radius (for creating curved

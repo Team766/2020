@@ -1,12 +1,12 @@
-package com.team766.frc2020;
+package com.team766.frc2019;
 
 //import static org.junit.Assume.assumeTrue;
 
 import com.team766.framework.Command;
-import com.team766.frc2020.Robot;
-import com.team766.frc2020.commands.LimePickup;
-import com.team766.frc2020.commands.LimeScore;
-import com.team766.frc2020.commands.PreciseTurn;
+import com.team766.frc2019.Robot;
+import com.team766.frc2019.commands.LimePickup;
+import com.team766.frc2019.commands.LimeScore;
+import com.team766.frc2019.commands.PreciseTurn;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
