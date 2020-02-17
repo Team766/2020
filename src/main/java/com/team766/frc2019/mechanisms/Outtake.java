@@ -52,12 +52,6 @@ public class Outtake extends Mechanism {
     }
 
     public double[] distanceNeeded45Degrees(double velocity){
-        double[] distances = new double[2];
-        double acc = -9.80665;
-        double InitialVy = velocity * Math.sin(Math.PI / 2);
-        double[] timesToHeight = {((-InitialVy + Math.sqrt(Math.pow(InitialVy, 2) + 2 * acc * height_meters))/acc), ((-InitialVy - Math.sqrt(Math.pow(InitialVy, 2) + 2 * acc * height_meters))/acc)};
-        distances[0] = timesToHeight[0] * velocity * Math.cos(Math.PI / 2);
-        distances[1] = timesToHeight[1] * velocity * Math.cos(Math.PI / 2);
-        return distances;
+        return distanceNeeded(velocity, Math.PI / 4);
     }
 }
