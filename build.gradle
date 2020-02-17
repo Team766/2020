@@ -52,7 +52,11 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     testCompile 'junit:junit:4.12'
+    compile "org.java-websocket:Java-WebSocket:1.4.0"
+
 }
+    // compile 'javax.websocket:javax.websocket-api:1.1'
+
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
 // in order to make them all available at runtime. Also adding the manifest so WPILib

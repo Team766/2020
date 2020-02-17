@@ -1,10 +1,10 @@
-package com.team766.frc2019.paths;
+package com.team766.frc2020.paths;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Math;
 
-import com.team766.frc2019.paths.Waypoint;
+import com.team766.frc2020.paths.Waypoint;
 
 /**
  * Build paths from a few waypoints to use with path following
@@ -28,7 +28,7 @@ public class PathBuilder {
         newWaypoints = calculateCurvature(newWaypoints);
         newWaypoints = calculateMaximumVelocities(newWaypoints, 3);
         newWaypoints = calculateTargetVelocities(newWaypoints);
-        newWaypoints = addEndBuffer(newWaypoints, 5);
+        newWaypoints = addEndBuffer(newWaypoints);
 
         return(newWaypoints);
     }
@@ -238,10 +238,10 @@ public class PathBuilder {
      * @param buffer num extra waypoints to add
      * @return input path plus #buffer collinear points
      */
-    public static ArrayList<Waypoint> addEndBuffer(ArrayList<Waypoint> inputPath, int buffer) {
+    public static ArrayList<Waypoint> addEndBuffer(ArrayList<Waypoint> inputPath) {
         double deltaX = inputPath.get(inputPath.size()-1).getX() - inputPath.get(inputPath.size()-2).getX();
         double deltaY = inputPath.get(inputPath.size()-1).getY() - inputPath.get(inputPath.size()-2).getY();
-        for (int i = 0; i < buffer; i++) {
+        for (int i = 1000; i < 1001; i++) {
             inputPath.add(new Waypoint(inputPath.get(inputPath.size()-1).getX() + i*deltaX, inputPath.get(inputPath.size()-1).getY() + i*deltaY));
          }
         return inputPath;
