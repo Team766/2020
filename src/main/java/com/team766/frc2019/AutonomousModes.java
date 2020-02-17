@@ -5,7 +5,6 @@ import com.team766.frc2019.commands.*;
 
 public enum AutonomousModes {
     @AutonomousCommand(commandClass = TurnAround.class) TurnAround,
-    @AutonomousCommand(commandClass = PreciseTurn.class) PreciseTurn,
     @AutonomousCommand(commandClass = WebSocketTest.class) WebSocketTest,
 
 }

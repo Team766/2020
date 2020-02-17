@@ -1,17 +1,12 @@
 package com.team766.frc2019.commands;
 
 import java.util.ArrayList;
-import java.net.InetSocketAddress;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.java_websocket.server.WebSocketServer;
-
 import com.team766.framework.Subroutine;
 import com.team766.frc2019.Robot;
 import com.team766.frc2019.paths.PathBuilder;
 import com.team766.frc2019.paths.PathFollower;
 import com.team766.frc2019.paths.Waypoint;
-import com.team766.frc2019.paths.PathWebSocketServer;
 import com.team766.hal.RobotProvider;
 import com.team766.controllers.PIDController;
 import com.team766.frc2019.mechanisms.Drive;
@@ -33,7 +28,7 @@ public class TurnAround extends Subroutine {
         waypoints.add(new Waypoint(-25, -25));
         waypoints.add(new Waypoint(-25, 0));
         waypoints.add(new Waypoint(0, 0));
-        endOrientation = 0;
+        endOrientation = Robot.drive.getGyroAngle();
 
         // SQUARE WAYPOINTS
         // waypoints.add(new Waypoint(0, 0, 50, 50, 50));
@@ -102,45 +97,6 @@ public class TurnAround extends Subroutine {
         Robot.drive.setDrive(0, 0);
         System.out.println("path followed");
         callSubroutine(new PreciseTurn(endOrientation));
-        // PreciseTurn(endOrientation); 
         System.out.println("final orientated");
     }
-
-
-// why did i put this here? bruh
-	// private void PreciseTurn(double endOrientation) {
-    //     PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-    //     boolean turning = true;
-    //     double power = 0;
-    //     double m_turnAngle = endOrientation;
-    //     System.out.println("hey im gonna turn");
-    //     m_turnController.setSetpoint(0.0);
-    //     m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
-    //     while((!(Robot.drive.isTurnDone(m_turnController)))) {
-    //         m_turnController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle), true);
-    //         power = m_turnController.getOutput();
-
-    //         Robot.drive.setDrive(-power, power);
-
-    //         SmartDashboard.putNumber("Current Angle", Robot.drive.getGyroAngle());
-    //         SmartDashboard.putNumber("Target Angle", m_turnAngle);
-    //         SmartDashboard.putNumber("Angle Difference", Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_turnAngle));
-    //         SmartDashboard.putNumber("PID Output", m_turnController.getOutput());
-
-    //         if (!Robot.drive.isEnabled()){
-    //             turning = false;
-    //             Robot.drive.nukeRobot();
-    //             yield();
-    //             return;
-    //         }
-    //     }
-    //     // if (!(Math.abs(m_joystick1.getRawAxis(1)) < .2)) {
-    //     //     //callSubroutine(new TeleopAuton());
-    //     // }
-    //     Robot.drive.setDrive(0.0, 0.0);
-    //     // Robot.drive.resetEncoders();
-    //     yield();
-    //     turning = false;
-    //     System.out.println("exited loop");
-	// }
 }
