@@ -1,9 +1,11 @@
-package com.team766.frc2019.paths;
+package com.team766.frc2020.paths;
 
 import java.util.ArrayList;
 
-import com.team766.frc2019.paths.Waypoint;
-import com.team766.frc2019.paths.Vector;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.team766.frc2020.paths.Waypoint;
+import com.team766.frc2020.paths.Vector;
 
 public class PathFollower {
     private ArrayList<Waypoint> path = new ArrayList<Waypoint>();
@@ -35,7 +37,6 @@ public class PathFollower {
      * @param yPosition y position of robot
      * @param lookaheadDistance radius of look ahead distance (values between 12 - 15 are good)
      */
-    // TODO: add errors if path is length of zero
     public Waypoint findLookaheadPoint(ArrayList<Waypoint> path, double xPosition, double yPosition, double lookaheadDistance) {
         for (int i = getPreviousLookaheadPointIndex(); i < path.size() - 1; i++) {
             // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899
@@ -60,7 +61,8 @@ public class PathFollower {
                 // Point = E + (t value of intersection) * d
                 // if intersection exists find values
                 if (index++ % 50 == 0) {
-                    System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
+                    SmartDashboard.putNumber("X position",  getPreviousLookaheadPointIndex());
+                    // System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
                 }
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection
@@ -154,7 +156,7 @@ public class PathFollower {
     }
 
     public boolean isPathDone() {
-        if (this.getLastClosestPointIndex() >= (getPath().size() - 5)) {
+        if (this.getLastClosestPointIndex() >= (getPath().size() - 2)) {
             return true;
         } else {
             return false;
