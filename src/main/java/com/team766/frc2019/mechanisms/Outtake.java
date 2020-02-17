@@ -67,4 +67,15 @@ public class Outtake extends Mechanism {
         setPower(idlePower, idlePower);
     }
 
+    /**
+     * 
+     * @param distance inches away from target
+     * @return power to send to motors
+     */
+    public double calculateVelocity(double distance) {
+        double k = 0.1; // constantMuliplier TODO: make a real calculation for this stuff
+        double output = distance * k;
+        return output;
+    }
+
 }

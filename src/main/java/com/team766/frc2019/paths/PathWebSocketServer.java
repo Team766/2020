@@ -25,24 +25,17 @@ public class PathWebSocketServer extends WebSocketServer {
 		// conn.send("Welcome to the server!"); //This method sends a message to the new client
 		// broadcast( "new connection: " + handshake.getResourceDescriptor() ); //This method sends a message to all clients connected
 		System.out.println("new connection to " + conn.getRemoteSocketAddress());
-        // broadcast("hello333");
-
         broadcastPath(path);
     }
 
     public void broadcastPath(ArrayList<Waypoint> path) {
         String pathString = "";
-
         pathString += "{\"path\": [";
         
         for (int i = 0; i < path.size(); i++) {
-            pathString += "{\"x\": " + path.get(i).getX() + ", \"y\": " + path.get(i).getY() + "}";
-            if (i != (path.size() - 1)) {
-                pathString += ",";
-            }
+            pathString += "{\"x\": " + path.get(i).getX() + ", \"y\": " + path.get(i).getY() + "},";
         }
-
-        pathString += "]}";
+        pathString = pathString.substring(0, pathString.length()-1) + "]}";
 
         broadcast(pathString);
     }

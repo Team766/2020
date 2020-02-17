@@ -14,7 +14,6 @@ import com.team766.hal.RobotProvider;
 import com.team766.controllers.PIDController;
 import com.team766.frc2019.mechanisms.Drive;
 import com.team766.frc2019.paths.PathWebSocketServer;
-
 // import com.team766.frc2019.mechanisms.LimeLightI;
 // import com.team766.hal.RobotProvider;
 
@@ -111,10 +110,10 @@ public class PathRunner extends Subroutine {
 
         // continues to print position
         while(true) {   
-            pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
-            pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
+            if (i % 15 == 0) {
+                pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
+                pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
+            }
         }
     }
-
-
 }
