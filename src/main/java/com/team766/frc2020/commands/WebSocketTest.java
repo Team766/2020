@@ -1,11 +1,11 @@
-package com.team766.frc2019.commands;
+package com.team766.frc2020.commands;
 
 import java.net.InetSocketAddress;
 import com.team766.framework.Subroutine;
-import com.team766.frc2019.paths.PathWebSocketServer;
+import com.team766.frc2020.paths.PathWebSocketServer;
 import org.java_websocket.server.WebSocketServer;
 
-import com.team766.frc2019.Robot;
+import com.team766.frc2020.Robot;
 
 public class WebSocketTest extends Subroutine {
     @Override

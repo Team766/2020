@@ -1,4 +1,4 @@
-package com.team766.frc2019.paths;
+package com.team766.frc2020.paths;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -7,7 +7,7 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import java.util.ArrayList;
-import com.team766.frc2019.paths.Waypoint;
+import com.team766.frc2020.paths.Waypoint;
 
 public class PathWebSocketServer extends WebSocketServer {
     ArrayList<Waypoint> path;

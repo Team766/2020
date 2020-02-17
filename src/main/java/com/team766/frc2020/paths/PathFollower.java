@@ -1,11 +1,11 @@
-package com.team766.frc2019.paths;
+package com.team766.frc2020.paths;
 
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.team766.frc2019.paths.Waypoint;
-import com.team766.frc2019.paths.Vector;
+import com.team766.frc2020.paths.Waypoint;
+import com.team766.frc2020.paths.Vector;
 
 public class PathFollower {
     private ArrayList<Waypoint> path = new ArrayList<Waypoint>();

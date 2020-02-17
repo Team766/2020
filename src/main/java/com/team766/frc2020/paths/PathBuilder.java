@@ -1,10 +1,10 @@
-package com.team766.frc2019.paths;
+package com.team766.frc2020.paths;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Math;
 
-import com.team766.frc2019.paths.Waypoint;
+import com.team766.frc2020.paths.Waypoint;
 
 /**
  * Build paths from a few waypoints to use with path following
