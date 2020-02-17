@@ -17,7 +17,13 @@ public class PathWebSocketServer extends WebSocketServer {
 		conn.send("Welcome to the server!"); //This method sends a message to the new client
 		broadcast( "new connection: " + handshake.getResourceDescriptor() ); //This method sends a message to all clients connected
 		System.out.println("new connection to " + conn.getRemoteSocketAddress());
-	}
+        broadcast("hello333");
+    }
+
+    @Override
+    public void broadcast(String text) {
+        super.broadcast(text);
+    }
 
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
@@ -42,7 +48,7 @@ public class PathWebSocketServer extends WebSocketServer {
 	@Override
 	public void onStart() {
 		System.out.println("server started successfully");
-	}
+    }
 }
 
 // import java.io.IOException;
