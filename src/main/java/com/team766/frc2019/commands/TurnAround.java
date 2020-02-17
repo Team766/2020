@@ -30,9 +30,9 @@ public class TurnAround extends Subroutine {
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
         waypoints.add(new Waypoint(0, 0));
-        waypoints.add(new Waypoint(0, 50));
-        waypoints.add(new Waypoint(50, 50));
-        waypoints.add(new Waypoint(50, 0));
+        waypoints.add(new Waypoint(0, 25));
+        waypoints.add(new Waypoint(25, 25));
+        waypoints.add(new Waypoint(25, 0));
         waypoints.add(new Waypoint(0, 0));
         endOrientation = 0;
 
