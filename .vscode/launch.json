@@ -6,6 +6,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - DrawImageGraphics",
+      "request": "launch",
+      "mainClass": "com.team766.frc2019.gui.DrawImageGraphics",
+      "projectName": "2020"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - DrawImageGraphics",
+      "request": "launch",
+      "mainClass": "com.team766.frc2019.paths.DrawImageGraphics",
+      "projectName": "2020"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - gui",
+      "request": "launch",
+      "mainClass": "com.team766.frc2019.paths.gui",
+      "projectName": "2020"
+    },
+    {
+      "type": "java",
       "name": "Maroon Simulator",
       "request": "launch",
       "mainClass": "com.team766.hal.simulator.RobotMain",
