@@ -276,9 +276,9 @@ public class Drive extends Mechanism  implements DriveI {
         return yPosition;
     }
 
-    public double getAngle() {
-        return heading;
-    }
+    // public double getAngle() {
+    //     return heading;
+    // }
 
     @Override
     public void run() {    

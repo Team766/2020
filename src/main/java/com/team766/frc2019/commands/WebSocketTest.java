@@ -12,16 +12,22 @@ public class WebSocketTest extends Subroutine {
     protected void subroutine() {
         System.out.println("websockettest STARTING");
 
-        WebSocketServer pathWebsocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
+        WebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
         
-        pathWebsocketServer.start();
+        pathWebSocketServer.start();
 
         int i = 0;
+
+
+
         while(true) {
             if (i % 100 == 0){
-                System.out.println("broadcasted");
+                System.out.println("broadcasted " + i);
+                System.out.println("heading " + Robot.drive.getGyroAngle());
             }
-            pathWebsocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
+            i++;
+            pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
+            pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
             yield();
         }  
     }
