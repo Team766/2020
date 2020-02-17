@@ -22,7 +22,6 @@ public class PathRunner extends Subroutine {
     protected void subroutine() {
         System.out.println("PathRunner STARTING");
         PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
-        
         pathWebSocketServer.start();
 	        
         boolean inverted = true;
@@ -48,7 +47,7 @@ public class PathRunner extends Subroutine {
         for (int i = 0; i < path.size(); i++) {
             System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")");
         }
-        // make sure to pick waypoints or path correctly if testing
+
         PathFollower pathFollower = new PathFollower(path);
 
         pathWebSocketServer.broadcastPath(path);
@@ -72,7 +71,8 @@ public class PathRunner extends Subroutine {
                 // TODO: refactor these into own functions
                 pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
                 pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
-                
+                pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
+                pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
 
                 System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
@@ -84,11 +84,11 @@ public class PathRunner extends Subroutine {
             } else {
                 pathFollower.setHeading((Robot.drive.getGyroAngle() + 180) % 360);
             }
+
             pathFollower.update();
-
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
-
             double turnPower = m_turnController.getOutput() * 500;
+
             // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
             // System.out.println("closest point index" + findClosestPointIndex());
             double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
@@ -99,11 +99,10 @@ public class PathRunner extends Subroutine {
             //     Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
             // }
 
-            
             // allow odometry and other stuff to happen
             yield();
         }
-        // Robot.drive.setDrive(0, 0);
+        Robot.drive.setDrive(0, 0);
         System.out.println("path followed");
         // callSubroutine(new PreciseTurn(endOrientation));
         System.out.println("final orientated");
