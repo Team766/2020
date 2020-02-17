@@ -17,7 +17,7 @@ import com.team766.frc2019.mechanisms.Drive;
 public class PathRunner extends Subroutine {
 
     protected void subroutine() {
-        System.out.println("TurnAround STARTING");
+        System.out.println("PathRunner STARTING");
 	        
         boolean inverted = true;
         double endOrientation;
@@ -38,24 +38,16 @@ public class PathRunner extends Subroutine {
         // waypoints.add(new Waypoint(0, 0, 50, 0, 50));
 
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
-
         path = PathBuilder.buildPath(waypoints);
-
         for (int i = 0; i < path.size(); i++) {
             System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")");
         }
-
         // make sure to pick waypoints or path correctly if testing
         PathFollower pathFollower = new PathFollower(path);
 
-        System.out.println("path built");
-
         System.out.println(path.size() + " waypoints");
-
         SmartDashboard.putNumber("number of waypoints", path.size());
-
         PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-
         m_turnController.setSetpoint(0.0);
         int i = 0;
         while(!pathFollower.isPathDone()) {
@@ -100,4 +92,6 @@ public class PathRunner extends Subroutine {
         System.out.println("final orientated");
         callSubroutine(new PathRunner());
     }
+
+
 }
