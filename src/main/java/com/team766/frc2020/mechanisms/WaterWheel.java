@@ -15,10 +15,10 @@ public class Waterwheel extends Mechanism {
     private DigitalInputReader wheelLimitSwitch;
 
     public Waterwheel() {
-        m_talon = RobotProvider.instance.getTalonCANMotor("waterwheel.talon");
+        //m_talon = RobotProvider.instance.getTalonCANMotor("waterwheel.talon");
         m_ballPusher = RobotProvider.instance.getSolenoid("waterwheel.pusher");
         m_wheelMotor = RobotProvider.instance.getTalonCANMotor("waterwheel.motor");
-        wheelLimitSwitch = RobotProvider.instance.getDigitalInput("waterwheel.limitswitch");
+        //wheelLimitSwitch = RobotProvider.instance.getDigitalInput("waterwheel.limitswitch");
     }
 
     public void setWheelPower(double wheelPower) {
