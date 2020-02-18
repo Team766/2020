@@ -110,10 +110,10 @@ public class PIDController {
 
 	/**
 	 * Constructs a PID controller, with the specified P,I,D values, along with the end threshold.
-	 * @param P Proportional value used in the PID controller
+	 *  @param P Proportional value used in the PID controller
 	 * @param I    Integral value used in the PID controller
 	 * @param D Derivative value used in the PID controller
- 	 * @param threshold the end threshold for declaring the PID 'done'
+ *@param threshold the end threshold for declaring the PID 'done'
 	 * @param timeProvider
 	 */
 	public PIDController(double P, double I, double D, double threshold, TimeProviderI timeProvider) {
