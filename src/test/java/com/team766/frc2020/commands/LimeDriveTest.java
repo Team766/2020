@@ -11,7 +11,7 @@ public class LimeDriveTest {
         TestState testState = new TestState();
         DriveI drive = new DriveIMock( testState );
         LimeLightI limeLight = new LimeLightMock( testState );
-        //LimePickup limeDrive = new LimePickup(drive, limeLight, () -> System.currentTimeMillis());
-        //limeDrive.subroutine();
+        LimePickup limeDrive = new LimePickup(drive, limeLight, () -> System.currentTimeMillis());
+        limeDrive.subroutine();
     }
 }
