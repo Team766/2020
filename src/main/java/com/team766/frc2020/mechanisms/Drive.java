@@ -18,7 +18,7 @@ import com.team766.config.ConfigFileReader;
 
 import com.team766.frc2020.Robot;
 
-public class Drive extends Mechanism  implements DriveI {
+public class Drive extends Mechanism implements DriveI {
 
     //vars (including PID)
     private CANSpeedController m_leftVictor1;

@@ -13,7 +13,7 @@ public class Wagon extends Mechanism {
         m_victor = RobotProvider.instance.getVictorCANMotor("wagon.victor");
     }
 
-    public void setPower(double wagonPower) {
+    public void setWagonPower(double wagonPower) {
         m_victor.set(wagonPower);
     }
 }

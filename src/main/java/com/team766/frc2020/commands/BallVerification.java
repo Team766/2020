@@ -11,7 +11,7 @@ public class BallVerification extends Subroutine {
     }
 
     public void subroutine(){
-        double distance = Robot.ultrasonic.ultraSense();
+        double distance = Robot.ultrasonic.getDistance();
         System.out.println(distance);
     }
 

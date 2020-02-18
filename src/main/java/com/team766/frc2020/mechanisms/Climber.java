@@ -7,10 +7,9 @@ import com.team766.hal.SolenoidController;
 
 public class Climber extends Mechanism {
 
-    // Climber is pneumatics so I'm not sure how that's going to work
-    private final SolenoidController m_climbPiston;
-    private final CANSpeedController m_winch;
-    private final CANSpeedController m_shifter;
+    private SolenoidController m_climbPiston;
+    private CANSpeedController m_winch;
+    private CANSpeedController m_shifter;
 
     public Climber() {
         m_climbPiston = RobotProvider.instance.getSolenoid("climber.piston");
@@ -18,19 +17,15 @@ public class Climber extends Mechanism {
         m_shifter = RobotProvider.instance.getTalonCANMotor("climber.shifter");
     }
 
-    public void extend() {
-        m_climbPiston.set(true);
+    public void setClimberState(boolean state) {
+        m_climbPiston.set(state);
     }
 
-    public void retract() {
-        m_climbPiston.set(false);
-    }
-
-    public void winchPower(final double speed){
+    public void setWinchPower(double speed){
         m_winch.set(speed);
     }
 
-    public void shifterPower(final double speed){
+    public void setShifterPower(double speed){
         m_shifter.set(speed);
     }
 }

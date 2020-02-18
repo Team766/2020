@@ -2,9 +2,7 @@ package com.team766.frc2020;
 
 import com.team766.framework.AutonomousCommandUtils;
 import com.team766.framework.Command;
-import com.team766.frc2020.mechanisms.Drive;
-import com.team766.frc2020.mechanisms.Ultrasonic;
-import com.team766.frc2020.mechanisms.LimeLight;
+import com.team766.frc2020.mechanisms.*;
 import com.team766.hal.MyRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
 
@@ -18,8 +16,14 @@ import com.team766.web.WebServer;
 public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
-	public static Ultrasonic ultrasonic;
+	public static Climber climber;
+	public static Intake intake;
 	public static LimeLight limeLight;
+	public static Outtake outtake;
+	public static Spinner spinner;
+	public static Ultrasonic ultrasonic;
+	public static Wagon wagon;
+	public static Waterwheel waterwheel;
 	public static OI m_oi;
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;
@@ -30,8 +34,13 @@ public class Robot extends MyRobot {
 	public void robotInit() {
 		// Initialize mechanisms here
 		drive = new Drive();
+		climber = new Climber();
+		intake = new Intake();
 		limeLight = new LimeLight();
+		outtake = new Outtake();
+		spinner = new Spinner();
 		ultrasonic = new Ultrasonic(2);
+		waterwheel = new Waterwheel();
 		
 		//auton picker
 		m_webServer = new WebServer();
