@@ -34,18 +34,18 @@ public class NextBall extends Subroutine {
 
         Profile motionProfile = new TrapProfile(v_max, accel, dist, 0, 0);
 
-        while(Robot.waterWheel.getWheelPosition() != motionProfile.getDistAtTime(motionProfile.getFinalTime())) {
-            currentTime = (Math.abs(waterWheel.getWheelVelocity()) - Math.abs(start_velocity)) / accel;
-            vError = waterWheel.getWheelVelocity() - motionProfile.getVelocityAtTime(currentTime);
+        // while(Robot.waterWheel.getWheelPosition() != motionProfile.getDistAtTime(motionProfile.getFinalTime())) {
+        //     currentTime = (Math.abs(waterWheel.getWheelVelocity()) - Math.abs(start_velocity)) / accel;
+        //     vError = waterWheel.getWheelVelocity() - motionProfile.getVelocityAtTime(currentTime);
             
-            m_turnController.calculate(vError, true);
-            double velocityDifference = m_turnController.getOutput();
+        //     m_turnController.calculate(vError, true);
+        //     double velocityDifference = m_turnController.getOutput();
 
-            System.out.println("Wheel velocity: " + waterWheel.getWheelVelocity() + " Velocity difference: " + velocityDifference); 
-            waterWheel.setWheelVelocity(motionProfile.getVelocityAtTime(currentTime) + velocityDifference);
+        //     System.out.println("Wheel velocity: " + waterWheel.getWheelVelocity() + " Velocity difference: " + velocityDifference); 
+        //     waterWheel.setWheelVelocity(motionProfile.getVelocityAtTime(currentTime) + velocityDifference);
             
 
-        }
+        // }
 
         
 
