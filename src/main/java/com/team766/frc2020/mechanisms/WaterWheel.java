@@ -11,7 +11,6 @@ public class Waterwheel extends Mechanism {
 
     private CANSpeedController m_talon;
     private SolenoidController m_ballPusher;
-
     private CANSpeedController m_wheelMotor;
     private DigitalInputReader wheelLimitSwitch;
 
