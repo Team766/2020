@@ -11,7 +11,7 @@ public class Spinner extends Mechanism {
     private SolenoidController m_actuator;
 
     public Spinner() {
-        m_spinner = RobotProvider.instance.getTalonCANMotor("spinner.talon");
+        m_spinner = RobotProvider.instance.getVictorCANMotor("spinner.victor");
         m_actuator = RobotProvider.instance.getSolenoid("spinner.actuator");
     }
 
