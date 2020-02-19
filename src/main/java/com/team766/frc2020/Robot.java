@@ -39,8 +39,9 @@ public class Robot extends MyRobot {
 		limeLight = new LimeLight();
 		outtake = new Outtake();
 		spinner = new Spinner();
-		ultrasonic = new Ultrasonic(2);
-		waterwheel = new WaterWheel();
+        ultrasonic = new Ultrasonic(2);
+        wagon = new Wagon();
+        waterwheel = new WaterWheel();
 		
 		//auton picker
 		m_webServer = new WebServer();
