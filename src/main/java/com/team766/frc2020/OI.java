@@ -132,9 +132,7 @@ public class OI extends Command {
 		} else {
 			Robot.waterwheel.setWheelPower(0);
 		}
-
-		System.out.println(Robot.waterwheel.getWheelPosition());
-
+		
 		if (!Robot.drive.isEnabled()) {
 			Robot.drive.nukeRobot();
 			return;
