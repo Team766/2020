@@ -10,7 +10,7 @@ public class Intake extends Mechanism {
     private CANSpeedController m_victor;
     private SolenoidController m_intakeActuator;
 
-    public void intake() {
+    public Intake() {
         m_victor = RobotProvider.instance.getVictorCANMotor("intake.victor");
         m_intakeActuator = RobotProvider.instance.getSolenoid("intake.actuator");
     }
