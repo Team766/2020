@@ -21,16 +21,16 @@ public class PathRunner extends Subroutine {
 
     protected void subroutine() {
         System.out.println("PathRunner STARTING");
-        PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
-        pathWebSocketServer.start();
+        // PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
+        // pathWebSocketServer.start();
         double endOrientation;
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
         boolean inverted = false;
         waypoints.add(new Waypoint(0, 0));
-        waypoints.add(new Waypoint(0, 50));
-        waypoints.add(new Waypoint(50, 50));
-        waypoints.add(new Waypoint(50, 0));
+        waypoints.add(new Waypoint(0, 100));
+        waypoints.add(new Waypoint(100, 100));
+        waypoints.add(new Waypoint(100, 0));
         waypoints.add(new Waypoint(0, 0));
         endOrientation = Robot.drive.getGyroAngle();
 
@@ -41,7 +41,7 @@ public class PathRunner extends Subroutine {
         }
 
         PathFollower pathFollower = new PathFollower(path);
-        pathWebSocketServer.broadcastPath(path);
+        // pathWebSocketServer.broadcastPath(path);
 
         SmartDashboard.putNumber("number of waypoints", path.size());
         PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
@@ -52,10 +52,10 @@ public class PathRunner extends Subroutine {
 
                 SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
                 // TODO: refactor these into own functions
-                pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
-                pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
-                pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
-                pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
+                // pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
+                // pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
+                // pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
+                // pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
                 System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
             i++;
@@ -104,9 +104,9 @@ public class PathRunner extends Subroutine {
 
         ArrayList<Waypoint> path2 = new ArrayList<Waypoint>();
         path2 = PathBuilder.buildPath(waypoints2);
-        for (int i = 0; i < path2.size(); i++) {
-            System.out.println("(" + path2.get(i).getX() + "," + path2.get(i).getY() + ")"); //built path coordinates
-        }
+        // for (int i = 0; i < path2.size(); i++) {
+        //     System.out.println("(" + path2.get(i).getX() + "," + path2.get(i).getY() + ")"); //built path coordinates
+        // }
 
         PathFollower pathFollower2 = new PathFollower(path2);
         pathWebSocketServer.broadcastPath(path2);
@@ -119,10 +119,10 @@ public class PathRunner extends Subroutine {
 
                 SmartDashboard.putNumber("last closest point index",  pathFollower2.getLastClosestPointIndex());
                 // TODO: refactor these into own functions
-                pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
-                pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
-                pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path2.get(pathFollower2.getLastClosestPointIndex()).getX() + ", \"y\": " + path2.get(pathFollower2.getLastClosestPointIndex()).getY() + "}}" );
-                pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower2.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower2.getLookaheadWaypoint().getY() + "}}" );
+                // pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
+                // pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
+                // pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path2.get(pathFollower2.getLastClosestPointIndex()).getX() + ", \"y\": " + path2.get(pathFollower2.getLastClosestPointIndex()).getY() + "}}" );
+                // pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower2.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower2.getLookaheadWaypoint().getY() + "}}" );
                 System.out.println("steering error " + pathFollower2.calculateSteeringError());
             }
             i2++;
