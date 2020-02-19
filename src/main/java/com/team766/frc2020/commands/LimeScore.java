@@ -51,13 +51,13 @@ public class LimeScore extends Subroutine {
         System.out.println("currentX"+ currentX);
        while ((currentX<-1)||(currentX>1)) {
             if ( currentX<-1){
-                Robot.drive.setDrive(-0.5,0.5);
+                Robot.drive.setDrive(0.5,-0.5);
             }
             else{
                 Robot.drive.setDrive(0,0);
             }
             if ( currentX>1){
-                Robot.drive.setDrive(0.5,-0.5);
+                Robot.drive.setDrive(-0.5,0.5);
             }
             else{
                 Robot.drive.setDrive(0,0);
