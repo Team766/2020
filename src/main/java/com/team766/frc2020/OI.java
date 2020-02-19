@@ -66,9 +66,11 @@ public class OI extends Command {
 		Robot.drive.setDrive(leftPower, rightPower);
 		
 		if (m_boxop.getRawButton(5)) {
-			Robot.climber.setClimberState(false);
+            Robot.climber.setClimberUpState(false);
+            Robot.climber.setClimberDownState(true);
 		} else if (m_boxop.getRawButton(6)) {
-			Robot.climber.setClimberState(true);
+            Robot.climber.setClimberUpState(true);
+            Robot.climber.setClimberDownState(false);
 		}
 
 		if (m_boxop.getRawButton(7)) {

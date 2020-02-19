@@ -19,8 +19,12 @@ public class Climber extends Mechanism {
         m_shifter = RobotProvider.instance.getTalonCANMotor("climber.shifter");
     }
 
-    public void setClimberState(boolean state) {
+    public void setClimberUpState(boolean state) {
         m_climbPistonUp.set(state);
+    }
+
+    public void setClimberDownState(boolean state) {
+        m_climbPistonDown.set(state);
     }
 
     public void setWinchPower(double speed){
