@@ -69,7 +69,7 @@ public class PathRunner extends Subroutine {
 
             pathFollower.update();
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
-            double turnPower = m_turnController.getOutput() * 500;
+            double turnPower = m_turnController.getOutput() * 700;
 
             // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
             // System.out.println("closest point index" + findClosestPointIndex());
@@ -93,68 +93,68 @@ public class PathRunner extends Subroutine {
 
 
 
-        //-------------------------------------------------------------------------------------------
-        ArrayList<Waypoint> waypoints2 = new ArrayList<Waypoint>();
-        inverted = true;
-        waypoints.add(new Waypoint(0, 0));
-        waypoints.add(new Waypoint(0, -50));
-        waypoints.add(new Waypoint(-50, -50));
-        waypoints.add(new Waypoint(-50, 0));
-        waypoints.add(new Waypoint(0, 0));
+    //     //-------------------------------------------------------------------------------------------
+    //     ArrayList<Waypoint> waypoints2 = new ArrayList<Waypoint>();
+    //     inverted = true;
+    //     waypoints.add(new Waypoint(0, 0));
+    //     waypoints.add(new Waypoint(0, -100));
+    //     waypoints.add(new Waypoint(-100, -100));
+    //     waypoints.add(new Waypoint(-100, 0));
+    //     waypoints.add(new Waypoint(0, 0));
 
-        ArrayList<Waypoint> path2 = new ArrayList<Waypoint>();
-        path2 = PathBuilder.buildPath(waypoints2);
-        // for (int i = 0; i < path2.size(); i++) {
-        //     System.out.println("(" + path2.get(i).getX() + "," + path2.get(i).getY() + ")"); //built path coordinates
-        // }
+    //     ArrayList<Waypoint> path2 = new ArrayList<Waypoint>();
+    //     path2 = PathBuilder.buildPath(waypoints2);
+    //     // for (int i = 0; i < path2.size(); i++) {
+    //     //     System.out.println("(" + path2.get(i).getX() + "," + path2.get(i).getY() + ")"); //built path coordinates
+    //     // }
 
-        PathFollower pathFollower2 = new PathFollower(path2);
-        // pathWebSocketServer.broadcastPath(path2);
+    //     PathFollower pathFollower2 = new PathFollower(path2);
+    //     // pathWebSocketServer.broadcastPath(path2);
 
-        // PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-        // m_turnController.setSetpoint(0.0);
-        int i2 = 0;
-        while(!pathFollower.isPathDone()) {
-            if (i2 % 15 == 0) {
+    //     // PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+    //     // m_turnController.setSetpoint(0.0);
+    //     int i2 = 0;
+    //     while(!pathFollower.isPathDone()) {
+    //         if (i2 % 15 == 0) {
 
-                // SmartDashboard.putNumber("last closest point index",  pathFollower2.getLastClosestPointIndex());
-                // TODO: refactor these into own functions
-                // pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
-                // pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
-                // pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path2.get(pathFollower2.getLastClosestPointIndex()).getX() + ", \"y\": " + path2.get(pathFollower2.getLastClosestPointIndex()).getY() + "}}" );
-                // pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower2.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower2.getLookaheadWaypoint().getY() + "}}" );
-                System.out.println("steering error " + pathFollower2.calculateSteeringError());
-            }
-            i2++;
+    //             // SmartDashboard.putNumber("last closest point index",  pathFollower2.getLastClosestPointIndex());
+    //             // TODO: refactor these into own functions
+    //             // pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
+    //             // pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
+    //             // pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path2.get(pathFollower2.getLastClosestPointIndex()).getX() + ", \"y\": " + path2.get(pathFollower2.getLastClosestPointIndex()).getY() + "}}" );
+    //             // pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower2.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower2.getLookaheadWaypoint().getY() + "}}" );
+    //             System.out.println("steering error " + pathFollower2.calculateSteeringError());
+    //         }
+    //         i2++;
 
-            pathFollower2.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
-            if (!inverted) { 
-                pathFollower2.setHeading(Robot.drive.getGyroAngle());
-            } else {
-                pathFollower2.setHeading((Robot.drive.getGyroAngle() + 180) % 360);
-            }
+    //         pathFollower2.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
+    //         if (!inverted) { 
+    //             pathFollower2.setHeading(Robot.drive.getGyroAngle());
+    //         } else {
+    //             pathFollower2.setHeading((Robot.drive.getGyroAngle() + 180) % 360);
+    //         }
 
-            pathFollower2.update();
-            m_turnController.calculate(pathFollower2.calculateSteeringError(), true);
-            double turnPower = m_turnController.getOutput() * 500;
+    //         pathFollower2.update();
+    //         m_turnController.calculate(pathFollower2.calculateSteeringError(), true);
+    //         double turnPower = m_turnController.getOutput() * 500;
 
-            // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
-            // System.out.println("closest point index" + findClosestPointIndex());
-            double straightPower = path2.get(pathFollower2.findClosestPointIndex()).getVelocity();
+    //         // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
+    //         // System.out.println("closest point index" + findClosestPointIndex());
+    //         double straightPower = path2.get(pathFollower2.findClosestPointIndex()).getVelocity();
 
-            if (!inverted) { 
-                Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
-            } else {
-                Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
-            }
+    //         if (!inverted) { 
+    //             Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
+    //         } else {
+    //             Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
+    //         }
 
-            // allow odometry and other stuff to happen
-            yield();
-        }
-        Robot.drive.setDrive(0, 0);
-        System.out.println("path followed2");
-        callSubroutine(new PreciseTurn(endOrientation));
-        System.out.println("final orientated2");
+    //         // allow odometry and other stuff to happen
+    //         yield();
+    //     }
+    //     Robot.drive.setDrive(0, 0);
+    //     System.out.println("path followed2");
+    //     callSubroutine(new PreciseTurn(endOrientation));
+    //     System.out.println("final orientated2");
 
     }
 }
