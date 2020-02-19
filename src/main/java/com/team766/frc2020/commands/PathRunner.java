@@ -109,7 +109,7 @@ public class PathRunner extends Subroutine {
         // }
 
         PathFollower pathFollower2 = new PathFollower(path2);
-        pathWebSocketServer.broadcastPath(path2);
+        // pathWebSocketServer.broadcastPath(path2);
 
         // PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
         // m_turnController.setSetpoint(0.0);
@@ -117,7 +117,7 @@ public class PathRunner extends Subroutine {
         while(!pathFollower.isPathDone()) {
             if (i2 % 15 == 0) {
 
-                SmartDashboard.putNumber("last closest point index",  pathFollower2.getLastClosestPointIndex());
+                // SmartDashboard.putNumber("last closest point index",  pathFollower2.getLastClosestPointIndex());
                 // TODO: refactor these into own functions
                 // pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
                 // pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
