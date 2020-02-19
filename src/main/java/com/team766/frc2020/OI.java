@@ -84,9 +84,9 @@ public class OI extends Command {
 		}
 
 		if (m_boxop.getRawButton(3)) {
-			Robot.intake.setIntakePower(0.5);
-		} else if (m_boxop.getRawButton(4)) {
 			Robot.intake.setIntakePower(0);
+		} else if (m_boxop.getRawButton(4)) {
+			Robot.intake.setIntakePower(0.5);
 		}
 		
 		if (m_boxop.getRawButton(1)) {
