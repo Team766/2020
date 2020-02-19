@@ -52,10 +52,12 @@ public class LimeScore extends Subroutine {
        while ((currentX<-1)||(currentX>1)) {
             if ( currentX<-1){
                 Robot.drive.setDrive(0.5,-0.5);
+                waitForSeconds(0.1);
             }
                 Robot.drive.setDrive(0,0);
             if ( currentX>1){
                 Robot.drive.setDrive(-0.5,0.5);
+                waitForSeconds(0.1);
             }
             Robot.drive.setDrive(0,0);
        }
