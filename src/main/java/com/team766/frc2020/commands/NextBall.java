@@ -16,9 +16,9 @@ public class NextBall extends Subroutine {
 
     protected void subroutine() {
 
-        double v_max = 10;
-        double accel = 10;
-        double dist = 10;
+        double v_max = 100;
+        double accel = 100;
+        double dist = 777;
         double currentTime = 0;
         double start_velocity = 0;
 
@@ -28,20 +28,20 @@ public class NextBall extends Subroutine {
         m_turnController.setSetpoint(0.0);
 
 
-        Profile motionProfile = new TrapProfile(v_max, accel, dist, 0, 0);
+        Profile motionProfile = new TrapProfile(v_max, accel, dist, 100, 0);
 
-        // while(Robot.Robot.waterwheel.getWheelPosition() != motionProfile.getDistAtTime(motionProfile.getFinalTime())) {
-        //     currentTime = (Math.abs(Robot.waterwheel.getWheelVelocity()) - Math.abs(start_velocity)) / accel;
-        //     vError = Robot.waterwheel.getWheelVelocity() - motionProfile.getVelocityAtTime(currentTime);
+        while(Robot.waterwheel.getWheelPosition() != motionProfile.getDistAtTime(motionProfile.getFinalTime())) {
+            currentTime = (Math.abs(Robot.waterwheel.getWheelVelocity()) - Math.abs(start_velocity)) / accel;
+            System.out.println("current time: " + currentTime + " velocity at current time:" +  motionProfile.getVelocityAtTime(currentTime));
+            vError = motionProfile.getVelocityAtTime(currentTime) - Robot.waterwheel.getWheelVelocity();
             
-        //     m_turnController.calculate(vError, true);
-        //     double velocityDifference = m_turnController.getOutput();
+            m_turnController.calculate(vError, true);
+            double velocityDifference = m_turnController.getOutput();
 
-        //     System.out.println("Wheel velocity: " + Robot.waterwheel.getWheelVelocity() + " Velocity difference: " + velocityDifference); 
-        //     Robot.waterwheel.setWheelVelocity(motionProfile.getVelocityAtTime(currentTime) + velocityDifference);
-            
-
-        // }
+            //System.out.println("Wheel velocity: " + Robot.waterwheel.getWheelVelocity() + " Velocity difference: " + velocityDifference); 
+            Robot.waterwheel.setWheelPower(motionProfile.getVelocityAtTime(currentTime) + velocityDifference);
+        
+        }
 
         
 

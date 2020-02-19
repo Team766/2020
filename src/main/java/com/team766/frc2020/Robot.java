@@ -23,7 +23,7 @@ public class Robot extends MyRobot {
 	public static Spinner spinner;
 	public static Ultrasonic ultrasonic;
 	public static Wagon wagon;
-	public static Waterwheel waterwheel;
+	public static WaterWheel waterwheel;
 	public static OI m_oi;
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;
@@ -40,7 +40,7 @@ public class Robot extends MyRobot {
 		outtake = new Outtake();
 		spinner = new Spinner();
 		ultrasonic = new Ultrasonic(2);
-		waterwheel = new Waterwheel();
+		waterwheel = new WaterWheel();
 		
 		//auton picker
 		m_webServer = new WebServer();

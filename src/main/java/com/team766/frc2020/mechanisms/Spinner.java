@@ -9,12 +9,10 @@ public class Spinner extends Mechanism {
 
     private CANSpeedController m_spinner;
     private SolenoidController m_actuator;
-    private SolenoidController m_stopper;
 
     public Spinner() {
         m_spinner = RobotProvider.instance.getTalonCANMotor("spinner.talon");
         m_actuator = RobotProvider.instance.getSolenoid("spinner.actuator");
-        m_stopper = RobotProvider.instance.getSolenoid("spinner.stopper");
     }
 
     public void setSpinnerPower(double spinnerPower) {
@@ -25,7 +23,4 @@ public class Spinner extends Mechanism {
         m_actuator.set(state);
     }
 
-    public void setStopperState(boolean state) {
-        m_stopper.set(state);
-    }
 }

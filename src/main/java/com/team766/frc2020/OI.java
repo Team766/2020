@@ -113,15 +113,9 @@ public class OI extends Command {
 			Robot.spinner.setSpinnerState(true);
 		}
 
-		if (m_boxop.getRawButton(21)) {
-			Robot.spinner.setStopperState(false);
-		} else if (m_boxop.getRawButton(22)) {
-			Robot.spinner.setStopperState(true);
-		}
-
-		if (m_boxop.getRawButton(17)) {
+		if (m_boxop.getRawButton(22)) {
 			Robot.wagon.setWagonPower(0.5);
-		} else {
+		} else if (m_boxop.getRawButton(23)) {
 			Robot.wagon.setWagonPower(0);
 		}
 

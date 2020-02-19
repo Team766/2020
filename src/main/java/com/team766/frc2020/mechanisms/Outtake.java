@@ -10,8 +10,9 @@ public class Outtake extends Mechanism {
     private CANSpeedController m_talon2;
 
     public Outtake() {
-        m_talon1 = RobotProvider.instance.getTalonCANMotor("outtake.talon1");
-        m_talon2 = RobotProvider.instance.getTalonCANMotor("outtake.talon2");
+        m_talon1 = RobotProvider.instance.getTalonCANMotor("outtake.leftTalon");
+        m_talon2 = RobotProvider.instance.getTalonCANMotor("outtake.rightTalon");
+        m_talon1.setInverted(true);
     }
 
     public void setOuttakePower(double outtakePower) {

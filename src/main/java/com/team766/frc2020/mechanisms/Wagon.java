@@ -7,13 +7,16 @@ import com.team766.hal.CANSpeedController;
 
 public class Wagon extends Mechanism {
 
-    private CANSpeedController m_victor;
+    private CANSpeedController m_frontVictor;
+    private CANSpeedController m_backVictor;
 
     public Wagon() {
-        m_victor = RobotProvider.instance.getVictorCANMotor("wagon.victor");
+        m_frontVictor = RobotProvider.instance.getVictorCANMotor("wagon.frontVictor");
+        m_backVictor = RobotProvider.instance.getVictorCANMotor("wagon.backVictor");
     }
 
     public void setWagonPower(double wagonPower) {
-        m_victor.set(wagonPower);
+        m_frontVictor.set(wagonPower);
+        m_backVictor.set(wagonPower);
     }
 }

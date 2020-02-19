@@ -7,14 +7,14 @@ import com.team766.hal.DigitalInputReader;
 import com.team766.hal.SolenoidController;
 import com.team766.hal.CANSpeedController.ControlMode;
 
-public class Waterwheel extends Mechanism {
+public class WaterWheel extends Mechanism {
 
     private CANSpeedController m_talon;
     private SolenoidController m_ballPusher;
     private CANSpeedController m_wheelMotor;
     private DigitalInputReader wheelLimitSwitch;
 
-    public Waterwheel() {
+    public WaterWheel() {
         //m_talon = RobotProvider.instance.getTalonCANMotor("waterwheel.talon");
         m_ballPusher = RobotProvider.instance.getSolenoid("waterwheel.pusher");
         m_wheelMotor = RobotProvider.instance.getTalonCANMotor("waterwheel.motor");
@@ -22,7 +22,7 @@ public class Waterwheel extends Mechanism {
     }
 
     public void setWheelPower(double wheelPower) {
-        m_talon.set(wheelPower);
+        m_wheelMotor.set(wheelPower);
     }
 
     public void setPusherState(boolean state) {
