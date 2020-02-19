@@ -55,6 +55,7 @@ public class LimeScore extends Subroutine {
                 waitForSeconds(0.1);
             }
                 Robot.drive.setDrive(0,0);
+                waitForSeconds(0.1);
             if ( currentX>1){
                 Robot.drive.setDrive(-0.5,0.5);
                 waitForSeconds(0.1);
