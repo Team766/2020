@@ -26,7 +26,7 @@ public class PathBuilder {
         newWaypoints = smoother(newWaypoints, .6, .4, 0.001);
         newWaypoints = calculateDistanceBetweenWaypoints(newWaypoints);
         newWaypoints = calculateCurvature(newWaypoints);
-        newWaypoints = calculateMaximumVelocities(newWaypoints, 3);
+        newWaypoints = calculateMaximumVelocities(newWaypoints, 5);
         newWaypoints = calculateTargetVelocities(newWaypoints);
         newWaypoints = addEndBuffer(newWaypoints, 5);
 
