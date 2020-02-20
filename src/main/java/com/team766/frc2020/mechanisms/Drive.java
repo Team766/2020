@@ -258,10 +258,16 @@ public class Drive extends Mechanism implements DriveI {
 
     // variables for calculating position using odometry
     // should be moved later
+    private static double deltaXPosition = 0;
+    private static double deltaYPosition = 0;
     private static double xPosition = 0;
     private static double yPosition = 0;
+    private static double velocity = 0;
     // heading is in degrees
     private static double heading = 0; //aka angle
+
+    private static double previousTime = RobotProvider.getTimeProvider().get();
+    private static double currentTime = previousTime;
 
     private double currentGyroAngle = 0;
     private double currentLeftEncoderDistance = 0;
@@ -280,6 +286,10 @@ public class Drive extends Mechanism implements DriveI {
         return heading;
     }
 
+    public double getVelocity() {
+        return velocity;
+    }
+
     @Override
     public void run() {    
         if (index == 0) {
@@ -288,22 +298,34 @@ public class Drive extends Mechanism implements DriveI {
             index = 1;
         }
 
+        // get data
+        currentTime = RobotProvider.getTimeProvider().get();
         currentGyroAngle = getGyroAngle();
         currentLeftEncoderDistance = leftEncoderDistance();
         currentRightEncoderDistance = rightEncoderDistance();
         Robot.drive.resetEncoders();
-        xPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
-        yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
+        // calculate position
+        deltaXPosition = (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
+        deltaYPosition = (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
+
+        xPosition += deltaXPosition;
+        yPosition += deltaYPosition;
+
+        // calculate velocity
+        velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
         if (index % 10 == 0) {
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
+            SmartDashboard.putNumber("velocity", velocity);
             // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
         }
         index++;
+
+        previousTime = currentTime;
     }
 }
