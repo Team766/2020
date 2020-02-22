@@ -16,7 +16,14 @@ import com.team766.web.WebServer;
 public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
-
+	public static Climber climber;
+	public static Intake intake;
+	public static LimeLight limeLight;
+	public static Outtake outtake;
+	public static Spinner spinner;
+	public static Ultrasonic ultrasonic;
+	public static Wagon wagon;
+	public static WaterWheel waterwheel;
 	public static OI m_oi;
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;
@@ -26,7 +33,15 @@ public class Robot extends MyRobot {
 	
 	public void robotInit() {
 		// Initialize mechanisms here
-		drive = new Drive();	
+		drive = new Drive();
+		climber = new Climber();
+		intake = new Intake();
+		limeLight = new LimeLight();
+		outtake = new Outtake();
+		spinner = new Spinner();
+        ultrasonic = new Ultrasonic(2);
+        wagon = new Wagon();
+        waterwheel = new WaterWheel();
 		
 		//auton picker
 		m_webServer = new WebServer();
