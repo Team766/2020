@@ -60,7 +60,7 @@ public class PathFollower {
                 // Point = E + (t value of intersection) * d
                 // if intersection exists find values
                 if (index++ % 50 == 0) {
-                    System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
+                    // System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
                 }
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection
