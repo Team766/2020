@@ -5,26 +5,21 @@ import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController;
 import com.team766.hal.SolenoidController;
 
-
 public class Intake extends Mechanism {
 
     private CANSpeedController m_victor;
     private SolenoidController m_intakeActuator;
 
-    public void intake() {
+    public Intake() {
         m_victor = RobotProvider.instance.getVictorCANMotor("intake.victor");
         m_intakeActuator = RobotProvider.instance.getSolenoid("intake.actuator");
     }
 
-    public void setPower(double intakePower) {
+    public void setIntakePower(double intakePower) {
         m_victor.set(intakePower);
     }
 
-    public void actuate() {
-        m_intakeActuator.set(true);
-    }
-
-    public void retract() {
-        m_intakeActuator.set(false);
+    public void setIntakeState(boolean state) {
+        m_intakeActuator.set(state);
     }
 }

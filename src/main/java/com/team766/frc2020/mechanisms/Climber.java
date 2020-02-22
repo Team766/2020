@@ -7,30 +7,31 @@ import com.team766.hal.SolenoidController;
 
 public class Climber extends Mechanism {
 
-    // Climber is pneumatics so I'm not sure how that's going to work
-    private final SolenoidController m_climbPiston;
-    private final CANSpeedController m_winch;
-    private final CANSpeedController m_shifter;
+    private SolenoidController m_climbPistonUp;
+    private SolenoidController m_climbPistonDown;
+    private CANSpeedController m_winch;
+    private CANSpeedController m_shifter;
 
     public Climber() {
-        m_climbPiston = RobotProvider.instance.getSolenoid("climber.piston");
-        m_winch = RobotProvider.instance.getTalonCANMotor("climber.winch");
-        m_shifter = RobotProvider.instance.getTalonCANMotor("climber.shifter");
+        m_climbPistonUp = RobotProvider.instance.getSolenoid("climber.pistonUp");
+        m_climbPistonDown = RobotProvider.instance.getSolenoid("climber.pistonDown");
+        m_winch = RobotProvider.instance.getVictorCANMotor("climber.winch");
+        m_shifter = RobotProvider.instance.getVictorCANMotor("climber.shifter");
     }
 
-    public void extend() {
-        m_climbPiston.set(true);
+    public void setClimberUpState(boolean state) {
+        m_climbPistonUp.set(state);
     }
 
-    public void retract() {
-        m_climbPiston.set(false);
+    public void setClimberDownState(boolean state) {
+        m_climbPistonDown.set(state);
     }
 
-    public void winchPower(final double speed){
+    public void setWinchPower(double speed){
         m_winch.set(speed);
     }
 
-    public void shifterPower(final double speed){
+    public void setShifterPower(double speed){
         m_shifter.set(speed);
     }
 }

@@ -58,12 +58,82 @@ public class OI extends Command {
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
 		
-		SmartDashboard.putNumber("Forward Power", fwd_power);
-		SmartDashboard.putNumber("Turn Power", turn_power);
-		SmartDashboard.putNumber("Left Power", leftPower);
-		SmartDashboard.putNumber("Right Power", rightPower);
+		//SmartDashboard.putNumber("Forward Power", fwd_power);
+		//SmartDashboard.putNumber("Turn Power", turn_power);
+		//SmartDashboard.putNumber("Left Power", leftPower);
+		//SmartDashboard.putNumber("Right Power", rightPower);
 		
 		Robot.drive.setDrive(leftPower, rightPower);
+		
+		if (m_boxop.getRawButton(5)) {
+            Robot.climber.setClimberUpState(false);
+            Robot.climber.setClimberDownState(true);
+		} else if (m_boxop.getRawButton(6)) {
+            Robot.climber.setClimberUpState(true);
+            Robot.climber.setClimberDownState(false);
+		}
+
+		if (m_boxop.getRawButton(7)) {
+			Robot.climber.setShifterPower(0);
+		} else if (m_boxop.getRawButton(8)) {
+			Robot.climber.setShifterPower(0.5);
+		}
+
+		if (m_boxop.getRawButton(9)) {
+			Robot.climber.setWinchPower(0);
+		} else if (m_boxop.getRawButton(10)) {
+			Robot.climber.setWinchPower(0.5);
+		}
+
+		if (m_boxop.getRawButton(3)) {
+			Robot.intake.setIntakePower(0);
+		} else if (m_boxop.getRawButton(4)) {
+			Robot.intake.setIntakePower(0.5);
+		}
+		
+		if (m_boxop.getRawButton(1)) {
+			Robot.intake.setIntakeState(false);
+		} else if (m_boxop.getRawButton(2)) {
+			Robot.intake.setIntakeState(true);
+		}
+
+		if (m_joystick1.getRawButton(1)) {
+			Robot.outtake.setOuttakePower(0.5);
+		} else {
+			Robot.outtake.setOuttakePower(0);
+		}
+
+		if (m_boxop.getRawButton(18)) {
+			Robot.spinner.setSpinnerPower(0);
+		} else if (m_boxop.getRawButton(19)) {
+			Robot.spinner.setSpinnerPower(0.5);
+		}
+
+		if (m_boxop.getRawButton(20)) {
+			Robot.spinner.setSpinnerState(false);
+		} else if (m_boxop.getRawButton(21)) {
+			Robot.spinner.setSpinnerState(true);
+		}
+
+		if (m_boxop.getRawButton(22)) {
+			Robot.wagon.setWagonPower(0.5);
+		} else if (m_boxop.getRawButton(23)) {
+			Robot.wagon.setWagonPower(0);
+		}
+
+		if (m_joystick2.getRawButton(1)) {
+			Robot.waterwheel.setPusherState(true);
+		} else {
+			Robot.waterwheel.setPusherState(false);
+		}
+
+		if (m_joystick1.getRawButton(2)) {
+			Robot.waterwheel.setWheelPower(-0.1);
+		} else if (m_joystick2.getRawButton(2)) {
+			Robot.waterwheel.setWheelPower(0.1);
+		} else {
+			Robot.waterwheel.setWheelPower(0);
+		}
 		
 		if (!Robot.drive.isEnabled()) {
 			Robot.drive.nukeRobot();

@@ -18,7 +18,7 @@ import com.team766.config.ConfigFileReader;
 
 import com.team766.frc2020.Robot;
 
-public class Drive extends Mechanism  implements DriveI {
+public class Drive extends Mechanism implements DriveI {
 
     //vars (including PID)
     private CANSpeedController m_leftVictor1;
@@ -57,13 +57,13 @@ public class Drive extends Mechanism  implements DriveI {
         m_rightVictor1 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor1");
 
         // Initialize second victors if they exist
-        if (ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
-            m_secondVictor = true;
-            m_leftVictor2 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor2");
-            m_rightVictor2 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor2");    
-        } else {
+        // if (ConfigFileReader.getInstance().getInt("drive.leftVictor2").get() >= 0) {
+        //     m_secondVictor = true;
+        //     m_leftVictor2 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor2");
+        //     m_rightVictor2 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor2");    
+        // } else {
             m_secondVictor = false;
-        }
+        // }
 
         // Initializes talons
         m_leftTalon = RobotProvider.instance.getTalonCANMotor("drive.leftTalon");
