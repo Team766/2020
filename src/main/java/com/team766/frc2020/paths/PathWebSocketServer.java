@@ -34,8 +34,9 @@ public class PathWebSocketServer extends WebSocketServer {
         for (int i = 0; i < path.size(); i++) {
             pathString += "{\"x\": " + path.get(i).getX() + ", \"y\": " + path.get(i).getY() + "},";
         }
-        pathString = pathString.substring(0, pathString.length()-1) + "]}";
+        pathString = pathString.substring(0, pathString.length() - 1) + "]}";
 
+        System.out.println("path string " + pathString);
         broadcast(pathString);
     }
 

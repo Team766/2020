@@ -1,6 +1,10 @@
 package com.team766.frc2020.mechanisms;
 
 import java.lang.Math.*;
+import java.net.InetSocketAddress;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.team766.framework.Mechanism;
 import com.team766.hal.GyroReader;
@@ -8,15 +12,13 @@ import com.team766.hal.CANSpeedController;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
 
 import com.team766.frc2020.Robot;
+import com.team766.frc2020.paths.PathWebSocketServer;
 
 public class Drive extends Mechanism implements DriveI {
 
@@ -49,9 +51,9 @@ public class Drive extends Mechanism implements DriveI {
 
     public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
 
+    public PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
 
     public Drive() {
-
         // Initialize victors
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
         m_rightVictor1 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor1");
@@ -104,6 +106,9 @@ public class Drive extends Mechanism implements DriveI {
         m_leftTalon.configClosedLoopRamp(0.25, 0);
         m_rightTalon.configOpenLoopRamp(0.25, 0);
         m_rightTalon.configClosedLoopRamp(0.25, 0); //if something breaks that you can't figure out with acceleration (un)comment this
+    
+        // start websocket server
+        pathWebSocketServer.start();
     }
 
     @Override
@@ -258,10 +263,16 @@ public class Drive extends Mechanism implements DriveI {
 
     // variables for calculating position using odometry
     // should be moved later
+    private static double deltaXPosition = 0;
+    private static double deltaYPosition = 0;
     private static double xPosition = 0;
     private static double yPosition = 0;
+    private static double velocity = 0;
     // heading is in degrees
     private static double heading = 0; //aka angle
+
+    private static double previousTime = RobotProvider.getTimeProvider().get();
+    private static double currentTime = previousTime;
 
     private double currentGyroAngle = 0;
     private double currentLeftEncoderDistance = 0;
@@ -280,6 +291,10 @@ public class Drive extends Mechanism implements DriveI {
         return heading;
     }
 
+    public double getVelocity() {
+        return velocity;
+    }
+
     @Override
     public void run() {    
         if (index == 0) {
@@ -288,22 +303,37 @@ public class Drive extends Mechanism implements DriveI {
             index = 1;
         }
 
+        // get data
+        currentTime = RobotProvider.getTimeProvider().get();
         currentGyroAngle = getGyroAngle();
         currentLeftEncoderDistance = leftEncoderDistance();
         currentRightEncoderDistance = rightEncoderDistance();
         Robot.drive.resetEncoders();
-        xPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
-        yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
+        // calculate position
+        deltaXPosition = (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
+        deltaYPosition = (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
+
+        xPosition += deltaXPosition;
+        yPosition += deltaYPosition;
+
+        // send position and heading over websockets
+        // TODO: write this
+
+        // calculate velocity
+        velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
         if (index % 10 == 0) {
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
+            SmartDashboard.putNumber("velocity", velocity);
             // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
         }
         index++;
+
+        previousTime = currentTime;
     }
 }
