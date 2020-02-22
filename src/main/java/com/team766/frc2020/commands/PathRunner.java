@@ -56,10 +56,10 @@ public class PathRunner extends Subroutine {
 
                 SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
                 // TODO: refactor these into own functions
-                pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
-                pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
-                pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
-                pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
+                // pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
+                // pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
+                // pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
+                // pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
                 System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
             i++;
@@ -78,7 +78,7 @@ public class PathRunner extends Subroutine {
             System.out.println("closest point index" + pathFollower.findClosestPointIndex());
             m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
             m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
-            double straightPower = m_velocityController.getOutput() * 500;
+            double straightPower = m_velocityController.getOutput();
 
             if (!inverted) { 
                 Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));

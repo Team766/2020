@@ -2,7 +2,6 @@ package com.team766.frc2020.commands;
 
 import java.util.ArrayList;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import java.net.InetSocketAddress;
 import org.java_websocket.server.WebSocketServer;
@@ -19,7 +18,7 @@ import com.team766.frc2020.paths.PathWebSocketServer;
 // import com.team766.frc2020.mechanisms.LimeLightI;
 // import com.team766.hal.RobotProvider;
 
-public class WebSocketTest extends Subroutine {
+public class PathRunner extends Subroutine {
 
     protected void subroutine() {
         System.out.println("PathRunner STARTING");
@@ -49,24 +48,19 @@ public class WebSocketTest extends Subroutine {
         PIDController m_turnController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
         PIDController m_velocityController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
-        // LiveWindow.setEnabled(true);
-        // LiveWindow liveWindow = LiveWindow.getInstance();
-        // LiveWindow.add(m_turnController);
-        // LiveWindow.
-
         
         m_turnController.setSetpoint(0.0);
         int i = 0;
         while(!pathFollower.isPathDone()) {
             if (i % 15 == 0) {
 
-                // SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
+                SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
                 // TODO: refactor these into own functions
                 pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
                 pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
                 pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
                 pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
-                // System.out.println("steering error " + pathFollower.calculateSteeringError());
+                System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
             i++;
 
@@ -81,13 +75,10 @@ public class WebSocketTest extends Subroutine {
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
             double turnPower = m_turnController.getOutput() * 800;
 
-            // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
-            // System.out.println("closest point index" + findClosestPointIndex());
+            System.out.println("closest point index" + pathFollower.findClosestPointIndex());
             m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
             m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
-
-            double straightPower = m_velocityController.getOutput() * 500;
-
+            double straightPower = m_velocityController.getOutput();
 
             // if (!inverted) { 
             //     Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
@@ -98,9 +89,9 @@ public class WebSocketTest extends Subroutine {
             // allow odometry and other stuff to happen
             yield();
         }
-        // Robot.drive.setDrive(0, 0);
-        // System.out.println("path followed");
-        // callSubroutine(new PreciseTurn(endOrientation));
+        Robot.drive.setDrive(0, 0);
+        System.out.println("path followed");
+        callSubroutine(new PreciseTurn(endOrientation));
         System.out.println("final orientated");
 
 
@@ -108,6 +99,7 @@ public class WebSocketTest extends Subroutine {
 
 
     //     //-------------------------------------------------------------------------------------------
+    //      UNCOMMENT FOR A SECOND PATH; ONLY FOR TEMPORARY TESTING, YOU CAN DELETEME
     //     ArrayList<Waypoint> waypoints2 = new ArrayList<Waypoint>();
     //     inverted = true;
     //     waypoints.add(new Waypoint(0, 0));
