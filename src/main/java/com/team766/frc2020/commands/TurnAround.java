@@ -52,7 +52,7 @@ public class TurnAround extends Subroutine {
 
         System.out.println(path.size() + " waypoints");
 
-        PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+        PIDController m_turnController = new PIDController(Drive.P, Drive.I, Drive.D, Drive.THRESHOLD, RobotProvider.getTimeProvider());
 
         m_turnController.setSetpoint(0.0);
         int i = 0;
@@ -93,7 +93,7 @@ public class TurnAround extends Subroutine {
             // }
             Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
             
-            // allow odometry and other stuff to happen
+            // Allow odometry and other stuff to happen
             yield();
         }
         Robot.drive.setDrive(0, 0);
