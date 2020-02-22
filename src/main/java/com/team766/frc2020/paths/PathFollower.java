@@ -15,17 +15,18 @@ public class PathFollower {
     public static boolean isPathDone = false;
     private Waypoint lookaheadWaypoint;
     private int index = 0;
+    private double lookaheadDistance = 13;
 
     public PathFollower(ArrayList<Waypoint> path) {
         // TODO: add copy function for path
         this.path = path;
         // change this from magic number
-        lookaheadWaypoint = findLookaheadPoint(13);
+        lookaheadWaypoint = findLookaheadPoint(this.lookaheadDistance);
     }
 
     public void update() {
         setLastClosestPointIndex(findClosestPointIndex());
-        setLookaheadWaypoint(findLookaheadPoint(13));
+        setLookaheadWaypoint(findLookaheadPoint(this.lookaheadDistance));
     }
 
     /**

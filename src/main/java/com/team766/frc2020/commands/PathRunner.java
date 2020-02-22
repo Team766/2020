@@ -22,8 +22,8 @@ public class PathRunner extends Subroutine {
 
     protected void subroutine() {
         System.out.println("PathRunner STARTING");
-        PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
-        pathWebSocketServer.start();
+        // PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
+        // pathWebSocketServer.start();
         double endOrientation;
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
@@ -42,13 +42,12 @@ public class PathRunner extends Subroutine {
         }
 
         PathFollower pathFollower = new PathFollower(path);
-        pathWebSocketServer.broadcastPath(path);
+        // pathWebSocketServer.broadcastPath(path);
 
         SmartDashboard.putNumber("number of waypoints", path.size());
         PIDController m_turnController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
         PIDController m_velocityController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
-        
         m_turnController.setSetpoint(0.0);
         int i = 0;
         while(!pathFollower.isPathDone()) {

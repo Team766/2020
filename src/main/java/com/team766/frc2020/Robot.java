@@ -26,8 +26,7 @@ public class Robot extends MyRobot {
 	
 	public void robotInit() {
 		// Initialize mechanisms here
-		drive = new Drive();
-		
+		drive = new Drive();	
 		
 		//auton picker
 		m_webServer = new WebServer();
