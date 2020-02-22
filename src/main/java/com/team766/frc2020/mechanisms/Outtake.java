@@ -35,9 +35,9 @@ public class Outtake extends Mechanism {
     }
 
     public void shootingSpeed(double targetVelocity) {
-        //m_velocityController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-        //m_velocityController.calculate(Robot.drive.AngleDifference(Robot.drive.getGyroAngle(), m_targetAngle), false);
-
+        // m_velocityController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+        // m_velocityController.setSetpoint(0.0);
+        // m_velocityController.calculate(, false);
     }
 
 }
