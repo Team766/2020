@@ -50,11 +50,9 @@ public class WebSocketTest extends Subroutine {
 
                 SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
                 // TODO: refactor these into own functions
-                Robot.drive.pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
-                Robot.drive.pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
                 Robot.drive.pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
                 Robot.drive.pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
-                System.out.println("steering error " + pathFollower.calculateSteeringError());
+                // System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
             i++;
 
@@ -69,7 +67,7 @@ public class WebSocketTest extends Subroutine {
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
             double turnPower = m_turnController.getOutput() * 800;
 
-            System.out.println("closest point index" + pathFollower.findClosestPointIndex());
+            // System.out.println("closest point index" + pathFollower.findClosestPointIndex());
             m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
             m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
             double straightPower = m_velocityController.getOutput();

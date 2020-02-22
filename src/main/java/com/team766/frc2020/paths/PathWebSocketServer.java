@@ -40,6 +40,14 @@ public class PathWebSocketServer extends WebSocketServer {
         broadcast(pathString);
     }
 
+    public void broadcastPosition(double xPosition, double yPosition) {
+        broadcast("{\"position\": { \"x\": " + xPosition + ", \"y\": " + yPosition + "}}" );
+    }
+
+    public void broadcastHeading(double heading) {
+        broadcast("{\"heading\": " + heading + "}" );
+    }
+
     @Override
     public void broadcast(String text) {
         super.broadcast(text);

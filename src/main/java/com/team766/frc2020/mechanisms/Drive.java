@@ -269,7 +269,6 @@ public class Drive extends Mechanism implements DriveI {
     private static double yPosition = 0;
     private static double velocity = 0;
     // heading is in degrees
-    private static double heading = 0; //aka angle
 
     private static double previousTime = RobotProvider.getTimeProvider().get();
     private static double currentTime = previousTime;
@@ -285,10 +284,6 @@ public class Drive extends Mechanism implements DriveI {
 
     public double getYPosition() {
         return yPosition;
-    }
-
-    public double getAngle() {
-        return heading;
     }
 
     public double getVelocity() {
@@ -318,7 +313,8 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += deltaYPosition;
 
         // send position and heading over websockets
-        // TODO: write this
+        this.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
+        this.pathWebSocketServer.broadcastHeading(currentGyroAngle);
 
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
