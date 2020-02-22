@@ -2,7 +2,6 @@ package com.team766.frc2020.commands;
 
 import java.util.ArrayList;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import java.net.InetSocketAddress;
 import org.java_websocket.server.WebSocketServer;
@@ -23,8 +22,8 @@ public class PathRunner extends Subroutine {
 
     protected void subroutine() {
         System.out.println("PathRunner STARTING");
-        // PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
-        // pathWebSocketServer.start();
+        PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
+        pathWebSocketServer.start();
         double endOrientation;
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
@@ -43,16 +42,11 @@ public class PathRunner extends Subroutine {
         }
 
         PathFollower pathFollower = new PathFollower(path);
-        // pathWebSocketServer.broadcastPath(path);
+        pathWebSocketServer.broadcastPath(path);
 
         SmartDashboard.putNumber("number of waypoints", path.size());
         PIDController m_turnController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
         PIDController m_velocityController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-
-        // LiveWindow.setEnabled(true);
-        // LiveWindow liveWindow = LiveWindow.getInstance();
-        // LiveWindow.add(m_turnController);
-        // LiveWindow.
 
         
         m_turnController.setSetpoint(0.0);
@@ -62,10 +56,10 @@ public class PathRunner extends Subroutine {
 
                 SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
                 // TODO: refactor these into own functions
-                // pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
-                // pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
-                // pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
-                // pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
+                pathWebSocketServer.broadcast("{\"position\": { \"x\": " + Robot.drive.getXPosition() + ", \"y\": " + Robot.drive.getYPosition() + "}}" );
+                pathWebSocketServer.broadcast("{\"heading\": " + Robot.drive.getGyroAngle() + "}" );
+                pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
+                pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
                 System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
             i++;
@@ -81,13 +75,10 @@ public class PathRunner extends Subroutine {
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
             double turnPower = m_turnController.getOutput() * 800;
 
-            // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
-            // System.out.println("closest point index" + findClosestPointIndex());
+            System.out.println("closest point index" + pathFollower.findClosestPointIndex());
             m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
             m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
-
             double straightPower = m_velocityController.getOutput() * 500;
-
 
             if (!inverted) { 
                 Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
@@ -108,6 +99,7 @@ public class PathRunner extends Subroutine {
 
 
     //     //-------------------------------------------------------------------------------------------
+    //      UNCOMMENT FOR A SECOND PATH; ONLY FOR TEMPORARY TESTING, YOU CAN DELETEME
     //     ArrayList<Waypoint> waypoints2 = new ArrayList<Waypoint>();
     //     inverted = true;
     //     waypoints.add(new Waypoint(0, 0));
