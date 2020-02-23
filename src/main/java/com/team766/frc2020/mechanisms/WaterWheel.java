@@ -65,5 +65,9 @@ public class WaterWheel extends Mechanism {
         double error = nextAngle - m_wheelMotor.getSensorPosition();
         m_velocityController.calculate(error, true);
         m_wheelMotor.set(m_velocityController.getOutput());
+    
+        // OTHER METHODS OF DOING THIS:
+        // TURN UNTIL ULTRASONIC SENSOR SENSES NO BALL
+        // MAKE ANOTHER METHOD TURNTOANGLE()
     }
 }

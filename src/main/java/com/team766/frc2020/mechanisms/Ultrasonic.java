@@ -21,4 +21,11 @@ public class Ultrasonic extends Mechanism{
         double currentDistance = m_ultrasonic.getValue() * kValueToInches;
         return currentDistance;
     }
+    
+    public boolean isBallPresent(){
+      if (getDistance() < 3.0) {
+        return true;
+      }
+      return false;
+    }
 }
