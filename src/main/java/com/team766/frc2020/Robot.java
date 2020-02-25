@@ -5,6 +5,8 @@ import com.team766.framework.Command;
 import com.team766.frc2020.mechanisms.*;
 import com.team766.hal.MyRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
+import java.net.InetSocketAddress;
+import com.team766.frc2020.paths.PathWebSocketServer;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
@@ -24,10 +26,12 @@ public class Robot extends MyRobot {
 	// public static Ultrasonic ultrasonic;
 	// public static Wagon wagon;
 	// public static WaterWheel waterwheel;
+	public static PathWebSocketServer pathWebSocketServer;
 	public static OI m_oi;
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;
 	private Command m_autonomous;
+
 	
 	@Override
 	
@@ -43,6 +47,8 @@ public class Robot extends MyRobot {
         // wagon = new Wagon();
         // waterwheel = new WaterWheel();
 		
+		pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
+
 		//auton picker
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());

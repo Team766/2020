@@ -142,13 +142,13 @@ public class OI extends Command {
 		oldTotalForward = totalForward;
 		oldTotalTheta = totalTheta;
 
-		totalForward = (Robot.drive.leftEncoderDistance() + Robot.drive.rightEncoderDistance()) / 2;
+		totalForward = ((Robot.drive.leftEncoderDistance() + Robot.drive.rightEncoderDistance()) * Robot.drive.DIST_PER_PULSE) / 2;
 		totalTheta = Robot.drive.getGyroAngle();
 
 		double deltaForward = totalForward - oldTotalForward;
 		double deltaTheta = totalTheta - oldTotalTheta;
 
-		Robot.drive.pathWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
+		Robot.pathWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
 	}
 }
 

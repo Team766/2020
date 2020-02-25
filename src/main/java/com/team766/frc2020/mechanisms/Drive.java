@@ -1,7 +1,6 @@
 package com.team766.frc2020.mechanisms;
 
 import java.lang.Math.*;
-import java.net.InetSocketAddress;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +17,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
 
 import com.team766.frc2020.Robot;
-import com.team766.frc2020.paths.PathWebSocketServer;
 
 public class Drive extends Mechanism implements DriveI {
 
@@ -50,8 +48,6 @@ public class Drive extends Mechanism implements DriveI {
     public static boolean isInverted = false;
 
     public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
-
-    public PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
 
     public Drive() {
         // Initialize victors
@@ -108,7 +104,7 @@ public class Drive extends Mechanism implements DriveI {
         m_rightTalon.configClosedLoopRamp(0.25, 0); //if something breaks that you can't figure out with acceleration (un)comment this
     
         // start websocket server
-        pathWebSocketServer.start();
+        Robot.pathWebSocketServer.start();
     }
 
     @Override
@@ -313,8 +309,8 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += deltaYPosition;
 
         // send position and heading over websockets
-        this.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
-        this.pathWebSocketServer.broadcastHeading(currentGyroAngle);
+        Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
+        Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
 
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
