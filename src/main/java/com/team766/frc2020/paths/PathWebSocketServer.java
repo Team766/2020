@@ -46,7 +46,12 @@ public class PathWebSocketServer extends WebSocketServer {
 
     public void broadcastHeading(double heading) {
         broadcast("{\"heading\": " + heading + "}" );
-    }
+	}
+	
+	public void broadcastDeltas(double deltaForward, double deltaTheta) {
+		//System.out.println("Sending: " + deltaForward + " " + deltaTheta);
+		broadcast("{\"deltas\": { \"forward\": " + deltaForward + ", \"theta\": " + deltaTheta + "}}" );
+	}
 
     @Override
     public void broadcast(String text) {

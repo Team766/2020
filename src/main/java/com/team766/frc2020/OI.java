@@ -25,11 +25,10 @@ public class OI extends Command {
 
 	public static boolean driverControl = false;
 
-	public double targetPosition = -1; 
-
-	public double combinedPosition;
-
-	public static boolean calibrate;
+	private double totalForward = (Robot.drive.leftSensorBasePosition + Robot.drive.rightSensorBasePosition) / 2;
+	private double totalTheta = Robot.drive.getGyroAngle();
+	private double oldTotalForward = 0;
+	private double oldTotalTheta = 0;
 
 	public OI() {
 		m_joystick1 = RobotProvider.instance.getJoystick(1);
@@ -139,6 +138,17 @@ public class OI extends Command {
 			Robot.drive.nukeRobot();
 			return;
 		}
+
+		oldTotalForward = totalForward;
+		oldTotalTheta = totalTheta;
+
+		totalForward = (Robot.drive.leftEncoderDistance() + Robot.drive.rightEncoderDistance()) / 2;
+		totalTheta = Robot.drive.getGyroAngle();
+
+		double deltaForward = totalForward - oldTotalForward;
+		double deltaTheta = totalTheta - oldTotalTheta;
+
+		Robot.drive.pathWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
 	}
 }
 
