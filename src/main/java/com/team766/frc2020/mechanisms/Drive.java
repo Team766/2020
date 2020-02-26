@@ -4,6 +4,7 @@ import java.lang.Math.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 
 import com.team766.framework.Mechanism;
 import com.team766.hal.GyroReader;
@@ -28,6 +29,11 @@ public class Drive extends Mechanism implements DriveI {
     private static CANSpeedController m_leftTalon;
     private static CANSpeedController m_rightTalon;
     private GyroReader m_gyro;
+    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
+    public static double kS = 0.0; 
+    public static double kV = 0.01; 
+    public static double kA = 0.01;
+
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
     public static double D = 0.0; //0.0012
@@ -129,8 +135,40 @@ public class Drive extends Mechanism implements DriveI {
         SmartDashboard.putNumber("Left Motor Input", leftSetting * maximumRPM * 256 / 600);
         SmartDashboard.putNumber("Right Motor Input", rightSetting * maximumRPM * 256 / 600);
     }
+    
+    /**
+     * As a guideline, kS should have units of volts, kV should have units of volts * seconds / distance, 
+     * and kA should have units of volts * seconds^2 / distance
+     * @param leftSetting
+     * @param rightSetting
+     */
+    
+    public void setDriveCurrent(double leftVelocity, double rightVelocity) {
+        // m_leftTalon.set(ControlMode.Current, leftSetting); 
+        // m_rightTalon.set(ControlMode.Current, rightSetting);
+        m_leftTalon.set(ControlMode.Current, feedforward.calculate(leftVelocity)); // TODO: try doing this by also giving it position data and also add a calculation for acceleration at each waypoint in a path
+        m_rightTalon.set(ControlMode.Current,feedforward.calculate(rightVelocity)); // TODO: check units. and really it should be setting voltage
+                                                                                    // to calibrate constants: https://docs.wpilib.org/en/latest/docs/software/wpilib-tools/robot-characterization/introduction.html#introduction-to-robot-characterization
+        m_leftVictor1.follow(m_leftTalon);
+        m_rightVictor1.follow(m_rightTalon);
+        if (m_secondVictor) {
+            m_leftVictor2.follow(m_leftTalon);
+            m_rightVictor2.follow(m_rightTalon);
+        }
 
-    public void arcadeDrive(double fwdPower, double turnPower) {
+        // EXAMPLE
+        // Calculates the feedforward for a position of 10 units, velocity of 20 units/second,
+        // and an acceleration of 30 units/second^2
+        // Units are determined by the units of the gains passed in at construction.
+        // feedforward.calculate(10, 20, 30);
+    }
+
+    /**
+     * Using different methods to set drive so we don't have to recode it.
+     * @param fwdPower
+     * @param turnPower
+     */
+    public void setArcadeDrive(double fwdPower, double turnPower) {
         double maximum = Math.max(Math.abs(fwdPower), Math.abs(turnPower));
         double total = fwdPower + turnPower;
         double difference = fwdPower - turnPower;
