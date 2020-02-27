@@ -26,7 +26,6 @@ public class Robot extends MyRobot {
 	// public static Ultrasonic ultrasonic;
 	// public static Wagon wagon;
 	// public static WaterWheel waterwheel;
-	public static PathWebSocketServer pathWebSocketServer;
 	public static OI m_oi;
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;
@@ -46,9 +45,7 @@ public class Robot extends MyRobot {
         // ultrasonic = new Ultrasonic(2);
         // wagon = new Wagon();
         // waterwheel = new WaterWheel();
-		
-		pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
-
+			
 		//auton picker
 		m_webServer = new WebServer();
 		m_webServer.addHandler("/config", new ConfigUI());

@@ -1,6 +1,7 @@
 package com.team766.frc2020.mechanisms;
 
 import java.lang.Math.*;
+import java.net.InetSocketAddress;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
 
 import com.team766.frc2020.Robot;
+import com.team766.frc2020.paths.PathWebSocketServer;
 
 public class Drive extends Mechanism implements DriveI {
 
@@ -54,6 +56,8 @@ public class Drive extends Mechanism implements DriveI {
     public static boolean isInverted = false;
 
     public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
+    
+	public PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
 
     public Drive() {
         // Initialize victors
@@ -110,7 +114,7 @@ public class Drive extends Mechanism implements DriveI {
         m_rightTalon.configClosedLoopRamp(0.25, 0); //if something breaks that you can't figure out with acceleration (un)comment this
     
         // start websocket server
-        Robot.pathWebSocketServer.start();
+        pathWebSocketServer.start();
     }
 
     @Override
@@ -301,6 +305,11 @@ public class Drive extends Mechanism implements DriveI {
     private static double previousTime = RobotProvider.getTimeProvider().get();
     private static double currentTime = previousTime;
 
+    private double totalForward = (leftSensorBasePosition + rightSensorBasePosition) / 2;
+	private double totalTheta = 0;
+	private double oldTotalForward = 0;
+	private double oldTotalTheta = 0;
+
     private double currentGyroAngle = 0;
     private double currentLeftEncoderDistance = 0;
     private double currentRightEncoderDistance = 0;
@@ -326,7 +335,7 @@ public class Drive extends Mechanism implements DriveI {
             index = 1;
         }
 
-        // get data
+        /*// get data
         currentTime = RobotProvider.getTimeProvider().get();
         currentGyroAngle = getGyroAngle();
         currentLeftEncoderDistance = leftEncoderDistance();
@@ -358,6 +367,17 @@ public class Drive extends Mechanism implements DriveI {
         }
         index++;
 
-        previousTime = currentTime;
+        previousTime = currentTime;*/
+        oldTotalForward = totalForward;
+		oldTotalTheta = totalTheta;
+
+		totalForward = ((Robot.drive.leftEncoderDistance() + Robot.drive.rightEncoderDistance()) * Robot.drive.DIST_PER_PULSE) / 2;
+		totalTheta = Robot.drive.getGyroAngle();
+
+		double deltaForward = totalForward - oldTotalForward;
+		double deltaTheta = totalTheta - oldTotalTheta;
+
+        pathWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
+        System.out.println("AAAAAAAAAAAAAA");
     }
 }
