@@ -75,9 +75,12 @@ public class PathRunner extends Subroutine {
             double turnPower = m_turnController.getOutput() * 800;
 
             System.out.println("closest point index" + pathFollower.findClosestPointIndex());
-            m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
-            m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
-            double straightPower = m_velocityController.getOutput();
+            // m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
+            // m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
+            // double straightPower = m_velocityController.getOutput();
+            // CANSpeedController already is fed in velocity values. PID should not be going on here. TODO: delete above code?
+             double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
+
 
             if (!inverted) { 
                 Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
