@@ -36,7 +36,7 @@ public class WebSocketTest extends Subroutine {
         }
 
         PathFollower pathFollower = new PathFollower(path);
-        Robot.pathWebSocketServer.broadcastPath(path);
+        Robot.drive.pathWebSocketServer.broadcastPath(path);
 
         SmartDashboard.putNumber("number of waypoints", path.size());
         PIDController m_turnController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
@@ -50,8 +50,8 @@ public class WebSocketTest extends Subroutine {
 
                 SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
                 // TODO: refactor these into own functions
-                Robot.pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
-                Robot.pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
+                Robot.drive.pathWebSocketServer.broadcast("{\"closest point\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
+                Robot.drive.pathWebSocketServer.broadcast("{\"lookahead point\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
                 // System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
             i++;
