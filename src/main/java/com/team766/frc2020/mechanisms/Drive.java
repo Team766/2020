@@ -293,8 +293,8 @@ public class Drive extends Mechanism implements DriveI {
     // should be moved later
     private static double deltaXPosition = 0;
     private static double deltaYPosition = 0;
-    private static double xPosition = 0;
-    private static double yPosition = 0;
+    private volatile static double xPosition = 0;
+    private volatile static double yPosition = 0;
     private static double velocity = 0;
     // heading is in degrees
 
@@ -317,6 +317,14 @@ public class Drive extends Mechanism implements DriveI {
 
     public double getYPosition() {
         return yPosition;
+    }
+
+    public void setXPosition(double newXPosition) {
+        xPosition = newXPosition;
+    }
+
+    public void setYPosition(double newYPosition) {
+        yPosition = newYPosition;
     }
 
     public double getVelocity() {

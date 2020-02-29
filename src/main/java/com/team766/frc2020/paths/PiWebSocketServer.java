@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import com.team766.frc2020.Robot;
+
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
@@ -54,6 +56,8 @@ public class PiWebSocketServer extends WebSocketServer {
             xPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("x"));
 			yPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("y"));
 			theta = Double.parseDouble(pmessage.getJSONObject("position").getString("theta"));
+            Robot.drive.setXPosition(Double.parseDouble(pmessage.getJSONObject("position").getString("x")));
+            Robot.drive.setYPosition(Double.parseDouble(pmessage.getJSONObject("position").getString("y")));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -72,5 +76,13 @@ public class PiWebSocketServer extends WebSocketServer {
 	@Override
 	public void onStart() {
 		System.out.println("server started successfully");
+    }
+
+    public double getXPosition() {
+        return xPosition;
+    }
+
+    public double getYPosition() {
+        return yPosition;
     }
 }
