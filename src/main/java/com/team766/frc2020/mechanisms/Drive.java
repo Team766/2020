@@ -41,9 +41,9 @@ public class Drive extends Mechanism implements DriveI {
     public static double I = 0.0;//0.0005
     public static double D = 0.0; //0.0012
     public final double MF = 1.1366666666666666666666666;
-    public final double MP = 0.00; //0.02
-    public final double MI = 0.00;
-    public final double MD = 9.31;
+    public final double MP = 0.01;
+    public final double MI = 0.0001;
+    public final double MD = 0.002;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
@@ -146,21 +146,15 @@ public class Drive extends Mechanism implements DriveI {
     public void setDriveCurrent(double leftVelocity, double rightVelocity) {
         // m_leftTalon.set(ControlMode.Current, leftSetting); 
         // m_rightTalon.set(ControlMode.Current, rightSetting);
-        m_leftTalon.set(ControlMode.Current, feedforward.calculate(leftVelocity)); // TODO: try doing this by also giving it position data and also add a calculation for acceleration at each waypoint in a path
-        m_rightTalon.set(ControlMode.Current,feedforward.calculate(rightVelocity)); // TODO: check units. and really it should be setting voltage
-                                                                                    // to calibrate constants: https://docs.wpilib.org/en/latest/docs/software/wpilib-tools/robot-characterization/introduction.html#introduction-to-robot-characterization
+        m_leftTalon.set(ControlMode.Current, feedforward.calculate(leftVelocity)); 
+        m_rightTalon.set(ControlMode.Current,feedforward.calculate(rightVelocity)); 
+        // to calibrate constants: https://docs.wpilib.org/en/latest/docs/software/wpilib-tools/robot-characterization/introduction.html#introduction-to-robot-characterization
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor) {
             m_leftVictor2.follow(m_leftTalon);
             m_rightVictor2.follow(m_rightTalon);
         }
-
-        // EXAMPLE
-        // Calculates the feedforward for a position of 10 units, velocity of 20 units/second,
-        // and an acceleration of 30 units/second^2
-        // Units are determined by the units of the gains passed in at construction.
-        // feedforward.calculate(10, 20, 30);
     }
 
     /**
@@ -352,8 +346,8 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += deltaYPosition;
 
         // send position and heading over websockets
-        Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
-        Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
+        pathWebSocketServer.broadcastPosition(xPosition, yPosition);
+        pathWebSocketServer.broadcastHeading(currentGyroAngle);
 
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
