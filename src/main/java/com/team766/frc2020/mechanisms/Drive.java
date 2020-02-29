@@ -346,8 +346,8 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += deltaYPosition;
 
         // send position and heading over websockets
-        pathWebSocketServer.broadcastPosition(xPosition, yPosition);
-        pathWebSocketServer.broadcastHeading(currentGyroAngle);
+        Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
+        Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
 
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
