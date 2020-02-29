@@ -13,7 +13,8 @@ import org.json.JSONObject;
 public class PiWebSocketServer extends WebSocketServer {
 
     public double xPosition = 0;
-    public double yPosition = 0;
+	public double yPosition = 0;
+	public double theta = 0;
     
     public PiWebSocketServer(InetSocketAddress address) {
         super(address);
@@ -29,6 +30,10 @@ public class PiWebSocketServer extends WebSocketServer {
 	public void broadcastDeltas(double deltaForward, double deltaTheta) {
 		//System.out.println("Sending: " + deltaForward + " " + deltaTheta);
 		broadcast("{\"deltas\": { \"forward\": " + deltaForward + ", \"theta\": " + deltaTheta + "}}" );
+	}
+
+	public void broadcastPosition(double xPosition, double yPosition, double theta) {
+		broadcast("{\"position\": { \"xPosition\": " + xPosition + ", \"yPosition\": " + yPosition + ", \"theta\": " + "}}" );
 	}
 
     @Override
@@ -47,7 +52,8 @@ public class PiWebSocketServer extends WebSocketServer {
         try {
             JSONObject pmessage = new JSONObject(message);
             xPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("x"));
-            yPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("y"));
+			yPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("y"));
+			theta = Double.parseDouble(pmessage.getJSONObject("position").getString("theta"));
         } catch (Exception e) {
             System.out.println(e);
         }
