@@ -20,6 +20,7 @@ import com.team766.config.ConfigFileReader;
 
 import com.team766.frc2020.Robot;
 import com.team766.frc2020.paths.PathWebSocketServer;
+import com.team766.frc2020.paths.PiWebSocketServer;
 
 public class Drive extends Mechanism implements DriveI {
 
@@ -57,8 +58,6 @@ public class Drive extends Mechanism implements DriveI {
 
     public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
     
-	public PathWebSocketServer pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
-
     public Drive() {
         // Initialize victors
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
@@ -112,9 +111,6 @@ public class Drive extends Mechanism implements DriveI {
         m_leftTalon.configClosedLoopRamp(0.25, 0);
         m_rightTalon.configOpenLoopRamp(0.25, 0);
         m_rightTalon.configClosedLoopRamp(0.25, 0); //if something breaks that you can't figure out with acceleration (un)comment this
-    
-        // start websocket server
-        pathWebSocketServer.start();
     }
 
     @Override
@@ -350,8 +346,8 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += deltaYPosition;
 
         // send position and heading over websockets
-        pathWebSocketServer.broadcastPosition(xPosition, yPosition);
-        pathWebSocketServer.broadcastHeading(currentGyroAngle);
+        Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
+        Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
 
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
@@ -367,18 +363,17 @@ public class Drive extends Mechanism implements DriveI {
         }
         index++;
 
+        // quan combde
         oldTotalForward = totalForward;
 		oldTotalTheta = totalTheta;
 
-		totalForward = ((Robot.drive.leftEncoderDistance() + Robot.drive.rightEncoderDistance()) * Robot.drive.DIST_PER_PULSE) / 2;
-		totalTheta = Robot.drive.getGyroAngle();
+		totalForward = ((deltaLeftEncoderDistance + deltaRightEncoderDistance) * Robot.drive.DIST_PER_PULSE) / 2;
+		totalTheta = currentGyroAngle;
 
 		double deltaForward = totalForward - oldTotalForward;
-		double deltaTheta = totalTheta - oldTotalTheta;
+        double deltaTheta = totalTheta - oldTotalTheta;
 
-        pathWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
-        System.out.println("AAAAAAAAAAAAAA");
-
+        Robot.piWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
         previousTime = currentTime;
     }
 }
