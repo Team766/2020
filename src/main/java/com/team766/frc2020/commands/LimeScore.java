@@ -3,19 +3,18 @@ package com.team766.frc2020.commands;
 import com.team766.controllers.TimeProviderI;
 import com.team766.framework.Subroutine;
 import com.team766.frc2020.Robot;
-//import com.team766.frc2020.mechanisms.Drive;
+import com.team766.frc2020.mechanisms.Drive;
 import com.team766.frc2020.mechanisms.DriveI;
 import com.team766.frc2020.mechanisms.LimeLight;
 import com.team766.frc2020.mechanisms.LimeLightI;
 import com.team766.frc2020.mechanisms.LimeLight.CameraMode;
 import com.team766.frc2020.mechanisms.LimeLight.LightMode;
-//import com.team766.hal.CANSpeedController.ControlMode;
-
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.team766.hal.CANSpeedController.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.team766.controllers.PIDController;
-//import com.team766.hal.JoystickReader;
-//import com.team766.hal.RobotProvider;
+import com.team766.hal.JoystickReader;
+import com.team766.hal.RobotProvider;
 
 public class LimeScore extends Subroutine {
 
@@ -50,14 +49,24 @@ public class LimeScore extends Subroutine {
         Robot.drive.setDrive(0,0);
         System.out.println("currentX"+ currentX);
        while ((currentX<-1)||(currentX>1)) {
-            if ( currentX<-1){
+            if (currentX<-4){
                 Robot.drive.setDrive(0.5,-0.5);
                 waitForSeconds(0.1);
             }
-                Robot.drive.setDrive(0,0);
+            Robot.drive.setDrive(0,0);
+            if ( currentX<-1){
+                Robot.drive.setDrive(0.3,-0.3);
                 waitForSeconds(0.1);
-            if ( currentX>1){
+            }
+             Robot.drive.setDrive(0,0);
+                waitForSeconds(0.1);
+            if ( currentX>4){
                 Robot.drive.setDrive(-0.5,0.5);
+                waitForSeconds(0.1);
+            }
+            Robot.drive.setDrive(0,0);
+            if ( currentX>1){
+                Robot.drive.setDrive(-0.3,0.3);
                 waitForSeconds(0.1);
             }
             Robot.drive.setDrive(0,0);
