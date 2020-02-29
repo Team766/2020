@@ -311,8 +311,8 @@ public class Drive extends Mechanism implements DriveI {
 	private double oldTotalTheta = 0;
 
     private double currentGyroAngle = 0;
-    private double currentLeftEncoderDistance = 0;
-    private double currentRightEncoderDistance = 0;
+    private double deltaLeftEncoderDistance = 0;
+    private double deltaRightEncoderDistance = 0;
     int index = 0;
 
     public double getXPosition() {
@@ -338,13 +338,13 @@ public class Drive extends Mechanism implements DriveI {
         // get data
         currentTime = RobotProvider.getTimeProvider().get();
         currentGyroAngle = getGyroAngle();
-        currentLeftEncoderDistance = leftEncoderDistance();
-        currentRightEncoderDistance = rightEncoderDistance();
+        deltaLeftEncoderDistance = leftEncoderDistance();
+        deltaRightEncoderDistance = rightEncoderDistance();
         Robot.drive.resetEncoders();
 
         // calculate position
-        deltaXPosition = (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
-        deltaYPosition = (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
+        deltaXPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
+        deltaYPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
         xPosition += deltaXPosition;
         yPosition += deltaYPosition;
@@ -363,11 +363,10 @@ public class Drive extends Mechanism implements DriveI {
             SmartDashboard.putNumber("velocity", velocity);
             // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
-            // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
+            // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }
         index++;
 
-        previousTime = currentTime;
         oldTotalForward = totalForward;
 		oldTotalTheta = totalTheta;
 
@@ -379,5 +378,7 @@ public class Drive extends Mechanism implements DriveI {
 
         pathWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
         System.out.println("AAAAAAAAAAAAAA");
+
+        previousTime = currentTime;
     }
 }
