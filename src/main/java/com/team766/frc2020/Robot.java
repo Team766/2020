@@ -21,7 +21,7 @@ public class Robot extends MyRobot {
 	public static Drive drive;
 	// public static Climber climber;
 	// public static Intake intake;
-	// public static LimeLight limeLight;
+	 public static LimeLight limeLight;
 	// public static Outtake outtake;
 	// public static Spinner spinner;
 	// public static Ultrasonic ultrasonic;
@@ -42,7 +42,7 @@ public class Robot extends MyRobot {
 		drive = new Drive();
 		// climber = new Climber();
 		// intake = new Intake();
-		// limeLight = new LimeLight();
+		 limeLight = new LimeLight();
 		// outtake = new Outtake();
 		// spinner = new Spinner();
         // ultrasonic = new Ultrasonic(2);
