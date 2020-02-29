@@ -35,7 +35,11 @@ public class PiWebSocketServer extends WebSocketServer {
 	}
 
 	public void broadcastPosition(double xPosition, double yPosition, double theta) {
-		broadcast("{\"position\": { \"xPosition\": " + xPosition + ", \"yPosition\": " + yPosition + ", \"theta\": " + "}}" );
+		broadcast("{\"position\": { \"xPosition\": " + xPosition + ", \"yPosition\": " + yPosition + ", \"theta\": " + theta + "}}" );
+	}
+
+	public void broadcastDeltaPosition(double deltaX, double deltaY, double deltaTheta) {
+		broadcast("{\"position\": { \"deltaX\": " + deltaX + ", \"deltaY\": " + deltaY + ", \"theta\": " + deltaTheta + "}}" );
 	}
 
     @Override
@@ -53,9 +57,9 @@ public class PiWebSocketServer extends WebSocketServer {
         System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
         try {
             JSONObject pmessage = new JSONObject(message);
-            xPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("x"));
-			yPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("y"));
-			theta = Double.parseDouble(pmessage.getJSONObject("position").getString("theta"));
+            // xPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("x"));
+			// yPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("y"));
+			// theta = Double.parseDouble(pmessage.getJSONObject("position").getString("theta"));
             Robot.drive.setXPosition(Double.parseDouble(pmessage.getJSONObject("position").getString("x")));
             Robot.drive.setYPosition(Double.parseDouble(pmessage.getJSONObject("position").getString("y")));
         } catch (Exception e) {

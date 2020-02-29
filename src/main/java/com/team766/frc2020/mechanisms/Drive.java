@@ -307,6 +307,7 @@ public class Drive extends Mechanism implements DriveI {
 	private double oldTotalTheta = 0;
 
     private double currentGyroAngle = 0;
+    private double deltaGyroAngle = 0;
     private double deltaLeftEncoderDistance = 0;
     private double deltaRightEncoderDistance = 0;
     int index = 0;
@@ -341,6 +342,7 @@ public class Drive extends Mechanism implements DriveI {
 
         // get data
         currentTime = RobotProvider.getTimeProvider().get();
+        deltaGyroAngle = getGyroAngle() - currentGyroAngle;
         currentGyroAngle = getGyroAngle();
         deltaLeftEncoderDistance = leftEncoderDistance();
         deltaRightEncoderDistance = rightEncoderDistance();
@@ -356,7 +358,7 @@ public class Drive extends Mechanism implements DriveI {
         // send position and heading over websockets
         Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
         Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
-        Robot.piWebSocketServer.broadcastPosition(xPosition, yPosition, currentGyroAngle);
+        Robot.piWebSocketServer.broadcastDeltaPosition(deltaXPosition, deltaYPosition, deltaGyroAngle);
 
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
