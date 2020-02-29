@@ -76,5 +76,5 @@ public class PathWebSocketServer extends WebSocketServer {
 	@Override
 	public void onStart() {
 		System.out.println("server started successfully");
-    }
+	}
 }
