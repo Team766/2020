@@ -1,5 +1,6 @@
 package com.team766.frc2020.mechanisms;
 
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.team766.controllers.PIDController;
 import com.team766.framework.Mechanism;
 import com.team766.hal.RobotProvider;
@@ -12,10 +13,12 @@ public class WaterWheel extends Mechanism {
 
     private CANSpeedController m_talon;
     private final SolenoidController m_ballPusher;
-    private final CANSpeedController m_wheelMotor;
+    private static CANSpeedController m_wheelMotor;
     private DigitalInputReader wheelLimitSwitch;
     PIDController m_velocityController = new PIDController(0.01, 0, 0, 10, RobotProvider.getTimeProvider());
     private double[] angles = {0.0, 72.0, 144.0, 216.0, 288.0};
+    double feedforward = 0.07;
+    
 
 
 
@@ -29,6 +32,11 @@ public class WaterWheel extends Mechanism {
     public void setWheelPower(double wheelPower) {
         m_wheelMotor.set(wheelPower);
     }
+
+    public static void setMotionMagic(double targetPos) {
+        m_wheelMotor.set(ControlMode.MotionMagic, targetPos);
+    }    
+
 
     public void setPusherState(boolean state) {
         m_ballPusher.set(state);

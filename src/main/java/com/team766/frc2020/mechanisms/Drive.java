@@ -116,6 +116,8 @@ public class Drive extends Mechanism implements DriveI {
     * Each Talon is followed by 2 Victors, which mirror the Talon's output.
     * Speed will be [-maximumRPM, maximumRPM], depending on joystick input.
     */
+
+
     public void setDrive(double leftSetting, double rightSetting) {
         m_leftTalon.set(ControlMode.Velocity, leftSetting * maximumRPM * 256 / 600); //RPM times units per rev / 100ms per min
         m_rightTalon.set(ControlMode.Velocity, rightSetting * maximumRPM * 256 / 600); //basically converts from RPM to units/100ms for the PID to use

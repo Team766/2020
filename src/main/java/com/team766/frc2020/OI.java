@@ -98,15 +98,19 @@ public class OI extends Command {
 		}
 
 		if (m_joystick1.getRawButton(1)) {
-			Robot.outtake.setOuttakePower(0.5);
+			// Robot.outtake.setOuttakePower(0.5);
+			Robot.outtake.testOuttake();
+
 		} else {
 			Robot.outtake.setOuttakePower(0);
 		}
 
 		if (m_boxop.getRawButton(18)) {
-			Robot.spinner.setSpinnerPower(0);
+			// Robot.spinner.setSpinnerPower(0);
+			Robot.wagon.setWagonPower(0);
 		} else if (m_boxop.getRawButton(19)) {
-			Robot.spinner.setSpinnerPower(0.5);
+			// Robot.spinner.setSpinnerPower(0.5);
+			Robot.wagon.setWagonPower(-0.5); // temporarily map the spinner speed to negative wagon
 		}
 
 		if (m_boxop.getRawButton(20)) {
@@ -116,7 +120,7 @@ public class OI extends Command {
 		}
 
 		if (m_boxop.getRawButton(22)) {
-			Robot.wagon.setWagonPower(0.5);
+			Robot.wagon.setWagonPower(1.0);
 		} else if (m_boxop.getRawButton(23)) {
 			Robot.wagon.setWagonPower(0);
 		}
@@ -128,9 +132,9 @@ public class OI extends Command {
 		}
 
 		if (m_joystick1.getRawButton(2)) {
-			Robot.waterwheel.setWheelPower(-0.1);
+			Robot.waterwheel.setWheelPower(-0.3);
 		} else if (m_joystick2.getRawButton(2)) {
-			Robot.waterwheel.setWheelPower(0.1);
+			Robot.waterwheel.setWheelPower(0.3);
 		} else {
 			Robot.waterwheel.setWheelPower(0);
 		}

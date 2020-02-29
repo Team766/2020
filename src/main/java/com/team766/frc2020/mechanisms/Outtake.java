@@ -6,6 +6,7 @@ import com.team766.hal.CANSpeedController;
 import com.team766.controllers.PIDController;
 import com.team766.hal.RobotProvider;
 import com.team766.frc2020.Robot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Outtake extends Mechanism {
 
@@ -32,6 +33,13 @@ public class Outtake extends Mechanism {
     public void stopOuttake() {
         m_talon1.stopMotor();
         m_talon2.stopMotor();
+    }
+
+    public void testOuttake() {
+        double power = 0.5;  
+        SmartDashboard.putNumber("outtake power", power);
+        m_talon1.set(power);
+        m_talon2.set(power);
     }
 
     public void shootingSpeed(double targetVelocity) {
