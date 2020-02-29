@@ -63,6 +63,7 @@ dependencies {
     implementation files('deps/gral-core-0.11.jar')
     // implementation "org.java-websocket:Java-WebSocket:1.4.0"
     implementation files('deps/Java-WebSocket-1.4.0-with-dependencies.jar')
+    implementation files('deps/json-20190722.jar')
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

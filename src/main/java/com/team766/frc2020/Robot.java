@@ -7,6 +7,7 @@ import com.team766.hal.MyRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import java.net.InetSocketAddress;
 import com.team766.frc2020.paths.PathWebSocketServer;
+import com.team766.frc2020.paths.PiWebSocketServer;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
@@ -26,6 +27,8 @@ public class Robot extends MyRobot {
 	// public static Ultrasonic ultrasonic;
 	// public static Wagon wagon;
 	// public static WaterWheel waterwheel;
+	public static PathWebSocketServer pathWebSocketServer;
+	public static PiWebSocketServer piWebSocketServer;
 	public static OI m_oi;
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;
@@ -44,7 +47,12 @@ public class Robot extends MyRobot {
 		// spinner = new Spinner();
         // ultrasonic = new Ultrasonic(2);
         // wagon = new Wagon();
-        // waterwheel = new WaterWheel();
+		// waterwheel = new WaterWheel();
+		
+		pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
+		piWebSocketServer = new PiWebSocketServer(new InetSocketAddress("10.7.66.2", 5802));
+		pathWebSocketServer.start();
+		piWebSocketServer.start();
 			
 		//auton picker
 		m_webServer = new WebServer();

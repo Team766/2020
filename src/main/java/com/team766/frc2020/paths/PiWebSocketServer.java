@@ -8,14 +8,14 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
 
-public class PathWebSocketServer extends WebSocketServer {
-    ArrayList<Waypoint> path;
-	public PathWebSocketServer(InetSocketAddress address, ArrayList<Waypoint> path) {
-        super(address);
-        this.path = path;
-    }
+import org.json.JSONObject;
+
+public class PiWebSocketServer extends WebSocketServer {
+
+    public double xPosition = 0;
+    public double yPosition = 0;
     
-    public PathWebSocketServer(InetSocketAddress address) {
+    public PiWebSocketServer(InetSocketAddress address) {
         super(address);
 	}
 
@@ -24,28 +24,11 @@ public class PathWebSocketServer extends WebSocketServer {
 		// conn.send("Welcome to the server!"); //This method sends a message to the new client
 		// broadcast( "new connection: " + handshake.getResourceDescriptor() ); //This method sends a message to all clients connected
 		System.out.println("new connection to " + conn.getRemoteSocketAddress());
-        broadcastPath(path);
     }
-
-    public void broadcastPath(ArrayList<Waypoint> path) {
-        String pathString = "";
-        pathString += "{\"path\": [";
-        
-        for (int i = 0; i < path.size(); i++) {
-			pathString += "{\"x\": " + Math.round(path.get(i).getX() * 100) / 100.0 + ", \"y\": " + Math.round(path.get(i).getY() * 100) / 100 + "},";
-		}
-		pathString = pathString.substring(0, pathString.length() - 1) + "]}";
-
-        System.out.println("path string " + pathString);
-        broadcast(pathString);
-    }
-
-    public void broadcastPosition(double xPosition, double yPosition) {
-        broadcast("{\"position\": { \"x\": " + xPosition + ", \"y\": " + yPosition + "}}" );
-    }
-
-    public void broadcastHeading(double heading) {
-        broadcast("{\"heading\": " + heading + "}" );
+	
+	public void broadcastDeltas(double deltaForward, double deltaTheta) {
+		//System.out.println("Sending: " + deltaForward + " " + deltaTheta);
+		broadcast("{\"deltas\": { \"forward\": " + deltaForward + ", \"theta\": " + deltaTheta + "}}" );
 	}
 
     @Override
@@ -60,7 +43,14 @@ public class PathWebSocketServer extends WebSocketServer {
 
 	@Override
 	public void onMessage(WebSocket conn, String message) {
-		System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
+        System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
+        try {
+            JSONObject pmessage = new JSONObject(message);
+            xPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("x"));
+            yPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("y"));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 	}
 
 	@Override
