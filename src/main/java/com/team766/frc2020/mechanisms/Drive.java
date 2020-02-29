@@ -356,8 +356,8 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += deltaYPosition;
 
         // send position and heading over websockets
-        Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
-        Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
+        // Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
+        // Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
         Robot.piWebSocketServer.broadcastDeltaPosition(deltaXPosition, deltaYPosition, deltaGyroAngle);
 
         // calculate velocity
@@ -375,16 +375,16 @@ public class Drive extends Mechanism implements DriveI {
         index++;
 
         // quan combde
-        oldTotalForward = totalForward;
-		oldTotalTheta = totalTheta;
+        // oldTotalForward = totalForward;
+		// oldTotalTheta = totalTheta;
 
-		totalForward = ((deltaLeftEncoderDistance + deltaRightEncoderDistance) * Robot.drive.DIST_PER_PULSE) / 2;
-		totalTheta = currentGyroAngle;
+		// totalForward = ((deltaLeftEncoderDistance + deltaRightEncoderDistance) * Robot.drive.DIST_PER_PULSE) / 2;
+		// totalTheta = currentGyroAngle;
 
-		double deltaForward = totalForward - oldTotalForward;
-        double deltaTheta = totalTheta - oldTotalTheta;
+		// double deltaForward = totalForward - oldTotalForward;
+        // double deltaTheta = totalTheta - oldTotalTheta;
 
-        Robot.piWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
+        // Robot.piWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
         previousTime = currentTime;
     }
 }
