@@ -298,13 +298,14 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
         
-        if (index % 10 == 0) {
+        if (index % 100 == 0) {
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
             // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
+            System.out.println("waterwheel at: " + Robot.waterwheel.getWheelPosition());
         }
         index++;
     }

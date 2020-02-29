@@ -38,7 +38,7 @@ public class NextBall extends Subroutine {
             
             m_turnController.calculate(vError, true);
             double velocityDifference = m_turnController.getOutput();
-            System.out.println("wheel difference: " + (Robot.waterwheel.getWheelPosition() - initialWheelPosition) + " distance at final time: " + motionProfile.getDistAtTime(motionProfile.getFinalTime()));
+            // System.out.println("wheel difference: " + (Robot.waterwheel.getWheelPosition() - initialWheelPosition) + " distance at final time: " + motionProfile.getDistAtTime(motionProfile.getFinalTime()));
             //System.out.println("Wheel velocity: " + Robot.waterwheel.getWheelVelocity() + " Velocity difference: " + velocityDifference); 
             Robot.waterwheel.setWheelPower(motionProfile.getVelocityAtTime(currentTime) + velocityDifference);
         

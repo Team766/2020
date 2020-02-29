@@ -13,7 +13,11 @@ public class WaterWheel extends Mechanism {
 
     private CANSpeedController m_talon;
     private final SolenoidController m_ballPusher;
+<<<<<<< HEAD
     private static CANSpeedController m_wheelMotor;
+=======
+    private final CANSpeedCntroller m_wheelMotor;
+>>>>>>> 8ef472ae85c149ebb7682f3107938f422dd15fdf
     private DigitalInputReader wheelLimitSwitch;
     PIDController m_velocityController = new PIDController(0.01, 0, 0, 10, RobotProvider.getTimeProvider());
     private double[] angles = {0.0, 72.0, 144.0, 216.0, 288.0};
@@ -54,6 +58,7 @@ public class WaterWheel extends Mechanism {
 
         m_wheelMotor.set(ControlMode.Velocity, wheelVelocity);
     }
+
     public void oneTurn() {
         m_velocityController.setSetpoint(0.0);
         double minError = 360;
