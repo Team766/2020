@@ -39,7 +39,7 @@ public class PiWebSocketServer extends WebSocketServer {
 	}
 
 	public void broadcastDeltaPosition(double deltaX, double deltaY, double deltaTheta) {
-		broadcast("{\"position\": { \"deltaX\": " + deltaX + ", \"deltaY\": " + deltaY + ", \"theta\": " + deltaTheta + "}}" );
+		broadcast("{\"deltaPosition\": { \"deltaX\": " + deltaX + ", \"deltaY\": " + deltaY + ", \"theta\": " + deltaTheta + "}}" );
 	}
 
     @Override
