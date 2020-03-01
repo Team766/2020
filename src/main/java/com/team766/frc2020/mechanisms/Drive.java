@@ -40,9 +40,9 @@ public class Drive extends Mechanism implements DriveI {
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
     public static double D = 0.0; //0.0012
-    public final double MF = 1.1366666666666666666666666;
+    public final double MF = 0.1; //will be kv
     public final double MP = 0.01;
-    public final double MI = 0.0001;
+    public final double MI = 0.000;
     public final double MD = 0.002;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
@@ -363,12 +363,12 @@ public class Drive extends Mechanism implements DriveI {
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
-        if (index % 10 == 0) {
+        if (index % 100 == 0) {
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
             SmartDashboard.putNumber("velocity", velocity);
-            // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }
