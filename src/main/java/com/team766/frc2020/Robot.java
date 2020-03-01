@@ -36,8 +36,8 @@ public class Robot extends MyRobot {
 
 	
 	@Override
-	
 	public void robotInit() {
+		System.out.println("hello");
 		// Initialize mechanisms here
 		drive = new Drive();
 		// climber = new Climber();

@@ -38,8 +38,8 @@ public class LimeScore extends Subroutine {
         m_limeLight = Robot.limeLight;
         m_turnController = new PIDController(LimeLight.P, LimeLight.I, LimeLight.D, LimeLight.THRESHOLD, RobotProvider.getTimeProvider() );
     }
-
     protected void subroutine() {
+        System.out.println("hi");
         LimeLight.setLedMode(LightMode.eOn);
         LimeLight.setCameraMode(CameraMode.eVision);
         m_turnController.reset();
@@ -48,41 +48,23 @@ public class LimeScore extends Subroutine {
         yError = m_limeLight.ty();
         Robot.drive.setDrive(0,0);
         System.out.println("currentX"+ currentX);
-       while (currentX<-1) {
-            if (currentX<-4){
-                Robot.drive.setDrive(-0.5,0.5);
-                waitForSeconds(0.1);
-                currentX = m_limeLight.tx();
-            }
-            Robot.drive.setDrive(0,0);
-            if ( currentX<-1){
-                Robot.drive.setDrive(-0.3,0.3);
-                waitForSeconds(0.1);
-                currentX = m_limeLight.tx();
-            }
-             Robot.drive.setDrive(0,0);
-                waitForSeconds(0.1);
-       }
+        Robot.drive.setDrive(0,0);
+       currentX = m_limeLight.tx();
+         while (currentX<-0.7){
+            Robot.drive.setDrive(-0.1,0.1);
+          currentX = m_limeLight.tx();
+          waitForSeconds(0.1);
+        }
        Robot.drive.setDrive(0,0);
        currentX = m_limeLight.tx();
-       while (currentX>1) {
-        if ( currentX>4){
-            Robot.drive.setDrive(0.5,-0.5);
-            waitForSeconds(0.1);
+        while (currentX>0.7){
+            Robot.drive.setDrive(0.1,-0.1);
             currentX = m_limeLight.tx();
-        }
-        Robot.drive.setDrive(0,0);
-        if ( currentX>1){
-            Robot.drive.setDrive(0.3,-0.3);
             waitForSeconds(0.1);
-            currentX = m_limeLight.tx();
         }
-        Robot.drive.setDrive(0,0);
-        currentX = m_limeLight.tx();
-   }
+        Robot.drive.setDrive(0,0);      
         currentX = m_limeLight.tx();
        System.out.println("currentX"+ currentX);
-       Robot.drive.setDrive(0,0);
        System.out.println("Callibrated, if it ain't working, its a mechanical prolem");
         yield();
         return;
