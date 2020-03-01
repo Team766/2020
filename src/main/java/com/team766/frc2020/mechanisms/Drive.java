@@ -147,7 +147,7 @@ public class Drive extends Mechanism implements DriveI {
         // m_leftTalon.set(ControlMode.Current, leftSetting); 
         // m_rightTalon.set(ControlMode.Current, rightSetting);
         m_leftTalon.set(ControlMode.Current, feedforward.calculate(leftVelocity)); 
-        m_rightTalon.set(ControlMode.Current,feedforward.calculate(rightVelocity)); 
+        m_rightTalon.set(ControlMode.Current, feedforward.calculate(rightVelocity)); 
         // to calibrate constants: https://docs.wpilib.org/en/latest/docs/software/wpilib-tools/robot-characterization/introduction.html#introduction-to-robot-characterization
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
