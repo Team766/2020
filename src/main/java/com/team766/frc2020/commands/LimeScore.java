@@ -51,16 +51,25 @@ public class LimeScore extends Subroutine {
         Robot.drive.setDrive(0,0);
        currentX = m_limeLight.tx();
          while (currentX<-0.7){
-            Robot.drive.setDrive(-0.1,0.1);
+            Robot.drive.setDrive(-1,1);
           currentX = m_limeLight.tx();
           waitForSeconds(0.1);
+          Robot.drive.setDrive(0,0);
         }
        Robot.drive.setDrive(0,0);
        currentX = m_limeLight.tx();
         while (currentX>0.7){
-            Robot.drive.setDrive(0.1,-0.1);
+            Robot.drive.setDrive(1,-1);
             currentX = m_limeLight.tx();
             waitForSeconds(0.1);
+            Robot.drive.setDrive(0,0);
+        }
+
+             while (currentX<-0.7){
+            Robot.drive.setDrive(-1,1);
+          currentX = m_limeLight.tx();
+          waitForSeconds(0.1);
+          Robot.drive.setDrive(0,0);
         }
         Robot.drive.setDrive(0,0);      
         currentX = m_limeLight.tx();
