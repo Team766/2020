@@ -23,7 +23,7 @@ public class WheelMotionMagic extends Subroutine {
         double currentTime = 0;
         double start_velocity = 0;
         
-        WaterWheel.setMotionMagic(dist);
+        Robot.waterwheel.setMotionMagic(dist);
 
 
 

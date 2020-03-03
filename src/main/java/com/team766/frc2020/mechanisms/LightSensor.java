@@ -1,3 +1,5 @@
+package com.team766.frc2020.mechanisms;
+
 import com.team766.framework.Mechanism;
 import com.team766.hal.DigitalInputReader;
 import com.team766.hal.RobotProvider;
