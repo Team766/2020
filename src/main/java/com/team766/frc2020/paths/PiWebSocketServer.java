@@ -39,7 +39,7 @@ public class PiWebSocketServer extends WebSocketServer {
 	}
 
 	public void broadcastDeltaPosition(double deltaX, double deltaY, double deltaTheta) {
-		broadcast("{\"deltaPosition\": { \"deltaX\": " + deltaX + ", \"deltaY\": " + deltaY + ", \"deltaTheta\": " + deltaTheta + "}}" );
+		broadcast("{\"deltaPosition\": { \"deltaX\": " + deltaX + ", \"deltaY\": " + deltaY + ", \"theta\": " + deltaTheta + "}}" );
 	}
 
     @Override
@@ -54,7 +54,7 @@ public class PiWebSocketServer extends WebSocketServer {
 
 	@Override
 	public void onMessage(WebSocket conn, String message) {
-        //System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
+        System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
         try {
             JSONObject pmessage = new JSONObject(message);
             // xPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("x"));
@@ -63,7 +63,7 @@ public class PiWebSocketServer extends WebSocketServer {
             Robot.drive.setXPosition(Double.parseDouble(pmessage.getJSONObject("position").getString("x")));
             Robot.drive.setYPosition(Double.parseDouble(pmessage.getJSONObject("position").getString("y")));
         } catch (Exception e) {
-            //System.out.println(e);
+            System.out.println(e);
         }
 	}
 
@@ -74,7 +74,7 @@ public class PiWebSocketServer extends WebSocketServer {
 
 	@Override
 	public void onError(WebSocket conn, Exception ex) {
-		//System.err.println("an error occurred on connection " + conn.getRemoteSocketAddress()  + ":" + ex);
+		System.err.println("an error occurred on connection " + conn.getRemoteSocketAddress()  + ":" + ex);
 	}
 	
 	@Override

@@ -40,9 +40,9 @@ public class Drive extends Mechanism implements DriveI {
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
     public static double D = 0.0; //0.0012
-    public final double MF = 0.1; //will be kv
+    public final double MF = 1.1366666666666666666666666;
     public final double MP = 0.01;
-    public final double MI = 0.000;
+    public final double MI = 0.0001;
     public final double MD = 0.002;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
@@ -147,7 +147,7 @@ public class Drive extends Mechanism implements DriveI {
         // m_leftTalon.set(ControlMode.Current, leftSetting); 
         // m_rightTalon.set(ControlMode.Current, rightSetting);
         m_leftTalon.set(ControlMode.Current, feedforward.calculate(leftVelocity)); 
-        m_rightTalon.set(ControlMode.Current, feedforward.calculate(rightVelocity)); 
+        m_rightTalon.set(ControlMode.Current,feedforward.calculate(rightVelocity)); 
         // to calibrate constants: https://docs.wpilib.org/en/latest/docs/software/wpilib-tools/robot-characterization/introduction.html#introduction-to-robot-characterization
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
@@ -363,28 +363,28 @@ public class Drive extends Mechanism implements DriveI {
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
-        if (index % 100 == 0) {
+        if (index % 10 == 0) {
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
             SmartDashboard.putNumber("velocity", velocity);
-            System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }
         index++;
 
         // quan combde
-        // oldTotalForward = totalForward;
-		// oldTotalTheta = totalTheta;
+        oldTotalForward = totalForward;
+		oldTotalTheta = totalTheta;
 
-		// totalForward = ((deltaLeftEncoderDistance + deltaRightEncoderDistance) * Robot.drive.DIST_PER_PULSE) / 2;
-		// totalTheta = currentGyroAngle;
+		totalForward = ((deltaLeftEncoderDistance + deltaRightEncoderDistance) * Robot.drive.DIST_PER_PULSE) / 2;
+		totalTheta = currentGyroAngle;
 
-		// double deltaForward = totalForward - oldTotalForward;
-        // double deltaTheta = totalTheta - oldTotalTheta;
+		double deltaForward = totalForward - oldTotalForward;
+        double deltaTheta = totalTheta - oldTotalTheta;
 
-        // Robot.piWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
+        Robot.piWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
         previousTime = currentTime;
     }
 }

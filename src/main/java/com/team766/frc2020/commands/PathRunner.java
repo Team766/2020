@@ -45,8 +45,8 @@ public class PathRunner extends Subroutine {
         // pathWebSocketServer.broadcastPath(path);
 
         SmartDashboard.putNumber("number of waypoints", path.size());
-        PIDController m_turnController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-        PIDController m_velocityController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+        PIDController m_turnController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+        PIDController m_velocityController = new PIDController(0.01, 0.0001, 0.001, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
         m_turnController.setSetpoint(0.0);
         int i = 0;
@@ -72,18 +72,18 @@ public class PathRunner extends Subroutine {
 
             pathFollower.update();
             m_turnController.calculate(pathFollower.calculateSteeringError(), true);
-            double turnPower = m_turnController.getOutput() * 200; // add (Vintercept + ka)/kv
+            double turnPower = m_turnController.getOutput() * 800;
 
             System.out.println("closest point index" + pathFollower.findClosestPointIndex());
-            m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
-            m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
-            double straightPower = m_velocityController.getOutput();
-            //  double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
-            System.out.println("straightpower: " + straightPower);
+            // m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
+            // m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
+            // double straightPower = m_velocityController.getOutput();
+            // CANSpeedController already is fed in velocity values. PID should not be going on here. TODO: delete above code?
+             double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
 
 
             if (!inverted) { 
-                Robot.drive.setDrive((straightPower + turnPower)/50, (straightPower - turnPower)/50);
+                Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
             } else {
                 Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
             }
@@ -91,12 +91,10 @@ public class PathRunner extends Subroutine {
             // allow odometry and other stuff to happen
             yield();
         }
-
         Robot.drive.setDrive(0, 0);
         System.out.println("path followed");
         callSubroutine(new PreciseTurn(endOrientation));
         System.out.println("final orientated");
-
 
 
 
