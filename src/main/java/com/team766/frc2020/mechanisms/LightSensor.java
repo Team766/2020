@@ -32,7 +32,4 @@ public class LightSensor extends Mechanism {
             System.out.println("Bottom is false");
         }
     }
-
-
 }
-

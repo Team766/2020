@@ -1,6 +1,7 @@
 package com.team766.frc2020.mechanisms;
 
 import com.team766.framework.Mechanism;
+import com.team766.frc2020.mechanisms.LightSensor;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController;
 import com.team766.controllers.PIDController;
@@ -13,6 +14,7 @@ public class Outtake extends Mechanism {
     private CANSpeedController m_talon1;
     private CANSpeedController m_talon2;
     private PIDController m_velocityController;
+    private double kShoot = 0.1;
 
     public Outtake() {
         m_talon1 = RobotProvider.instance.getTalonCANMotor("outtake.leftTalon");
@@ -42,10 +44,22 @@ public class Outtake extends Mechanism {
         m_talon2.set(power);
     }
 
-    public void shootingSpeed(double targetVelocity) {
-        // m_velocityController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-        // m_velocityController.setSetpoint(0.0);
-        // m_velocityController.calculate(, false);
+    /**
+     * set the outtake power dynamically based on distance away
+     * @param distance away from target in inches
+     */
+    public void setOuttakePowerDistance(double distance) {
+        // uses the Talon PID and not our own
+        m_talon1.set(kShoot * distance);
+        m_talon2.set(kShoot * distance);
+    }
+
+    public void continuousDistanceShoot() {
+        while(Robot.lightSensor.getTopLightSensorState()){
+            //double distance = limelight.getDistanceToTarget();
+            m_talon1.set(kShoot * distance);
+            m_talon2.set(kShoot * distance);
+        }
     }
 
 }
