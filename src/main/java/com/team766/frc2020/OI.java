@@ -149,7 +149,6 @@ public class OI extends Command {
 			Robot.drive.nukeRobot();
 			return;
 		}
-		
 
 		if(m_boxop.getRawButton(24)) {
 			outtakeAllBalls();
@@ -159,7 +158,7 @@ public class OI extends Command {
 	public void outtakeAllBalls() {
 		// when limelight works, get the distance here
 		for (int i = 0; i < 5; i++) {
-			// Robot.WaterWheel.NextBall();
+			Robot.WaterWheel.turnDegrees(840);
 			if (Robot.lightSensor.getTopLightSensorState() == true){
 				Robot.outtake.setOuttakePower(1);
 			}	

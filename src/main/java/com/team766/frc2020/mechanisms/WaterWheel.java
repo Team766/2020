@@ -18,10 +18,8 @@ public class WaterWheel extends Mechanism {
     PIDController m_velocityController = new PIDController(0.01, 0, 0, 10, RobotProvider.getTimeProvider());
     private double[] angles = {0.0, 72.0, 144.0, 216.0, 288.0};
     double feedforward = 0.07;
+
     
-
-
-
     public WaterWheel() {
         //m_talon = RobotProvider.instance.getTalonCANMotor("waterwheel.talon");
         m_ballPusher = RobotProvider.instance.getSolenoid("waterwheel.pusher");
@@ -55,30 +53,6 @@ public class WaterWheel extends Mechanism {
         m_wheelMotor.set(ControlMode.Velocity, wheelVelocity);
     }
 
-    public void oneTurn() {
-        m_velocityController.setSetpoint(0.0);
-        double minError = 360;
-        double nextAngle = 0;
-        for (double angle: angles){
-            if (angle - m_wheelMotor.getSensorPosition() <=0) {
-                angle+=360;
-            }
-            if (angle - m_wheelMotor.getSensorPosition() < minError) {
-                nextAngle = angle;
-            }
-        }
-        if (nextAngle>=360){
-            nextAngle-=360;
-        }
-
-        double error = nextAngle - m_wheelMotor.getSensorPosition();
-        m_velocityController.calculate(error, true);
-        m_wheelMotor.set(m_velocityController.getOutput());
-    
-        // OTHER METHODS OF DOING THIS:
-        // TURN UNTIL ULTRASONIC SENSOR SENSES NO BALL
-        // MAKE ANOTHER METHOD TURNTOANGLE()
-    }
 
     public void turnDegrees(int degrees) {
         int currentPosition = (int)(m_wheelMotor.getSensorPosition());
