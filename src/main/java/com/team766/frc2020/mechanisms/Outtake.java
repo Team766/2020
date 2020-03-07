@@ -57,8 +57,8 @@ public class Outtake extends Mechanism {
     public void continuousDistanceShoot() {
         while(Robot.lightSensor.getTopLightSensorState()){
             //double distance = limelight.getDistanceToTarget();
-            m_talon1.set(kShoot * distance);
-            m_talon2.set(kShoot * distance);
+            // m_talon1.set(kShoot * distance);
+            // m_talon2.set(kShoot * distance);
         }
     }
 

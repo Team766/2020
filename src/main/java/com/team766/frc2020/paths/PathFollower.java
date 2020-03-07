@@ -15,17 +15,18 @@ public class PathFollower {
     public static boolean isPathDone = false;
     private Waypoint lookaheadWaypoint;
     private int index = 0;
+    private double lookaheadDistance = 13;
 
     public PathFollower(ArrayList<Waypoint> path) {
         // TODO: add copy function for path
         this.path = path;
         // change this from magic number
-        lookaheadWaypoint = findLookaheadPoint(13);
+        lookaheadWaypoint = findLookaheadPoint(this.lookaheadDistance);
     }
 
     public void update() {
         setLastClosestPointIndex(findClosestPointIndex());
-        setLookaheadWaypoint(findLookaheadPoint(13));
+        setLookaheadWaypoint(findLookaheadPoint(this.lookaheadDistance));
     }
 
     /**
@@ -60,7 +61,7 @@ public class PathFollower {
                 // Point = E + (t value of intersection) * d
                 // if intersection exists find values
                 if (index++ % 50 == 0) {
-                    System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
+                    // System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
                 }
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection

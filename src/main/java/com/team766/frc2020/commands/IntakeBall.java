@@ -25,7 +25,7 @@ public class IntakeBall extends Subroutine {
         Robot.intake.setIntakeState(false);
         Robot.intake.setIntakePower(0);
         Robot.wagon.setWagonPower(0);
-        Robot.waterwheel.oneTurn();
+        // Robot.waterwheel.oneTurn();
     }
 
 }

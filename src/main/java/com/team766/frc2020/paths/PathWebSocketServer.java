@@ -32,12 +32,21 @@ public class PathWebSocketServer extends WebSocketServer {
         pathString += "{\"path\": [";
         
         for (int i = 0; i < path.size(); i++) {
-            pathString += "{\"x\": " + path.get(i).getX() + ", \"y\": " + path.get(i).getY() + "},";
-        }
-        pathString = pathString.substring(0, pathString.length()-1) + "]}";
+			pathString += "{\"x\": " + Math.round(path.get(i).getX() * 100) / 100.0 + ", \"y\": " + Math.round(path.get(i).getY() * 100) / 100 + "},";
+		}
+		pathString = pathString.substring(0, pathString.length() - 1) + "]}";
 
+        System.out.println("path string " + pathString);
         broadcast(pathString);
     }
+
+    public void broadcastPosition(double xPosition, double yPosition) {
+        broadcast("{\"position\": { \"x\": " + xPosition + ", \"y\": " + yPosition + "}}" );
+    }
+
+    public void broadcastHeading(double heading) {
+        broadcast("{\"heading\": " + heading + "}" );
+	}
 
     @Override
     public void broadcast(String text) {
@@ -55,7 +64,7 @@ public class PathWebSocketServer extends WebSocketServer {
 	}
 
 	@Override
-	public void onMessage( WebSocket conn, ByteBuffer message ) {
+	public void onMessage(WebSocket conn, ByteBuffer message) {
 		System.out.println("received ByteBuffer from "	+ conn.getRemoteSocketAddress());
 	}
 
@@ -67,5 +76,5 @@ public class PathWebSocketServer extends WebSocketServer {
 	@Override
 	public void onStart() {
 		System.out.println("server started successfully");
-    }
+	}
 }
