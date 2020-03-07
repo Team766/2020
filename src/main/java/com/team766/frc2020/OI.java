@@ -8,6 +8,7 @@ import com.team766.frc2020.mechanisms.WaterWheel;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
+import com.team766.frc2020.commands.LimeScore;
 
 import com.team766.frc2020.mechanisms.*;
 
@@ -28,6 +29,8 @@ public class OI extends Command {
 	// Variables for arcade drive
 	private double fwd_power = 0;
 	private double turn_power = 0;
+
+	private LimeScore m_limeScore;
 
 	public static boolean driverControl = false;
 
@@ -103,7 +106,14 @@ public class OI extends Command {
 			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
 		}
 
-
+		if (m_joystick2.getRawButton(2)) {
+			m_limeScore = new LimeScore();
+			m_limeScore.start();
+		 } 
+		if (m_joystick2.getRawButton(3)) {
+			m_limeScore = new LimeScore();
+			m_limeScore.stop();
+		 }
 		// if (m_boxop.getRawButton(18)) {
 		// 	Robot.spinner.setSpinnerPower(0);
 		// } else if (m_boxop.getRawButton(19)) {
