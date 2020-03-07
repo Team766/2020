@@ -79,4 +79,10 @@ public class WaterWheel extends Mechanism {
         // TURN UNTIL ULTRASONIC SENSOR SENSES NO BALL
         // MAKE ANOTHER METHOD TURNTOANGLE()
     }
+
+    public void turnDegrees(int degrees) {
+        int currentPosition = (int)(m_wheelMotor.getSensorPosition());
+        m_wheelMotor.setPosition(currentPosition + degrees);
+    }
+
 }
