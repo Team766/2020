@@ -8,6 +8,9 @@ import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
+import com.team766.frc2020.mechanisms.*;
+
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI extends Command {
-
 	private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
@@ -67,32 +69,16 @@ public class OI extends Command {
 		
 		// Robot.drive.setDrive(leftPower, rightPower);
 
-		Robot.drive.arcadeDrive(-m_joystick1.getRawAxis(1), Math.pow(m_joystick2.getRawAxis(0), 3));
+		Robot.drive.arcadeDrive(-m_joystick1.getRawAxis(1), m_joystick2.getRawAxis(0));
 		
-		// We shouldn't need to actuate the intake very often. Put it down and leave it. (To minimize damage)
-		if (m_boxop.getRawButton(1)) {
-			Robot.intake.setIntakeState(false);
-		} else if (m_boxop.getRawButton(2)) {
-			Robot.intake.setIntakeState(true);
-		}
-
-		// Power intake wheels
-		if (m_boxop.getRawButton(3)) {
-			Robot.intake.setIntakePower(0);
-		} else if (m_boxop.getRawButton(4)) {
-			Robot.intake.setIntakePower(0.5);
-		}
-
-		// Wagon
+		// Climber
 		if (m_boxop.getRawButton(5)) {
-			// Robot.spinner.setSpinnerPower(0);
-			Robot.wagon.setWagonPower(0);
+            Robot.climber.setClimberUpState(false);
+            Robot.climber.setClimberDownState(true);
 		} else if (m_boxop.getRawButton(6)) {
-			// Robot.spinner.setSpinnerPower(0.5);
-			Robot.wagon.setWagonPower(0.7); // temporarily map the spinner speed to negative wagon
+            Robot.climber.setClimberUpState(true);
+            Robot.climber.setClimberDownState(false);
 		}
-
-		
 
 		if (m_boxop.getRawButton(7)) {
 			Robot.climber.setShifterPower(0);
@@ -106,6 +92,18 @@ public class OI extends Command {
 			Robot.climber.setWinchPower(0.5);
 		}
 
+		if (m_boxop.getRawButton(3)) {
+			Robot.intake.setIntakePower(0);
+		} else if (m_boxop.getRawButton(4)) {
+			Robot.intake.setIntakePower(0.5);
+		}
+		
+		if (m_boxop.getRawButton(1)) {
+			Robot.intake.setIntakeState(false);
+		} else if (m_boxop.getRawButton(2)) {
+			Robot.intake.setIntakeState(true);
+		}
+
 		if (m_joystick1.getRawButton(1)) {
 			// Robot.outtake.setOuttakePower(0.5);
 			Robot.outtake.testOuttake();
@@ -114,13 +112,12 @@ public class OI extends Command {
 			Robot.outtake.setOuttakePower(0);
 		}
 
-		// Climber
 		if (m_boxop.getRawButton(18)) {
-            Robot.climber.setClimberUpState(false);
-            Robot.climber.setClimberDownState(true);
+			// Robot.spinner.setSpinnerPower(0);
+			Robot.wagon.setWagonPower(0);
 		} else if (m_boxop.getRawButton(19)) {
-            Robot.climber.setClimberUpState(true);
-            Robot.climber.setClimberDownState(false);
+			// Robot.spinner.setSpinnerPower(0.5);
+			Robot.wagon.setWagonPower(0.5); // temporarily map the spinner speed to negative wagon
 		}
 
 		if (m_boxop.getRawButton(20)) {
@@ -152,7 +149,22 @@ public class OI extends Command {
 			Robot.drive.nukeRobot();
 			return;
 		}
+		
+
+		if(m_boxop.getRawButton(24)) {
+			outtakeAllBalls();
+		}
+	}
+
+	public void outtakeAllBalls() {
+		// when limelight works, get the distance here
+		for (int i = 0; i < 5; i++) {
+			// Robot.WaterWheel.NextBall();
+			if (Robot.lightSensor.getTopLightSensorState() == true){
+				Robot.outtake.setOuttakePower(1);
+			}	
+		Robot.outtake.setOuttakePower(0);
+		}
 	}
 }
-
 	

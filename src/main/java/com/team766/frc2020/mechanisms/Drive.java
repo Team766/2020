@@ -15,6 +15,7 @@ import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
+import com.team766.frc2020.mechanisms.LightSensor;
 
 import com.team766.frc2020.Robot;
 
@@ -298,7 +299,7 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
         
-        if (index % 100 == 0) {
+        if (index % 10 == 0) {
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
@@ -306,6 +307,7 @@ public class Drive extends Mechanism implements DriveI {
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
             System.out.println("waterwheel at: " + Robot.waterwheel.getWheelPosition());
+            Robot.lightSensor.checkLightSensor();
         }
         index++;
     }
