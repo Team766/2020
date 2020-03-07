@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.team766.controllers.PIDController;
 import com.team766.config.ConfigFileReader;
 import com.team766.framework.Mechanism;
+import com.team766.frc2020.Robot;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController;
 import com.team766.hal.DigitalInputReader;
@@ -20,6 +21,8 @@ public class WaterWheel extends Mechanism {
    //private final CANSpeedController wheelState;
     private DigitalInputReader wheelLimitSwitch;
     private WPI_TalonSRX m_wheelMotor;
+    public boolean intakeMode = false;
+    public boolean outtakeMode = true;
 
     
     public WaterWheel() {
@@ -38,6 +41,22 @@ public class WaterWheel extends Mechanism {
         //m_wheelMotor.set(ControlMode.MotionMagic, 0.0);
 
         //wheelLimitSwitch = RobotProvider.instance.getDigitalInput("waterwheel.limitswitch");
+    }
+
+    public void setIntakeMode(boolean mode) {
+        if(!(intakeMode == mode)) {  
+            intakeMode = mode;  
+            setWheelPosition(Robot.waterwheel.getWheelPosition() + 420);
+        }
+
+    }
+
+    public void setOuttakeMode(boolean mode) {
+        outtakeMode = mode;
+        if(!(outtakeMode == mode)) {
+            outtakeMode = mode;
+            setWheelPosition(Robot.waterwheel.getWheelPosition() + 420);
+        }
     }
 
     public void setWheelPower(final double wheelPower) {
