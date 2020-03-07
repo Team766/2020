@@ -55,6 +55,7 @@ public class LimeScore extends Subroutine {
           currentX = m_limeLight.tx();
           waitForSeconds(0.1);
           Robot.drive.setDrive(0,0);
+          continue;
         }
        Robot.drive.setDrive(0,0);
        currentX = m_limeLight.tx();
@@ -63,6 +64,7 @@ public class LimeScore extends Subroutine {
             currentX = m_limeLight.tx();
             waitForSeconds(0.1);
             Robot.drive.setDrive(0,0);
+            continue;
         }
 
              while (currentX<-0.7){
@@ -70,12 +72,12 @@ public class LimeScore extends Subroutine {
           currentX = m_limeLight.tx();
           waitForSeconds(0.1);
           Robot.drive.setDrive(0,0);
+          continue;
         }
         Robot.drive.setDrive(0,0);      
         currentX = m_limeLight.tx();
        System.out.println("currentX"+ currentX);
        System.out.println("Callibrated, if it ain't working, its a mechanical prolem, alos, Alex. C. and Anton and Jaob might be the reason it aint working, ask them questions cause its their fault entirely");
-        yield();
         return;
     }
 }
