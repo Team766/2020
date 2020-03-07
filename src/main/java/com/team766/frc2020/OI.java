@@ -81,11 +81,19 @@ public class OI extends Command {
 		// 	Robot.climber.setShifterPower(0.5);
 		// }
 
-		// if (m_boxop.getRawButton(9)) {
-		// 	Robot.climber.setWinchPower(0);
-		// } else if (m_boxop.getRawButton(10)) {
-		// 	Robot.climber.setWinchPower(0.5);
-		// }
+		//intake mode
+		if(m_joystick1.getRawButton(2)){
+			Robot.intake.setIntakeState(true);
+			Robot.intake.setIntakePower(0.5);
+			Robot.wagon.setWagonPower(0.7);
+			if(Robot.lightSensor.getBottomLightSensorState()){
+				waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
+			}
+		} else {
+			Robot.intake.setIntakeState(false);
+			Robot.intake.setIntakePower(0);
+			Robot.wagon.setWagonPower(0);
+		}
 
 		// if (m_boxop.getRawButton(3)) {
 		// 	Robot.intake.setIntakePower(0);

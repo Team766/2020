@@ -22,14 +22,14 @@ public class LightSensor extends Mechanism {
 
     public void checkLightSensor(){
         if(m_toplightSensor.get()==true){
-            System.out.println("Top is true");
+            //System.out.println("Top is true");
         } else{
-            System.out.println("Top is false");
+            //System.out.println("Top is false");
         }
         if(m_bottomlightSensor.get()==true){
-            System.out.println("Bottom is true");
+            //System.out.println("Bottom is true");
         } else{
-            System.out.println("Bottom is false");
+            //System.out.println("Bottom is false");
         }
     }
 }
