@@ -9,6 +9,9 @@ import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
 
+import com.team766.frc2020.mechanisms.*;
+
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,6 +25,7 @@ public class OI extends Command {
 	private JoystickReader m_boxop;
 	WaterWheel waterWheel = new WaterWheel();
 
+	// Variables for arcade drive
 	private double fwd_power = 0;
 	private double turn_power = 0;
 
@@ -38,12 +42,12 @@ public class OI extends Command {
 		if (Math.abs(m_joystick1.getRawAxis(1)) < 0.13 ) {
 			fwd_power = 0;
 		} else {
-			fwd_power = -(0.05*(Math.abs(m_joystick1.getRawAxis(1))/m_joystick1.getRawAxis(1)) + Math.pow(m_joystick1.getRawAxis(1), 3));
+			fwd_power = -(0.05 + Math.pow(m_joystick1.getRawAxis(1), 3));
 		}
 		if (Math.abs(m_joystick2.getRawAxis(0)) < 0.13 ) {
 			turn_power = 0;
 		} else {
-			turn_power = (Math.abs(m_joystick2.getRawAxis(0))*1.3/m_joystick2.getRawAxis(0)) + Math.pow(m_joystick2.getRawAxis(0), 3);
+			turn_power = (1.3 + Math.pow(m_joystick2.getRawAxis(0), 3));
 			turn_power = 0.20 * turn_power;
 			if (Math.abs(fwd_power) > 0.5) {
 				turn_power = 0.6 * turn_power;
@@ -54,12 +58,14 @@ public class OI extends Command {
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
 		
-		//SmartDashboard.putNumber("Forward Power", fwd_power);
-		//SmartDashboard.putNumber("Turn Power", turn_power);
-		//SmartDashboard.putNumber("Left Power", leftPower);
-		//SmartDashboard.putNumber("Right Power", rightPower);
+		// //SmartDashboard.putNumber("Forward Power", fwd_power);
+		// //SmartDashboard.putNumber("Turn Power", turn_power);
+		// //SmartDashboard.putNumber("Left Power", leftPower);
+		// //SmartDashboard.putNumber("Right Power", rightPower);
 		
 		Robot.drive.setDrive(leftPower, rightPower);
+
+		//Robot.drive.arcadeDrive(-m_joystick1.getRawAxis(1), m_joystick2.getRawAxis(0));
 		
 		// if (m_boxop.getRawButton(5)) {
         //     Robot.climber.setClimberUpState(false);
@@ -134,7 +140,22 @@ public class OI extends Command {
 			Robot.drive.nukeRobot();
 			return;
 		}
+		
+
+		if(m_boxop.getRawButton(24)) {
+			outtakeAllBalls();
+		}
+	}
+
+	public void outtakeAllBalls() {
+		// when limelight works, get the distance here
+		for (int i = 0; i < 5; i++) {
+			// Robot.WaterWheel.NextBall();
+			if (Robot.lightSensor.getTopLightSensorState() == true){
+				Robot.outtake.setOuttakePower(1);
+			}	
+		Robot.outtake.setOuttakePower(0);
+		}
 	}
 }
-
 	

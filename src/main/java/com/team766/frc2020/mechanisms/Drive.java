@@ -17,6 +17,7 @@ import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
+import com.team766.frc2020.mechanisms.LightSensor;
 
 import com.team766.frc2020.Robot;
 import com.team766.frc2020.paths.PathWebSocketServer;
@@ -124,6 +125,8 @@ public class Drive extends Mechanism implements DriveI {
     * Each Talon is followed by 2 Victors, which mirror the Talon's output.
     * Speed will be [-maximumRPM, maximumRPM], depending on joystick input.
     */
+
+
     public void setDrive(double leftSetting, double rightSetting) {
         m_leftTalon.set(ControlMode.Velocity, leftSetting * maximumRPM * 256 / 600); //RPM times units per rev / 100ms per min
         m_rightTalon.set(ControlMode.Velocity, rightSetting * maximumRPM * 256 / 600); //basically converts from RPM to units/100ms for the PID to use
@@ -367,18 +370,17 @@ public class Drive extends Mechanism implements DriveI {
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
-<<<<<<< HEAD
         if (index % 10 == 0) {
             System.out.println("current waterwheel position: "+ waterWheel.getWheelPosition());
-=======
-        if (index % 100 == 0) {
->>>>>>> 4c4118a6b6eeaffbf4bda998ea5bce27ed35e462
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
             SmartDashboard.putNumber("velocity", velocity);
-            System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            //System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
+            // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
+            System.out.println("waterwheel at: " + Robot.waterwheel.getWheelPosition());
+            Robot.lightSensor.checkLightSensor();
             // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }
         index++;

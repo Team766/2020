@@ -19,14 +19,15 @@ import com.team766.web.WebServer;
 public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
-	// public static Climber climber;
-	// public static Intake intake;
+	public static Climber climber;
+	public static Intake intake;
 	 public static LimeLight limeLight;
-	// public static Outtake outtake;
-	// public static Spinner spinner;
-	// public static Ultrasonic ultrasonic;
-	// public static Wagon wagon;
+	public static Outtake outtake;
+	public static Spinner spinner;
+	public static Ultrasonic ultrasonic;
+	public static Wagon wagon;
 	public static WaterWheel waterwheel;
+	public static LightSensor lightSensor;
 	public static PathWebSocketServer pathWebSocketServer;
 	public static PiWebSocketServer piWebSocketServer;
 	public static OI m_oi;
@@ -40,14 +41,15 @@ public class Robot extends MyRobot {
 		System.out.println("hello");
 		// Initialize mechanisms here
 		drive = new Drive();
-		// climber = new Climber();
-		// intake = new Intake();
-		 limeLight = new LimeLight();
-		// outtake = new Outtake();
-		// spinner = new Spinner();
-        // ultrasonic = new Ultrasonic(2);
-        // wagon = new Wagon();
+		climber = new Climber();
+		intake = new Intake();
+		limeLight = new LimeLight();
+		outtake = new Outtake();
+		spinner = new Spinner();
+        ultrasonic = new Ultrasonic(2);
+        wagon = new Wagon();
 		waterwheel = new WaterWheel();
+		lightSensor = new LightSensor();
 		
 		pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
 		piWebSocketServer = new PiWebSocketServer(new InetSocketAddress("10.7.66.2", 5802));

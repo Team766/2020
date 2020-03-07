@@ -1,5 +1,7 @@
 package com.team766.frc2020.mechanisms;
 
+import com.ctre.phoenix.motorcontrol.DemandType;
+import com.team766.controllers.PIDController;
 import com.team766.config.ConfigFileReader;
 import com.team766.framework.Mechanism;
 import com.team766.hal.RobotProvider;
@@ -65,4 +67,28 @@ public class WaterWheel extends Mechanism {
     public void setWheelVelocity(final double wheelVelocity) {
         m_wheelMotor.set(ControlMode.Velocity, wheelVelocity);
     }
-}
+
+    // public void oneTurn() {
+    //     m_velocityController.setSetpoint(0.0);
+    //     double minError = 360;
+    //     double nextAngle = 0;
+    //     for (double angle: angles){
+    //         if (angle - m_wheelMotor.getSensorPosition() <=0) {
+    //             angle+=360;
+    //         }
+    //         if (angle - m_wheelMotor.getSensorPosition() < minError) {
+    //             nextAngle = angle;
+    //         }
+    //     }
+    //     if (nextAngle>=360){
+    //         nextAngle-=360;
+    //     }
+
+    //     double error = nextAngle - m_wheelMotor.getSensorPosition();
+    //     m_velocityController.calculate(error, true);
+    //     m_wheelMotor.set(m_velocityController.getOutput());
+    
+        // OTHER METHODS OF DOING THIS:
+        // TURN UNTIL ULTRASONIC SENSOR SENSES NO BALL
+        // MAKE ANOTHER METHOD TURNTOANGLE()
+    }
