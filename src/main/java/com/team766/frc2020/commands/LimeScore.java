@@ -48,36 +48,39 @@ public class LimeScore extends Subroutine {
         yError = m_limeLight.ty();
         Robot.drive.setDrive(0,0);
         System.out.println("currentX"+ currentX);
-        Robot.drive.setDrive(0,0);
-       currentX = m_limeLight.tx();
          while (currentX<-0.7){
-            Robot.drive.setDrive(-0.5,05);
           currentX = m_limeLight.tx();
+          Robot.drive.setDrive(-0.25,025);
           waitForSeconds(0.1);
           Robot.drive.setDrive(0,0);
+          currentX = m_limeLight.tx();
           continue;
         }
        Robot.drive.setDrive(0,0);
        currentX = m_limeLight.tx();
         while (currentX>0.7){
-            Robot.drive.setDrive(0.5,-0.5);
-            currentX = m_limeLight.tx();
+          currentX = m_limeLight.tx();
+            Robot.drive.setDrive(0.25,-0.25);
             waitForSeconds(0.1);
             Robot.drive.setDrive(0,0);
+            currentX = m_limeLight.tx();
             continue;
         }
-
-             while (currentX<-0.7){
-            Robot.drive.setDrive(-0.5,0.5);
+        currentX = m_limeLight.tx();
+        while (currentX<-0.7){
           currentX = m_limeLight.tx();
+          Robot.drive.setDrive(-0.25,0.25);
           waitForSeconds(0.1);
           Robot.drive.setDrive(0,0);
+          currentX = m_limeLight.tx();
           continue;
         }
         Robot.drive.setDrive(0,0);      
         currentX = m_limeLight.tx();
        System.out.println("currentX"+ currentX);
-       System.out.println("Callibrated, if it ain't working, its a mechanical prolem, alos, Alex. C. and Anton and Jaob might be the reason it aint working, ask them questions cause its their fault entirely");
-        return;
+       System.out.println("Callibrated, if it ain't working, its a mechanical prolem, alos, Alex. C. and Anton and Jacob might be the reason it aint working, ask them questions cause its their fault entirely");
+       yield();
+       return;
+    
     }
 }
