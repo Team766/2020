@@ -1,15 +1,17 @@
 package com.team766.frc2020.mechanisms;
 
 import java.lang.Math.*;
+import java.net.InetSocketAddress;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 
 import com.team766.framework.Mechanism;
 import com.team766.hal.GyroReader;
 import com.team766.hal.CANSpeedController;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -18,6 +20,8 @@ import com.team766.config.ConfigFileReader;
 import com.team766.frc2020.mechanisms.LightSensor;
 
 import com.team766.frc2020.Robot;
+import com.team766.frc2020.paths.PathWebSocketServer;
+import com.team766.frc2020.paths.PiWebSocketServer;
 
 public class Drive extends Mechanism implements DriveI {
 
@@ -28,14 +32,20 @@ public class Drive extends Mechanism implements DriveI {
     private CANSpeedController m_rightVictor2;
     private static CANSpeedController m_leftTalon;
     private static CANSpeedController m_rightTalon;
+    private static WaterWheel waterWheel = new WaterWheel();
     private GyroReader m_gyro;
+    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
+    public static double kS = 0.0; 
+    public static double kV = 0.01; 
+    public static double kA = 0.01;
+
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
     public static double D = 0.0; //0.0012
-    public final double MF = 1.1366666666666666666666666;
-    public final double MP = 0.00; //0.02
+    public final double MF = 1.1367; //will be kv
+    public final double MP = 0.01;
     public final double MI = 0.00;
-    public final double MD = 9.31;
+    public final double MD = 0.002;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
     public final double DIST_PER_PULSE = ConfigFileReader.getInstance().getDouble("drive.DIST_PER_PULSE").get();
@@ -49,10 +59,8 @@ public class Drive extends Mechanism implements DriveI {
     public static boolean isInverted = false;
 
     public final double maximumRPM = 15 * 12 * 60 / 6.25; //first is feet/second, converts to RPM
-
-
+    
     public Drive() {
-
         // Initialize victors
         m_leftVictor1 = RobotProvider.instance.getVictorCANMotor("drive.leftVictor1"); 
         m_rightVictor1 = RobotProvider.instance.getVictorCANMotor("drive.rightVictor1");
@@ -122,6 +130,7 @@ public class Drive extends Mechanism implements DriveI {
     public void setDrive(double leftSetting, double rightSetting) {
         m_leftTalon.set(ControlMode.Velocity, leftSetting * maximumRPM * 256 / 600); //RPM times units per rev / 100ms per min
         m_rightTalon.set(ControlMode.Velocity, rightSetting * maximumRPM * 256 / 600); //basically converts from RPM to units/100ms for the PID to use
+
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor) {
@@ -131,8 +140,34 @@ public class Drive extends Mechanism implements DriveI {
         SmartDashboard.putNumber("Left Motor Input", leftSetting * maximumRPM * 256 / 600);
         SmartDashboard.putNumber("Right Motor Input", rightSetting * maximumRPM * 256 / 600);
     }
+    
+    /**
+     * As a guideline, kS should have units of volts, kV should have units of volts * seconds / distance, 
+     * and kA should have units of volts * seconds^2 / distance
+     * @param leftSetting
+     * @param rightSetting
+     */
+    
+    public void setDriveCurrent(double leftVelocity, double rightVelocity) {
+        // m_leftTalon.set(ControlMode.Current, leftSetting); 
+        // m_rightTalon.set(ControlMode.Current, rightSetting);
+        m_leftTalon.set(ControlMode.Current, feedforward.calculate(leftVelocity)); 
+        m_rightTalon.set(ControlMode.Current, feedforward.calculate(rightVelocity)); 
+        // to calibrate constants: https://docs.wpilib.org/en/latest/docs/software/wpilib-tools/robot-characterization/introduction.html#introduction-to-robot-characterization
+        m_leftVictor1.follow(m_leftTalon);
+        m_rightVictor1.follow(m_rightTalon);
+        if (m_secondVictor) {
+            m_leftVictor2.follow(m_leftTalon);
+            m_rightVictor2.follow(m_rightTalon);
+        }
+    }
 
-    public void arcadeDrive(double fwdPower, double turnPower) {
+    /**
+     * Using different methods to set drive so we don't have to recode it.
+     * @param fwdPower
+     * @param turnPower
+     */
+    public void setArcadeDrive(double fwdPower, double turnPower) {
         double maximum = Math.max(Math.abs(fwdPower), Math.abs(turnPower));
         double total = fwdPower + turnPower;
         double difference = fwdPower - turnPower;
@@ -261,14 +296,25 @@ public class Drive extends Mechanism implements DriveI {
 
     // variables for calculating position using odometry
     // should be moved later
-    private static double xPosition = 0;
-    private static double yPosition = 0;
+    private static double deltaXPosition = 0;
+    private static double deltaYPosition = 0;
+    private volatile static double xPosition = 0;
+    private volatile static double yPosition = 0;
+    private static double velocity = 0;
     // heading is in degrees
-    private static double heading = 0; //aka angle
+
+    private static double previousTime = RobotProvider.getTimeProvider().get();
+    private static double currentTime = previousTime;
+
+    private double totalForward = (leftSensorBasePosition + rightSensorBasePosition) / 2;
+	private double totalTheta = 0;
+	private double oldTotalForward = 0;
+	private double oldTotalTheta = 0;
 
     private double currentGyroAngle = 0;
-    private double currentLeftEncoderDistance = 0;
-    private double currentRightEncoderDistance = 0;
+    private double deltaGyroAngle = 0;
+    private double deltaLeftEncoderDistance = 0;
+    private double deltaRightEncoderDistance = 0;
     int index = 0;
 
     public double getXPosition() {
@@ -279,8 +325,16 @@ public class Drive extends Mechanism implements DriveI {
         return yPosition;
     }
 
-    public double getAngle() {
-        return heading;
+    public void setXPosition(double newXPosition) {
+        xPosition = newXPosition;
+    }
+
+    public void setYPosition(double newYPosition) {
+        yPosition = newYPosition;
+    }
+
+    public double getVelocity() {
+        return velocity;
     }
 
     @Override
@@ -288,27 +342,60 @@ public class Drive extends Mechanism implements DriveI {
         if (index == 0) {
             resetEncoders();
             resetGyro();
+            waterWheel.resetWheelPosition();
             index = 1;
         }
 
-        currentGyroAngle = getGyroAngle();
-        currentLeftEncoderDistance = leftEncoderDistance();
-        currentRightEncoderDistance = rightEncoderDistance();
-        Robot.drive.resetEncoders();
-        xPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
-        yPosition += (currentLeftEncoderDistance + currentRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
+        // get data
+        currentTime = RobotProvider.getTimeProvider().get();
+        deltaGyroAngle = getGyroAngle() - currentGyroAngle;
+        currentGyroAngle = getGyroAngle();
+        deltaLeftEncoderDistance = leftEncoderDistance();
+        deltaRightEncoderDistance = rightEncoderDistance();
+        Robot.drive.resetEncoders();
+
+        // calculate position
+        deltaXPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
+        deltaYPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
+
+        xPosition += deltaXPosition;
+        yPosition += deltaYPosition;
+
+        // send position and heading over websockets
+        Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
+        Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
+        Robot.piWebSocketServer.broadcastDeltaPosition(deltaXPosition, deltaYPosition, deltaGyroAngle);
+
+        // calculate velocity
+        velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
         if (index % 10 == 0) {
+            System.out.println("current waterwheel position: "+ waterWheel.getWheelPosition());
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
-            // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            SmartDashboard.putNumber("velocity", velocity);
+            //System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
             System.out.println("waterwheel at: " + Robot.waterwheel.getWheelPosition());
             Robot.lightSensor.checkLightSensor();
+            // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }
         index++;
+
+        // quan combde
+        // oldTotalForward = totalForward;
+		// oldTotalTheta = totalTheta;
+
+		// totalForward = ((deltaLeftEncoderDistance + deltaRightEncoderDistance) * Robot.drive.DIST_PER_PULSE) / 2;
+		// totalTheta = currentGyroAngle;
+
+		// double deltaForward = totalForward - oldTotalForward;
+        // double deltaTheta = totalTheta - oldTotalTheta;
+
+        // Robot.piWebSocketServer.broadcastDeltas(deltaForward, deltaTheta);
+        previousTime = currentTime;
     }
 }
