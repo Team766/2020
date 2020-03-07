@@ -21,6 +21,7 @@ public class WaterWheel extends Mechanism {
     private DigitalInputReader wheelLimitSwitch;
     private WPI_TalonSRX m_wheelMotor;
 
+    
     public WaterWheel() {
         //m_talon = RobotProvider.instance.getTalonCANMotor("waterwheel.talon");
         m_ballPusher = RobotProvider.instance.getSolenoid("waterwheel.pusher");
@@ -52,6 +53,14 @@ public class WaterWheel extends Mechanism {
         m_wheelMotor.setSelectedSensorPosition(0, 0, 0);
     }
 
+    public void initializeWheelPosition() {
+        m_wheelMotor.setSelectedSensorPosition(1000, 0, 0);
+        m_wheelMotor.set(ControlMode.Velocity, 1);
+        // while (not hall effect sensor){}
+        m_wheelMotor.set(ControlMode.Velocity, 1);
+
+    }
+
     public void setPusherState(final boolean state) {
         m_ballPusher.set(state);
     }
@@ -68,27 +77,10 @@ public class WaterWheel extends Mechanism {
         m_wheelMotor.set(ControlMode.Velocity, wheelVelocity);
     }
 
-    // public void oneTurn() {
-    //     m_velocityController.setSetpoint(0.0);
-    //     double minError = 360;
-    //     double nextAngle = 0;
-    //     for (double angle: angles){
-    //         if (angle - m_wheelMotor.getSensorPosition() <=0) {
-    //             angle+=360;
-    //         }
-    //         if (angle - m_wheelMotor.getSensorPosition() < minError) {
-    //             nextAngle = angle;
-    //         }
-    //     }
-    //     if (nextAngle>=360){
-    //         nextAngle-=360;
-    //     }
 
-    //     double error = nextAngle - m_wheelMotor.getSensorPosition();
-    //     m_velocityController.calculate(error, true);
-    //     m_wheelMotor.set(m_velocityController.getOutput());
-    
-        // OTHER METHODS OF DOING THIS:
-        // TURN UNTIL ULTRASONIC SENSOR SENSES NO BALL
-        // MAKE ANOTHER METHOD TURNTOANGLE()
+    public void turnDegrees(int degrees) {
+        int currentPosition = (int)(m_wheelMotor.getSelectedSensorPosition(0));
+        m_wheelMotor.set(ControlMode.Position, currentPosition + degrees);
     }
+
+}

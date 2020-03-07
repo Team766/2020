@@ -24,7 +24,6 @@ public class Robot extends MyRobot {
 	 public static LimeLight limeLight;
 	public static Outtake outtake;
 	public static Spinner spinner;
-	public static Ultrasonic ultrasonic;
 	public static Wagon wagon;
 	public static WaterWheel waterwheel;
 	public static LightSensor lightSensor;
@@ -46,7 +45,6 @@ public class Robot extends MyRobot {
 		limeLight = new LimeLight();
 		outtake = new Outtake();
 		spinner = new Spinner();
-        ultrasonic = new Ultrasonic(2);
         wagon = new Wagon();
 		waterwheel = new WaterWheel();
 		lightSensor = new LightSensor();
