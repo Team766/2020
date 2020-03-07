@@ -367,17 +367,13 @@ public class Drive extends Mechanism implements DriveI {
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
-<<<<<<< HEAD
         if (index % 10 == 0) {
             System.out.println("current waterwheel position: "+ waterWheel.getWheelPosition());
-=======
-        if (index % 100 == 0) {
->>>>>>> 4c4118a6b6eeaffbf4bda998ea5bce27ed35e462
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
             SmartDashboard.putNumber("velocity", velocity);
-            System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            //System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }

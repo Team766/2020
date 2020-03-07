@@ -29,7 +29,7 @@ public class NextBall extends Subroutine {
 
         System.out.println("Wheel position initial: " + Robot.waterwheel.getWheelPosition());
 
-        waterWheel.setWheelPosition(830);
+        waterWheel.setWheelPosition(820);
 
         System.out.println("Wheel position final: " + Robot.waterwheel.getWheelPosition());
 
