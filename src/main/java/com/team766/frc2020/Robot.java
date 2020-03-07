@@ -26,7 +26,7 @@ public class Robot extends MyRobot {
 	// public static Spinner spinner;
 	// public static Ultrasonic ultrasonic;
 	// public static Wagon wagon;
-	// public static WaterWheel waterwheel;
+	public static WaterWheel waterwheel;
 	public static PathWebSocketServer pathWebSocketServer;
 	public static PiWebSocketServer piWebSocketServer;
 	public static OI m_oi;
@@ -47,7 +47,7 @@ public class Robot extends MyRobot {
 		// spinner = new Spinner();
         // ultrasonic = new Ultrasonic(2);
         // wagon = new Wagon();
-		// waterwheel = new WaterWheel();
+		waterwheel = new WaterWheel();
 		
 		pathWebSocketServer = new PathWebSocketServer(new InetSocketAddress("10.7.66.2", 5801));
 		piWebSocketServer = new PiWebSocketServer(new InetSocketAddress("10.7.66.2", 5802));

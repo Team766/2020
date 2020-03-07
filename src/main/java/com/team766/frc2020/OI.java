@@ -4,6 +4,7 @@ package com.team766.frc2020;
 
 import com.team766.framework.Command;
 import com.team766.frc2020.Robot;
+import com.team766.frc2020.mechanisms.WaterWheel;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController.ControlMode;
@@ -19,6 +20,7 @@ public class OI extends Command {
 	private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
+	WaterWheel waterWheel = new WaterWheel();
 
 	private double fwd_power = 0;
 	private double turn_power = 0;
@@ -91,11 +93,10 @@ public class OI extends Command {
 		// 	Robot.intake.setIntakeState(true);
 		// }
 
-		// if (m_joystick1.getRawButton(1)) {
-		// 	Robot.outtake.setOuttakePower(0.5);
-		// } else {
-		// 	Robot.outtake.setOuttakePower(0);
-		// }
+		if (m_joystick1.getRawButton(1)) {
+			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
+		}
+
 
 		// if (m_boxop.getRawButton(18)) {
 		// 	Robot.spinner.setSpinnerPower(0);
@@ -115,11 +116,11 @@ public class OI extends Command {
 		// 	Robot.wagon.setWagonPower(0);
 		// }
 
-		// if (m_joystick2.getRawButton(1)) {
-		// 	Robot.waterwheel.setPusherState(true);
-		// } else {
-		// 	Robot.waterwheel.setPusherState(false);
-		// }
+		if (m_joystick2.getRawButton(1)) {
+			Robot.waterwheel.setPusherState(true);
+		} else {
+			Robot.waterwheel.setPusherState(false);
+		}
 
 		// if (m_joystick1.getRawButton(2)) {
 		// 	Robot.waterwheel.setWheelPower(-0.1);
