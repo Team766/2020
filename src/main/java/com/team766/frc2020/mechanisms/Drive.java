@@ -40,9 +40,9 @@ public class Drive extends Mechanism implements DriveI {
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
     public static double D = 0.0; //0.0012
-    public final double MF = 0.1; //will be kv
+    public final double MF = 1.1367; //will be kv
     public final double MP = 0.01;
-    public final double MI = 0.000;
+    public final double MI = 0.0001;
     public final double MD = 0.002;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
