@@ -53,6 +53,14 @@ public class WaterWheel extends Mechanism {
         m_wheelMotor.setSelectedSensorPosition(0, 0, 0);
     }
 
+    public void initializeWheelPosition() {
+        m_wheelMotor.setSelectedSensorPosition(1000, 0, 0);
+        m_wheelMotor.set(ControlMode.Velocity, 1);
+        // while (not hall effect sensor){}
+        m_wheelMotor.set(ControlMode.Velocity, 1);
+
+    }
+
     public void setPusherState(final boolean state) {
         m_ballPusher.set(state);
     }
@@ -71,8 +79,8 @@ public class WaterWheel extends Mechanism {
 
 
     public void turnDegrees(int degrees) {
-        int currentPosition = (int)(m_wheelMotor.getSensorPosition());
-        m_wheelMotor.setPosition(currentPosition + degrees);
+        int currentPosition = (int)(m_wheelMotor.getSelectedSensorPosition(0));
+        m_wheelMotor.set(ControlMode.Position, currentPosition + degrees);
     }
 
 }
