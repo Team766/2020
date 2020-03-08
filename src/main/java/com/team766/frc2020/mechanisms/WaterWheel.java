@@ -25,6 +25,8 @@ public class WaterWheel extends Mechanism {
     public boolean intakeMode = false;
     public boolean outtakeMode = true;
     private double initialWaterWheelPosition;
+    public boolean outtaking;
+    public double initialWheelPosition;
 
     
     public WaterWheel() {
@@ -39,6 +41,7 @@ public class WaterWheel extends Mechanism {
         m_wheelMotor.config_kD(0, 0, 0);
         m_wheelMotor.config_kF(0, 0, 0);
         initialWaterWheelPosition = m_wheelMotor.getSelectedSensorPosition(0); 
+        outtaking = false;
 
         
         //m_wheelMotor.set(ControlMode.MotionMagic, 0.0);
@@ -73,6 +76,12 @@ public class WaterWheel extends Mechanism {
         m_wheelMotor.setSelectedSensorPosition(0, 0, 0);
     }
 
+    public void outtakeOneBall() {
+        outtaking = true;
+        initialWheelPosition = getWheelPosition();
+        setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
+    }
+
     public void initializeWheelPosition() {
         m_wheelMotor.setSelectedSensorPosition(1000, 0, 0);
         m_wheelMotor.set(ControlMode.Velocity, 1);
@@ -81,7 +90,7 @@ public class WaterWheel extends Mechanism {
 
     }
 
-    public void setPusherState(final boolean state) {
+    public void setPusherState(boolean state) {
         m_ballPusher.set(state);
     }
 
