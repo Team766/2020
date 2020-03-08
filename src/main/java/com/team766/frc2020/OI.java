@@ -138,9 +138,14 @@ public class OI extends Command {
 		} else {
 			Robot.waterwheel.setPusherState(false);
 		}
-
-		if (!m_joystick2.getRawButton(3)) {
-			outtakeAllBalls();
+		
+		if (m_joystick2.getRawButton(3)) {
+			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
+			Robot.outtake.setOuttakePowerDistance(5.0);
+			Robot.waterwheel.pusherOutAndIn();
+		} else {
+			Robot.outtake.stopOuttake();
+			Robot.waterwheel.setPusherState(false);
 		}
 		
 		if (!Robot.drive.isEnabled()) {
