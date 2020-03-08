@@ -295,6 +295,7 @@ public class Drive extends Mechanism implements DriveI {
     private static double deltaYPosition = 0;
     private volatile static double xPosition = 0;
     private volatile static double yPosition = 0;
+    private volatile static double theta = 0;
     private static double velocity = 0;
     // heading is in degrees
 
@@ -320,12 +321,20 @@ public class Drive extends Mechanism implements DriveI {
         return yPosition;
     }
 
+    public double getTheta() {
+        return theta;
+    }
+
     public void setXPosition(double newXPosition) {
         xPosition = newXPosition;
     }
 
     public void setYPosition(double newYPosition) {
         yPosition = newYPosition;
+    }
+
+    public void setTheta(double newTheta) {
+        theta = newTheta;
     }
 
     public double getVelocity() {
@@ -361,11 +370,12 @@ public class Drive extends Mechanism implements DriveI {
         //Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
         //Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
         Robot.piWebSocketServer.broadcastDeltaPosition(deltaXPosition, deltaYPosition, deltaGyroAngle);
+        Robot.piWebSocketServer.broadcastPosition(xPosition, yPosition, currentGyroAngle);
 
         // calculate velocity
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
-        if (index % 10 == 0) {
+        if (index % 50 == 0) {
             System.out.println("current waterwheel position: "+ waterWheel.getWheelPosition());
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
@@ -374,8 +384,7 @@ public class Drive extends Mechanism implements DriveI {
             //System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
-            System.out.println("waterwheel at: " + Robot.waterwheel.getWheelPosition());
-            Robot.lightSensor.checkLightSensor();
+            //System.out.println("waterwheel at: " + Robot.waterwheel.getWheelPosition());
             // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }
         index++;
