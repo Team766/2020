@@ -68,6 +68,7 @@ public class OI extends Command {
 
 		Robot.drive.setArcadeDrive(-m_joystick1.getRawAxis(1), Math.pow(m_joystick2.getRawAxis(0), 3));
 		
+		//climber
 		if (m_boxop.getRawButton(1)) {
             Robot.climber.setClimberUpState(false);
             Robot.climber.setClimberDownState(true);
@@ -86,17 +87,11 @@ public class OI extends Command {
 	
 
 		//intake mode
-<<<<<<< Updated upstream
-		if(m_boxop.getRawButton(2)){
-			waterWheel.setIntakeMode(true);
-			//Robot.intake.setIntakeState(true);
-=======
 		if(m_joystick1.getRawButton(2)){
 			if(!waterWheel.intakeMode) {
 				waterWheel.setIntakeMode(true);
 			}
-			Robot.intake.setIntakeState(true);
->>>>>>> Stashed changes
+			//Robot.intake.setIntakeState(true);
 			Robot.intake.setIntakePower(0.5);
 			Robot.wagon.setWagonPower(0.7);
 			if(Robot.lightSensor.getBottomLightSensorState()){
@@ -104,17 +99,12 @@ public class OI extends Command {
 			}
 		} else {
 			waterWheel.setIntakeMode(false);
-<<<<<<< Updated upstream
 			//Robot.intake.setIntakeState(false);
-=======
-			Robot.intake.setIntakeState(false);
->>>>>>> Stashed changes
 			Robot.intake.setIntakePower(0);
 			Robot.wagon.setWagonPower(0);
 		}
 
 		//outtake mode
-<<<<<<< Updated upstream
 		if(m_boxop.getRawButton(3)) {
 			waterWheel.setOuttakeMode(true);
 			Robot.outtake.setOuttakePower(m_boxop.getRawAxis(3)/10);
@@ -129,35 +119,19 @@ public class OI extends Command {
 			Robot.outtake.setOuttakePower(0.0);
 		}
 
+		//turn one tick
 		if (m_boxop.getRawButton(9)) {
 			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
-		} else if (m_boxop.getRawButton(10)) {
-			System.out.println("setting pushed state");
-			waterWheel.setPusherState(true);
 		}
-			//waterWheel.setPusherState(false);
-=======
-		if(m_joystick1.getRawButton(3)) {
-			if(!waterWheel.outtakeMode) {
-				waterWheel.setOuttakeMode(true);
-			}
-			Robot.outtake.setOuttakePower(m_boxop.getRawAxis(0));
-			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
-			waterWheel.setPusherState(true);
-			//waterWheel.setPusherState(false);
-		} else {
-			Robot.outtake.setOuttakePower(0.0);
-			waterWheel.setOuttakeMode(false);
-		}
-
-		// if (m_boxop.getRawButton(3)) {
-		// 	Robot.intake.setIntakePower(0);
-		// } else if (m_boxop.getRawButton(4)) {
-		// 	Robot.intake.setIntakePower(0.5);
-		// }
->>>>>>> Stashed changes
 		
-		// if (m_boxop.gtRawButton(1)) {
+		//pusher out
+		if (m_boxop.getRawButton(10)) {
+			System.out.println("setting pushed state");
+			waterWheel.pusherOutAndIn();
+		}
+			//waterWheel.setPusherState(false);
+		
+		// if (m_boxop.getRawButton(1)) {
 		// 	Robot.intake.setIntakeState(false);
 		// } else if (m_boxop.getRawButton(2)) {
 		// 	Robot.intake.setIntakeState(true);
@@ -215,17 +189,11 @@ public class OI extends Command {
 		// when limelight works, get the distance here
 		for (int i = 0; i < 5; i++) {
 			Robot.waterwheel.turnDegrees(840);
-<<<<<<< Updated upstream
 			// Robot.waterwheel.setWheelPosition(840 * i);
 			// Robot.outtake.continuousDistanceShoot();
 			Robot.outtake.setOuttakePowerDistance(2.0);
 			Robot.waterwheel.pusherOutAndIn();
 		}
-=======
-			Robot.outtake.continuousDistanceShoot();
-			
-			}	
->>>>>>> Stashed changes
 		Robot.outtake.setOuttakePower(0);
 		}
 	}
