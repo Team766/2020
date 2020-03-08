@@ -24,6 +24,7 @@ public class OI extends Command {
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
 	WaterWheel waterWheel = new WaterWheel();
+	int index = 0;
 
 	// Variables for arcade drive
 	private double fwd_power = 0;
@@ -66,40 +67,65 @@ public class OI extends Command {
 		Robot.drive.setDrive(leftPower, rightPower);
 
 		//Robot.drive.arcadeDrive(-m_joystick1.getRawAxis(1), m_joystick2.getRawAxis(0));
-		
-		// if (m_boxop.getRawButton(5)) {
-        //     Robot.climber.setClimberUpState(false);
-        //     Robot.climber.setClimberDownState(true);
-		// } else if (m_boxop.getRawButton(6)) {
-        //     Robot.climber.setClimberUpState(true);
-        //     Robot.climber.setClimberDownState(false);
-		// }
 
-		// if (m_boxop.getRawButton(7)) {
-		// 	Robot.climber.setShifterPower(0);
-		// } else if (m_boxop.getRawButton(8)) {
-		// 	Robot.climber.setShifterPower(0.5);
-		// }
+		Robot.climber.setClimberUpState(true);
+		Robot.climber.setClimberDownState(false);
+		
+		if (m_boxop.getRawButton(1)) {
+            Robot.climber.setClimberUpState(false);
+            Robot.climber.setClimberDownState(true);
+		} else if (m_boxop.getRawButton(2)) {
+            Robot.climber.setClimberUpState(true);
+            Robot.climber.setClimberDownState(false);
+		}
+
+		//intake up and down
+		if (m_boxop.getRawButton(6)) {
+			Robot.intake.setIntakeState(true);
+		} else if (m_boxop.getRawButton(7)) {
+			Robot.intake.setIntakeState(false);
+		}
+
+	
 
 		//intake mode
-		if(m_joystick1.getRawButton(2)){
-			Robot.intake.setIntakeState(true);
+		if(m_boxop.getRawButton(2)){
+			waterWheel.setIntakeMode(true);
+			//Robot.intake.setIntakeState(true);
 			Robot.intake.setIntakePower(0.5);
 			Robot.wagon.setWagonPower(0.7);
 			if(Robot.lightSensor.getBottomLightSensorState()){
 				waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
 			}
 		} else {
-			Robot.intake.setIntakeState(false);
+			waterWheel.setIntakeMode(false);
+			//Robot.intake.setIntakeState(false);
 			Robot.intake.setIntakePower(0);
 			Robot.wagon.setWagonPower(0);
 		}
 
-		// if (m_boxop.getRawButton(3)) {
-		// 	Robot.intake.setIntakePower(0);
-		// } else if (m_boxop.getRawButton(4)) {
-		// 	Robot.intake.setIntakePower(0.5);
-		// }
+		//outtake mode
+		if(m_boxop.getRawButton(3)) {
+			waterWheel.setOuttakeMode(true);
+			Robot.outtake.setOuttakePower(m_boxop.getRawAxis(3)/10);
+			if (index++ % 10 == 0) {
+				System.out.println(m_boxop.getRawAxis(3)/10);
+			}
+			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
+			waterWheel.setPusherState(true);
+			//System.out.println("pushed");
+			waterWheel.setPusherState(false);
+		} else {
+			Robot.outtake.setOuttakePower(0.0);
+		}
+
+		if (m_boxop.getRawButton(9)) {
+			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
+		} else if (m_boxop.getRawButton(10)) {
+			System.out.println("setting pushed state");
+			waterWheel.setPusherState(true);
+		}
+			//waterWheel.setPusherState(false);
 		
 		// if (m_boxop.getRawButton(1)) {
 		// 	Robot.intake.setIntakeState(false);
