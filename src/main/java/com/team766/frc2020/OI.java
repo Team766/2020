@@ -68,6 +68,7 @@ public class OI extends Command {
 
 		Robot.drive.setArcadeDrive(-m_joystick1.getRawAxis(1), Math.pow(m_joystick2.getRawAxis(0), 3));
 		
+		//climber
 		if (m_boxop.getRawButton(1)) {
             Robot.climber.setClimberUpState(false);
             Robot.climber.setClimberDownState(true);
@@ -84,8 +85,10 @@ public class OI extends Command {
 		}
 
 		//intake mode
-		if(m_boxop.getRawButton(2)){
-			waterWheel.setIntakeMode(true);
+		if(m_joystick1.getRawButton(2)){
+			if(!waterWheel.intakeMode) {
+				waterWheel.setIntakeMode(true);
+			}
 			//Robot.intake.setIntakeState(true);
 			Robot.intake.setIntakePower(0.5);
 			Robot.wagon.setWagonPower(0.7);
@@ -114,11 +117,15 @@ public class OI extends Command {
 			Robot.outtake.setOuttakePower(0.0);
 		}
 
+		//turn one tick
 		if (m_boxop.getRawButton(9)) {
 			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
-		} else if (m_boxop.getRawButton(10)) {
+		}
+		
+		//pusher out
+		if (m_boxop.getRawButton(10)) {
 			System.out.println("setting pushed state");
-			waterWheel.setPusherState(true);
+			waterWheel.pusherOutAndIn();
 		}
 			//waterWheel.setPusherState(false);
 
@@ -152,6 +159,6 @@ public class OI extends Command {
 			Robot.waterwheel.pusherOutAndIn();
 		}
 		Robot.outtake.setOuttakePower(0);
+		}
 	}
-}
 	
