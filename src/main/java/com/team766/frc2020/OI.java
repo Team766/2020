@@ -25,6 +25,7 @@ public class OI extends Command {
 	private JoystickReader m_boxop;
 	WaterWheel waterWheel = new WaterWheel();
 	int index = 0;
+	boolean startIndexing = false;
 
 	// Variables for arcade drive
 	private double fwd_power = 0;
@@ -102,15 +103,35 @@ public class OI extends Command {
 
 		//outtake mode
 		if(m_boxop.getRawButton(3)) {
+			if(startIndexing) {
+				waterWheel.setPusherState(true);
+				index++;
+			}
+			if (index == 50) {
+				waterWheel.setPusherState(false);
+			}
+			if (index > 200) {
+				index = 0;
+				//System.out.println("outtaking truly finished");
+				waterWheel.outtaking = false;
+				startIndexing = false;
+			}
 			waterWheel.setOuttakeMode(true);
 			Robot.outtake.setOuttakePower(m_boxop.getRawAxis(3)/10);
 			if (index++ % 10 == 0) {
 				System.out.println(m_boxop.getRawAxis(3)/10);
 			}
-			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
-			waterWheel.setPusherState(true);
+			//System.out.println("waterWheel.outtaking: " + waterWheel.outtaking);
+			if(waterWheel.getWheelPosition() > (waterWheel.initialWheelPosition + 700)) {
+				//System.out.println("outtaking finished");
+				startIndexing = true;
+			} 
+			if(!waterWheel.outtaking) {
+				//System.out.println("got here: " + waterWheel.outtaking);
+				waterWheel.outtakeOneBall();
+			}
 			//System.out.println("pushed");
-			waterWheel.setPusherState(false);
+			//waterWheel.setPusherState(false);
 		} else {
 			Robot.outtake.setOuttakePower(0.0);
 		}
