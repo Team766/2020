@@ -14,6 +14,7 @@ import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
+import com.team766.frc2020.mechanisms.LightSensor;
 
 import com.team766.frc2020.Robot;
 
@@ -26,6 +27,7 @@ public class Drive extends Mechanism implements DriveI {
     private CANSpeedController m_rightVictor2;
     private static CANSpeedController m_leftTalon;
     private static CANSpeedController m_rightTalon;
+    private static WaterWheel waterWheel = new WaterWheel();
     private GyroReader m_gyro;
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
     public static double kS = 0.0; 
@@ -35,9 +37,9 @@ public class Drive extends Mechanism implements DriveI {
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
     public static double D = 0.0; //0.0012
-    public final double MF = 1.1366666666666666666666666;
+    public final double MF = 1.1367; //will be kv
     public final double MP = 0.01;
-    public final double MI = 0.0001;
+    public final double MI = 0.00;
     public final double MD = 0.002;
     public static final double THRESHOLD = 2;
     public final double MIN_TURN_SPEED = 0.35;
@@ -118,9 +120,12 @@ public class Drive extends Mechanism implements DriveI {
     * Each Talon is followed by 2 Victors, which mirror the Talon's output.
     * Speed will be [-maximumRPM, maximumRPM], depending on joystick input.
     */
+
+
     public void setDrive(double leftSetting, double rightSetting) {
         m_leftTalon.set(ControlMode.Velocity, leftSetting * maximumRPM * 256 / 600); //RPM times units per rev / 100ms per min
         m_rightTalon.set(ControlMode.Velocity, rightSetting * maximumRPM * 256 / 600); //basically converts from RPM to units/100ms for the PID to use
+
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
         if (m_secondVictor) {
@@ -332,8 +337,10 @@ public class Drive extends Mechanism implements DriveI {
         if (index == 0) {
             resetEncoders();
             resetGyro();
+            waterWheel.resetWheelPosition();
             index = 1;
         }
+
 
         // get data
         currentTime = RobotProvider.getTimeProvider().get();
@@ -359,12 +366,16 @@ public class Drive extends Mechanism implements DriveI {
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
         if (index % 10 == 0) {
+            System.out.println("current waterwheel position: "+ waterWheel.getWheelPosition());
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
             SmartDashboard.putNumber("velocity", velocity);
-            // System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
+            //System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
+            // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
+            System.out.println("waterwheel at: " + Robot.waterwheel.getWheelPosition());
+            Robot.lightSensor.checkLightSensor();
             // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }
         index++;

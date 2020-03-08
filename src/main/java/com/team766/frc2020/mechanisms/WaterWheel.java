@@ -1,43 +1,94 @@
 package com.team766.frc2020.mechanisms;
 
+import com.ctre.phoenix.motorcontrol.DemandType;
+import com.team766.controllers.PIDController;
+import com.team766.config.ConfigFileReader;
 import com.team766.framework.Mechanism;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.CANSpeedController;
 import com.team766.hal.DigitalInputReader;
 import com.team766.hal.SolenoidController;
-import com.team766.hal.CANSpeedController.ControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class WaterWheel extends Mechanism {
 
     private CANSpeedController m_talon;
-    private SolenoidController m_ballPusher;
-    private CANSpeedController m_wheelMotor;
+    private final SolenoidController m_ballPusher;
+   //private final CANSpeedController wheelState;
     private DigitalInputReader wheelLimitSwitch;
+    private WPI_TalonSRX m_wheelMotor;
 
     public WaterWheel() {
         //m_talon = RobotProvider.instance.getTalonCANMotor("waterwheel.talon");
         m_ballPusher = RobotProvider.instance.getSolenoid("waterwheel.pusher");
-        m_wheelMotor = RobotProvider.instance.getTalonCANMotor("waterwheel.motor");
+        //wheelState = RobotProvider.instance.getTalonCANMotor("waterwheel.motor");
+        m_wheelMotor = new WPI_TalonSRX(ConfigFileReader.getInstance().getInt("waterwheel.motor").get());
+        m_wheelMotor.configMotionCruiseVelocity(1000);
+        m_wheelMotor.configMotionAcceleration(800);
+        m_wheelMotor.config_kP(0, 1.5, 0);
+        m_wheelMotor.config_kI(0, 0, 0);
+        m_wheelMotor.config_kD(0, 0, 0);
+        m_wheelMotor.config_kF(0, 0, 0);
+
+        
+        //m_wheelMotor.set(ControlMode.MotionMagic, 0.0);
+
         //wheelLimitSwitch = RobotProvider.instance.getDigitalInput("waterwheel.limitswitch");
     }
 
-    public void setWheelPower(double wheelPower) {
-        m_wheelMotor.set(wheelPower);
+    public void setWheelPower(final double wheelPower) {
+        m_wheelMotor.set(ControlMode.MotionMagic, wheelPower);
     }
 
-    public void setPusherState(boolean state) {
+    public void setWheelPosition(double position) {
+        //example: _talonRght.set(ControlMode.MotionMagic, targetDistance, DemandType.AuxPID, desiredRobotHeading);
+        m_wheelMotor.set(ControlMode.MotionMagic, position);
+    }
+
+    public void resetWheelPosition() {
+        m_wheelMotor.setSelectedSensorPosition(0, 0, 0);
+    }
+
+    public void setPusherState(final boolean state) {
         m_ballPusher.set(state);
     }
 
     public double getWheelPosition() {
-        return m_wheelMotor.getSensorPosition();
+        return m_wheelMotor.getSelectedSensorPosition(0);
     }
 
-    public double getWheelVelocity() {
-        return m_wheelMotor.getSensorVelocity();
-    }
+    // public double getWheelVelocity() {
+    //     return m_wheelMotor.getSensorVelocity();
+    // }
 
-    public void setWheelVelocity(double wheelVelocity) {
+    public void setWheelVelocity(final double wheelVelocity) {
         m_wheelMotor.set(ControlMode.Velocity, wheelVelocity);
     }
-}
+
+    // public void oneTurn() {
+    //     m_velocityController.setSetpoint(0.0);
+    //     double minError = 360;
+    //     double nextAngle = 0;
+    //     for (double angle: angles){
+    //         if (angle - m_wheelMotor.getSensorPosition() <=0) {
+    //             angle+=360;
+    //         }
+    //         if (angle - m_wheelMotor.getSensorPosition() < minError) {
+    //             nextAngle = angle;
+    //         }
+    //     }
+    //     if (nextAngle>=360){
+    //         nextAngle-=360;
+    //     }
+
+    //     double error = nextAngle - m_wheelMotor.getSensorPosition();
+    //     m_velocityController.calculate(error, true);
+    //     m_wheelMotor.set(m_velocityController.getOutput());
+    
+        // OTHER METHODS OF DOING THIS:
+        // TURN UNTIL ULTRASONIC SENSOR SENSES NO BALL
+        // MAKE ANOTHER METHOD TURNTOANGLE()
+    }
