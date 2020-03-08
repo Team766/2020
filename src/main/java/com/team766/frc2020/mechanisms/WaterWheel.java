@@ -51,14 +51,12 @@ public class WaterWheel extends Mechanism {
             intakeMode = mode;  
             setWheelPosition(Robot.waterwheel.getWheelPosition() + 420);
         }
-
     }
 
     public void setOuttakeMode(boolean mode) {
-        outtakeMode = mode;
         if(!(outtakeMode == mode)) {
             outtakeMode = mode;
-            setWheelPosition(Robot.waterwheel.getWheelPosition() + 420);
+            setWheelPosition(Robot.waterwheel.getWheelPosition() + 0);
         }
     }
 
