@@ -69,12 +69,10 @@ public class OI extends Command {
 		Robot.drive.setArcadeDrive(-m_joystick1.getRawAxis(1), Math.pow(m_joystick2.getRawAxis(0), 3));
 		
 		//climber
-		if (m_boxop.getRawButton(1)) {
-            Robot.climber.setClimberUpState(false);
-            Robot.climber.setClimberDownState(true);
-		} else if (m_boxop.getRawButton(2)) {
-            Robot.climber.setClimberUpState(true);
-            Robot.climber.setClimberDownState(false);
+		if (m_boxop.getRawButton(2)) {
+            Robot.climber.setClimberUp(true);
+		} else {
+            Robot.climber.setClimberUp(false);
 		}
 
 		//intake up and down

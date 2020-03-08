@@ -27,6 +27,11 @@ public class Climber extends Mechanism {
         m_climbPistonDown.set(state);
     }
 
+    public void setClimberUp (boolean isUp) {
+        m_climbPistonDown.set(!isUp);
+        m_climbPistonUp.set(isUp);
+    }
+
     public void setWinchPower(double speed){
         m_winch.set(speed);
     }
