@@ -109,9 +109,12 @@ public class WaterWheel extends Mechanism {
 
     public void turnDegrees(int degrees) {
         if (!isPusherOut()) {
+            System.out.println("turning degrees:" + degrees);
             int currentPosition = (int)(m_wheelMotor.getSelectedSensorPosition(0));
             m_wheelMotor.set(ControlMode.Position, currentPosition + degrees);
         }
+        System.out.println("WARNING PUSHER WAS OUT! DID NOT TURN WATERWHEEL");
+
     }
 
 }
