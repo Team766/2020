@@ -35,7 +35,7 @@ public class PiWebSocketServer extends WebSocketServer {
 	}
 
 	public void broadcastPosition(double xPosition, double yPosition, double theta) {
-		broadcast("{\"position\": { \"xPosition\": " + xPosition + ", \"yPosition\": " + yPosition + ", \"theta\": " + theta + "}}" );
+		broadcast("{\"odometryPosition\": { \"xPosition\": " + xPosition + ", \"yPosition\": " + yPosition + ", \"theta\": " + theta + "}}" );
 	}
 
 	public void broadcastDeltaPosition(double deltaX, double deltaY, double deltaTheta) {
@@ -57,16 +57,13 @@ public class PiWebSocketServer extends WebSocketServer {
         //System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
         try {
             JSONObject pmessage = new JSONObject(message);
-            // xPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("x"));
-			// yPosition = Double.parseDouble(pmessage.getJSONObject("position").getString("y"));
-			// theta = Double.parseDouble(pmessage.getJSONObject("position").getString("theta"));
-            xPosition = pmessage.getJSONObject("position").getDouble("xPosition");
-			yPosition = pmessage.getJSONObject("position").getDouble("yPosition");
-			theta = pmessage.getJSONObject("position").getDouble("theta");
-            //Robot.drive.setXPosition(Double.parseDouble(pmessage.getJSONObject("position").getString("x")));
-            //Robot.drive.setYPosition(Double.parseDouble(pmessage.getJSONObject("position").getString("y")));
+            xPosition = pmessage.getJSONObject("montyPosition").getDouble("xPosition");
+			yPosition = pmessage.getJSONObject("montyPosition").getDouble("yPosition");
+			theta = pmessage.getJSONObject("montyPosition").getDouble("theta");
+
             Robot.drive.setXPosition(xPosition);
-            Robot.drive.setYPosition(yPosition);
+			Robot.drive.setYPosition(yPosition);
+			Robot.drive.setTheta(theta);
             System.out.println("received: x: " + xPosition + " y: " + yPosition + " theta: " + theta);
             
         } catch (Exception e) {
