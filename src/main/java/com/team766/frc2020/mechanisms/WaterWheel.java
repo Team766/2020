@@ -23,6 +23,7 @@ public class WaterWheel extends Mechanism {
     private WPI_TalonSRX m_wheelMotor;
     public boolean intakeMode = false;
     public boolean outtakeMode = true;
+    private double initialWaterWheelPosition = m_wheelMotor.getSelectedSensorPosition(0); 
 
     
     public WaterWheel() {
@@ -85,12 +86,8 @@ public class WaterWheel extends Mechanism {
     }
 
     public double getWheelPosition() {
-        return m_wheelMotor.getSelectedSensorPosition(0);
+        return m_wheelMotor.getSelectedSensorPosition(0) - initialWaterWheelPosition;
     }
-
-    // public double getWheelVelocity() {
-    //     return m_wheelMotor.getSensorVelocity();
-    // }
 
     public void setWheelVelocity(final double wheelVelocity) {
         m_wheelMotor.set(ControlMode.Velocity, wheelVelocity);
