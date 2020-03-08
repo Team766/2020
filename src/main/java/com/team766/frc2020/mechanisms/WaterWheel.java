@@ -96,6 +96,10 @@ public class WaterWheel extends Mechanism {
         m_ballPusher.set(false);
     }
 
+    public void setInitialWaterWheelPosition() {
+        initialWaterWheelPosition = m_wheelMotor.getSelectedSensorPosition(0);
+    }
+
     public double getWheelPosition() {
         return m_wheelMotor.getSelectedSensorPosition(0) - initialWaterWheelPosition;
     }

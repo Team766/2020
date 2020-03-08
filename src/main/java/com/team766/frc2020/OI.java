@@ -83,8 +83,6 @@ public class OI extends Command {
 			Robot.intake.setIntakeState(false);
 		}
 
-	
-
 		//intake mode
 		if(m_boxop.getRawButton(2)){
 			waterWheel.setIntakeMode(true);
@@ -123,35 +121,10 @@ public class OI extends Command {
 			waterWheel.setPusherState(true);
 		}
 			//waterWheel.setPusherState(false);
-		
-		// if (m_boxop.getRawButton(1)) {
-		// 	Robot.intake.setIntakeState(false);
-		// } else if (m_boxop.getRawButton(2)) {
-		// 	Robot.intake.setIntakeState(true);
-		// }
 
 		if (m_joystick1.getRawButton(1)) {
 			waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
 		}
-
-
-		// if (m_boxop.getRawButton(18)) {
-		// 	Robot.spinner.setSpinnerPower(0);
-		// } else if (m_boxop.getRawButton(19)) {
-		// 	Robot.spinner.setSpinnerPower(0.5);
-		// }
-
-		// if (m_boxop.getRawButton(20)) {
-		// 	Robot.spinner.setSpinnerState(false);
-		// } else if (m_boxop.getRawButton(21)) {
-		// 	Robot.spinner.setSpinnerState(true);
-		// }
-
-		// if (m_boxop.getRawButton(22)) {
-		// 	Robot.wagon.setWagonPower(0.5);
-		// } else if (m_boxop.getRawButton(23)) {
-		// 	Robot.wagon.setWagonPower(0);
-		// }
 
 		if (m_joystick2.getRawButton(1)) {
 			Robot.waterwheel.setPusherState(true);
@@ -159,21 +132,13 @@ public class OI extends Command {
 			Robot.waterwheel.setPusherState(false);
 		}
 
-		// if (m_joystick1.getRawButton(2)) {
-		// 	Robot.waterwheel.setWheelPower(-0.1);
-		// } else if (m_joystick2.getRawButton(2)) {
-		// 	Robot.waterwheel.setWheelPower(0.1);
-		// } else {
-		// 	Robot.waterwheel.setWheelPower(0);
-		// }
+		if (!m_joystick2.getRawButton(3)) {
+			outtakeAllBalls();
+		}
 		
 		if (!Robot.drive.isEnabled()) {
 			Robot.drive.nukeRobot();
 			return;
-		}
-
-		if(m_boxop.getRawButton(24)) {
-			outtakeAllBalls();
 		}
 	}
 
