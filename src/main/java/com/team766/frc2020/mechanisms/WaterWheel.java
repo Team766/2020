@@ -69,7 +69,10 @@ public class WaterWheel extends Mechanism {
 
     public void setWheelPosition(double position) {
         //example: _talonRght.set(ControlMode.MotionMagic, targetDistance, DemandType.AuxPID, desiredRobotHeading);
-        m_wheelMotor.set(ControlMode.MotionMagic, position);
+        if (!isPusherOut()) {
+            m_wheelMotor.set(ControlMode.MotionMagic, position);
+        }
+        System.out.println("WARNING PUSHER WAS OUT! DID NOT TURN WATERWHEEL");
     }
 
     public void resetWheelPosition() {

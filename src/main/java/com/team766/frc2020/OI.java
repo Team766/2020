@@ -161,6 +161,21 @@ public class OI extends Command {
 			Robot.waterwheel.setPusherState(false);
 		}
 		
+		if (m_joystick2.getRawButton(3)) {
+			if (!Robot.lightSensor.getTopLightSensorState()) {
+				waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
+			}
+			Robot.outtake.setOuttakePowerDistance(3.0);
+			Robot.waterwheel.pusherOutAndIn();
+		} else {
+			Robot.outtake.stopOuttake();
+			Robot.waterwheel.setPusherState(false);
+		}
+
+		if (m_joystick2.getRawButton(4)) {
+			Robot.waterwheel.setInitialWaterWheelPosition();
+		}
+		
 		if (!Robot.drive.isEnabled()) {
 			Robot.drive.nukeRobot();
 			return;
