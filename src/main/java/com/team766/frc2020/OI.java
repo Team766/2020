@@ -158,8 +158,10 @@ public class OI extends Command {
 		// when limelight works, get the distance here
 		for (int i = 0; i < 5; i++) {
 			Robot.waterwheel.turnDegrees(840);
-			Robot.outtake.continuousDistanceShoot();
-			
+			// Robot.waterwheel.setWheelPosition(840 * i);
+			// Robot.outtake.continuousDistanceShoot();
+			Robot.outtake.setOuttakePowerDistance(2.0);
+			Robot.waterwheel.pusherOutAndIn();
 		}
 		Robot.outtake.setOuttakePower(0);
 	}

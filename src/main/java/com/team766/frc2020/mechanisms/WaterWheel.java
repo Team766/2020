@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.team766.frc2020.mechanisms.LightSensor;
 
 public class WaterWheel extends Mechanism {
 
@@ -23,7 +24,7 @@ public class WaterWheel extends Mechanism {
     private WPI_TalonSRX m_wheelMotor;
     public boolean intakeMode = false;
     public boolean outtakeMode = true;
-    private double initialWaterWheelPosition = m_wheelMotor.getSelectedSensorPosition(0); 
+    private double initialWaterWheelPosition;
 
     
     public WaterWheel() {
@@ -37,6 +38,7 @@ public class WaterWheel extends Mechanism {
         m_wheelMotor.config_kI(0, 0, 0);
         m_wheelMotor.config_kD(0, 0, 0);
         m_wheelMotor.config_kF(0, 0, 0);
+        initialWaterWheelPosition = m_wheelMotor.getSelectedSensorPosition(0); 
 
         
         //m_wheelMotor.set(ControlMode.MotionMagic, 0.0);
@@ -85,6 +87,17 @@ public class WaterWheel extends Mechanism {
         m_ballPusher.set(state);
     }
 
+    public boolean isPusherOut() {
+        return m_ballPusher.get();
+    }
+
+    public void pusherOutAndIn() {
+        while (Robot.lightSensor.getTopLightSensorState()) {
+            m_ballPusher.set(true);
+        }
+        m_ballPusher.set(false);
+    }
+
     public double getWheelPosition() {
         return m_wheelMotor.getSelectedSensorPosition(0) - initialWaterWheelPosition;
     }
@@ -95,8 +108,10 @@ public class WaterWheel extends Mechanism {
 
 
     public void turnDegrees(int degrees) {
-        int currentPosition = (int)(m_wheelMotor.getSelectedSensorPosition(0));
-        m_wheelMotor.set(ControlMode.Position, currentPosition + degrees);
+        if (!isPusherOut()) {
+            int currentPosition = (int)(m_wheelMotor.getSelectedSensorPosition(0));
+            m_wheelMotor.set(ControlMode.Position, currentPosition + degrees);
+        }
     }
 
 }
