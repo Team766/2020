@@ -28,6 +28,7 @@ public class PathWebSocketServer extends WebSocketServer {
     }
 
     public void broadcastPath(ArrayList<Waypoint> path) {
+        this.path = path;
         String pathString = "";
         pathString += "{\"path\": [";
         

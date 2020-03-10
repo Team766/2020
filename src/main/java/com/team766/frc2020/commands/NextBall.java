@@ -25,11 +25,11 @@ public class NextBall extends Subroutine {
 
         double vError;
 
-        WaterWheel waterWheel = new WaterWheel();
+        WaterWheel waterwheel = new WaterWheel();
 
         System.out.println("Wheel position initial: " + Robot.waterwheel.getWheelPosition());
 
-        waterWheel.setWheelPosition(820);
+        waterwheel.setWheelPosition(820);
 
         System.out.println("Wheel position final: " + Robot.waterwheel.getWheelPosition());
 

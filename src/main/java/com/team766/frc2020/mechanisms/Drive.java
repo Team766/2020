@@ -14,7 +14,6 @@ import com.team766.controllers.PIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.config.ConfigFileReader;
-import com.team766.frc2020.mechanisms.LightSensor;
 
 import com.team766.frc2020.Robot;
 
@@ -27,7 +26,6 @@ public class Drive extends Mechanism implements DriveI {
     private CANSpeedController m_rightVictor2;
     private static CANSpeedController m_leftTalon;
     private static CANSpeedController m_rightTalon;
-    private static WaterWheel waterWheel = new WaterWheel();
     private GyroReader m_gyro;
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
     public static double kS = 0.0; 
@@ -36,7 +34,7 @@ public class Drive extends Mechanism implements DriveI {
 
     public static double P = 0.01; //0.04
     public static double I = 0.0;//0.0005
-    public static double D = 0.0; //0.0012
+    public static double D = 0.001; //0.0012
     public final double MF = 1.1367; //will be kv
     public final double MP = 0.01;
     public final double MI = 0.00;
@@ -346,7 +344,6 @@ public class Drive extends Mechanism implements DriveI {
         if (index == 0) {
             resetEncoders();
             resetGyro();
-            waterWheel.resetWheelPosition();
             index = 1;
         }
 
@@ -367,8 +364,8 @@ public class Drive extends Mechanism implements DriveI {
         yPosition += deltaYPosition;
 
         // send position and heading over websockets
-        //Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
-        //Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
+        Robot.pathWebSocketServer.broadcastPosition(xPosition, yPosition);
+        Robot.pathWebSocketServer.broadcastHeading(currentGyroAngle);
         Robot.piWebSocketServer.broadcastDeltaPosition(deltaXPosition, deltaYPosition, deltaGyroAngle);
         Robot.piWebSocketServer.broadcastPosition(xPosition, yPosition, currentGyroAngle);
 
@@ -376,7 +373,6 @@ public class Drive extends Mechanism implements DriveI {
         velocity = Math.sqrt(Math.pow(deltaXPosition, 2) + Math.pow(deltaYPosition, 2)) / (currentTime - previousTime);
         
         if (index % 50 == 0) {
-            System.out.println("current waterwheel position: "+ waterWheel.getWheelPosition());
             SmartDashboard.putNumber("X position", xPosition);
             SmartDashboard.putNumber("Y position", yPosition);
             SmartDashboard.putNumber("Gyro angle", currentGyroAngle);
@@ -384,7 +380,6 @@ public class Drive extends Mechanism implements DriveI {
             //System.out.println("position in drive.java ("+ xPosition + ", "+ yPosition);
             // System.out.println("gyro angle  " + currentGyroAngle);
             // System.out.println("left encoder: " + currentLeftEncoderDistance + " right encoder " + currentRightEncoderDistance);
-            //System.out.println("waterwheel at: " + Robot.waterwheel.getWheelPosition());
             // System.out.println("left encoder: " + deltaLeftEncoderDistance + " right encoder " + deltaRightEncoderDistance);
         }
         index++;

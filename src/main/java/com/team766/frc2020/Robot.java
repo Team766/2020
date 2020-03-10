@@ -21,7 +21,7 @@ public class Robot extends MyRobot {
 	public static Drive drive;
 	public static Climber climber;
 	public static Intake intake;
-	 public static LimeLight limeLight;
+	public static LimeLight limeLight;
 	public static Outtake outtake;
 	public static Spinner spinner;
 	public static Wagon wagon;
