@@ -16,6 +16,16 @@ import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 
+/*
+//HOW TO CALL SUBROUTINES FOR DUMDUMS LIKE MOI
+		if (m_joystick2.getRawButton(4)) {
+			LimeScore limeScore = new LimeScore();
+			limeScore.start();
+		}
+*/
+
+
+
 public class LimeScore extends Subroutine {
 
     PIDController m_turnController;
@@ -33,51 +43,35 @@ public class LimeScore extends Subroutine {
     double pOut;
     DriveI m_drive;
     LimeLightI m_limeLight;
+    double power = 0.4;
     public LimeScore() {
         m_drive = Robot.drive;
         m_limeLight = Robot.limeLight;
-        m_turnController = new PIDController(LimeLight.P, LimeLight.I, LimeLight.D, LimeLight.THRESHOLD, RobotProvider.getTimeProvider() );
+        m_turnController = new PIDController(LimeLight.P, LimeLight.I, LimeLight.D, LimeLight.THRESHOLD, RobotProvider.getTimeProvider());
     }
     protected void subroutine() {
-        System.out.println("hi");
+        System.out.println("limescore start");
         LimeLight.setLedMode(LightMode.eOn);
         LimeLight.setCameraMode(CameraMode.eVision);
         m_turnController.reset();
         m_drive.resetEncoders();
         currentX = m_limeLight.tx();
         yError = m_limeLight.ty();
-        Robot.drive.setDrive(0,0);
         System.out.println("currentX"+ currentX);
-        Robot.drive.setDrive(0,0);
-       currentX = m_limeLight.tx();
-         while (currentX<-0.7){
-            Robot.drive.setDrive(-0.5,05);
-          currentX = m_limeLight.tx();
-          waitForSeconds(0.1);
-          Robot.drive.setDrive(0,0);
-          continue;
-        }
-       Robot.drive.setDrive(0,0);
-       currentX = m_limeLight.tx();
-        while (currentX>0.7){
-            Robot.drive.setDrive(0.5,-0.5);
-            currentX = m_limeLight.tx();
-            waitForSeconds(0.1);
-            Robot.drive.setDrive(0,0);
-            continue;
-        }
+        Robot.drive.setDrive(0.0, 0.0);
 
-             while (currentX<-0.7){
-            Robot.drive.setDrive(-0.5,0.5);
+        while (currentX<-0.7){
+          Robot.drive.setDrive(-power, power);
+          System.out.println("moving left");
           currentX = m_limeLight.tx();
-          waitForSeconds(0.1);
-          Robot.drive.setDrive(0,0);
-          continue;
         }
-        Robot.drive.setDrive(0,0);      
-        currentX = m_limeLight.tx();
-       System.out.println("currentX"+ currentX);
-       System.out.println("Callibrated, if it ain't working, its a mechanical prolem, alos, Alex. C. and Anton and Jaob might be the reason it aint working, ask them questions cause its their fault entirely");
-        return;
+        Robot.drive.setDrive(0.0, 0.0);
+        while (currentX>0.7){
+          Robot.drive.setDrive(power, -power);
+          System.out.println("moving right");
+
+          currentX = m_limeLight.tx();
+        }
+        Robot.drive.setDrive(0,0);
     }
 }
