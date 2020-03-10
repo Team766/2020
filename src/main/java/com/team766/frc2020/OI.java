@@ -145,7 +145,14 @@ public class OI extends Command {
 		if (!m_joystick2.getRawButton(3)) {
 			outtakeAllBalls();
 		}
-		
+		if (m_joystick2.getRawButton(4)) {
+			m_limeScore = new LimeScore();
+			m_limeScore.start();
+		 } 
+		if (m_joystick2.getRawButton(5)) {
+			m_limeScore = new LimeScore();
+			m_limeScore.stop();
+		 }
 		if (!Robot.drive.isEnabled()) {
 			Robot.drive.nukeRobot();
 			return;
