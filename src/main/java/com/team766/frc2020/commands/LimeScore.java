@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.team766.controllers.PIDController;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
-
 /*
 //HOW TO CALL SUBROUTINES FOR DUMDUMS LIKE MOI
 		if (m_joystick2.getRawButton(4)) {
@@ -23,9 +22,6 @@ import com.team766.hal.RobotProvider;
 			limeScore.start();
 		}
 */
-
-
-
 public class LimeScore extends Subroutine {
 
     PIDController m_turnController;
@@ -44,34 +40,39 @@ public class LimeScore extends Subroutine {
     DriveI m_drive;
     LimeLightI m_limeLight;
     double power = 0.4;
+    double targetHeight = 98.25;
+    double cameraHeight  = 22.4;
+    double cameraAngle = 65;
+    double limeDistance = ((targetHeight-cameraHeight)/Math.tan(cameraAngle+(yError))) ;;
+
     public LimeScore() {
         m_drive = Robot.drive;
         m_limeLight = Robot.limeLight;
-        m_turnController = new PIDController(LimeLight.P, LimeLight.I, LimeLight.D, LimeLight.THRESHOLD, RobotProvider.getTimeProvider());
+        m_turnController = new PIDController(LimeLight.P, LimeLight.I, LimeLight.D, LimeLight.THRESHOLD, RobotProvider.getTimeProvider() );
     }
     protected void subroutine() {
-        System.out.println("limescore start");
-        LimeLight.setLedMode(LightMode.eOn);
+      System.out.println("limescore start");
+      LimeLight.setLedMode(LightMode.eOn);
         LimeLight.setCameraMode(CameraMode.eVision);
         m_turnController.reset();
         m_drive.resetEncoders();
         currentX = m_limeLight.tx();
         yError = m_limeLight.ty();
         System.out.println("currentX"+ currentX);
-        Robot.drive.setDrive(0.0, 0.0);
-
-        while (currentX<-0.7){
+         while (currentX<-0.7){
           Robot.drive.setDrive(-power, power);
           System.out.println("moving left");
           currentX = m_limeLight.tx();
         }
-        Robot.drive.setDrive(0.0, 0.0);
+       Robot.drive.setDrive(0.0, 0.0);
         while (currentX>0.7){
           Robot.drive.setDrive(power, -power);
           System.out.println("moving right");
-
-          currentX = m_limeLight.tx();
+            currentX = m_limeLight.tx();
         }
-        Robot.drive.setDrive(0,0);
+
+      Robot.drive.setDrive(0,0);      
+       yield();
     }
+    
 }
