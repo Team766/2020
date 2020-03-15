@@ -60,28 +60,15 @@ public class OI extends Command {
 		// double leftPower = (fwd_power + turn_power);
 		// double rightPower = (fwd_power - turn_power);
 		
-		// // //SmartDashboard.putNumber("Forward Power", fwd_power);
-		// // //SmartDashboard.putNumber("Turn Power", turn_power);
-		// // //SmartDashboard.putNumber("Left Power", leftPower);
-		// // //SmartDashboard.putNumber("Right Power", rightPower);
-		
 		// Robot.drive.setDrive(leftPower, rightPower);
+
+		if (!Robot.drive.isEnabled()) {
+			Robot.drive.nukeRobot();
+		}
 
 		Robot.drive.setArcadeDrive(-m_joystick1.getRawAxis(1), Math.pow(m_joystick2.getRawAxis(0), 3));
 		
-		//climber
-		if (m_boxop.getRawButton(2)) {
-            Robot.climber.setClimberUp(true);
-		} else {
-            Robot.climber.setClimberUp(false);
-		}
 
-		//intake up and down
-		if (m_boxop.getRawButton(6)) {
-			Robot.intake.setIntakeState(true);
-		} else if (m_boxop.getRawButton(7)) {
-			Robot.intake.setIntakeState(false);
-		}
 
 		//intake mode
 		if(m_joystick1.getRawButton(2)){
@@ -153,29 +140,32 @@ public class OI extends Command {
 		}
 
 		if (m_joystick2.getRawButton(1)) {
-			Robot.waterwheel.setPusherState(true);
-		} else {
-			Robot.waterwheel.setPusherState(false);
-		}
+			Robot.waterwheel.pusherOutAndIn();
+		} 
 		
 		if (m_joystick2.getRawButton(3)) {
+			Robot.outtake.setOuttakePowerDistance(3.0);
 			if (!Robot.lightSensor.getTopLightSensorState()) {
+				System.out.println("turning by one sector");
 				waterWheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
 			}
-			Robot.outtake.setOuttakePowerDistance(3.0);
 			Robot.waterwheel.pusherOutAndIn();
 		} else {
 			Robot.outtake.stopOuttake();
 			Robot.waterwheel.setPusherState(false);
+			// get rid of all the other button else conditions so they don't conflict and do weird things
 		}
 
 		if (m_joystick2.getRawButton(4)) {
 			Robot.waterwheel.setInitialWaterWheelPosition();
+			Robot.outtake.setOuttakePowerDistance(3.0);
 		}
 		
-		if (!Robot.drive.isEnabled()) {
-			Robot.drive.nukeRobot();
-			return;
+		//climber
+		if (m_boxop.getRawButton(2)) {
+			Robot.climber.setClimberUp(true);
+		} else {
+			Robot.climber.setClimberUp(false);
 		}
 	}
 

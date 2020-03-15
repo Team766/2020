@@ -59,7 +59,7 @@ public class WaterWheel extends Mechanism {
     public void setOuttakeMode(boolean mode) {
         if(!(outtakeMode == mode)) {
             outtakeMode = mode;
-            setWheelPosition(Robot.waterwheel.getWheelPosition() + 0);
+            setWheelPosition(Robot.waterwheel.getWheelPosition());
         }
     }
 
@@ -70,6 +70,7 @@ public class WaterWheel extends Mechanism {
     public void setWheelPosition(double position) {
         //example: _talonRght.set(ControlMode.MotionMagic, targetDistance, DemandType.AuxPID, desiredRobotHeading);
         if (!isPusherOut()) {
+            System.out.println("turning waterwheel about " + (position - Robot.waterwheel.getWheelPosition()) / 840 + " spaces");
             m_wheelMotor.set(ControlMode.MotionMagic, position);
         }
         System.out.println("WARNING PUSHER WAS OUT! DID NOT TURN WATERWHEEL");
@@ -102,7 +103,7 @@ public class WaterWheel extends Mechanism {
     }
 
     public void pusherOutAndIn() {
-        while (Robot.lightSensor.getTopLightSensorState()) {
+        while ((Robot.lightSensor.getTopLightSensorState()) && (Robot.drive.isEnabled())) {
             m_ballPusher.set(true);
         }
         m_ballPusher.set(false);
