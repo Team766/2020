@@ -30,7 +30,7 @@ public class PathWebSocketServer extends WebSocketServer {
     public void broadcastPath(ArrayList<Waypoint> path) {
         this.path = path;
         String pathString = "";
-        pathString += "{\"path\": [";
+        pathString += "{\"waypoints\": [";
         
         for (int i = 0; i < path.size(); i++) {
 			pathString += "{\"x\": " + Math.round(path.get(i).getX() * 100) / 100.0 + ", \"y\": " + Math.round(path.get(i).getY() * 100) / 100 + "},";

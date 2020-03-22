@@ -86,6 +86,7 @@ public class Talon implements CANSpeedController {
 		throw new UnsupportedOperationException();
 	}
 
+    // TODO: add actual mock stuff for these functions
 	@Override
 	public ErrorCode config_kP(int slotIdx, double value, int timeoutMs) {
         // throw new UnsupportedOperationException();
