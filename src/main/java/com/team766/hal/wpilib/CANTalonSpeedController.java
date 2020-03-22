@@ -108,5 +108,17 @@ public class CANTalonSpeedController extends WPI_TalonSRX implements CANSpeedCon
 	public ErrorCode config_kF(int slotIdx, double value, int timeoutMs) {
 		super.config_kF(slotIdx, value, timeoutMs);
 		return ErrorCode.OK;
-	}
+    }
+    
+    @Override
+    public ErrorCode configMotionCruiseVelocity(int sensorUnitsPer100ms) {
+        super.configMotionCruiseVelocity(sensorUnitsPer100ms);
+        return ErrorCode.OK;
+    }
+
+    @Override
+    public ErrorCode configMotionAcceleration(int sensorUnitsPer100msPerSec) {
+        super.configMotionAcceleration(sensorUnitsPer100msPerSec);
+        return ErrorCode.OK;
+    }
 }

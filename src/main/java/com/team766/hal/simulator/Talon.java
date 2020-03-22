@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.hal.CANSpeedController;
 import com.team766.simulator.ProgramInterface;
 
-public class Talon implements CANSpeedController{
+public class Talon implements CANSpeedController {
 
 	private ProgramInterface.CANSpeedControllerCommunication channel;
 	
@@ -145,5 +145,15 @@ public class Talon implements CANSpeedController{
 	@Override
 	public ErrorCode config_kF(int slotIdx, double value, int timeoutMs) {
 		throw new UnsupportedOperationException();
-	}
+    }
+    
+    @Override
+    public ErrorCode configMotionCruiseVelocity(int sensorUnitsPer100ms) {
+		throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ErrorCode configMotionAcceleration(int sensorUnitsPer100msPerSec) {
+		throw new UnsupportedOperationException();
+    }
 }

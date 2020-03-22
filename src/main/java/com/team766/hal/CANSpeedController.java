@@ -96,7 +96,11 @@ public interface CANSpeedController extends SpeedController {
 
 	ErrorCode configPeakOutputForward(double PercentOutput);
 
-	ErrorCode configPeakOutputReverse(double PercentOutput);
+    ErrorCode configPeakOutputReverse(double PercentOutput);
+    
+    ErrorCode configMotionCruiseVelocity(int sensorUnitsPer100ms);
+
+    ErrorCode configMotionAcceleration(int sensorunitsPer100msPerSec);
 	
 	void setSensorPhase(boolean PhaseSensor);
 
@@ -104,5 +108,5 @@ public interface CANSpeedController extends SpeedController {
 
 	void configOpenLoopRamp(double secondsFromNeutralToFull, int timeoutMs);
 
-	void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs);
+    void configClosedLoopRamp(double secondsFromNeutralToFull, int timeoutMs);
 }

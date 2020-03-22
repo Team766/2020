@@ -16,7 +16,7 @@ import com.team766.hal.SpeedController;
 
 import edu.wpi.first.wpilibj.SPI;
 
-public class WPIRobotProvider extends RobotProvider{
+public class WPIRobotProvider extends RobotProvider {
 
 	@Override
 	public SpeedController getMotor(int index) {
