@@ -18,14 +18,13 @@ public class RobotMain extends TimedRobot {
 
 	@Override
 	public void robotInit() {
-		try{
+		try {
 			ConfigFileReader.instance = new ConfigFileReader("/home/lvuser/robotConfig.txt");
-			RobotProvider.instance = new WPIRobotProvider();
-			
+            RobotProvider.instance = new WPIRobotProvider();
 			robot = EntryPoint.createRobot();
 			
 			robot.robotInit();
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}

@@ -77,7 +77,7 @@ public class ConfigFileReader {
 		return generation;
 	}
 	
-	boolean containsKey(String key) {
+	public boolean containsKey(String key) {
 		return values.containsKey(key);
 	}
 	

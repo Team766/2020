@@ -13,14 +13,18 @@ public class Climber extends Mechanism {
     private CANSpeedController m_shifter;
 
     public Climber() {
+        if (true) {
         m_climbPistonUp = RobotProvider.instance.getSolenoid("climber.pistonUp");
         m_climbPistonDown = RobotProvider.instance.getSolenoid("climber.pistonDown");
         m_winch = RobotProvider.instance.getVictorCANMotor("climber.winch");
         m_shifter = RobotProvider.instance.getVictorCANMotor("climber.shifter");
+        }
     }
 
     public void setClimberUpState(boolean state) {
+        if (m_climbPistonUp != null) {
         m_climbPistonUp.set(state);
+        }
     }
 
     public void setClimberDownState(boolean state) {

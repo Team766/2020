@@ -5,6 +5,8 @@ import java.util.HashMap;
 import com.team766.config.ConfigFileReader;
 import com.team766.controllers.TimeProviderI;
 
+import com.team766.hal.mock.*;
+
 public abstract class RobotProvider {
 	
 	public static RobotProvider instance;
@@ -44,74 +46,93 @@ public abstract class RobotProvider {
 		return () -> instance.getClock().getTime();
 	}
 	
-	//Config-driven methods
+	// Config-driven methods
 	public SpeedController getMotor(String configName) {
-		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
-		if (port == null) {
-			throw new IllegalArgumentException("Motor " + configName + " not found in config file");
-		}
-		return getMotor(port);
+        try {
+            Integer port = ConfigFileReader.getInstance().getInt(configName).get();
+            return getMotor(port);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Motor " + configName + " not found in config file, using mock motor instead");
+            return new Victor(0);
+        }
 	}
 	public CANSpeedController getTalonCANMotor(String configName) {
-		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
-		if (port == null) {
-			throw new IllegalArgumentException("Talon CAN Motor " + configName + " not found in config file");
-		}
-		return getTalonCANMotor(port);
+        try {
+            Integer port = ConfigFileReader.getInstance().getInt(configName).get();
+            return getTalonCANMotor(port);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Talon CAN Motor " + configName + " not found in config file, using mock talon instead");
+            return new Talon(0);
+        }
 	}
 	public CANSpeedController getVictorCANMotor(String configName) {
-		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
-		if (port == null) {
-			throw new IllegalArgumentException("Victor CAN Motor " + configName + " not found in config file");
-		}
-		return getVictorCANMotor(port);
+        try {
+            Integer port = ConfigFileReader.getInstance().getInt(configName).get();
+            return getVictorCANMotor(port);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Victor CAN Motor " + configName + " not found in config file, using mock victor instead");
+            return new Talon(0);
+        }
 	}
 	public EncoderReader getEncoder(String configName) {
-		Integer[] ports = ConfigFileReader.getInstance().getInts(configName).get();
-		if (ports == null) {
-			throw new IllegalArgumentException("Encoder " + configName + " not found in config file");
-		}
-		if (ports.length != 2) {
-			throw new IllegalArgumentException("Encoder " + configName + " has " + ports.length + " config values, but expected 2");
-		}
-		return getEncoder(ports[0], ports[1]);
+        try {
+            Integer[] ports = ConfigFileReader.getInstance().getInts(configName).get();
+		    return getEncoder(ports[0], ports[1]);
+        } catch (IllegalArgumentException ex) {
+            // if (ports.length != 2) {
+            //     System.out.println("Encoder " + configName + " has " + ports.length + " config values, but expected 2");
+            //     return new Encoder(0, 0);
+            // }
+            System.out.println("Encoder " + configName + " not found in config file, using mock encoder instead");
+            return new Encoder(0, 0);
+        }
 	}
 	public DigitalInputReader getDigitalInput(String configName) {
-		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
-		if (port == null) {
-			throw new IllegalArgumentException("Digital input " + configName + " not found in config file");
-		}
-		return getDigitalInput(port);
+        try {
+            Integer port = ConfigFileReader.getInstance().getInt(configName).get();
+		    return getDigitalInput(port);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Digital input " + configName + " not found in config file, using mock digital input");
+            return new DigitalInput();
+        }
 	}
 	public AnalogInputReader getAnalogInput(String configName) {
-		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
-		if (port == null) {
-			throw new IllegalArgumentException("Analog input " + configName + " not found in config file");
-		}
-		return getAnalogInput(port);
+        try {
+            Integer port = ConfigFileReader.getInstance().getInt(configName).get();
+            return getAnalogInput(port);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Analog input " + configName + " not found in config file, using mock analog input instead");
+            return new AnalogInput();
+        }
 	}
 	public RelayOutput getRelay(String configName) {
-		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
-		if (port == null) {
-			throw new IllegalArgumentException("Relay " + configName + " not found in config file");
-		}
+        try {
+        Integer port = ConfigFileReader.getInstance().getInt(configName).get();
 		return getRelay(port);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Relay " + configName + " not found in config file, using mock relay instead");
+            return new Relay(0);
+        }
 	}
 	public SolenoidController getSolenoid(String configName) {
-		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
-		if (port == null) {
-			throw new IllegalArgumentException("Solenoid " + configName + " not found in config file");
+        try {
+		    Integer port = ConfigFileReader.getInstance().getInt(configName).get();
+            return getSolenoid(port);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Solenoid " + configName + " not found in config file, using mock solenoid instead");
+            return new Solenoid(0);
 		}
-		return getSolenoid(port);
 	}
 	public GyroReader getGyro(String configName) {
-		Integer port = ConfigFileReader.getInstance().getInt(configName).get();
-		if (port == null) {
-			throw new IllegalArgumentException("Gyro " + configName + " not found in config file");
+        try {
+		    Integer port = ConfigFileReader.getInstance().getInt(configName).get();
+            return getGyro(port);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Gyro " + configName + " not found in config file, using mock gyro instead");
+            return new Gyro();
 		}
-		return getGyro(port);
 	}
-	
+
 	//Operator Devices
 	public abstract JoystickReader getJoystick(int index);
 	

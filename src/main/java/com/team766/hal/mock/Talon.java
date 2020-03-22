@@ -5,14 +5,14 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team766.hal.CANSpeedController;
 
-public class Talon implements CANSpeedController{
+public class Talon implements CANSpeedController {
 
 	private double output;
 	private double sensorPosition;
 	private double sensorVelocity;
 	private ControlMode controlMode;
 	
-	public Talon(int index){
+	public Talon(int index) {
 		output = 0;
 	}
 	

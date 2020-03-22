@@ -10,8 +10,6 @@ import com.team766.hal.CANSpeedController;
 import com.team766.hal.DigitalInputReader;
 import com.team766.hal.SolenoidController;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.team766.frc2020.mechanisms.LightSensor;
 
@@ -32,6 +30,7 @@ public class WaterWheel extends Mechanism {
         m_ballPusher = RobotProvider.instance.getSolenoid("waterwheel.pusher");
         //wheelState = RobotProvider.instance.getTalonCANMotor("waterwheel.motor");
         m_wheelMotor = new WPI_TalonSRX(ConfigFileReader.getInstance().getInt("waterwheel.motor").get());
+        // m_wheelMotor = RobotProvider.instance.getTalonCANMotor("waterwheel.motor");
         m_wheelMotor.configMotionCruiseVelocity(1000);
         m_wheelMotor.configMotionAcceleration(800);
         m_wheelMotor.config_kP(0, 1.5, 0);

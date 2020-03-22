@@ -29,7 +29,7 @@ public class WPIRobotProvider extends RobotProvider{
 
 	@Override
 	public CANSpeedController getTalonCANMotor(int index) {
-		if(talonCanMotors[index] == null){
+		if (talonCanMotors[index] == null) {
 			talonCanMotors[index] = new CANTalonSpeedController(index);
 		}
 
@@ -38,7 +38,7 @@ public class WPIRobotProvider extends RobotProvider{
 
 	@Override
 	public CANSpeedController getVictorCANMotor(int index) {
-		if(victorCanMotors[index] == null){
+		if (victorCanMotors[index] == null) {
 			victorCanMotors[index] = new CANVictorSpeedController(index);
 		}
 
@@ -93,7 +93,7 @@ public class WPIRobotProvider extends RobotProvider{
 
 	@Override
 	public DigitalInputReader getDigitalInput(int index) {
-		if(digInputs[index] == null)
+		if (digInputs[index] == null)
 			digInputs[index] = new DigitalInput(index);
 		return digInputs[index];
 	}
