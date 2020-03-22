@@ -14,10 +14,11 @@ public class Climber extends Mechanism {
 
     public Climber() {
         if (true) {
-        m_climbPistonUp = RobotProvider.instance.getSolenoid("climber.pistonUp");
-        m_climbPistonDown = RobotProvider.instance.getSolenoid("climber.pistonDown");
-        m_winch = RobotProvider.instance.getVictorCANMotor("climber.winch");
-        m_shifter = RobotProvider.instance.getVictorCANMotor("climber.shifter");
+            m_climbPistonUp = RobotProvider.instance.getSolenoid("climber.pistonUp");
+            m_climbPistonDown = RobotProvider.instance.getSolenoid("climber.pistonDown");
+            m_winch = RobotProvider.instance.getVictorCANMotor("climber.winch");
+            m_shifter = RobotProvider.instance.getVictorCANMotor("climber.shifter");
+            setClimberUp(false);
         }
     }
 
@@ -29,6 +30,11 @@ public class Climber extends Mechanism {
 
     public void setClimberDownState(boolean state) {
         m_climbPistonDown.set(state);
+    }
+
+    public void setClimberUp (boolean isUp) {
+        m_climbPistonDown.set(!isUp);
+        m_climbPistonUp.set(isUp);
     }
 
     public void setWinchPower(double speed){

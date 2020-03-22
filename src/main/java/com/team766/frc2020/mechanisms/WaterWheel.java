@@ -24,6 +24,8 @@ public class WaterWheel extends Mechanism {
     public boolean intakeMode = false;
     public boolean outtakeMode = true;
     private double initialWaterWheelPosition;
+    public boolean outtaking;
+    public double initialWheelPosition;
 
     
     public WaterWheel() {
@@ -39,7 +41,7 @@ public class WaterWheel extends Mechanism {
         m_wheelMotor.config_kD(0, 0, 0);
         m_wheelMotor.config_kF(0, 0, 0);
         initialWaterWheelPosition = m_wheelMotor.getSensorPosition(); 
-
+        outtaking = false;
         
         //m_wheelMotor.set(ControlMode.MotionMagic, 0.0);
 
@@ -56,7 +58,7 @@ public class WaterWheel extends Mechanism {
     public void setOuttakeMode(boolean mode) {
         if(!(outtakeMode == mode)) {
             outtakeMode = mode;
-            setWheelPosition(Robot.waterwheel.getWheelPosition() + 0);
+            setWheelPosition(Robot.waterwheel.getWheelPosition());
         }
     }
 
@@ -66,11 +68,21 @@ public class WaterWheel extends Mechanism {
 
     public void setWheelPosition(double position) {
         //example: _talonRght.set(ControlMode.MotionMagic, targetDistance, DemandType.AuxPID, desiredRobotHeading);
-        m_wheelMotor.set(ControlMode.MotionMagic, position);
+        if (!isPusherOut()) {
+            System.out.println("turning waterwheel about " + (position - Robot.waterwheel.getWheelPosition()) / 840 + " spaces");
+            m_wheelMotor.set(ControlMode.MotionMagic, position);
+        }
+        System.out.println("WARNING PUSHER WAS OUT! DID NOT TURN WATERWHEEL");
     }
 
     public void resetWheelPosition() {
         m_wheelMotor.setPosition(0);
+    }
+
+    public void outtakeOneBall() {
+        outtaking = true;
+        initialWheelPosition = getWheelPosition();
+        setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
     }
 
     public void initializeWheelPosition() {
@@ -81,7 +93,7 @@ public class WaterWheel extends Mechanism {
 
     }
 
-    public void setPusherState(final boolean state) {
+    public void setPusherState(boolean state) {
         m_ballPusher.set(state);
     }
 
@@ -90,13 +102,13 @@ public class WaterWheel extends Mechanism {
     }
 
     public void pusherOutAndIn() {
-        while (Robot.lightSensor.getTopLightSensorState()) {
+        while ((Robot.lightSensor.getTopLightSensorState()) && (Robot.drive.isEnabled())) {
             m_ballPusher.set(true);
         }
         m_ballPusher.set(false);
     }
 
-    public void setInitialWaterWheelPosition() {
+    public void setInitialWaterwheelPosition() {
         initialWaterWheelPosition = m_wheelMotor.getSensorPosition();
     }
 

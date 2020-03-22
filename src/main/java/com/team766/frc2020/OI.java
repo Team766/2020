@@ -24,6 +24,7 @@ public class OI extends Command {
 	private JoystickReader m_joystick2;
 	private JoystickReader m_boxop;
 	int index = 0;
+	boolean startIndexing = false;
 
 	// Variables for arcade drive
 	private double fwd_power = 0;
@@ -60,30 +61,20 @@ public class OI extends Command {
 		double leftPower = (fwd_power + turn_power);
 		double rightPower = (fwd_power - turn_power);
 		
-		// //SmartDashboard.putNumber("Forward Power", fwd_power);
-		// //SmartDashboard.putNumber("Turn Power", turn_power);
-		// //SmartDashboard.putNumber("Left Power", leftPower);
-		// //SmartDashboard.putNumber("Right Power", rightPower);
+		// SmartDashboard.putNumber("Forward Power", fwd_power);
+		// SmartDashboard.putNumber("Turn Power", turn_power);
+		// SmartDashboard.putNumber("Left Power", leftPower);
+		// SmartDashboard.putNumber("Right Power", rightPower);
 		
 		Robot.drive.setDrive(leftPower, rightPower);
 
-		Robot.drive.setArcadeDrive(-m_joystick1.getRawAxis(1), Math.pow(m_joystick2.getRawAxis(0), 3));
-		
-		//climber
-		if (m_boxop.getRawButton(1)) {
-            Robot.climber.setClimberUpState(false);
-            Robot.climber.setClimberDownState(true);
-		} else if (m_boxop.getRawButton(2)) {
-            Robot.climber.setClimberUpState(true);
-            Robot.climber.setClimberDownState(false);
+		if (!Robot.drive.isEnabled()) {
+			Robot.drive.nukeRobot();
 		}
 
-		//intake up and down
-		if (m_boxop.getRawButton(6)) {
-			Robot.intake.setIntakeState(true);
-		} else if (m_boxop.getRawButton(7)) {
-			Robot.intake.setIntakeState(false);
-		}
+		Robot.drive.setArcadeDrive(-m_joystick1.getRawAxis(1), Math.pow(m_joystick2.getRawAxis(0), 3));
+		
+
 
 		//intake mode
 		if(m_joystick1.getRawButton(2)){
@@ -105,15 +96,35 @@ public class OI extends Command {
 
 		//outtake mode
 		if(m_boxop.getRawButton(3)) {
+			if (startIndexing) {
+				Robot.waterwheel.setPusherState(true);
+				index++;
+			}
+			if (index == 50) {
+				Robot.waterwheel.setPusherState(false);
+			}
+			if (index > 200) {
+				index = 0;
+				//System.out.println("outtaking truly finished");
+				Robot.waterwheel.outtaking = false;
+				startIndexing = false;
+			}
 			Robot.waterwheel.setOuttakeMode(true);
 			Robot.outtake.setOuttakePower(m_boxop.getRawAxis(3)/10);
 			if (index++ % 10 == 0) {
 				System.out.println(m_boxop.getRawAxis(3)/10);
 			}
-			Robot.waterwheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
-			Robot.waterwheel.setPusherState(true);
+			//System.out.println("waterwheel.outtaking: " + waterwheel.outtaking);
+			if (Robot.waterwheel.getWheelPosition() > (Robot.waterwheel.initialWheelPosition + 700)) {
+				//System.out.println("outtaking finished");
+				startIndexing = true;
+			} 
+			if (!Robot.waterwheel.outtaking) {
+				//System.out.println("got here: " + waterwheel.outtaking);
+				Robot.waterwheel.outtakeOneBall();
+			}
 			//System.out.println("pushed");
-			Robot.waterwheel.setPusherState(false);
+			//waterwheel.setPusherState(false);
 		} else {
 			Robot.outtake.setOuttakePower(0.0);
 		}
@@ -135,25 +146,46 @@ public class OI extends Command {
 		}
 
 		if (m_joystick2.getRawButton(1)) {
-			Robot.waterwheel.setPusherState(true);
+			Robot.waterwheel.pusherOutAndIn();
+		} 
+		
+		if (m_joystick2.getRawButton(3)) {
+			Robot.outtake.setOuttakePowerDistance(3.0);
+			if (!Robot.lightSensor.getTopLightSensorState()) {
+				System.out.println("turning by one sector");
+				Robot.waterwheel.setWheelPosition(Robot.waterwheel.getWheelPosition() + 840);
+			}
+			Robot.waterwheel.pusherOutAndIn();
 		} else {
+			Robot.outtake.stopOuttake();
 			Robot.waterwheel.setPusherState(false);
+			// get rid of all the other button else conditions so they don't conflict and do weird things
 		}
 
 		// if (!m_joystick2.getRawButton(3)) {
 		// 	outtakeAllBalls();
 		// }
+		// if (m_joystick2.getRawButton(4)) {
+		// 	m_limeScore = new LimeScore();
+		// 	m_limeScore.start();
+		//  } 
+		// if (m_joystick2.getRawButton(5)) {
+		// 	m_limeScore = new LimeScore();
+		// 	m_limeScore.stop();
+		//  }
+		// if (!Robot.drive.isEnabled()) {
+		// 	Robot.drive.nukeRobot();
+		// 	return;
 		if (m_joystick2.getRawButton(4)) {
-			m_limeScore = new LimeScore();
-			m_limeScore.start();
-		 } 
-		if (m_joystick2.getRawButton(5)) {
-			m_limeScore = new LimeScore();
-			m_limeScore.stop();
-		 }
-		if (!Robot.drive.isEnabled()) {
-			Robot.drive.nukeRobot();
-			return;
+			Robot.waterwheel.setInitialWaterwheelPosition();
+			Robot.outtake.setOuttakePowerDistance(3.0);
+		}
+		
+		//climber
+		if (m_boxop.getRawButton(2)) {
+			Robot.climber.setClimberUp(true);
+		} else {
+			Robot.climber.setClimberUp(false);
 		}
 	}
 
