@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - AStarGeneration",
+      "request": "launch",
+      "mainClass": "com.team766.frc2020.paths.AStarGeneration",
+      "projectName": "2020"
+    },
+    {
+      "type": "java",
       "name": "Maroon Simulator",
       "request": "launch",
       "mainClass": "com.team766.hal.simulator.RobotMain",
@@ -15,13 +22,13 @@
       "type": "wpilib",
       "name": "WPILib Desktop Debug",
       "request": "launch",
-      "desktop": true,
+      "desktop": true
     },
     {
       "type": "wpilib",
       "name": "WPILib roboRIO Debug",
       "request": "launch",
-      "desktop": false,
+      "desktop": false
     }
   ]
 }
