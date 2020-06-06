@@ -6,7 +6,8 @@ import java.io.File;
 import java.awt.image.WritableRaster;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,26 +19,34 @@ public class AStarGeneration {
     // private double[][] imageDoubleArray = new double[707][1384];
     MapArray array = new MapArray();
 
-/*     public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException{
         // open image
         File imgPath = new File("src\\main\\java\\com\\team766\\frc2020\\paths\\CLEAN FieldMap.png");
         BufferedImage bufferedImage = ImageIO.read(imgPath);
        
         // get DataBufferBytes from Raster
         WritableRaster raster = bufferedImage.getRaster();
-        DataBufferInt data   = (DataBufferInt)raster.getDataBuffer();
+        DataBufferByte data   = (DataBufferByte)raster.getDataBuffer();
         //DataBufferByte data   = DataBufferByte( (DataBufferByte)raster.getDataBuffer(), 707);
        
         // System.out.println(data.getData());
         // data.getData().toString();
         // System.out.println((char)data.getData()[1]);
-        System.out.println(Arrays.toString(data.getData()));
+        //System.out.println(Arrays.toString(data.getData()));
+
+        
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter("hi.txt"));
+            out.write(Arrays.toString(data.getData()));
+            out.close();
+        } catch (IOException e) {
+        }
 
 
-    }     */   
+    }  
 
 
-    public static void main(String[] args) throws IOException{
+/*     public static void main(String[] args) throws IOException{
         // open image
         File imgPath = new File("src\\main\\java\\com\\team766\\frc2020\\paths\\CLEAN FieldMap.png");
         BufferedImage image = new BufferedImage(707,1384,BufferedImage.TYPE_INT_RGB);
@@ -53,8 +62,8 @@ public class AStarGeneration {
         for(int i = 0; i < 707; i+6)
             for(int j = 0; j < 1384; j+6)
                 array.setLowResArray(i, j, image.getRGB(i, j)); 
-                */
-    } 
+                
+    }  */
 
     
 }
