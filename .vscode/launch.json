@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - Input$Reader",
+      "request": "launch",
+      "mainClass": "com.team766.frc2020.paths.Input$Reader",
+      "projectName": "2020"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - AStarGeneration",
       "request": "launch",
       "mainClass": "com.team766.frc2020.paths.AStarGeneration",

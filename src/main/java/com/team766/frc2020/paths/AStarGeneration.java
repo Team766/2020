@@ -1,69 +1,37 @@
 package com.team766.frc2020.paths;
 
 import java.util.ArrayList;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.awt.image.WritableRaster;
-import java.awt.image.DataBufferByte;
-import java.awt.image.DataBufferInt;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.Arrays;
 
-import com.team766.frc2020.paths.MapArray;
-
-    //TODO: make a low res 1/6th res map to make calculation faster (1/6 pixel will make each node one 1/2 robot width which is good)
+    
 public class AStarGeneration {
-    // private double[][] imageDoubleArray = new double[707][1384];
-    MapArray array = new MapArray();
-
+    /* // This block of code can iake in any image and will output a text file "byte.map". As the name says, it is in bytes. You can just convert it to whatever other format you want.
+        // I made it into binary to minimize the size and make it easily intakeable as a binary map for passable areas in a boolean array
     public static void main(String[] args) throws IOException{
-        // open image
         File imgPath = new File("src\\main\\java\\com\\team766\\frc2020\\paths\\CLEAN FieldMap.png");
         BufferedImage bufferedImage = ImageIO.read(imgPath);
-       
-        // get DataBufferBytes from Raster
         WritableRaster raster = bufferedImage.getRaster();
         DataBufferByte data   = (DataBufferByte)raster.getDataBuffer();
-        //DataBufferByte data   = DataBufferByte( (DataBufferByte)raster.getDataBuffer(), 707);
-       
-        // System.out.println(data.getData());
-        // data.getData().toString();
-        // System.out.println((char)data.getData()[1]);
-        //System.out.println(Arrays.toString(data.getData()));
-
-        
+  
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter("hi.txt"));
+            BufferedWriter out = new BufferedWriter(new FileWriter("byte.map"));
             out.write(Arrays.toString(data.getData()));
             out.close();
         } catch (IOException e) {
         }
+    }  */
 
-
-    }  
-
-
-/*     public static void main(String[] args) throws IOException{
-        // open image
-        File imgPath = new File("src\\main\\java\\com\\team766\\frc2020\\paths\\CLEAN FieldMap.png");
-        BufferedImage image = new BufferedImage(707,1384,BufferedImage.TYPE_INT_RGB);
+     public static void main(String[] args) throws IOException{
        
 
-        for(int i = 0; i < 707; i++)
-            for(int j = 0; j < 1384; j++)
-                array.setArray(i, j, image.getRGB(i, j));
 
-
-/*
+    /*
         //make sure no out of bounds collisions and stuff, should be fine
+        //makes a low res 1/6th res map to make calculation faster (1/6 pixel will make each node one 1/2 robot width which is good)
         for(int i = 0; i < 707; i+6)
             for(int j = 0; j < 1384; j+6)
                 array.setLowResArray(i, j, image.getRGB(i, j)); 
-                
-    }  */
-
-    
+    */
+    }
 }

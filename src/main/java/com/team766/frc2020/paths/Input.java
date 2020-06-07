@@ -1,47 +1,25 @@
 package com.team766.frc2020.paths;
 
-// Working program using Reader Class 
 import java.io.DataInputStream; 
 import java.io.FileInputStream; 
 import java.io.IOException; 
-import java.io.InputStreamReader; 
-import java.util.Scanner; 
-import java.util.StringTokenizer; 
   
 public class Input 
 { 
+    public static boolean[][] imageBoolArray = new boolean[1384][707];
     static class Reader 
     { 
         final private int BUFFER_SIZE = 1 << 16; 
         private DataInputStream din; 
         private byte[] buffer; 
         private int bufferPointer, bytesRead; 
+        
   
-        public Reader() 
+        public Reader() throws IOException 
         { 
-            din = new DataInputStream(System.in); 
+            din = new DataInputStream(new FileInputStream("src\\main\\java\\com\\team766\\frc2020\\paths\\binary.map")); 
             buffer = new byte[BUFFER_SIZE]; 
             bufferPointer = bytesRead = 0; 
-        } 
-  
-        public Reader(String file_name) throws IOException 
-        { 
-            din = new DataInputStream(new FileInputStream(file_name)); 
-            buffer = new byte[BUFFER_SIZE]; 
-            bufferPointer = bytesRead = 0; 
-        } 
-  
-        public String readLine() throws IOException 
-        { 
-            byte[] buf = new byte[64]; // line length 
-            int cnt = 0, c; 
-            while ((c = read()) != -1) 
-            { 
-                if (c == '\n') 
-                    break; 
-                buf[cnt++] = (byte) c; 
-            } 
-            return new String(buf, 0, cnt); 
         } 
   
         public int nextInt() throws IOException 
@@ -57,52 +35,6 @@ public class Input
             { 
                 ret = ret * 10 + c - '0'; 
             }  while ((c = read()) >= '0' && c <= '9'); 
-  
-            if (neg) 
-                return -ret; 
-            return ret; 
-        } 
-  
-        public long nextLong() throws IOException 
-        { 
-            long ret = 0; 
-            byte c = read(); 
-            while (c <= ' ') 
-                c = read(); 
-            boolean neg = (c == '-'); 
-            if (neg) 
-                c = read(); 
-            do { 
-                ret = ret * 10 + c - '0'; 
-            } 
-            while ((c = read()) >= '0' && c <= '9'); 
-            if (neg) 
-                return -ret; 
-            return ret; 
-        } 
-  
-        public double nextDouble() throws IOException 
-        { 
-            double ret = 0, div = 1; 
-            byte c = read(); 
-            while (c <= ' ') 
-                c = read(); 
-            boolean neg = (c == '-'); 
-            if (neg) 
-                c = read(); 
-  
-            do { 
-                ret = ret * 10 + c - '0'; 
-            } 
-            while ((c = read()) >= '0' && c <= '9'); 
-  
-            if (c == '.') 
-            { 
-                while ((c = read()) >= '0' && c <= '9') 
-                { 
-                    ret += (c - '0') / (div *= 10); 
-                } 
-            } 
   
             if (neg) 
                 return -ret; 
@@ -129,20 +61,23 @@ public class Input
                 return; 
             din.close(); 
         } 
-    } 
   
-    public static void main(String[] args) throws IOException 
-    { 
-        Reader s=new Reader(); 
-        int n = s.nextInt(); 
-        int k = s.nextInt(); 
-        int count=0; 
-        while (n-- > 0) 
-        { 
-            int x = s.nextInt(); 
-            if (x%k == 0) 
-               count++; 
+        public static void main(String[] args) throws IOException 
+        { //978488 ints
+            Reader s = new Reader(); 
+            for (int i = 0; i < 1384; i++) {
+                for (int j = 0; j < 707; j++) {
+                    if (s.nextInt() == 1) {
+                        imageBoolArray[i][j] = true;
+                    } else {
+                        imageBoolArray[i][j] = false;
+                    }
+                }
+                // if (i % 13 == 0) {
+                //     System.out.println("reading map " + i * 707 * 100 / 978488 + " percent done");
+                // }
+            }
+            s.close();
         } 
-        System.out.println(count); 
-    } 
+    }
 } 
