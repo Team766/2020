@@ -8,14 +8,13 @@ import com.team766.frc2020.paths.InputMapArray;
 import com.team766.frc2020.paths.AStarNode;
 
 
-    
 public class AStarGeneration {
     final private static int width = 707/6;
     final private static int height = 1384/6;
     
-    private ArrayList<AStarNode> openList = new ArrayList<AStarNode>();
-    private ArrayList<AStarNode> closedList = new ArrayList<AStarNode>();
-    private boolean done = false;
+    private static ArrayList<AStarNode> openList = new ArrayList<AStarNode>();
+    private static ArrayList<AStarNode> closedList = new ArrayList<AStarNode>();
+    private static boolean done = false;
 
     private static AStarNode[][] nodeMap = new AStarNode[height][width];
      
@@ -33,18 +32,19 @@ public class AStarGeneration {
     }
 
     private static void initEmptyNodes() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                nodeMap[i][j] = new AStarNode(j, i);
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                nodeMap[j][i] = new AStarNode(i, j);
+                System.out.println(nodeMap[j][i]);
             }
         }
     }
 
-    private AStarNode getNode(int xPosition, int yPosition) {
+    private static AStarNode getNode(int xPosition, int yPosition) {
         return nodeMap[yPosition][xPosition];
     }
 
-    public final ArrayList<AStarNode> findPath(int startX, int startY, int endX, int endY) {
+    public static ArrayList<AStarNode> findPath(int startX, int startY, int endX, int endY) {
         openList.add(nodeMap[startX][startY]); // add starting node to open list
 
         AStarNode current;
@@ -83,7 +83,7 @@ public class AStarGeneration {
     }
 
     // trace the nodes from end to beginning to make the path
-    private ArrayList<AStarNode> calcPath(AStarNode start, AStarNode goal) {
+    private static ArrayList<AStarNode> calcPath(AStarNode start, AStarNode goal) {
         ArrayList<AStarNode> path = new ArrayList<AStarNode>();
 
         AStarNode curr = goal;
@@ -99,7 +99,7 @@ public class AStarGeneration {
         return path;
     }
 
-    private AStarNode lowestFInOpen() {
+    private static AStarNode lowestFInOpen() {
         AStarNode cheapest = openList.get(0);
         for (int i = 0; i < openList.size(); i++) {
             if (openList.get(i).getfCosts() < cheapest.getfCosts()) {
@@ -109,14 +109,14 @@ public class AStarGeneration {
         return cheapest;
     }
 
-    private ArrayList<AStarNode> getAdjacent(AStarNode node) {
+    private static ArrayList<AStarNode> getAdjacent(AStarNode node) {
         int x = node.getxPosition();
         int y = node.getyPosition();
         ArrayList<AStarNode> adj = new ArrayList<AStarNode>();
 
         AStarNode temp;
         if (x > 0) {
-            temp = this.getNode((x - 1), y);
+            temp = getNode((x - 1), y);
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 temp.setIsDiagonally(false);
                 adj.add(temp);
@@ -124,7 +124,7 @@ public class AStarGeneration {
         }
 
         if (x < width - 1) {
-            temp = this.getNode((x + 1), y);
+            temp = getNode((x + 1), y);
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 temp.setIsDiagonally(false);
                 adj.add(temp);
@@ -132,7 +132,7 @@ public class AStarGeneration {
         }
 
         if (y > 0) {
-            temp = this.getNode(x, (y - 1));
+            temp = getNode(x, (y - 1));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 temp.setIsDiagonally(false);
                 adj.add(temp);
@@ -140,7 +140,7 @@ public class AStarGeneration {
         }
 
         if (y < height - 1) {
-            temp = this.getNode(x, (y + 1));
+            temp = getNode(x, (y + 1));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 temp.setIsDiagonally(false);
                 adj.add(temp);
@@ -150,7 +150,7 @@ public class AStarGeneration {
         // diagonal nodes also:
 
         if (x < width - 1 && y < height - 1) {
-            temp = this.getNode((x + 1), (y + 1));
+            temp = getNode((x + 1), (y + 1));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 temp.setIsDiagonally(true);
                 adj.add(temp);
@@ -158,7 +158,7 @@ public class AStarGeneration {
         }
 
         if (x > 0 && y > 0) {
-            temp = this.getNode((x - 1), (y - 1));
+            temp = getNode((x - 1), (y - 1));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 temp.setIsDiagonally(true);
                 adj.add(temp);
@@ -166,7 +166,7 @@ public class AStarGeneration {
         }
 
         if (x > 0 && y < height - 1) {
-            temp = this.getNode((x - 1), (y + 1));
+            temp = getNode((x - 1), (y + 1));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 temp.setIsDiagonally(true);
                 adj.add(temp);
@@ -174,7 +174,7 @@ public class AStarGeneration {
         }
 
         if (x < width - 1 && y > 0) {
-            temp = this.getNode((x + 1), (y - 1));
+            temp = getNode((x + 1), (y - 1));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 temp.setIsDiagonally(true);
                 adj.add(temp);
