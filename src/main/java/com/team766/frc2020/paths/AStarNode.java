@@ -112,7 +112,7 @@ public class AStarNode {
     }
 
     public String toStringDesmos() {
-        return "(" + 6*getxPosition() + ", " + 6*getyPosition() + ")";
+        return "(" + 6*getxPosition() + ", " + -1*6*getyPosition() + ")"; // multiply by 6 to get back into inch coord system that will integrate directly into the path grapher GUI. -1*y because y=0 is at the top of the frame for these calculations. Inverted to graph correctly in desmos.
     }
 
     public boolean equals(Object obj) {

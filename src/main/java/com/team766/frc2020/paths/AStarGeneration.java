@@ -24,11 +24,16 @@ public class AStarGeneration {
 
         initEmptyNodes();
         ArrayList<AStarNode> path = findPath(84/6, 514/6, 621/6, 929/6);
-        // ArrayList<AStarNode> path = findPath(30,30,100,200);
 
         // can check the path in desmos
+        int modAmt = 3;
+        System.out.println("PATH" + " (printing every 1 in " + modAmt + "pts):");
         for (int i = 0; i < path.size(); i++) {
-            // System.out.println("(" + path.get(i).getxPosition() + ", " + path.get(i).getyPosition() + ")");
+            if (i % modAmt == 0) {
+                // System.out.println("(" + path.get(i).getxPosition() + ", -" + path.get(i).getyPosition() + ")");
+                System.out.println(path.get(i).toStringDesmos());
+
+            }
         }
     }
 
@@ -46,8 +51,8 @@ public class AStarGeneration {
     }
 
     public static ArrayList<AStarNode> findPath(int startX, int startY, int endX, int endY) {
-        System.out.println("finding path");
-        openList.add(nodeMap[startX][startY]); // add starting node to open list
+        System.out.println("\nfinding path between (" + startX + ", " + startY + ") and (" + endX + ", " + endY + ")");
+        openList.add(nodeMap[startY][startX]); // add starting node to open list
 
         AStarNode current;
         while (!done) {
@@ -96,7 +101,6 @@ public class AStarGeneration {
         System.out.println("\nstart " + start.toString());
         while (!isDone) {
             path.add(0, curr);
-            System.out.println(curr.toStringDesmos());
             if (curr.equals(start)) {
                 isDone = true;
             } else {
