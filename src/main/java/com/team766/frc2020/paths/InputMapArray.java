@@ -93,8 +93,7 @@ public class InputMapArray
             return imageBoolArray[yPosition][xPosition];
         }
   
-        public static void main(String[] args) throws IOException 
-        { //978488 ints
+        public static void generateMapArray() throws IOException { //978488 ints
             Reader s = new Reader(); 
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
@@ -115,7 +114,6 @@ public class InputMapArray
                 } 
             }
             s.close();
-            printArray();
         } 
     }
 } 

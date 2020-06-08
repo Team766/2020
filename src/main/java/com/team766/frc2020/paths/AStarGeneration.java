@@ -2,6 +2,7 @@ package com.team766.frc2020.paths;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.io.IOException; 
 
 import com.team766.frc2020.paths.InputMapArray;
 import com.team766.frc2020.paths.AStarNode;
@@ -16,15 +17,22 @@ public class AStarGeneration {
     private ArrayList<AStarNode> closedList = new ArrayList<AStarNode>();
     private boolean done = false;
 
-    private AStarNode[][] nodeMap = new AStarNode[height][width];
+    private static AStarNode[][] nodeMap = new AStarNode[height][width];
      
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
+        InputMapArray.Reader.generateMapArray();
+        InputMapArray.Reader.printArray();
 
+        initEmptyNodes();
+        ArrayList<AStarNode> path = findPath(84, 514, 621, 929);
 
-
+        // can check the path in desmos
+        for (int i = 0; i < path.size(); i++) {
+            System.out.println("(" + path.get(i).getxPosition() + ", " + path.get(i).getyPosition() + ")");
+        }
     }
 
-    private void initEmptyNodes() {
+    private static void initEmptyNodes() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 nodeMap[i][j] = new AStarNode(j, i);
