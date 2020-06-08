@@ -111,6 +111,10 @@ public class AStarNode {
                 + gethCosts() + " g: " + getgCosts() + " f: " + getfCosts();
     }
 
+    public String toStringDesmos() {
+        return "(" + 6*getxPosition() + ", " + 6*getyPosition() + ")";
+    }
+
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;

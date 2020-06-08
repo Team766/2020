@@ -18,16 +18,17 @@ public class AStarGeneration {
 
     private static AStarNode[][] nodeMap = new AStarNode[height][width];
      
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         InputMapArray.Reader.generateMapArray();
         InputMapArray.Reader.printArray();
 
         initEmptyNodes();
-        ArrayList<AStarNode> path = findPath(84, 514, 621, 929);
+        ArrayList<AStarNode> path = findPath(84/6, 514/6, 621/6, 929/6);
+        // ArrayList<AStarNode> path = findPath(30,30,100,200);
 
         // can check the path in desmos
         for (int i = 0; i < path.size(); i++) {
-            System.out.println("(" + path.get(i).getxPosition() + ", " + path.get(i).getyPosition() + ")");
+            // System.out.println("(" + path.get(i).getxPosition() + ", " + path.get(i).getyPosition() + ")");
         }
     }
 
@@ -35,7 +36,7 @@ public class AStarGeneration {
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
                 nodeMap[j][i] = new AStarNode(i, j);
-                System.out.println(nodeMap[j][i]);
+                // System.out.println(nodeMap[j][i]);
             }
         }
     }
@@ -45,6 +46,7 @@ public class AStarGeneration {
     }
 
     public static ArrayList<AStarNode> findPath(int startX, int startY, int endX, int endY) {
+        System.out.println("finding path");
         openList.add(nodeMap[startX][startY]); // add starting node to open list
 
         AStarNode current;
@@ -55,7 +57,8 @@ public class AStarGeneration {
 
             if ((current.getxPosition() == endX)
                     && (current.getyPosition() == endY)) { // found goal
-                return calcPath(nodeMap[startX][startY], current);
+                System.out.println("found path");       
+                return calcPath(nodeMap[startY][startX], current);
             }
 
             // for all adjacent nodes:
@@ -64,7 +67,7 @@ public class AStarGeneration {
                 AStarNode currentAdj = adjacentNodes.get(i);
                 if (!openList.contains(currentAdj)) { // node is not in openList
                     currentAdj.setPrevious(current); // set current node as previous for this node
-                    currentAdj.sethCosts(nodeMap[endX][endY]); // set h costs of this node (estimated costs to goal)
+                    currentAdj.sethCosts(nodeMap[endY][endX]); // set h costs of this node (estimated costs to goal)
                     currentAdj.setgCosts(current); // set g costs of this node (costs from start to this node)
                     openList.add(currentAdj); // add node to openList
                 } else { // node is in openList
@@ -76,6 +79,7 @@ public class AStarGeneration {
             }
 
             if (openList.isEmpty()) { // no path exists
+                System.out.println("no path found");
                 return new ArrayList<AStarNode>(); // return empty list
             }
         }
@@ -84,16 +88,19 @@ public class AStarGeneration {
 
     // trace the nodes from end to beginning to make the path
     private static ArrayList<AStarNode> calcPath(AStarNode start, AStarNode goal) {
+        System.out.println("calcPath");
         ArrayList<AStarNode> path = new ArrayList<AStarNode>();
 
         AStarNode curr = goal;
         boolean isDone = false;
+        System.out.println("\nstart " + start.toString());
         while (!isDone) {
             path.add(0, curr);
-            curr = (AStarNode) curr.getPrevious();
-
+            System.out.println(curr.toStringDesmos());
             if (curr.equals(start)) {
                 isDone = true;
+            } else {
+                curr = (AStarNode) curr.getPrevious();
             }
         }
         return path;
