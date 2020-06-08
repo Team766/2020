@@ -1,30 +1,180 @@
 package com.team766.frc2020.paths;
 
 import java.util.ArrayList;
-import java.io.IOException;
 import java.util.Arrays;
 
 import com.team766.frc2020.paths.InputMapArray;
+import com.team766.frc2020.paths.AStarNode;
+
 
     
 public class AStarGeneration {
+    final private static int width = 707/6;
+    final private static int height = 1384/6;
+    
+    private ArrayList<AStarNode> openList = new ArrayList<AStarNode>();
+    private ArrayList<AStarNode> closedList = new ArrayList<AStarNode>();
+    private boolean done = false;
 
-     public static void main(String[] args) {
-        //InputMapArray.main();
-        // InputMapArray.ImageBoolArray[y AKA row][x AKA col];
+    private AStarNode[][] nodeMap = new AStarNode[height][width];
+     
+    public static void main(String[] args) {
 
 
 
-    /*
-        //make sure no out of bounds collisions and stuff, should be fine
-        //makes a low res 1/6th res map to make calculation faster (1/6 pixel will make each node one 1/2 robot width which is good)
-        for(int i = 0; i < 707; i+6)
-            for(int j = 0; j < 1384; j+6)
-                array.setLowResArray(i, j, image.getRGB(i, j)); 
-    */
     }
 
+    private void initEmptyNodes() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                nodeMap[i][j] = new AStarNode(j, i);
+            }
+        }
+    }
 
+    private AStarNode getNode(int xPosition, int yPosition) {
+        return nodeMap[yPosition][xPosition];
+    }
+
+    public final ArrayList<AStarNode> findPath(int startX, int startY, int endX, int endY) {
+        openList.add(nodeMap[startX][startY]); // add starting node to open list
+
+        AStarNode current;
+        while (!done) {
+            current = lowestFInOpen(); // get node with lowest fCosts from openList
+            closedList.add(current); // add current node to closed list
+            openList.remove(current); // delete current node from open list
+
+            if ((current.getxPosition() == endX)
+                    && (current.getyPosition() == endY)) { // found goal
+                return calcPath(nodeMap[startX][startY], current);
+            }
+
+            // for all adjacent nodes:
+            ArrayList<AStarNode> adjacentNodes = getAdjacent(current);
+            for (int i = 0; i < adjacentNodes.size(); i++) {
+                AStarNode currentAdj = adjacentNodes.get(i);
+                if (!openList.contains(currentAdj)) { // node is not in openList
+                    currentAdj.setPrevious(current); // set current node as previous for this node
+                    currentAdj.sethCosts(nodeMap[endX][endY]); // set h costs of this node (estimated costs to goal)
+                    currentAdj.setgCosts(current); // set g costs of this node (costs from start to this node)
+                    openList.add(currentAdj); // add node to openList
+                } else { // node is in openList
+                    if (currentAdj.getgCosts() > currentAdj.calculategCosts(current)) { // costs from current node are cheaper than previous costs
+                        currentAdj.setPrevious(current); // set current node as previous for this node
+                        currentAdj.setgCosts(current); // set g costs of this node (costs from start to this node)
+                    }
+                }
+            }
+
+            if (openList.isEmpty()) { // no path exists
+                return new ArrayList<AStarNode>(); // return empty list
+            }
+        }
+        return null; // unreachable
+    }
+
+    // trace the nodes from end to beginning to make the path
+    private ArrayList<AStarNode> calcPath(AStarNode start, AStarNode goal) {
+        ArrayList<AStarNode> path = new ArrayList<AStarNode>();
+
+        AStarNode curr = goal;
+        boolean isDone = false;
+        while (!isDone) {
+            path.add(0, curr);
+            curr = (AStarNode) curr.getPrevious();
+
+            if (curr.equals(start)) {
+                isDone = true;
+            }
+        }
+        return path;
+    }
+
+    private AStarNode lowestFInOpen() {
+        AStarNode cheapest = openList.get(0);
+        for (int i = 0; i < openList.size(); i++) {
+            if (openList.get(i).getfCosts() < cheapest.getfCosts()) {
+                cheapest = openList.get(i);
+            }
+        }
+        return cheapest;
+    }
+
+    private ArrayList<AStarNode> getAdjacent(AStarNode node) {
+        int x = node.getxPosition();
+        int y = node.getyPosition();
+        ArrayList<AStarNode> adj = new ArrayList<AStarNode>();
+
+        AStarNode temp;
+        if (x > 0) {
+            temp = this.getNode((x - 1), y);
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                temp.setIsDiagonally(false);
+                adj.add(temp);
+            }
+        }
+
+        if (x < width - 1) {
+            temp = this.getNode((x + 1), y);
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                temp.setIsDiagonally(false);
+                adj.add(temp);
+            }
+        }
+
+        if (y > 0) {
+            temp = this.getNode(x, (y - 1));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                temp.setIsDiagonally(false);
+                adj.add(temp);
+            }
+        }
+
+        if (y < height - 1) {
+            temp = this.getNode(x, (y + 1));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                temp.setIsDiagonally(false);
+                adj.add(temp);
+            }
+        }
+
+        // diagonal nodes also:
+
+        if (x < width - 1 && y < height - 1) {
+            temp = this.getNode((x + 1), (y + 1));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                temp.setIsDiagonally(true);
+                adj.add(temp);
+            }
+        }
+
+        if (x > 0 && y > 0) {
+            temp = this.getNode((x - 1), (y - 1));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                temp.setIsDiagonally(true);
+                adj.add(temp);
+            }
+        }
+
+        if (x > 0 && y < height - 1) {
+            temp = this.getNode((x - 1), (y + 1));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                temp.setIsDiagonally(true);
+                adj.add(temp);
+            }
+        }
+
+        if (x < width - 1 && y > 0) {
+            temp = this.getNode((x + 1), (y - 1));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                temp.setIsDiagonally(true);
+                adj.add(temp);
+            }
+        }
+        
+        return adj;
+    }
 
 
         /* // This block of code can iake in any image and will output a text file "byte.map". As the name says, it is in bytes. You can just convert it to whatever other format you want.

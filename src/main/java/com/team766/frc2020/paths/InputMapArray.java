@@ -9,6 +9,7 @@ public class InputMapArray
 { 
     static class Reader 
     { 
+        // to convert the low res map points back to normal inches just multiply x (col) and y (row) each by 6
         final private static int width = 707/6;
         final private static int height = 1384/6;
         public static boolean[][] imageBoolArray = new boolean[height][width];
@@ -87,6 +88,10 @@ public class InputMapArray
                 System.out.print(" _"); // border of map
             }
         }
+
+        public static boolean isWalkable(int xPosition, int yPosition) {
+            return imageBoolArray[yPosition][xPosition];
+        }
   
         public static void main(String[] args) throws IOException 
         { //978488 ints
@@ -98,22 +103,18 @@ public class InputMapArray
                     } else {
                         imageBoolArray[i][j] = false;
                     }
-                    for (int k = 0; k < 5; k++) {
+                    for (int k = 0; k < 5; k++) { // skip 5 columns
                         s.nextInt();
                     }
                 }
-                for (int k = 0; k < 5; k++) {
+                for (int k = 0; k < 5; k++) { // reach end of row
                     s.nextInt();
-                } // reach end of row
-                for (int l = 0; l < 5 * 707; l++) {
+                } 
+                for (int l = 0; l < 5 * 707; l++) { // skip 5 rows
                     s.nextInt();
-                } // skip 5 rows
-                // if (i % 13 == 0) {
-                //     System.out.println("reading map " + i * 707 * 100 / 978488 + " percent done");
-                // }
+                } 
             }
             s.close();
-            // System.out.println(imageBoolArray.toString());
             printArray();
         } 
     }
