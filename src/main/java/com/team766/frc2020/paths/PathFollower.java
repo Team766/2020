@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import com.team766.frc2020.paths.Waypoint;
 import com.team766.frc2020.paths.Vector;
 
+import com.team766.hal.RobotProvider;
+import com.team766.controllers.PIDController;
+import com.team766.frc2020.Robot;
+
 public class PathFollower {
     private ArrayList<Waypoint> path = new ArrayList<Waypoint>();
     private int previousLookaheadPointIndex = 0;
@@ -12,16 +16,25 @@ public class PathFollower {
     private double heading = 0;
     private double xPosition = 0;
     private double yPosition = 0;
-    public static boolean isPathDone = false;
+    // private static boolean isPathDone = false;
     private Waypoint lookaheadWaypoint;
     private int index = 0;
     private double lookaheadDistance = 13;
+    private boolean inverted = false;
+
+    // for turn controller
+    private double P = 0.01;
+    private double I = 0.0;
+    private double D = 0.05;
+    private PIDController m_turnController = new PIDController(P, I, D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
     public PathFollower(ArrayList<Waypoint> path) {
         // TODO: add copy function for path
         this.path = path;
-        // change this from magic number
+
         lookaheadWaypoint = findLookaheadPoint(this.lookaheadDistance);
+        m_turnController.setSetpoint(0.0);
+
     }
 
     public void update() {
@@ -138,7 +151,8 @@ public class PathFollower {
      * @param yPosition
      * @return positive value robot needs to turn counterclockwise, negative if robot needs to turn clockwise
      */
-    public double calculateSteeringError(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition){
+    public double calculateSteeringError(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition) {
+        // calculate angle between lookahead vector and heading vector
         Vector headingUnitVector = new Vector(Math.sin(Math.toRadians(heading)), Math.cos(Math.toRadians(heading)));
         Vector lookaheadVector = new Vector(this.lookaheadWaypoint.getX() - xPosition, this.lookaheadWaypoint.getY() - yPosition);
         double error =  Math.toDegrees(Math.acos(
@@ -146,8 +160,12 @@ public class PathFollower {
             (0.000001 + headingUnitVector.magnitude() * lookaheadVector.magnitude())
         ));
 
+        // do PID
+        m_turnController.calculate(error, true);
+        error = m_turnController.getOutput() * 200; // add (Vintercept + ka)/kv
+
         // make error negative if headingUnitVector is more counterclockwise than lookaheadVector
-        if (headingUnitVector.crossMagnitude(lookaheadVector) < 0) {
+        if ((headingUnitVector.crossMagnitude(lookaheadVector) < 0) ^ !inverted) {
             return error * -1;
         } else {
             return error;
@@ -199,7 +217,11 @@ public class PathFollower {
     }
 
     public void setHeading(double heading) {
-        this.heading = heading;
+        if (!inverted) { 
+            this.heading = heading;
+        } else {
+            this.heading = (heading + 180) % 360;
+        }
     }
 
     public Waypoint getLookaheadWaypoint() {
@@ -208,5 +230,9 @@ public class PathFollower {
     
     public void setLookaheadWaypoint(Waypoint lookaheadWaypoint) {
         this.lookaheadWaypoint = lookaheadWaypoint;
+    }
+    
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
     }
 }

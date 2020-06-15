@@ -17,7 +17,7 @@ public class PathRunner extends Subroutine {
 
     protected void subroutine() {
         System.out.println("PathRunner STARTING");
-        double endOrientation;
+        // double endOrientation;
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
         
         boolean inverted = false;
@@ -26,66 +26,75 @@ public class PathRunner extends Subroutine {
         waypoints.add(new Waypoint(150, 150));
         waypoints.add(new Waypoint(150, 0));
         waypoints.add(new Waypoint(0, 0));
-        endOrientation = Robot.drive.getGyroAngle();
+        // endOrientation = Robot.drive.getGyroAngle();
 
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
         path = PathBuilder.buildPath(waypoints);
-        for (int i = 0; i < path.size(); i++) {
-            System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")"); //built path coordinates
-        }
+        // for (int i = 0; i < path.size(); i++) {
+        //     System.out.println("(" + path.get(i).getX() + "," + path.get(i).getY() + ")"); //built path coordinates
+        // }
 
         PathFollower pathFollower = new PathFollower(path);
+        pathFollower.setInverted(true);
         Robot.pathWebSocketServer.broadcastPath(path);
 
-        double P = 0.01;
-        double I = 0.0;
-        double D = 0.05;
+        // double P = 0.01;
+        // double I = 0.0;
+        // double D = 0.05;
 
-        SmartDashboard.putNumber("P", P);
-        SmartDashboard.putNumber("I", I);
-        SmartDashboard.putNumber("D", D);
+        // SmartDashboard.putNumber("P", P);
+        // SmartDashboard.putNumber("I", I);
+        // SmartDashboard.putNumber("D", D);
 
-        SmartDashboard.putNumber("number of waypoints", path.size());
-        PIDController m_turnController = new PIDController(P, I, D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-        PIDController m_velocityController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+        // SmartDashboard.putNumber("number of waypoints", path.size());
+        // PIDController m_turnController = new PIDController(P, I, D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
+        // PIDController m_velocityController = new PIDController(Robot.drive.P, Robot.drive.I, Robot.drive.D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
-        m_turnController.setSetpoint(0.0);
+        // m_turnController.setSetpoint(0.0);
         int i = 0;
         while(!pathFollower.isPathDone()) {
             if (i % 15 == 0) {
                 SmartDashboard.putNumber("last closest point index",  pathFollower.getLastClosestPointIndex());
 
-                Robot.pathWebSocketServer.broadcast("{\"closestPoint\": { \"x\": " + path.get(pathFollower.getLastClosestPointIndex()).getX() + ", \"y\": " + path.get(pathFollower.getLastClosestPointIndex()).getY() + "}}" );
-                Robot.pathWebSocketServer.broadcast("{\"lookaheadPoint\": { \"x\": " + pathFollower.getLookaheadWaypoint().getX() + ", \"y\": " + pathFollower.getLookaheadWaypoint().getY() + "}}" );
+                Robot.pathWebSocketServer.broadcastClosestPoint(
+                    path.get(pathFollower.getLastClosestPointIndex()).getX(),
+                    path.get(pathFollower.getLastClosestPointIndex()).getY()
+                );
+                Robot.pathWebSocketServer.broadcastLookaheadPoint(
+                    pathFollower.getLookaheadWaypoint().getX(),
+                    pathFollower.getLookaheadWaypoint().getY()
+                );
 
                 System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
             i++;
 
             pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
-            if (!inverted) { 
+            
+            // if (!inverted) { 
                 pathFollower.setHeading(Robot.drive.getGyroAngle());
-            } else {
-                pathFollower.setHeading((Robot.drive.getGyroAngle() + 180) % 360);
-            }
+            // } else {
+            //     pathFollower.setHeading((Robot.drive.getGyroAngle() + 180) % 360);
+            // }
 
             pathFollower.update();
-            m_turnController.calculate(pathFollower.calculateSteeringError(), true);
-            double turnPower = m_turnController.getOutput() * 200; // add (Vintercept + ka)/kv
+            // m_turnController.calculate(pathFollower.calculateSteeringError(), true);
+            // double turnPower = m_turnController.getOutput() * 200; // add (Vintercept + ka)/kv
+
+            double turnPower = pathFollower.calculateSteeringError();
 
             System.out.println("closest point index" + pathFollower.findClosestPointIndex());
             // m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
             // m_velocityController.calculate(Robot.drive.getVelocity() - path.get(pathFollower.findClosestPointIndex()).getVelocity(), true);
             // double straightPower = m_velocityController.getOutput();
-             double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
+            double straightPower = path.get(pathFollower.findClosestPointIndex()).getVelocity();
             System.out.println("straightpower: " + straightPower);
 
-
-            if (!inverted) { 
+            // if (!inverted) { 
                 Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
-            } else {
-                Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
-            }
+            // } else {
+            //     Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
+            // }
 
             // allow odometry and other stuff to happen
             yield();
@@ -93,8 +102,8 @@ public class PathRunner extends Subroutine {
 
         Robot.drive.setDrive(0, 0);
         System.out.println("path followed");
-        callSubroutine(new PreciseTurn(endOrientation));
-        System.out.println("final orientated");
+        // callSubroutine(new PreciseTurn(endOrientation));
+        // System.out.println("final orientated");
 
 
 
