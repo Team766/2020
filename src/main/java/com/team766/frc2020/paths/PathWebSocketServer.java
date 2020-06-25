@@ -8,6 +8,13 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
 
+import org.json.JSONObject;
+
+import com.team766.framework.Subroutine;
+import com.team766.frc2020.Robot;
+import com.team766.frc2020.commands.PathRunner;
+
+
 public class PathWebSocketServer extends WebSocketServer {
     ArrayList<Waypoint> path;
 	public PathWebSocketServer(InetSocketAddress address, ArrayList<Waypoint> path) {
@@ -61,7 +68,18 @@ public class PathWebSocketServer extends WebSocketServer {
 
 	@Override
 	public void onMessage(WebSocket conn, String message) {
-		System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
+		double xPosition, yPosition;
+		try {
+            JSONObject goalPoint = new JSONObject(message);
+            xPosition = goalPoint.getJSONObject("targetPosition").getDouble("xPosition");
+			yPosition = goalPoint.getJSONObject("targetPosition").getDouble("yPosition");
+			// System.out.println("received target point: x: " + xPosition + " y: " + yPosition);
+			
+			callSubroutine(new PathRunner(false, Robot.drive.getGyroAngle(), AStarGeneration.AStarGeneratePathWaypoints(xPosition, yPosition))); // TODO: fix!
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }		
 	}
 
 	@Override

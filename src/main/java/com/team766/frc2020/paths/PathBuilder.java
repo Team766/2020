@@ -12,7 +12,7 @@ import com.team766.frc2020.paths.Waypoint;
 public class PathBuilder {
     // values are measured in inches and seconds
     private static final double spacing = 6;
-    private static final double maxVelocity = 1000;//360
+    private static final double maxVelocity = 1000; //360
     private static final double maxAcceleration = 500;
 
     /**

@@ -15,18 +15,31 @@ import com.team766.controllers.PIDController;
 
 public class PathRunner extends Subroutine {
 
-    protected void subroutine() {
-        System.out.println("PathRunner STARTING");
-        double endOrientation;
-        ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
-        
-        boolean inverted = false;
+    double endOrientation;
+    ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
+    boolean inverted;
+
+    public PathRunner() {
+        inverted = false;
         waypoints.add(new Waypoint(0, 0));
         waypoints.add(new Waypoint(0, 150));
         waypoints.add(new Waypoint(150, 150));
         waypoints.add(new Waypoint(150, 0));
         waypoints.add(new Waypoint(0, 0));
         endOrientation = Robot.drive.getGyroAngle();
+    }
+
+    public PathRunner(boolean inverted, double endOrientation, Waypoint[] waypoints) {
+        
+        this.inverted = inverted;
+        for (int i = 0; i < waypoints.length; i++) {
+            this.waypoints.add(waypoints[i]);
+        }
+        this.endOrientation = endOrientation;
+    }
+
+    protected void subroutine() {
+        System.out.println("PathRunner STARTING");
 
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
         path = PathBuilder.buildPath(waypoints);

@@ -7,6 +7,11 @@ import java.io.IOException;
 import com.team766.frc2020.paths.InputMapArray;
 import com.team766.frc2020.paths.AStarNode;
 
+import com.team766.frc2020.paths.Waypoint;
+import com.team766.frc2020.mechanisms.Drive;
+import com.team766.frc2020.Robot;
+
+
 
 public class AStarGeneration {
     final private static int width = 707/6;
@@ -18,6 +23,7 @@ public class AStarGeneration {
 
     private static AStarNode[][] nodeMap = new AStarNode[height][width];
      
+    // use this for debugging and quickly running on your own machine without the robot.
     public static void main(String[] args) throws IOException {
         InputMapArray.Reader.generateMapArray();
         InputMapArray.Reader.printArray();
@@ -35,6 +41,18 @@ public class AStarGeneration {
 
             }
         }
+    }
+
+    public static Waypoint[] AStarGeneratePathWaypoints(double xTargetPosition, double yTargetPosition) throws IOException {
+        InputMapArray.Reader.generateMapArray();
+        initEmptyNodes();
+        ArrayList<AStarNode> path = findPath((int)(Robot.drive.getXPosition()/6), (int)(Robot.drive.getYPosition()/6), (int)(xTargetPosition/6), height - (int)(yTargetPosition/6));
+
+        Waypoint[] pathWaypoint = new Waypoint[path.size()];
+        for (int i = 0; i < path.size(); i++) {
+            pathWaypoint[i] = new Waypoint(path.get(i).getxPosition(), path.get(i).getyPosition());
+        }
+        return pathWaypoint;
     }
 
     private static void initEmptyNodes() {
