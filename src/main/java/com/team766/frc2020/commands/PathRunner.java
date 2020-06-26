@@ -91,7 +91,7 @@ public class PathRunner extends Subroutine {
             System.out.println("straightpower: " + straightPower);
 
             // if (!inverted) { 
-                Robot.drive.setDrive((straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
+                Robot.drive.setDriveVelocity(straightPower + turnPower, straightPower - turnPower);
             // } else {
             //     Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
             // }

@@ -133,6 +133,24 @@ public class Drive extends Mechanism implements DriveI {
         SmartDashboard.putNumber("Left Motor Input", leftSetting * maximumRPM * 256 / 600);
         SmartDashboard.putNumber("Right Motor Input", rightSetting * maximumRPM * 256 / 600);
     }
+
+    /**
+     * sets drive but uses direct velocity instead scaling from -1 to 1 like setDrive
+     * used in pure pursuit
+     */
+    public void setDriveVelocity(double leftSetting, double rightSetting) {
+        m_leftTalon.set(ControlMode.Velocity, leftSetting);
+        m_rightTalon.set(ControlMode.Velocity, rightSetting);
+
+        m_leftVictor1.follow(m_leftTalon);
+        m_rightVictor1.follow(m_rightTalon);
+        if (m_secondVictor) {
+            m_leftVictor2.follow(m_leftTalon);
+            m_rightVictor2.follow(m_rightTalon);
+        }
+        SmartDashboard.putNumber("Left Motor Input", leftSetting);
+        SmartDashboard.putNumber("Right Motor Input", rightSetting);
+    }
     
     /**
      * As a guideline, kS should have units of volts, kV should have units of volts * seconds / distance, 
@@ -200,7 +218,7 @@ public class Drive extends Mechanism implements DriveI {
         isInverted = isItInverted;
     }
 
-    public static void invertMotors(){ //makes motors go backwards
+    public static void invertMotors() { //makes motors go backwards
             m_rightTalon.setInverted(false);
             m_leftTalon.setInverted(true);
     }
@@ -357,8 +375,8 @@ public class Drive extends Mechanism implements DriveI {
         Robot.drive.resetEncoders();
 
         // calculate position
-        deltaXPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2  * .019372 * Math.sin(Math.toRadians(currentGyroAngle));
-        deltaYPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2  * .019372 * Math.cos(Math.toRadians(currentGyroAngle));
+        deltaXPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2 * 0.019372 * Math.sin(Math.toRadians(currentGyroAngle));
+        deltaYPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2 * 0.019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
         xPosition += deltaXPosition;
         yPosition += deltaYPosition;
