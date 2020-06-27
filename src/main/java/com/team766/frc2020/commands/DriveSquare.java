@@ -12,10 +12,9 @@ public class DriveSquare extends Subroutine {
 
     protected void subroutine() {
 
-        System.out.println("PathRunner STARTING");
-
-        boolean inverted = false;
-
+        System.out.println("DriveSquare STARTING");
+        
+        // create list of points for the robot to go to
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
         waypoints.add(new Waypoint(0, 0));
         waypoints.add(new Waypoint(0, 150));
@@ -23,14 +22,17 @@ public class DriveSquare extends Subroutine {
         waypoints.add(new Waypoint(150, 0));
         waypoints.add(new Waypoint(0, 0));
 
+        // use PathBuilder to add points and data to help follow the waypoints
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
         path = PathBuilder.buildPath(waypoints);
 
+        // create a PathFollower that has functions that output steering error and target velocities
         PathFollower pathFollower = new PathFollower(path);
-        pathFollower.setInverted(inverted);
+        pathFollower.setInverted(false);
 
         while(!pathFollower.isPathDone()) {
 
+            // tell pathFollower our current position and heading and tell it to update and recalculate
             pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
             pathFollower.setHeading(Robot.drive.getGyroAngle());
             pathFollower.update();

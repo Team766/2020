@@ -219,8 +219,9 @@ public class PathBuilder {
         // target velocity calculations
         for (int i = inputPath.size() - 2; i >= 0; i--) {
             outputPath.get(i).setVelocity(
+                // new velocity at point i = min(old target velocity at point i,√((velocity at point (i + 1))^2 + 2 * a * distance )
                 Math.min(
-                outputPath.get(i).getVelocity(),
+                    outputPath.get(i).getVelocity(),
                     Math.sqrt(
                         Math.pow(
                             outputPath.get(i + 1).getVelocity(), 2) +

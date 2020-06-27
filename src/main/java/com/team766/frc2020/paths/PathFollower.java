@@ -10,6 +10,7 @@ import com.team766.controllers.PIDController;
 import com.team766.frc2020.Robot;
 
 public class PathFollower {
+
     private ArrayList<Waypoint> path = new ArrayList<Waypoint>();
     private int previousLookaheadPointIndex = 0;
     private int lastClosestPointIndex = 0;
@@ -28,18 +29,26 @@ public class PathFollower {
     private double D = 0.05;
     private PIDController m_turnController = new PIDController(P, I, D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
 
+    private double steeringError;
+    private double targetVelocity;
+
     public PathFollower(ArrayList<Waypoint> path) {
         // TODO: add copy function for path
         this.path = path;
 
         lookaheadWaypoint = findLookaheadPoint(this.lookaheadDistance);
         m_turnController.setSetpoint(0.0);
-
     }
 
+    /**
+     * update should be called after setting new position and heading
+     * does several calculations to keep variables up to date
+     */
     public void update() {
         setLastClosestPointIndex(findClosestPointIndex());
         setLookaheadWaypoint(findLookaheadPoint(this.lookaheadDistance));
+        setSteeringError(calculateSteeringError());
+        setTargetVelocity(findTargetVelocity());
     }
 
     /**
@@ -51,7 +60,9 @@ public class PathFollower {
      */
     // TODO: add errors if path is length of zero
     public Waypoint findLookaheadPoint(ArrayList<Waypoint> path, double xPosition, double yPosition, double lookaheadDistance) {
+        // loop through points to find intersection starting with last lookahead point
         for (int i = getPreviousLookaheadPointIndex(); i < path.size() - 1; i++) {
+            // line segment circle intersection algorithm
             // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899
             Vector lineSegmentVector = new Vector(path.get(i + 1).getX() - path.get(i).getX(), path.get(i + 1).getY() - path.get(i).getY());
             Vector centerToRayStartVector = new Vector(
@@ -73,6 +84,7 @@ public class PathFollower {
 
                 // Point = E + (t value of intersection) * d
                 // if intersection exists find values
+                // TODO: check if the lookahead circle interects two points between two waypoints it pick the one farthest along the path
                 if (index++ % 50 == 0) {
                     // System.out.println("Lookahead point index: " + getPreviousLookaheadPointIndex() + " path size: " + path.size());
                 }
@@ -111,7 +123,7 @@ public class PathFollower {
         int smallestIndex = getLastClosestPointIndex();
 
         // start at the point after the one we already calculated
-        for (int i = lastClosestPointIndex + 1; i < path.size() - 1; i++) {
+        for (int i = getLastClosestPointIndex() + 1; i < path.size() - 1; i++) {
             double currentDistance = Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(i), position);
             if (currentDistance < smallestDistance) {
                 smallestDistance = currentDistance;
@@ -155,21 +167,21 @@ public class PathFollower {
         // calculate angle between lookahead vector and heading vector
         Vector headingUnitVector = new Vector(Math.sin(Math.toRadians(heading)), Math.cos(Math.toRadians(heading)));
         Vector lookaheadVector = new Vector(this.lookaheadWaypoint.getX() - xPosition, this.lookaheadWaypoint.getY() - yPosition);
-        double error =  Math.toDegrees(Math.acos(
+        double angleError =  Math.toDegrees(Math.acos(
             (headingUnitVector.dot(lookaheadVector)) /
             (0.000001 + headingUnitVector.magnitude() * lookaheadVector.magnitude())
         ));
 
-        // do PID
-        m_turnController.calculate(error, true);
-        error = m_turnController.getOutput() * 200; // add (Vintercept + ka)/kv
-
-        // make error negative if headingUnitVector is more counterclockwise than lookaheadVector
-        if ((headingUnitVector.crossMagnitude(lookaheadVector) < 0) ^ !inverted) {
-            return error * -1;
-        } else {
-            return error;
+        // make angleError negative if headingUnitVector is more counterclockwise than lookaheadVector
+        if ((headingUnitVector.crossMagnitudeSigned(lookaheadVector) < 0) ^ !inverted) {
+            angleError *= -1;
         }
+
+        // do PID
+        m_turnController.calculate(angleError, true);
+        double error = m_turnController.getOutput() * 200; // add (Vintercept + ka)/kv
+
+        return error;
     }
 
     public boolean isPathDone() {
@@ -217,7 +229,7 @@ public class PathFollower {
     }
 
     public void setHeading(double heading) {
-        if (!inverted) { 
+        if (!inverted) {
             this.heading = heading;
         } else {
             this.heading = (heading + 180) % 360;
@@ -234,5 +246,21 @@ public class PathFollower {
     
     public void setInverted(boolean inverted) {
         this.inverted = inverted;
+    }
+
+    private void setSteeringError(double steeringError) {
+        this.steeringError = steeringError;
+    }
+
+    public double getSteeringError() {
+        return this.steeringError;
+    }
+
+    private void setTargetVelocity(double targetVelocity) {
+        this.targetVelocity = targetVelocity;
+    }
+
+    public double getTargetVelocity() {
+        return this.targetVelocity;
     }
 }

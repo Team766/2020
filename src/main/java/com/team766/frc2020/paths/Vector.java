@@ -29,7 +29,7 @@ public class Vector {
     }
 
     // can be negative or positive even though it says magnitude
-    public double crossMagnitude(Vector a) {
+    public double crossMagnitudeSigned(Vector a) {
         return this.getX() * a.getY() - this.getY() * a.getX();
     }
 

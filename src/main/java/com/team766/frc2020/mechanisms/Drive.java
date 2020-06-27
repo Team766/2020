@@ -375,6 +375,7 @@ public class Drive extends Mechanism implements DriveI {
         Robot.drive.resetEncoders();
 
         // calculate position
+        // magic number is how far in inches the robot moves per encoder pulse
         deltaXPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2 * 0.019372 * Math.sin(Math.toRadians(currentGyroAngle));
         deltaYPosition = (deltaLeftEncoderDistance + deltaRightEncoderDistance) / 2 * 0.019372 * Math.cos(Math.toRadians(currentGyroAngle));
 
