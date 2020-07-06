@@ -1,7 +1,7 @@
 package com.team766.frc2020.paths;
 
 /**
- * 2d vector with functions useful for path building
+ * 2d vector with functions useful for path building and path following
  */
 public class Vector {
     private double x;
@@ -28,7 +28,10 @@ public class Vector {
         return a.getX() * this.getX() + a.getY() * this.getY();
     }
 
-    // can be negative or positive even though it says magnitude
+    /** 
+     * can be negative or positive even though it says magnitude
+     * vectors are crossed as if the z component is zero
+     */
     public double crossMagnitudeSigned(Vector a) {
         return this.getX() * a.getY() - this.getY() * a.getX();
     }

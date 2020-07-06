@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import com.team766.frc2020.paths.Waypoint;
 import com.team766.frc2020.paths.Vector;
 
-import com.team766.hal.RobotProvider;
-import com.team766.controllers.PIDController;
-import com.team766.frc2020.Robot;
-
+// TODO: make methods static idk why maybe its good
 public class PathFollower {
+
+    private final float maxAcceleration = 10;
 
     private ArrayList<Waypoint> path = new ArrayList<Waypoint>();
     private int previousLookaheadPointIndex = 0;
@@ -23,21 +22,27 @@ public class PathFollower {
     private double lookaheadDistance = 13;
     private boolean inverted = false;
 
-    // for turn controller
-    private double P = 0.01;
-    private double I = 0.0;
-    private double D = 0.05;
-    private PIDController m_turnController = new PIDController(P, I, D, Robot.drive.THRESHOLD, RobotProvider.getTimeProvider());
-
-    private double steeringError;
-    private double targetVelocity;
+    private double targetVelocity = 0;
+    private double targetAcceleration = 0;
+    // TODO: get trackwidth and maybe kV and kA from config file or drive so it is not stored in path follower
+    // width of robot + a few inches (measured in inches);
+    private final double trackWidth = 30;
+    // used for feedforward
+    private final double kV = 0.001;
+    private final double kA = 0.001;
+    // left/right side drive target velocity
+    private double leftTargetVelocity = 0;
+    private double rightTargetVelocity = 0;
+    // feedforward constant
+    private double feedforward;
+    private double previousTime = 0;
+    private double deltaTime = 0;
 
     public PathFollower(ArrayList<Waypoint> path) {
         // TODO: add copy function for path
         this.path = path;
 
         lookaheadWaypoint = findLookaheadPoint(this.lookaheadDistance);
-        m_turnController.setSetpoint(0.0);
     }
 
     /**
@@ -47,8 +52,17 @@ public class PathFollower {
     public void update() {
         setLastClosestPointIndex(findClosestPointIndex());
         setLookaheadWaypoint(findLookaheadPoint(this.lookaheadDistance));
-        setSteeringError(calculateSteeringError());
+        double previousTargetVelocity = targetVelocity;
         setTargetVelocity(findTargetVelocity());
+
+        targetAcceleration = (targetVelocity - previousTargetVelocity) / deltaTime;
+        
+        setFeedforward(calculateFeedforward());
+
+        double[] leftRightTargetVelocity = calculateLeftAndRightTargetVelocities();
+        setLeftTargetVelocity(leftRightTargetVelocity[0]);
+        setRightTargetVelocity(leftRightTargetVelocity[1]);
+
     }
 
     /**
@@ -143,45 +157,101 @@ public class PathFollower {
     /**
      * returns target velocity of closest point to (xPosition, yPosition) in path
      */
-    public double findTargetVelocity(ArrayList<Waypoint> path, double xPosition, double yPosition) {
-        return path.get(findClosestPointIndex(path, xPosition, yPosition)).getVelocity();
+    public double findTargetVelocity(double targetVelocity, ArrayList<Waypoint> path, double xPosition, double yPosition, double maxAcceleration, double deltaTime) {
+        // rate limit
+        double maxChange = deltaTime * maxAcceleration;
+        // velocity at closest point
+        double change = path.get(findClosestPointIndex(path, xPosition, yPosition)).getVelocity() - targetVelocity;
+        
+        change = (change > maxChange) ? maxChange : change;
+        change = (change < -maxChange) ? -maxChange : change;
+
+        return targetVelocity + change;
     }
 
     /**
      * finds target velocity using variables stored in PathFollower
      */
     public double findTargetVelocity() {
-        return findTargetVelocity(this.path, this.xPosition, this.yPosition);
+        return findTargetVelocity(this.targetVelocity, this.path, this.xPosition, this.yPosition, this.maxAcceleration, this.deltaTime);
     }
 
+
     /**
-     * calculates angle between vector between robot and lookahead point and
-     * robot heading unit vector
+     * calculates distance from lookahead point to robot heading line that is signed for the side the robot is on
+     * compared to the path
      * @param path
      * @param heading
      * @param xPosition
      * @param yPosition
      * @return positive value robot needs to turn counterclockwise, negative if robot needs to turn clockwise
      */
-    public double calculateSteeringError(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition) {
+    public double calculateSignedDistanceFromLookaheadPointToRobotHeadingLine(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition) {
         // calculate angle between lookahead vector and heading vector
         Vector headingUnitVector = new Vector(Math.sin(Math.toRadians(heading)), Math.cos(Math.toRadians(heading)));
         Vector lookaheadVector = new Vector(this.lookaheadWaypoint.getX() - xPosition, this.lookaheadWaypoint.getY() - yPosition);
-        double angleError =  Math.toDegrees(Math.acos(
-            (headingUnitVector.dot(lookaheadVector)) /
-            (0.000001 + headingUnitVector.magnitude() * lookaheadVector.magnitude())
-        ));
 
-        // make angleError negative if headingUnitVector is more counterclockwise than lookaheadVector
-        if ((headingUnitVector.crossMagnitudeSigned(lookaheadVector) < 0) ^ !inverted) {
-            angleError *= -1;
+        // contstant in line equation
+        double c = headingUnitVector.getX() * xPosition + headingUnitVector.getY() * yPosition;
+        // refered to as "x" or "X" in 1712 whitepaper
+        double distanceFromLookaheadPointToRobotHeadingLine =
+            Math.abs(headingUnitVector.getX() * this.getLookaheadWaypoint().getX() + headingUnitVector.getY() * this.getLookaheadWaypoint().getY() - c) /
+            Math.sqrt(Math.pow(headingUnitVector.getX(), 2) + Math.pow(headingUnitVector.getY(), 2));
+
+        double signedDistanceFromLookaheadPointToRobotHeadingLine = distanceFromLookaheadPointToRobotHeadingLine;
+        // make distance negative if headingUnitVector is more counterclockwise than lookaheadVector
+        if ((headingUnitVector.crossMagnitudeSigned(lookaheadVector) < 0) ^ !this.inverted) {
+            signedDistanceFromLookaheadPointToRobotHeadingLine *= -1;
         }
 
-        // do PID
-        m_turnController.calculate(angleError, true);
-        double error = m_turnController.getOutput() * 200; // add (Vintercept + ka)/kv
+        return signedDistanceFromLookaheadPointToRobotHeadingLine;
+    }
 
-        return error;
+    /**
+     * calcualtes signed distance from lookahead point to robot line with variables
+     * stored in pathfollower
+     */
+    public double calculateSignedDistanceFromLookaheadPointToRobotHeadingLine() {
+        return calculateSignedDistanceFromLookaheadPointToRobotHeadingLine(this.getPath(), this.heading, this.xPosition, this.yPosition);
+    }
+
+    /**
+     * calculates the target velocities for the left and right side drive
+     * @param path
+     * @param heading
+     * @param xPosition
+     * @param yPosition
+     * @return an array of length two, where the first element is the left target velocity
+     * and the second element is the right target velocity
+     */
+    public double[] calculateLeftAndRightTargetVelocities(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition, double targetVelocity, double trackWidth) {
+        double signedDistanceFromLookaheadPointToRobotHeadingLine = this.calculateSignedDistanceFromLookaheadPointToRobotHeadingLine();
+        double targetCurvature = 2 * signedDistanceFromLookaheadPointToRobotHeadingLine / Math.pow(Math.hypot(this.getLookaheadWaypoint().getX() - xPosition, this.getLookaheadWaypoint().getY()), 2);
+        double leftTargetVelocity = targetVelocity * (2 - targetCurvature * trackWidth) / 2;
+        double rightTargetVelocity = targetVelocity * (2 + targetCurvature * trackWidth) / 2;
+
+        double[] leftAndRightTargetVelocities = {leftTargetVelocity, rightTargetVelocity};
+
+        return leftAndRightTargetVelocities;
+    }
+
+    /**
+     * calculates left and right target velocities with variables stored in PathFollower
+     */
+    public double[] calculateLeftAndRightTargetVelocities() {
+        return calculateLeftAndRightTargetVelocities(this.path, this.heading, this.xPosition, this.yPosition, this.targetVelocity, this.trackWidth);
+    }
+
+    public double calculateFeedforward(double kV, double kA, double targetVelocity, double targetAcceleration) {
+        return kV * targetVelocity + kA * targetAcceleration; 
+    }
+
+    /**
+     * calculate feedforward with variables stored in pathfollower
+     * @return
+     */
+    public double calculateFeedforward() {
+        return calculateFeedforward(this.kV, this.kA, this.targetVelocity, this.targetAcceleration);
     }
 
     public boolean isPathDone() {
@@ -192,18 +262,11 @@ public class PathFollower {
         }
     }
 
-    /**
-     * calculates steering error with variables stored in PathFollower
-     */
-    public double calculateSteeringError() {
-        return calculateSteeringError(this.path, this.heading, this.xPosition, this.yPosition);
-    }
-
     public int getPreviousLookaheadPointIndex() {
         return this.previousLookaheadPointIndex;
     }
 
-    public void setPreviousLookaheadPointIndex(int previousLookaheadPointIndex) {
+    private void setPreviousLookaheadPointIndex(int previousLookaheadPointIndex) {
         this.previousLookaheadPointIndex = previousLookaheadPointIndex;
     }
 
@@ -219,7 +282,7 @@ public class PathFollower {
         return this.lastClosestPointIndex;
     }
 
-    public void setLastClosestPointIndex(int lastClosestPointIndex) {
+    private void setLastClosestPointIndex(int lastClosestPointIndex) {
         this.lastClosestPointIndex = lastClosestPointIndex;
     }
 
@@ -240,20 +303,12 @@ public class PathFollower {
         return this.lookaheadWaypoint;
     }
     
-    public void setLookaheadWaypoint(Waypoint lookaheadWaypoint) {
+    private void setLookaheadWaypoint(Waypoint lookaheadWaypoint) {
         this.lookaheadWaypoint = lookaheadWaypoint;
     }
     
     public void setInverted(boolean inverted) {
         this.inverted = inverted;
-    }
-
-    private void setSteeringError(double steeringError) {
-        this.steeringError = steeringError;
-    }
-
-    public double getSteeringError() {
-        return this.steeringError;
     }
 
     private void setTargetVelocity(double targetVelocity) {
@@ -262,5 +317,34 @@ public class PathFollower {
 
     public double getTargetVelocity() {
         return this.targetVelocity;
+    }
+
+    public double getLeftTargetVelocity() {
+        return this.leftTargetVelocity;
+    }
+
+    private void setLeftTargetVelocity(double leftTargetVelocity) {
+        this.leftTargetVelocity = leftTargetVelocity;
+    }
+
+    public double getRightTargetVelocity() {
+        return this.rightTargetVelocity;
+    }
+
+    private void setRightTargetVelocity(double rightTargetVelocity) {
+        this.rightTargetVelocity = rightTargetVelocity;
+    }
+
+    public double getFeedforward() {
+        return this.feedforward;
+    }
+
+    private void setFeedforward(double feedforward) {
+        this.feedforward = feedforward;
+    }
+
+    public void setTime(double time) {
+        this.deltaTime = time - previousTime;
+        this.previousTime = time;
     }
 }

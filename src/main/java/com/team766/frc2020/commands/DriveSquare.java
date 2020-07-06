@@ -7,6 +7,7 @@ import com.team766.frc2020.Robot;
 import com.team766.frc2020.paths.PathBuilder;
 import com.team766.frc2020.paths.PathFollower;
 import com.team766.frc2020.paths.Waypoint;
+import com.team766.hal.RobotProvider;
 
 public class DriveSquare extends Subroutine {
 
@@ -26,21 +27,30 @@ public class DriveSquare extends Subroutine {
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
         path = PathBuilder.buildPath(waypoints);
 
+        Robot.pathWebSocketServer.broadcastPath(path);
+
         // create a PathFollower that has functions that output steering error and target velocities
         PathFollower pathFollower = new PathFollower(path);
         pathFollower.setInverted(false);
 
         while(!pathFollower.isPathDone()) {
 
-            // tell pathFollower our current position and heading and tell it to update and recalculate
+            // tell pathFollower our current position and heading and tell pathfollower to recalculate outputs
             pathFollower.setPosition(Robot.drive.getXPosition(), Robot.drive.getYPosition());
             pathFollower.setHeading(Robot.drive.getGyroAngle());
+            pathFollower.setTime(RobotProvider.getTimeProvider().get());
             pathFollower.update();
 
-            double turnPower = pathFollower.getSteeringError();
-            double straightPower = pathFollower.getTargetVelocity();
+            Robot.drive.setDriveVelocity(pathFollower.getLeftTargetVelocity(), pathFollower.getRightTargetVelocity(), pathFollower.getFeedforward());
 
-            Robot.drive.setDriveVelocity(straightPower + turnPower, straightPower - turnPower);
+            Robot.pathWebSocketServer.broadcastClosestPoint(
+                path.get(pathFollower.getLastClosestPointIndex()).getX(),
+                path.get(pathFollower.getLastClosestPointIndex()).getY()
+            );
+            Robot.pathWebSocketServer.broadcastLookaheadPoint(
+                pathFollower.getLookaheadWaypoint().getX(),
+                pathFollower.getLookaheadWaypoint().getY()
+            );
 
             // allow odometry and other stuff to happen
             yield();

@@ -135,12 +135,13 @@ public class Drive extends Mechanism implements DriveI {
     }
 
     /**
-     * sets drive but uses direct velocity instead scaling from -1 to 1 like setDrive
+     * sets drive but uses velocity in (inches / second) instead scaling from -1 to 1 like setDrive
      * used in pure pursuit
      */
-    public void setDriveVelocity(double leftSetting, double rightSetting) {
-        m_leftTalon.set(ControlMode.Velocity, leftSetting);
-        m_rightTalon.set(ControlMode.Velocity, rightSetting);
+    public void setDriveVelocity(double leftSetting, double rightSetting, double feedforward) {
+        // divide by distance per pulse and multiply by 0.1s / 100ms
+        m_leftTalon.set(ControlMode.Velocity, leftSetting / 0.019372 * 0.1);
+        m_rightTalon.set(ControlMode.Velocity, rightSetting / 0.019372 * 0.1);
 
         m_leftVictor1.follow(m_leftTalon);
         m_rightVictor1.follow(m_rightTalon);
@@ -148,8 +149,8 @@ public class Drive extends Mechanism implements DriveI {
             m_leftVictor2.follow(m_leftTalon);
             m_rightVictor2.follow(m_rightTalon);
         }
-        SmartDashboard.putNumber("Left Motor Input", leftSetting);
-        SmartDashboard.putNumber("Right Motor Input", rightSetting);
+        SmartDashboard.putNumber("Left Motor Input", leftSetting / 0.019372 * 0.1);
+        SmartDashboard.putNumber("Right Motor Input", rightSetting / 0.019372 * 0.1);
     }
     
     /**

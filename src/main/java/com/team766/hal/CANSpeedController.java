@@ -45,7 +45,7 @@ public interface CANSpeedController extends SpeedController {
 	 *
 	 * @param value The setpoint value, as described above.
 	 */
-	void set(ControlMode mode, double value);
+    void set(ControlMode mode, double value);
 
 	/**
 	 * Common interface for inverting direction of a speed controller.

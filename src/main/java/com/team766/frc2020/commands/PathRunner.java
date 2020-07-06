@@ -65,7 +65,7 @@ public class PathRunner extends Subroutine {
                     pathFollower.getLookaheadWaypoint().getY()
                 );
 
-                System.out.println("steering error " + pathFollower.calculateSteeringError());
+                // System.out.println("steering error " + pathFollower.calculateSteeringError());
             }
             i++;
 
@@ -81,7 +81,7 @@ public class PathRunner extends Subroutine {
             // m_turnController.calculate(pathFollower.calculateSteeringError(), true);
             // double turnPower = m_turnController.getOutput() * 200; // add (Vintercept + ka)/kv
 
-            double turnPower = pathFollower.calculateSteeringError();
+            // double turnPower = pathFollower.calculateSteeringError();
 
             System.out.println("closest point index" + pathFollower.findClosestPointIndex());
             // m_velocityController.setSetpoint(path.get(pathFollower.findClosestPointIndex()).getVelocity());
@@ -91,7 +91,17 @@ public class PathRunner extends Subroutine {
             System.out.println("straightpower: " + straightPower);
 
             // if (!inverted) { 
-                Robot.drive.setDriveVelocity(straightPower + turnPower, straightPower - turnPower);
+
+
+
+
+
+                // Robot.drive.setDriveVelocity(straightPower + turnPower, straightPower - turnPower);
+
+
+
+
+                
             // } else {
             //     Robot.drive.setDrive( -1 * (straightPower - turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600), -1 * (straightPower + turnPower) / ( 15 * 12 * 60 / 6.25 * 256 / 600));
             // }
