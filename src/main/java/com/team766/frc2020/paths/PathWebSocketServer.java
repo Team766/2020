@@ -25,6 +25,7 @@ public class PathWebSocketServer extends WebSocketServer {
     public PathWebSocketServer(InetSocketAddress address) {
         super(address);
 	}
+    // im not sure if it is good practice to use json in the body of websockets but it seems to work..
 
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
@@ -54,7 +55,15 @@ public class PathWebSocketServer extends WebSocketServer {
 
     public void broadcastHeading(double heading) {
         broadcast("{\"heading\": " + heading + "}" );
-	}
+    }
+    
+    public void broadcastClosestPoint(double x, double y) {
+        broadcast("{\"closestPoint\": { \"x\": " + x + ", \"y\": " + y + "}}" );
+    }
+    
+    public void broadcastLookaheadPoint(double x, double y) {
+        broadcast("{\"lookaheadPoint\": { \"x\": " + y + ", \"y\": " + y + "}}" );
+    }
 
     @Override
     public void broadcast(String text) {
@@ -94,6 +103,6 @@ public class PathWebSocketServer extends WebSocketServer {
 	
 	@Override
 	public void onStart() {
-		System.out.println("server started successfully");
+		System.out.println("path web socket server started successfully");
 	}
 }

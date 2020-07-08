@@ -62,7 +62,7 @@ public class WebSocketTest extends Subroutine {
             }
 
             pathFollower.update();
-            m_turnController.calculate(pathFollower.calculateSteeringError(), true);
+            // m_turnController.calculate(pathFollower.calculateSteeringError(), true);
             double turnPower = m_turnController.getOutput() * 800;
 
             // System.out.println("closest point index" + pathFollower.findClosestPointIndex());

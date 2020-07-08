@@ -3,12 +3,11 @@ package com.team766.frc2020.paths;
 /**
  * A waypoint along a path. Contains a position, radius (for creating curved
  * paths), and velocity. The information from these waypoints is used by the
- * PathBuilder class to generate Paths. Waypoints also contain an optional
- * marker that is used by the WaitForPathMarkerAction.
+ * PathBuilder class to generate paths.
  *
- * @see GeneratePath
  */
 public class Waypoint {
+
     // Translation2d position;
     private double x;
     private double y;

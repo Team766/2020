@@ -59,7 +59,7 @@ public class TurnAround extends Subroutine {
         while(!pathFollower.isPathDone()) {
             if (i % 100 == 0) {
                 // System.out.println("position: " + Robot.drive.getXPosition() + ", " + Robot.drive.getYPosition());
-                System.out.printf("heading %.2f steering error angle %.2f pid output %.2f \n", Robot.drive.getGyroAngle(), pathFollower.calculateSteeringError(), m_turnController.getOutput());
+                // System.out.printf("heading %.2f steering error angle %.2f pid output %.2f \n", Robot.drive.getGyroAngle(), pathFollower.calculateSteeringError(), m_turnController.getOutput());
                 System.out.println("last closest point index" + pathFollower.getLastClosestPointIndex());
                 // System.out.println("lookahead point: " + pathFollower.getLookaheadWaypoint().getX() + ", " + pathFollower.getLookaheadWaypoint().getY());
             }
@@ -80,7 +80,7 @@ public class TurnAround extends Subroutine {
             // }
             pathFollower.update();
 
-            m_turnController.calculate(pathFollower.calculateSteeringError(), true);
+            // m_turnController.calculate(pathFollower.calculateSteeringError(), true);
             double turnPower = m_turnController.getOutput() * 500;
             // double straightPower = path.get(previousLookaheadPointIndex).getVelocity();
             // System.out.println("closest point index" + findClosestPointIndex());
