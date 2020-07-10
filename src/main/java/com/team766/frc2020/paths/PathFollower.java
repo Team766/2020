@@ -33,8 +33,8 @@ public class PathFollower {
     // left/right side drive target velocity
     private double leftTargetVelocity = 0;
     private double rightTargetVelocity = 0;
-    // feedforward constant
     private double feedforward;
+
     private double previousTime = 0;
     private double deltaTime = 0;
 
@@ -50,18 +50,18 @@ public class PathFollower {
      * does several calculations to keep variables up to date
      */
     public void update() {
-        setLastClosestPointIndex(findClosestPointIndex());
-        setLookaheadWaypoint(findLookaheadPoint(this.lookaheadDistance));
+        lastClosestPointIndex = findClosestPointIndex();
+        lookaheadWaypoint = findLookaheadPoint(this.lookaheadDistance);
         double previousTargetVelocity = targetSpeed;
-        setTargetSpeed(findTargetSpeed());
+        targetSpeed = findTargetSpeed();
 
         targetAcceleration = (targetSpeed - previousTargetVelocity) / deltaTime;
         
-        setFeedforward(calculateFeedforward());
+        feedforward = calculateFeedforward();
 
         double[] leftRightTargetVelocity = calculateLeftAndRightTargetVelocities();
-        setLeftTargetVelocity(leftRightTargetVelocity[0]);
-        setRightTargetVelocity(leftRightTargetVelocity[1]);
+        leftTargetVelocity = leftRightTargetVelocity[0];
+        rightTargetVelocity = leftRightTargetVelocity[1];
 
     }
 
@@ -75,7 +75,7 @@ public class PathFollower {
     // TODO: add errors if path is length of zero
     public Waypoint findLookaheadPoint(ArrayList<Waypoint> path, double xPosition, double yPosition, double lookaheadDistance) {
         // loop through points to find intersection starting with last lookahead point
-        for (int i = getPreviousLookaheadPointIndex(); i < path.size() - 1; i++) {
+        for (int i = this.previousLookaheadPointIndex; i < path.size() - 1; i++) {
             // line segment circle intersection algorithm
             // https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm/1084899#1084899
             Vector lineSegmentVector = new Vector(path.get(i + 1).getX() - path.get(i).getX(), path.get(i + 1).getY() - path.get(i).getY());
@@ -104,18 +104,18 @@ public class PathFollower {
                 }
                 if (t1 >= 0 && t1 <=1) {
                     //return t1 intersection
-                    setPreviousLookaheadPointIndex(i);
+                    previousLookaheadPointIndex = i;
                     return path.get(i).add(new Waypoint(lineSegmentVector.getX() * t1, lineSegmentVector.getY() * t2));
                 }
                 if (t2 >= 0 && t2 <=1) {
                     //return t2 intersection
-                    setPreviousLookaheadPointIndex(i);
+                    previousLookaheadPointIndex = i;
                     return path.get(i).add(new Waypoint(lineSegmentVector.getX() * t2, lineSegmentVector.getY() * t2));
                 }
             }
         }
         // otherwise, no intersection
-        return path.get(getPreviousLookaheadPointIndex());
+        return path.get(this.previousLookaheadPointIndex);
     }
     
     /**
@@ -127,17 +127,21 @@ public class PathFollower {
 
     /**
      * finds closest point in PathFollower's path to (xPosition, yPosition)
+     * @param path
+     * @param xPosition
+     * @param yPosition
+     * @return
      */
     public int findClosestPointIndex(ArrayList<Waypoint> path, double xPosition, double yPosition) {
         Waypoint position = new Waypoint(xPosition, yPosition);
 
         // set smallest distance to last known smallest point
         // and set smallest index to that point
-        double smallestDistance = Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(getLastClosestPointIndex()), position);
-        int smallestIndex = getLastClosestPointIndex();
+        double smallestDistance = Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(this.lastClosestPointIndex), position);
+        int smallestIndex = this.lastClosestPointIndex;
 
         // start at the point after the one we already calculated
-        for (int i = getLastClosestPointIndex() + 1; i < path.size() - 1; i++) {
+        for (int i = this.lastClosestPointIndex + 1; i < path.size() - 1; i++) {
             double currentDistance = Waypoint.calculateDistanceBetweenTwoWaypoints(path.get(i), position);
             if (currentDistance < smallestDistance) {
                 smallestDistance = currentDistance;
@@ -195,7 +199,7 @@ public class PathFollower {
         double c = headingUnitVector.getX() * xPosition + headingUnitVector.getY() * yPosition;
         // refered to as "x" or "X" in 1712 whitepaper
         double distanceFromLookaheadPointToRobotHeadingLine =
-            Math.abs(headingUnitVector.getX() * this.getLookaheadWaypoint().getX() + headingUnitVector.getY() * this.getLookaheadWaypoint().getY() - c) /
+            Math.abs(headingUnitVector.getX() * this.lookaheadWaypoint.getX() + headingUnitVector.getY() * this.lookaheadWaypoint.getY() - c) /
             Math.sqrt(Math.pow(headingUnitVector.getX(), 2) + Math.pow(headingUnitVector.getY(), 2));
 
         double signedDistanceFromLookaheadPointToRobotHeadingLine = distanceFromLookaheadPointToRobotHeadingLine;
@@ -226,7 +230,7 @@ public class PathFollower {
      */
     public double[] calculateLeftAndRightTargetVelocities(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition, double targetSpeed, double trackWidth, boolean inverted) {
         double signedDistanceFromLookaheadPointToRobotHeadingLine = this.calculateSignedDistanceFromLookaheadPointToRobotHeadingLine();
-        double targetCurvature = 2 * signedDistanceFromLookaheadPointToRobotHeadingLine / Math.pow(Math.hypot(this.getLookaheadWaypoint().getX() - xPosition, this.getLookaheadWaypoint().getY()), 2);
+        double targetCurvature = 2 * signedDistanceFromLookaheadPointToRobotHeadingLine / Math.pow(Math.hypot(this.lookaheadWaypoint.getX() - xPosition, this.lookaheadWaypoint.getY()), 2);
         double targetVelocity = targetSpeed;
 
         if (inverted) {
@@ -248,6 +252,14 @@ public class PathFollower {
         return calculateLeftAndRightTargetVelocities(this.path, this.heading, this.xPosition, this.yPosition, this.targetSpeed, this.trackWidth, this.inverted);
     }
 
+    /**
+     * calculates feedforward to be applied to motor
+     * @param kV
+     * @param kA
+     * @param targetSpeed
+     * @param targetAcceleration
+     * @return
+     */
     public double calculateFeedforward(double kV, double kA, double targetSpeed, double targetAcceleration) {
         return kV * targetSpeed + kA * targetAcceleration; 
     }
@@ -261,19 +273,11 @@ public class PathFollower {
     }
 
     public boolean isPathDone() {
-        if (this.getLastClosestPointIndex() >= (getPath().size() - 5)) {
+        if (this.lastClosestPointIndex >= (getPath().size() - 5)) {
             return true;
         } else {
             return false;
         }
-    }
-
-    public int getPreviousLookaheadPointIndex() {
-        return this.previousLookaheadPointIndex;
-    }
-
-    private void setPreviousLookaheadPointIndex(int previousLookaheadPointIndex) {
-        this.previousLookaheadPointIndex = previousLookaheadPointIndex;
     }
 
     public ArrayList<Waypoint> getPath() {
@@ -286,10 +290,6 @@ public class PathFollower {
 
     public int getLastClosestPointIndex() {
         return this.lastClosestPointIndex;
-    }
-
-    private void setLastClosestPointIndex(int lastClosestPointIndex) {
-        this.lastClosestPointIndex = lastClosestPointIndex;
     }
 
     public void setPosition(double xPosition, double yPosition) {
@@ -309,16 +309,8 @@ public class PathFollower {
         return this.lookaheadWaypoint;
     }
     
-    private void setLookaheadWaypoint(Waypoint lookaheadWaypoint) {
-        this.lookaheadWaypoint = lookaheadWaypoint;
-    }
-    
     public void setInverted(boolean inverted) {
         this.inverted = inverted;
-    }
-
-    private void setTargetSpeed(double targetSpeed) {
-        this.targetSpeed = targetSpeed;
     }
 
     public double getTargetSpeed() {
@@ -329,24 +321,12 @@ public class PathFollower {
         return this.leftTargetVelocity;
     }
 
-    private void setLeftTargetVelocity(double leftTargetVelocity) {
-        this.leftTargetVelocity = leftTargetVelocity;
-    }
-
     public double getRightTargetVelocity() {
         return this.rightTargetVelocity;
     }
 
-    private void setRightTargetVelocity(double rightTargetVelocity) {
-        this.rightTargetVelocity = rightTargetVelocity;
-    }
-
     public double getFeedforward() {
         return this.feedforward;
-    }
-
-    private void setFeedforward(double feedforward) {
-        this.feedforward = feedforward;
     }
 
     public void setTime(double time) {

@@ -84,7 +84,7 @@ public class PathWebSocketServer extends WebSocketServer {
 			yPosition = goalPoint.getJSONObject("targetPosition").getDouble("yPosition");
 			// System.out.println("received target point: x: " + xPosition + " y: " + yPosition);
 			
-			callSubroutine(new PathRunner(false, Robot.drive.getGyroAngle(), AStarGeneration.AStarGeneratePathWaypoints(xPosition, yPosition))); // TODO: fix!
+			// callSubroutine(new PathRunner(false, Robot.drive.getGyroAngle(), AStarGeneration.AStarGeneratePathWaypoints(xPosition, yPosition))); // TODO: fix!
 
         } catch (Exception e) {
             System.out.println(e);

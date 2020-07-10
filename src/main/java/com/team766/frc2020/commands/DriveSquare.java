@@ -27,8 +27,6 @@ public class DriveSquare extends Subroutine {
         ArrayList<Waypoint> path = new ArrayList<Waypoint>();
         path = PathBuilder.buildPath(waypoints);
 
-        Robot.pathWebSocketServer.broadcastPath(path);
-
         // create a PathFollower that has functions that output steering error and target velocities
         PathFollower pathFollower = new PathFollower(path);
         pathFollower.setInverted(false);
@@ -42,15 +40,6 @@ public class DriveSquare extends Subroutine {
             pathFollower.update();
 
             Robot.drive.setDriveVelocity(pathFollower.getLeftTargetVelocity(), pathFollower.getRightTargetVelocity(), pathFollower.getFeedforward());
-
-            Robot.pathWebSocketServer.broadcastClosestPoint(
-                path.get(pathFollower.getLastClosestPointIndex()).getX(),
-                path.get(pathFollower.getLastClosestPointIndex()).getY()
-            );
-            Robot.pathWebSocketServer.broadcastLookaheadPoint(
-                pathFollower.getLookaheadWaypoint().getX(),
-                pathFollower.getLookaheadWaypoint().getY()
-            );
 
             // allow odometry and other stuff to happen
             yield();
