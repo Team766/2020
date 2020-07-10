@@ -22,7 +22,7 @@ public class PathFollower {
     private double lookaheadDistance = 13;
     private boolean inverted = false;
 
-    private double targetVelocity = 0;
+    private double targetSpeed = 0;
     private double targetAcceleration = 0;
     // TODO: get trackwidth and maybe kV and kA from config file or drive so it is not stored in path follower
     // width of robot + a few inches (measured in inches);
@@ -52,10 +52,10 @@ public class PathFollower {
     public void update() {
         setLastClosestPointIndex(findClosestPointIndex());
         setLookaheadWaypoint(findLookaheadPoint(this.lookaheadDistance));
-        double previousTargetVelocity = targetVelocity;
-        setTargetVelocity(findTargetVelocity());
+        double previousTargetVelocity = targetSpeed;
+        setTargetSpeed(findTargetSpeed());
 
-        targetAcceleration = (targetVelocity - previousTargetVelocity) / deltaTime;
+        targetAcceleration = (targetSpeed - previousTargetVelocity) / deltaTime;
         
         setFeedforward(calculateFeedforward());
 
@@ -157,23 +157,23 @@ public class PathFollower {
     /**
      * returns target velocity of closest point to (xPosition, yPosition) in path
      */
-    public double findTargetVelocity(double targetVelocity, ArrayList<Waypoint> path, double xPosition, double yPosition, double maxAcceleration, double deltaTime) {
+    public double findTargetSpeed(double targetSpeed, ArrayList<Waypoint> path, double xPosition, double yPosition, double maxAcceleration, double deltaTime) {
         // rate limit
         double maxChange = deltaTime * maxAcceleration;
         // velocity at closest point
-        double change = path.get(findClosestPointIndex(path, xPosition, yPosition)).getVelocity() - targetVelocity;
+        double change = path.get(findClosestPointIndex(path, xPosition, yPosition)).getVelocity() - targetSpeed;
         
         change = (change > maxChange) ? maxChange : change;
         change = (change < -maxChange) ? -maxChange : change;
 
-        return targetVelocity + change;
+        return targetSpeed + change;
     }
 
     /**
      * finds target velocity using variables stored in PathFollower
      */
-    public double findTargetVelocity() {
-        return findTargetVelocity(this.targetVelocity, this.path, this.xPosition, this.yPosition, this.maxAcceleration, this.deltaTime);
+    public double findTargetSpeed() {
+        return findTargetSpeed(this.targetSpeed, this.path, this.xPosition, this.yPosition, this.maxAcceleration, this.deltaTime);
     }
 
 
@@ -224,9 +224,15 @@ public class PathFollower {
      * @return an array of length two, where the first element is the left target velocity
      * and the second element is the right target velocity
      */
-    public double[] calculateLeftAndRightTargetVelocities(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition, double targetVelocity, double trackWidth) {
+    public double[] calculateLeftAndRightTargetVelocities(ArrayList<Waypoint> path, double heading, double xPosition, double yPosition, double targetSpeed, double trackWidth, boolean inverted) {
         double signedDistanceFromLookaheadPointToRobotHeadingLine = this.calculateSignedDistanceFromLookaheadPointToRobotHeadingLine();
         double targetCurvature = 2 * signedDistanceFromLookaheadPointToRobotHeadingLine / Math.pow(Math.hypot(this.getLookaheadWaypoint().getX() - xPosition, this.getLookaheadWaypoint().getY()), 2);
+        double targetVelocity = targetSpeed;
+
+        if (inverted) {
+            targetVelocity *= -1;
+        }
+
         double leftTargetVelocity = targetVelocity * (2 - targetCurvature * trackWidth) / 2;
         double rightTargetVelocity = targetVelocity * (2 + targetCurvature * trackWidth) / 2;
 
@@ -239,11 +245,11 @@ public class PathFollower {
      * calculates left and right target velocities with variables stored in PathFollower
      */
     public double[] calculateLeftAndRightTargetVelocities() {
-        return calculateLeftAndRightTargetVelocities(this.path, this.heading, this.xPosition, this.yPosition, this.targetVelocity, this.trackWidth);
+        return calculateLeftAndRightTargetVelocities(this.path, this.heading, this.xPosition, this.yPosition, this.targetSpeed, this.trackWidth, this.inverted);
     }
 
-    public double calculateFeedforward(double kV, double kA, double targetVelocity, double targetAcceleration) {
-        return kV * targetVelocity + kA * targetAcceleration; 
+    public double calculateFeedforward(double kV, double kA, double targetSpeed, double targetAcceleration) {
+        return kV * targetSpeed + kA * targetAcceleration; 
     }
 
     /**
@@ -251,7 +257,7 @@ public class PathFollower {
      * @return
      */
     public double calculateFeedforward() {
-        return calculateFeedforward(this.kV, this.kA, this.targetVelocity, this.targetAcceleration);
+        return calculateFeedforward(this.kV, this.kA, this.targetSpeed, this.targetAcceleration);
     }
 
     public boolean isPathDone() {
@@ -311,12 +317,12 @@ public class PathFollower {
         this.inverted = inverted;
     }
 
-    private void setTargetVelocity(double targetVelocity) {
-        this.targetVelocity = targetVelocity;
+    private void setTargetSpeed(double targetSpeed) {
+        this.targetSpeed = targetSpeed;
     }
 
-    public double getTargetVelocity() {
-        return this.targetVelocity;
+    public double getTargetSpeed() {
+        return this.targetSpeed;
     }
 
     public double getLeftTargetVelocity() {
